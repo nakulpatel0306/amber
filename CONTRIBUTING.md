@@ -5,7 +5,7 @@ Thanks for your interest in contributing. This guide covers the development work
 ## Getting Started
 
 1. Fork the repo and clone your fork.
-2. Follow the [Quick Start](./README.md#quick-start) in the root README to set up Supabase, the backend, and the frontend.
+2. Follow the [Running Locally](./README.md#running-locally) steps in the root README to set up Supabase, the backend, and the frontend.
 3. Create a feature branch off `main`:
    ```bash
    git checkout -b feature/short-description
