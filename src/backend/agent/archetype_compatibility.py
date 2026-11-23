@@ -64,7 +64,7 @@ ARCHETYPE_MATRIX: dict[str, dict[str, dict]] = {
         'The Collaborator': {'bonus': 9, 'synergy_note': 'Natural culture fit with team-first values', 'friction_note': 'Both may avoid tough conversations'},
         'The Driver': {'bonus': -5, 'synergy_note': 'Provides emotional intelligence balance', 'friction_note': 'Results pressure conflicts with harmony-seeking'},
         'The Stabilizer': {'bonus': 5, 'synergy_note': 'Creates calm, balanced work environment', 'friction_note': 'Low-energy pairing may lack dynamism'},
-        'The Visionary': {'bonus': 1, 'synergy_note': 'Ensures people arent left behind in change', 'friction_note': 'May slow ambitious transformations'},
+        'The Visionary': {'bonus': 1, 'synergy_note': 'Ensures people aren\'t left behind in change', 'friction_note': 'May slow ambitious transformations'},
         'The Nurturer': {'bonus': 10, 'synergy_note': 'Perfect alignment on people-centered values', 'friction_note': 'May lack performance accountability'},
         'The Challenger': {'bonus': -8, 'synergy_note': 'Brings needed balance to intense debate', 'friction_note': 'Confrontational culture is deeply uncomfortable'},
     },

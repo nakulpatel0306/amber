@@ -9,7 +9,6 @@ import ssl
 import certifi
 from typing import Optional
 from dataclasses import dataclass
-from datetime import datetime
 
 import jwt
 from jwt import PyJWKClient

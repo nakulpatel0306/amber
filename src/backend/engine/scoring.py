@@ -16,7 +16,7 @@ Score flow:
   6. Top 3 highest-scoring dimensions become the candidate's "top traits".
 """
 
-from typing import Dict, List, Tuple
+from typing import Dict, List
 from engine.questions import ASSESSMENT_QUESTIONS
 
 # Score profiles for each answer option

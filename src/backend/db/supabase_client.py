@@ -12,7 +12,7 @@ allowing the app to run in a degraded mode during local development.
 """
 
 import os
-from typing import Optional, Any
+from typing import Optional
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -183,7 +183,7 @@ def get_application(candidate_id: str, role_id: str) -> Optional[dict]:
             'candidate_id', candidate_id
         ).eq('role_id', role_id).limit(1).execute()
         return _first_or_none(result)
-    except Exception as e:
+    except Exception:
         return None
 
 

@@ -15,7 +15,6 @@ When SUPABASE_JWT_SECRET is not configured, auth is disabled entirely (dev mode)
 """
 
 from typing import Optional, List, Callable
-from functools import wraps
 
 from fastapi import Request, HTTPException, status, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -24,7 +23,7 @@ from starlette.responses import JSONResponse
 
 import jwt as pyjwt
 
-from .supabase_auth import get_current_user, verify_token, AuthUser, is_auth_configured
+from .supabase_auth import get_current_user, AuthUser, is_auth_configured
 
 
 # HTTP Bearer token security scheme

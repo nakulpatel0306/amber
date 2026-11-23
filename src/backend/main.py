@@ -67,11 +67,7 @@ from db.supabase_client import (
     get_role,
     get_all_candidates_with_scores as get_supabase_candidates,
     get_all_active_roles,
-    get_roles_by_employer_id,
     upsert_application,
-    get_application,
-    get_applications_for_role,
-    get_applications_for_candidate,
     create_coffee_chat,
     get_coffee_chats_for_candidate,
     get_coffee_chats_for_employer,
@@ -92,7 +88,6 @@ from engine.scoring import calculate_scores, get_score_explanation
 from auth import (
     AuthMiddleware,
     require_auth,
-    require_role,
     AuthUser,
     get_current_user_dependency,
     check_email_in_profiles,
@@ -330,7 +325,6 @@ async def health():
     # Matching Engine
     try:
         t0 = time.perf_counter()
-        from engine.compatibility import calculate_compatibility  # noqa: F811
         latency = round((time.perf_counter() - t0) * 1000)
         services["matching_engine"] = {"status": "operational", "latency_ms": latency}
     except Exception:

@@ -21,7 +21,6 @@ from engine.compatibility import (
     calculate_confidence,
     calculate_reverse_compatibility,
     CompatibilityResult,
-    CULTURE_OCEAN_MAP,
 )
 from agent.archetype_compatibility import get_archetype_modifier
 
@@ -363,7 +362,8 @@ def generate_insights(
     shared_values = archetype_cultures & employer_culture_lower
 
     if len(shared_values) >= 2:
-        values_str = ', '.join(shared_values)
+        # Sorted so the message is stable; set order varies between runs
+        values_str = ', '.join(sorted(shared_values))
         insights.append(EmberInsight(
             category='highlight',
             message=f'Your "{archetype["name"]}" personality naturally aligns with their values: {values_str}',
