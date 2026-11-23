@@ -122,7 +122,7 @@ export function parseSelect(input: string): SelectNode[] {
     return {
       kind: 'embed',
       name: throughColumn ? left : rawName,
-      alias: left,
+      alias: right !== null ? left : rawName,
       inner: hint === 'inner',
       fkColumn: throughColumn ? rawName : undefined,
       children,

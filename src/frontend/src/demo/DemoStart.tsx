@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, Building2, FastForward, User } from 'lucide-reac
 import { AmberLogo } from '../components/ui/AmberLogo';
 import { useAuth } from '../contexts/AuthContext';
 import { usePageTitle } from '../hooks/usePageTitle';
+import { resetDemo } from './store';
 import { applySampleCulture, fillSampleAssessment, prepareVisitor, VISITOR_NAME, visitorEmail, type DemoRole } from './visitor';
 
 const ROLES: {
@@ -38,6 +39,8 @@ export function DemoStart() {
   const start = async (role: DemoRole, skip: boolean) => {
     setBusy(`${role}-${skip}`);
     if (user) await signOut();
+    // Each run starts from the seed so earlier demo accounts don't show up as matches
+    resetDemo();
     const { user: created } = await signUpWithEmail(visitorEmail(role), 'demo-only-password', role, { full_name: VISITOR_NAME });
     if (!created) {
       setBusy(null);
@@ -80,7 +83,7 @@ export function DemoStart() {
             style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}
           >
             <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
-              You already have a demo {profile.role === 'candidate' ? 'job seeker' : 'employer'} account in this browser.
+              You have a demo {profile.role === 'candidate' ? 'job seeker' : 'employer'} run in progress. Starting a new one replaces it.
             </p>
             <button
               onClick={() => navigate(profile.role === 'candidate' ? '/app/dashboard' : '/app/employer')}
