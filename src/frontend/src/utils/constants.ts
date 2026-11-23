@@ -3,16 +3,9 @@
 export const APP_NAME = 'Amber Project';
 export const APP_DESCRIPTION = 'Culture-first job matching platform';
 
-
 // Auth
 export const AUTH_STORAGE_KEY = 'amber-auth';
 export const THEME_STORAGE_KEY = 'amber-theme';
-
-// Waitlist display baselines — added to the live DB count to seed the visible counter
-export const WAITLIST_BASELINE_CANDIDATES = 75;
-export const WAITLIST_BASELINE_EMPLOYERS = 25;
-export const WAITLIST_BASELINE_TOTAL =
-  WAITLIST_BASELINE_CANDIDATES + WAITLIST_BASELINE_EMPLOYERS;
 
 // Culture values options for employers
 export const CULTURE_VALUES = [

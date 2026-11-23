@@ -36,7 +36,7 @@ import { DemoBanner } from './demo/DemoBanner';
 const DemoStart = IS_DEMO ? lazy(() => import('./demo/DemoStart').then(m => ({ default: m.DemoStart }))) : () => null;
 
 // Landing page (loaded eagerly - critical path)
-import { WelcomeScreen } from './components/landing';
+import { CaseStudy } from './components/landing';
 
 // Auth components (loaded eagerly - needed for route guards)
 import { ProtectedRoute, GuestRoute } from './components/auth';
@@ -50,20 +50,7 @@ const RoleSelectionPage = lazy(() => import('./components/auth/RoleSelectionPage
 const Onboarding = lazy(() => import('./components/auth/Onboarding').then(m => ({ default: m.Onboarding })));
 const EmailVerificationPage = lazy(() => import('./components/auth/EmailVerificationPage').then(m => ({ default: m.EmailVerificationPage })));
 
-// Lazy-loaded public pages
-const BlogPage = lazy(() => import('./components/pages/BlogPage').then(m => ({ default: m.BlogPage })));
-const BlogArticlePage = lazy(() => import('./components/pages/BlogArticlePage').then(m => ({ default: m.BlogArticlePage })));
-const SciencePage = lazy(() => import('./components/pages/SciencePage').then(m => ({ default: m.SciencePage })));
-const HelpCenterPage = lazy(() => import('./components/pages/HelpCenterPage').then(m => ({ default: m.HelpCenterPage })));
-const ChangelogPage = lazy(() => import('./components/pages/ChangelogPage').then(m => ({ default: m.ChangelogPage })));
-const StatusPage = lazy(() => import('./components/pages/StatusPage').then(m => ({ default: m.StatusPage })));
-const AboutPage = lazy(() => import('./components/pages/AboutPage').then(m => ({ default: m.AboutPage })));
-const CareersPage = lazy(() => import('./components/pages/CareersPage').then(m => ({ default: m.CareersPage })));
-const PressPage = lazy(() => import('./components/pages/PressPage').then(m => ({ default: m.PressPage })));
-const PrivacyPolicyPage = lazy(() => import('./components/pages/PrivacyPolicyPage').then(m => ({ default: m.PrivacyPolicyPage })));
-const TermsOfServicePage = lazy(() => import('./components/pages/TermsOfServicePage').then(m => ({ default: m.TermsOfServicePage })));
-const CookiePolicyPage = lazy(() => import('./components/pages/CookiePolicyPage').then(m => ({ default: m.CookiePolicyPage })));
-const AccessibilityPage = lazy(() => import('./components/pages/AccessibilityPage').then(m => ({ default: m.AccessibilityPage })));
+// Lazy-loaded app pages
 const RolesPage = lazy(() => import('./components/pages/RolesPage').then(m => ({ default: m.RolesPage })));
 
 // Lazy-loaded dashboard components
@@ -144,22 +131,9 @@ function App() {
               <Suspense fallback={<PageLoader />}>
               <Routes>
                 {/* Public routes */}
-                <Route path="/" element={<WelcomeScreen />} />
+                <Route path="/" element={<CaseStudy />} />
                 {IS_DEMO && <Route path="/demo" element={<DemoStart />} />}
                 <Route element={<PublicLayout />}>
-                  <Route path="/blog" element={<BlogPage />} />
-                  <Route path="/blog/:slug" element={<BlogArticlePage />} />
-                  <Route path="/science" element={<SciencePage />} />
-                  <Route path="/help" element={<HelpCenterPage />} />
-                  <Route path="/changelog" element={<ChangelogPage />} />
-                  <Route path="/status" element={<StatusPage />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/careers" element={<CareersPage />} />
-                  <Route path="/press" element={<PressPage />} />
-                  <Route path="/privacy" element={<PrivacyPolicyPage />} />
-                  <Route path="/terms" element={<TermsOfServicePage />} />
-                  <Route path="/cookies" element={<CookiePolicyPage />} />
-                  <Route path="/accessibility" element={<AccessibilityPage />} />
                   <Route path="/pricing" element={<PricingPage />} />
                 </Route>
 

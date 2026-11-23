@@ -73,33 +73,21 @@ function AnimatedScoreNumber({ value, suffix = '', delay = 0 }: { value: number;
   );
 }
 
-function CompanyLogoTile({ domain, fallback, size = 20 }: { domain: string; fallback: string; size?: number }) {
-  const [err, setErr] = useState(false);
-  // Extract company name from domain (e.g., "figma.com" -> "figma")
-  const logoName = domain.split('.')[0];
+// Letter tiles: the companies in these scenes are invented, so there are no logos to show
+function CompanyLogoTile({ fallback, size = 20 }: { domain?: string; fallback: string; size?: number }) {
   return (
     <div
-      className="rounded flex items-center justify-center flex-shrink-0 overflow-hidden"
+      className="rounded flex items-center justify-center flex-shrink-0 font-bold"
       style={{
         width: size,
         height: size,
-        backgroundColor: '#fff',
+        fontSize: Math.max(9, size * 0.42),
+        backgroundColor: 'color-mix(in srgb, var(--color-accent) 14%, var(--color-surface))',
+        color: 'var(--color-accent)',
         border: '1px solid var(--color-border)',
       }}
     >
-      {err ? (
-        <span className="text-[9px] font-bold" style={{ color: '#111' }}>
-          {fallback}
-        </span>
-      ) : (
-        <img
-          src={`/logos/${logoName}.png`}
-          alt={fallback}
-          className="w-full h-full object-contain p-0.5"
-          onError={() => setErr(true)}
-          loading="lazy"
-        />
-      )}
+      {fallback}
     </div>
   );
 }
@@ -112,10 +100,10 @@ function SceneDashboard() {
   ];
 
   const topMatches = [
-    { company: 'Figma', domain: 'figma.com', role: 'Senior Product Designer', score: 94, fallback: 'F' },
-    { company: 'Stripe', domain: 'stripe.com', role: 'Staff Engineer', score: 91, fallback: 'S' },
-    { company: 'Linear', domain: 'linear.app', role: 'Design Engineer', score: 87, fallback: 'L' },
-    { company: 'Vercel', domain: 'vercel.com', role: 'DevRel Lead', score: 83, fallback: 'V' },
+    { company: 'Kestrel Studio', domain: 'kestrel', role: 'Brand Designer', score: 94, fallback: 'K' },
+    { company: 'Brightline Labs', domain: 'brightline', role: 'Founding Engineer', score: 91, fallback: 'B' },
+    { company: 'Fernleaf Health', domain: 'fernleaf', role: 'Product Designer', score: 87, fallback: 'F' },
+    { company: 'Northwind Robotics', domain: 'northwind', role: 'Robotics Engineer', score: 83, fallback: 'N' },
   ];
 
   return (
@@ -630,7 +618,7 @@ function SceneInsights() {
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <CompanyLogoTile domain="figma.com" fallback="F" size={32} />
+        <CompanyLogoTile fallback="K" size={32} />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
             <p
@@ -643,7 +631,7 @@ function SceneInsights() {
               className="text-[9px] leading-none"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              · Figma
+              · Kestrel Studio
             </span>
           </div>
           <div className="flex items-center gap-1.5 mt-1">
@@ -943,7 +931,7 @@ function SceneConnect({ stage }: { stage: number }) {
   const sent = stage >= 3;
 
   const message =
-    "I'd love to chat about how our work styles align at Figma.";
+    "I'd love to chat about how our work styles align at Kestrel Studio.";
 
   return (
     <div className="w-full h-full p-3 flex flex-col gap-2 overflow-hidden">
@@ -958,7 +946,7 @@ function SceneConnect({ stage }: { stage: number }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <CompanyLogoTile domain="figma.com" fallback="F" size={32} />
+        <CompanyLogoTile fallback="K" size={32} />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
             <p
@@ -971,7 +959,7 @@ function SceneConnect({ stage }: { stage: number }) {
               className="text-[9px] leading-none"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              · Figma
+              · Kestrel Studio
             </span>
           </div>
           <div className="flex items-center gap-1.5 mt-1">
@@ -1499,15 +1487,15 @@ function ScienceCard() {
           className="text-2xl font-serif font-normal tracking-tight mb-2 leading-tight"
           style={{ color: 'var(--color-text)' }}
         >
-          70 Years Of Research,{' '}
+          Decades Of Research,{' '}
           <span className="italic" style={{ color: 'var(--color-accent)' }}>
             In 15 Minutes.
           </span>
         </h3>
 
         <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textMuted)' }}>
-          The same model used by Fortune 500s: openness, conscientiousness, extraversion,
-          agreeableness, stability.
+          The Big Five, the most studied model in personality research: openness, conscientiousness,
+          extraversion, agreeableness, stability.
         </p>
 
         {/* Radar with 5 labeled points */}
@@ -1836,7 +1824,7 @@ function PrivacyCard() {
           className="text-[10px] font-mono uppercase tracking-[0.25em]"
           style={{ color: 'var(--color-textMuted)' }}
         >
-          Your Data · Encrypted
+          Postgres · RLS
         </span>
       </div>
 
@@ -1844,14 +1832,14 @@ function PrivacyCard() {
         className="text-2xl font-serif font-normal tracking-tight mb-2 leading-tight"
         style={{ color: 'var(--color-text)' }}
       >
-        Private By{' '}
+        Scoped By{' '}
         <span className="italic" style={{ color: 'var(--color-accent)' }}>
-          Default.
+          Design.
         </span>
       </h3>
 
       <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textMuted)' }}>
-        Your profile is invisible until you opt in. Employers never see your data without permission.
+        Row Level Security decides who can read each profile, chat and message. Candidates can hide their profile from search at any time.
       </p>
 
       {/* Encryption visual: animated hash string */}
@@ -1871,13 +1859,13 @@ function PrivacyCard() {
               animate={{ opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             >
-              a7b2·9fd0·14ce·8a3f
+              auth.uid() = user_id
             </motion.div>
             <p
               className="text-[9px] uppercase tracking-[0.25em] mt-0.5"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              AES-256 · TLS 1.3
+              Policy · per row
             </p>
           </div>
           <div
@@ -1897,7 +1885,7 @@ function PrivacyCard() {
 export function FeatureBento() {
   return (
     <section className="py-28 lg:py-36 px-4 sm:px-6 lg:px-8 relative">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <motion.div
           className="max-w-2xl mb-16"
           initial={{ opacity: 0, y: 40 }}

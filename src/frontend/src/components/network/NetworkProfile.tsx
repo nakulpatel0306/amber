@@ -269,7 +269,7 @@ export function NetworkProfile() {
               variant="outline"
               size="sm"
               leftIcon={<Edit3 className="w-4 h-4" />}
-              onClick={() => window.location.href = '/app/settings?tab=profile'}
+              onClick={() => window.location.href = `${import.meta.env.BASE_URL}app/settings?tab=profile`}
             >
               Edit
             </Button>

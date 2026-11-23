@@ -271,7 +271,7 @@ export function ProfileSidebar() {
             size="sm"
             className="flex-1 text-xs"
             leftIcon={<Edit3 className="w-3 h-3" />}
-            onClick={() => window.location.href = '/app/settings?tab=profile'}
+            onClick={() => window.location.href = `${import.meta.env.BASE_URL}app/settings?tab=profile`}
           >
             Edit
           </Button>

@@ -9,18 +9,8 @@ const SUFFIX = 'Amber | Culture Match';
  */
 const EXACT: Record<string, string> = {
   '/': '',
-  '/blog': 'Blog',
-  '/science': 'Science',
-  '/help': 'Help Center',
-  '/changelog': 'Changelog',
-  '/status': 'Status',
-  '/about': 'About',
-  '/careers': 'Careers',
-  '/press': 'Press',
-  '/privacy': 'Privacy Policy',
-  '/terms': 'Terms of Service',
-  '/cookies': 'Cookie Policy',
-  '/accessibility': 'Accessibility',
+  '/demo': 'Try the Demo',
+  '/pricing': 'Plans',
   '/auth/login': 'Sign In',
   '/auth/signup': 'Sign Up',
   '/auth/forgot-password': 'Reset Password',
@@ -55,7 +45,6 @@ const EXACT: Record<string, string> = {
  * Order matters — longer prefixes first.
  */
 const PREFIXES: Array<[string, string]> = [
-  ['/blog/', 'Blog'],
   ['/app/assessments/', 'Assessment'],
   ['/app/matches/', 'Match'],
   ['/app/ember/', 'Ember'],

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Check,
@@ -16,8 +16,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { CANDIDATE_PLANS, EMPLOYER_PLANS, PricingPlan } from '../../lib/stripe/plans';
 import { redirectToCheckout } from '../../lib/stripe/stripe';
-import { WaitlistModal } from '../landing/WaitlistModal';
-import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+import { IS_DEMO } from '../../demo/flag';
 
 const tierIcons: Record<string, React.ElementType> = {
   free: Sparkles,
@@ -42,46 +41,18 @@ export function PricingPage() {
     user ? (isEmployer ? 'employer' : 'candidate') : 'candidate'
   );
   const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
-  const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
-  const [waitlistCounts, setWaitlistCounts] = useState({
-    total: 0,
-    candidates: 0,
-    employers: 0,
-  });
-
-  const fetchWaitlistCounts = useCallback(async () => {
-    if (!isSupabaseConfigured) return;
-    try {
-      const { data, error } = await supabase.rpc('get_waitlist_count');
-      if (error) return;
-      if (data && Array.isArray(data) && data[0]) {
-        const row = data[0] as {
-          total: number | string;
-          candidates: number | string;
-          employers: number | string;
-        };
-        setWaitlistCounts({
-          total: Number(row.total) || 0,
-          candidates: Number(row.candidates) || 0,
-          employers: Number(row.employers) || 0,
-        });
-      }
-    } catch {
-      /* noop */
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchWaitlistCounts();
-  }, [fetchWaitlistCounts]);
-
   const isPublic = !user;
   const plans = activeTab === 'employer' ? EMPLOYER_PLANS : CANDIDATE_PLANS;
   const dashboardPath = isEmployer ? '/app/employer' : '/app/dashboard';
 
   const handleSubscribe = async (plan: PricingPlan) => {
+    if (IS_DEMO && plan.tier !== 'free') {
+      showSuccess('Checkout is off in the demo', 'The real product billed this plan as a Stripe subscription.');
+      return;
+    }
+
     if (!user) {
-      setIsWaitlistOpen(true);
+      navigate('/auth/signup');
       return;
     }
 
@@ -184,6 +155,15 @@ export function PricingPage() {
           Every plan starts free so you can explore before you commit. Use connects to
           reach out to matches, and upgrade when you are ready for more.
         </p>
+        {IS_DEMO && (
+          <p
+            className="mt-4 text-sm max-w-2xl rounded-xl border px-4 py-3"
+            style={{ borderColor: 'var(--color-border)', color: 'var(--color-textSecondary)', backgroundColor: 'var(--color-surface)' }}
+          >
+            These are the plans Amber planned to launch with. In the real product, paid plans were Stripe
+            subscriptions (Checkout, Customer Portal and webhooks); the demo doesn't take payments.
+          </p>
+        )}
 
         {/* Toggles */}
         <div className="flex flex-col items-start gap-3 mt-8">
@@ -395,16 +375,6 @@ export function PricingPage() {
           )}
         </div>
       </div>
-
-      {/* Waitlist Modal */}
-      <WaitlistModal
-        isOpen={isWaitlistOpen}
-        onClose={() => setIsWaitlistOpen(false)}
-        onSuccess={fetchWaitlistCounts}
-        total={waitlistCounts.total}
-        candidates={waitlistCounts.candidates}
-        employers={waitlistCounts.employers}
-      />
     </div>
   );
 }

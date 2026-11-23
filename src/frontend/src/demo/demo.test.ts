@@ -110,7 +110,7 @@ describe('demo realtime', () => {
     const channel = supabase
       .channel('t')
       .on('postgres_changes', { event: 'INSERT', table: 'messages', filter: 'coffee_chat_id=eq.chat-1' }, (p) => {
-        seen.push((p.new as { content: string }).content);
+        seen.push(String(p.new.content));
       })
       .subscribe();
     await supabase.from('messages').insert({ coffee_chat_id: 'chat-1', sender_id: 'x', content: 'hello' });

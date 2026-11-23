@@ -1,13 +1,1 @@
-export { BlogPage } from './BlogPage';
-export { BlogArticlePage } from './BlogArticlePage';
-export { SciencePage } from './SciencePage';
-export { HelpCenterPage } from './HelpCenterPage';
-export { ChangelogPage } from './ChangelogPage';
-export { StatusPage } from './StatusPage';
-export { AboutPage } from './AboutPage';
-export { CareersPage } from './CareersPage';
-export { PressPage } from './PressPage';
-export { PrivacyPolicyPage } from './PrivacyPolicyPage';
-export { TermsOfServicePage } from './TermsOfServicePage';
-export { CookiePolicyPage } from './CookiePolicyPage';
-export { AccessibilityPage } from './AccessibilityPage';
+export { RolesPage } from './RolesPage';

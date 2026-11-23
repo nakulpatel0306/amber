@@ -121,7 +121,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [currentTheme, setCurrentTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     const found = themes.find(t => t.id === saved);
-    return found || themes[0];
+    if (found) return found;
+    // No saved choice yet: follow the operating system
+    const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+    return prefersDark ? themes[1] : themes[0];
   });
 
   const isDark = currentTheme.id === 'amber-dark';
