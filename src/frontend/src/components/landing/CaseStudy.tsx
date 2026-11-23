@@ -12,7 +12,7 @@ import { FeatureBento } from './FeatureBento';
 import { MatchingExplainer } from './MatchingExplainer';
 import { ArchitectureDiagram } from './ArchitectureDiagram';
 import { AnimatedBlobs } from './AnimatedBlobs';
-import { DEMO_PATH, REPO_URL, TEAM } from './links';
+import { DEMO_LABEL, DEMO_PATH, REPO_URL, TEAM } from './links';
 import { ARCHETYPES } from '../../lib/archetypes';
 import { IS_DEMO } from '../../demo/flag';
 import { usePageTitle } from '../../hooks/usePageTitle';
@@ -139,7 +139,7 @@ export function CaseStudy() {
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl text-base font-semibold transition-opacity hover:opacity-90"
               style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-accentText)' }}
             >
-              Try the demo
+              {DEMO_LABEL}
               <ArrowRight className="w-4 h-4" />
             </Link>
             <a
@@ -358,7 +358,7 @@ export function CaseStudy() {
             className="mt-6 inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl text-base font-semibold transition-opacity hover:opacity-90"
             style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-accentText)' }}
           >
-            Try the demo
+            {DEMO_LABEL}
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

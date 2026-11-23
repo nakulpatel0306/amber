@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight, Github, Moon, Sun } from 'lucide-react';
 import { AmberLogo } from '../ui/AmberLogo';
 import { useTheme } from '../../contexts/ThemeContext';
-import { DEMO_PATH, REPO_URL } from './links';
+import { DEMO_LABEL, DEMO_PATH, REPO_URL } from './links';
 
 const SECTIONS = [
   { href: '#matching', label: 'Matching' },
@@ -69,7 +69,7 @@ export function LandingNav() {
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-semibold transition-opacity hover:opacity-90"
             style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-accentText)' }}
           >
-            Try the demo
+            {DEMO_LABEL}
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
