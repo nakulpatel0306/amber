@@ -1,14 +1,12 @@
 /**
  * Personality Archetypes for Project Amber
  *
- * Client-side port of the archetype classification logic from ember_agent.py.
- * Used as a fallback when the backend is unavailable, and for displaying
- * archetype details in the UI without an API call.
- *
- * The determineArchetype() function uses a rule-based decision tree
- * (checking OCEAN score thresholds) rather than the backend's distance-based
- * scoring approach. Both produce equivalent results for most profiles.
+ * Display metadata (strengths, environments) for the 8 archetypes. The
+ * classification itself comes from lib/ember, the port of the backend's
+ * determine_archetype, so the archetype a user sees in the UI is the same one
+ * the Ember API reports.
  */
+import { determineArchetype as classify } from './ember/agent';
 
 export interface Archetype {
   key: string;
@@ -104,47 +102,11 @@ interface OCEANInput {
 }
 
 /**
- * Classify a candidate into a personality archetype based on OCEAN scores.
- * Uses a priority-ordered decision tree: the first matching rule wins.
- * Falls back to "The Explorer" if no strong pattern is detected.
+ * Classify a profile into an archetype. Confidence is how closely the scores
+ * match the archetype's OCEAN signature (0-100).
  */
 export function determineArchetype(ocean: OCEANInput): Archetype & { confidence: number } {
-  const o = ocean.openness;
-  const c = ocean.conscientiousness;
-  const e = ocean.extraversion;
-  const a = ocean.agreeableness;
-  const n = ocean.neuroticism;
-
-  // Default archetype if no strong OCEAN pattern is detected
-  let key = 'the_explorer';
-  let confidence = 70;
-
-  if (o >= 80 && c <= 55) {
-    key = 'the_innovator';
-    confidence = 85;
-  } else if (c >= 80 && e <= 50) {
-    key = 'the_craftsperson';
-    confidence = 85;
-  } else if (e >= 80 && a >= 75) {
-    key = 'the_connector';
-    confidence = 90;
-  } else if (e >= 75 && a <= 50) {
-    key = 'the_catalyst';
-    confidence = 80;
-  } else if (c >= 80 && o >= 60) {
-    key = 'the_strategist';
-    confidence = 85;
-  } else if (a >= 80 && n <= 35) {
-    key = 'the_harmonizer';
-    confidence = 85;
-  } else if (c >= 80) {
-    key = 'the_architect';
-    confidence = 80;
-  } else if (o >= 70 && n <= 40) {
-    key = 'the_explorer';
-    confidence = 80;
-  }
-
+  const { key, confidence } = classify(ocean);
   return { ...ARCHETYPES[key], confidence };
 }
 
