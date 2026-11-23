@@ -15,8 +15,8 @@ import { ConnectButton } from '../../connections/ConnectButton';
 import { supabase } from '../../../lib/supabase';
 import { calculateCompatibility, type OCEANScores } from '../../../lib/compatibilityScoring';
 import type { ConnectionStatus } from '../../../types/connections.types';
+import { apiFetch } from '../../../utils/api';
 
-const API_BASE = 'http://127.0.0.1:8000';
 
 /* ── Title case helper ── */
 function titleCase(str: string): string {
@@ -255,7 +255,7 @@ export function DeepDive({
         if (candidateId) params.set('candidate_id', candidateId);
         if (employerId) params.set('employer_id', employerId);
         if (roleId) params.set('role_id', roleId);
-        const res = await fetch(`${API_BASE}/api/ember/analysis?${params}`);
+        const res = await apiFetch(`/api/ember/analysis?${params}`);
         if (res.ok) {
           const data = await res.json();
           setNarrative({

@@ -2,8 +2,8 @@ import { createContext, useContext, useState, useEffect, useCallback, useMemo } 
 import { supabase } from '../lib/supabase';
 import { useAuth } from './AuthContext';
 import type { Connection, ConnectionStatus } from '../types/connections.types';
+import { apiFetch } from '../utils/api';
 
-const API_BASE = 'http://127.0.0.1:8000';
 
 interface SendConnectionData {
   receiverId: string;
@@ -49,7 +49,7 @@ export function ConnectionsProvider({ children }: { children: React.ReactNode })
     if (!user) return;
     setIsLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/connections/me`, {
+      const res = await apiFetch(`/api/connections/me`, {
         headers: {
           'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
         },
@@ -118,7 +118,7 @@ export function ConnectionsProvider({ children }: { children: React.ReactNode })
 
   const sendConnectionRequest = useCallback(async (data: SendConnectionData) => {
     const session = (await supabase.auth.getSession()).data.session;
-    const res = await fetch(`${API_BASE}/api/connections`, {
+    const res = await apiFetch(`/api/connections`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -150,7 +150,7 @@ export function ConnectionsProvider({ children }: { children: React.ReactNode })
 
   const acceptConnection = useCallback(async (id: string, options?: { acceptMeetInvite?: boolean; confirmedTime?: string }) => {
     const session = (await supabase.auth.getSession()).data.session;
-    const res = await fetch(`${API_BASE}/api/connections/${id}/accept`, {
+    const res = await apiFetch(`/api/connections/${id}/accept`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ export function ConnectionsProvider({ children }: { children: React.ReactNode })
 
   const rejectConnection = useCallback(async (id: string) => {
     const session = (await supabase.auth.getSession()).data.session;
-    const res = await fetch(`${API_BASE}/api/connections/${id}/reject`, {
+    const res = await apiFetch(`/api/connections/${id}/reject`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${session?.access_token}`,

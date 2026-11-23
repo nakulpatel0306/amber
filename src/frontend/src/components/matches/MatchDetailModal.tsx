@@ -21,6 +21,7 @@ import {
 import { Button } from '../ui/Button';
 import { EmberFirefly } from '../ember/EmberFirefly';
 import { cn } from '../../utils/cn';
+import { apiFetch } from '../../utils/api';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -247,7 +248,7 @@ export function MatchDetailModal({
     try {
       const params = new URLSearchParams({ candidate_id: candidateId, employer_id: employerId });
       if (roleId) params.set('role_id', roleId);
-      const res = await fetch(`http://127.0.0.1:8000/api/ember/analysis?${params.toString()}`);
+      const res = await apiFetch(`/api/ember/analysis?${params.toString()}`);
       if (res.ok) {
         const data = await res.json();
         setEmberNarrative({

@@ -10,8 +10,8 @@
  */
 
 import { supabase } from '../supabase';
+import { apiFetch } from '../../utils/api';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 /** Get the current Supabase session (JWT + user id). */
 async function getAuthInfo(): Promise<{ token: string | null; userId: string | null }> {
@@ -30,7 +30,7 @@ async function stripeFetch(
   const { token, userId } = await getAuthInfo();
   // Always include userId in body as fallback for when backend auth is not configured
   const payload = body ? { ...body, userId } : { userId };
-  return fetch(`${API_BASE}${path}`, {
+  return apiFetch(`${path}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ export interface SubscriptionInfo {
 export async function getSubscriptionStatus(): Promise<SubscriptionInfo> {
   const { token, userId } = await getAuthInfo();
   const params = userId ? `?userId=${userId}` : '';
-  const response = await fetch(`${API_BASE}/api/stripe/subscription${params}`, {
+  const response = await apiFetch(`/api/stripe/subscription${params}`, {
     headers: {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },

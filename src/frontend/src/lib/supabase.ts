@@ -1,10 +1,12 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '../types/database.types';
+import { IS_DEMO } from '../demo/flag';
+import { createDemoSupabase } from '../demo';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+export const isSupabaseConfigured = IS_DEMO || Boolean(supabaseUrl && supabaseAnonKey);
 
 if (!isSupabaseConfigured) {
   console.warn(
@@ -12,24 +14,27 @@ if (!isSupabaseConfigured) {
   );
 }
 
-// Create typed Supabase client
+// Demo builds (VITE_DEMO=1) get the in-browser stand-in from src/demo instead
+// of a network client; see src/demo/index.ts.
 // Note: If you see type errors, regenerate types using: npx supabase gen types typescript
-const _supabase = createClient<Database>(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder-key',
-  {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true,
-      storage: localStorage,
-    },
-  }
-);
+const _supabase = IS_DEMO
+  ? createDemoSupabase()
+  : createClient<Database>(
+      supabaseUrl || 'https://placeholder.supabase.co',
+      supabaseAnonKey || 'placeholder-key',
+      {
+        auth: {
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true,
+          storage: localStorage,
+        },
+      }
+    );
 
 // Export with relaxed typing to avoid type conflicts before database is set up
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const supabase = _supabase as SupabaseClient<any>;
+export const supabase = _supabase as unknown as SupabaseClient<any>;
 
 // Helper to get current session
 export const getSession = async () => {

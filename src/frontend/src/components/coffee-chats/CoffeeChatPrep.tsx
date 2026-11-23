@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp, Copy, Check, AlertTriangle, Lightbulb } from 'lucide-react';
 import { EmberFirefly } from '../ember/EmberFirefly';
+import { apiFetch } from '../../utils/api';
 
 interface PrepData {
   personality_summary: string;
@@ -33,7 +34,7 @@ export function CoffeeChatPrep({ chatId }: CoffeeChatPrepProps) {
       setIsLoading(true);
       setError(false);
       try {
-        const res = await fetch(`http://127.0.0.1:8000/api/coffee-chats/${chatId}/prep`, {
+        const res = await apiFetch(`/api/coffee-chats/${chatId}/prep`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
         });

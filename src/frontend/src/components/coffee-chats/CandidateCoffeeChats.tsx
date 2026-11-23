@@ -8,14 +8,15 @@ import { CoffeeBrewLoader, useMinLoader } from '../ui/CoffeeBrewLoader';
 import { CoffeeChatData, ChatStatus } from './CoffeeChatCard';
 import { CoffeeChatsCalendar } from './CoffeeChatsCalendar';
 import { FeedbackModal } from './FeedbackModal';
+import { deriveDisplayStatus } from '../../utils/coffeeChatStatus';
 import { CoffeeChatDetailModal } from './CoffeeChatDetailModal';
 import { PageBanner } from '../ui/PageBanner';
 import { InboxPanel } from '../connections/InboxPanel';
 import { Coffee, UserPlus } from 'lucide-react';
 import { useConnections } from '../../contexts/ConnectionsContext';
 import { pageEntrance } from '../../utils/motion';
+import { apiFetch } from '../../utils/api';
 
-const API_BASE = 'http://127.0.0.1:8000';
 
 export function CandidateCoffeeChats() {
   const { user } = useAuth();
@@ -29,8 +30,8 @@ export function CandidateCoffeeChats() {
 
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const [detailModalOpen, setDetailModalOpen] = useState(false);
-  const [activeChatId, _setActiveChatId] = useState<string | null>(null);
-  const [activeChatPartner, _setActiveChatPartner] = useState('');
+  const [activeChatId, setActiveChatId] = useState<string | null>(null);
+  const [activeChatPartner, setActiveChatPartner] = useState('');
   const [activeChat, setActiveChat] = useState<CoffeeChatData | null>(null);
 
   const showLoader = useMinLoader(isLoading);
@@ -140,7 +141,7 @@ export function CandidateCoffeeChats() {
     if (!activeChatId) return;
     try {
       const headers = await getAuthHeaders();
-      const res = await fetch(`${API_BASE}/api/coffee-chats/${activeChatId}/feedback`, {
+      const res = await apiFetch(`/api/coffee-chats/${activeChatId}/feedback`, {
         method: 'PATCH', headers,
         body: JSON.stringify({ rating, feedback: feedback || null }),
       });
@@ -223,6 +224,16 @@ export function CandidateCoffeeChats() {
             setDetailModalOpen(false);
             handleMessage(activeChat.id, activeChat.partner_name);
           }}
+          onFeedback={
+            deriveDisplayStatus(activeChat.status, activeChat.scheduled_at) === 'completed' && !activeChat.rating
+              ? () => {
+                  setActiveChatId(activeChat.id);
+                  setActiveChatPartner(activeChat.partner_name);
+                  setDetailModalOpen(false);
+                  setFeedbackModalOpen(true);
+                }
+              : undefined
+          }
         />
       )}
 

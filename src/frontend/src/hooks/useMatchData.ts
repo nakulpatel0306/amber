@@ -11,8 +11,8 @@ import type {
   EmployerResult,
   EmberInsights,
 } from '../types/matching.types';
+import { apiFetch } from '../utils/api';
 
-const API_BASE = 'http://127.0.0.1:8000';
 
 interface UseCandidateMatchDataReturn {
   candidate: CandidateData | null;
@@ -190,7 +190,7 @@ export function useCandidateMatchData(): UseCandidateMatchDataReturn {
         setPendingChats(count || 0);
 
         try {
-          const res = await fetch(`${API_BASE}/api/ember/candidate-matches/${cand.id}`);
+          const res = await apiFetch(`/api/ember/candidate-matches/${cand.id}`);
           if (res.ok) {
             const data = await res.json();
             setInsights({
@@ -413,7 +413,7 @@ export function useEmployerMatchData(): UseEmployerMatchDataReturn {
         setPendingChats(count || 0);
 
         try {
-          const res = await fetch(`${API_BASE}/api/ember/employer-matches/${emp.id}`);
+          const res = await apiFetch(`/api/ember/employer-matches/${emp.id}`);
           if (res.ok) {
             const data = await res.json();
             setInsights({

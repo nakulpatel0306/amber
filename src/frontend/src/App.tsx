@@ -30,6 +30,11 @@ import { PublicLayout } from './components/layout/PublicLayout';
 import { ErrorBoundary } from './components/layout/ErrorBoundary';
 import { RouteTitleSync } from './components/layout/RouteTitleSync';
 
+// Demo build only: role picker and the "this is a demo" banner (see src/demo)
+import { IS_DEMO } from './demo/flag';
+import { DemoBanner } from './demo/DemoBanner';
+const DemoStart = IS_DEMO ? lazy(() => import('./demo/DemoStart').then(m => ({ default: m.DemoStart }))) : () => null;
+
 // Landing page (loaded eagerly - critical path)
 import { WelcomeScreen } from './components/landing';
 
@@ -110,6 +115,7 @@ const LeadershipStyleAssessment = lazy(() => import('./components/assessments/Le
 const GrowthPhilosophyAssessment = lazy(() => import('./components/assessments/GrowthPhilosophyAssessment').then(m => ({ default: m.GrowthPhilosophyAssessment })));
 const WorkEnvironmentAssessment = lazy(() => import('./components/assessments/WorkEnvironmentAssessment').then(m => ({ default: m.WorkEnvironmentAssessment })));
 
+import './styles/fonts';
 import './styles/globals.css';
 
 // Minimal loading fallback - keeps UI feeling fast
@@ -130,14 +136,16 @@ function App() {
       <AuthProvider>
         <ThemeProvider>
           <ToastProvider>
-            <BrowserRouter>
+            <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || '/'}>
               <RouteTitleSync />
+              {IS_DEMO && <DemoBanner />}
               <ConnectionsProvider>
               <MessagingProvider>
               <Suspense fallback={<PageLoader />}>
               <Routes>
                 {/* Public routes */}
                 <Route path="/" element={<WelcomeScreen />} />
+                {IS_DEMO && <Route path="/demo" element={<DemoStart />} />}
                 <Route element={<PublicLayout />}>
                   <Route path="/blog" element={<BlogPage />} />
                   <Route path="/blog/:slug" element={<BlogArticlePage />} />

@@ -7,8 +7,8 @@ import { Modal, ModalFooter } from '../ui/Modal';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { supabase } from '../../lib/supabase';
+import { apiFetch } from '../../utils/api';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 export function AccountSection() {
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ export function AccountSection() {
         throw new Error('No active session');
       }
 
-      const response = await fetch(`${API_BASE}/api/auth/delete-account`, {
+      const response = await apiFetch(`/api/auth/delete-account`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${session.access_token}`,

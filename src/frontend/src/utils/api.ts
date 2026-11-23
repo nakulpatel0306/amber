@@ -1,14 +1,20 @@
 /**
  * API Client for the Amber Backend
  *
- * All backend communication goes through this module. It defines TypeScript
- * interfaces for request/response shapes and provides typed fetch wrappers
- * for each API endpoint. The base URL points to the FastAPI dev server.
- *
- * For production, update API_BASE_URL to the deployed backend URL or use
- * an environment variable (e.g., import.meta.env.VITE_API_URL).
+ * All backend communication goes through apiFetch(). It points at the FastAPI
+ * server from VITE_API_URL, or, in demo builds (VITE_DEMO=1), at the
+ * in-browser stand-in in src/demo/backend.ts. Typed wrappers for the
+ * assessment, candidate, feedback and matching endpoints live below.
  */
-const API_BASE_URL = "http://localhost:8000";
+import { IS_DEMO } from '../demo/flag';
+import { demoFetch } from '../demo';
+
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+/** fetch() for a backend path such as "/api/connections/me". */
+export function apiFetch(path: string, init?: RequestInit): Promise<Response> {
+  return IS_DEMO ? demoFetch(path, init) : fetch(`${API_BASE_URL}${path}`, init);
+}
 
 // ============ Assessment Types ============
 
@@ -91,7 +97,7 @@ export interface FeedbackResponse {
 export async function startAssessment(
   request: StartAssessmentRequest
 ): Promise<StartAssessmentResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/assessment/start`, {
+  const response = await apiFetch(`/api/assessment/start`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -110,7 +116,7 @@ export async function startAssessment(
 export async function submitAnswer(
   request: SubmitAnswerRequest
 ): Promise<SubmitAnswerResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/assessment/answer`, {
+  const response = await apiFetch(`/api/assessment/answer`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -129,8 +135,7 @@ export async function submitAnswer(
 export async function getAssessmentResults(
   candidateId: number
 ): Promise<AssessmentResults> {
-  const response = await fetch(
-    `${API_BASE_URL}/api/assessment/results/${candidateId}`
+  const response = await apiFetch(`/api/assessment/results/${candidateId}`
   );
 
   if (!response.ok) {
@@ -142,8 +147,7 @@ export async function getAssessmentResults(
 }
 
 export async function getQuestion(questionId: number): Promise<Question> {
-  const response = await fetch(
-    `${API_BASE_URL}/api/assessment/question/${questionId}`
+  const response = await apiFetch(`/api/assessment/question/${questionId}`
   );
 
   if (!response.ok) {
@@ -156,7 +160,7 @@ export async function getQuestion(questionId: number): Promise<Question> {
 // ============ Candidates API ============
 
 export async function getCandidates(): Promise<Candidate[]> {
-  const response = await fetch(`${API_BASE_URL}/api/candidates`);
+  const response = await apiFetch(`/api/candidates`);
 
   if (!response.ok) {
     throw new Error(`API error: ${response.statusText}`);
@@ -166,7 +170,7 @@ export async function getCandidates(): Promise<Candidate[]> {
 }
 
 export async function getCandidate(candidateId: number): Promise<Candidate> {
-  const response = await fetch(`${API_BASE_URL}/api/candidates/${candidateId}`);
+  const response = await apiFetch(`/api/candidates/${candidateId}`);
 
   if (!response.ok) {
     throw new Error(`API error: ${response.statusText}`);
@@ -180,7 +184,7 @@ export async function getCandidate(candidateId: number): Promise<Candidate> {
 export async function submitFeedback(
   request: FeedbackRequest
 ): Promise<FeedbackResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/feedback`, {
+  const response = await apiFetch(`/api/feedback`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -216,7 +220,7 @@ export interface HealthResponse {
 }
 
 export async function healthCheck(): Promise<HealthResponse> {
-  const response = await fetch(`${API_BASE_URL}/health`);
+  const response = await apiFetch(`/health`);
   return response.json();
 }
 
@@ -268,7 +272,7 @@ export async function calculateMatch(
   candidateId: string,
   roleId: string
 ): Promise<MatchResult> {
-  const response = await fetch(`${API_BASE_URL}/api/matching/calculate`, {
+  const response = await apiFetch(`/api/matching/calculate`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -290,8 +294,7 @@ export async function calculateMatch(
 export async function getCandidatesForRole(
   roleId: string
 ): Promise<CandidateMatchResult[]> {
-  const response = await fetch(
-    `${API_BASE_URL}/api/matching/candidates/${roleId}`
+  const response = await apiFetch(`/api/matching/candidates/${roleId}`
   );
 
   if (!response.ok) {
@@ -305,8 +308,7 @@ export async function getCandidatesForRole(
 export async function getRolesForCandidate(
   candidateId: string
 ): Promise<RoleMatchResult[]> {
-  const response = await fetch(
-    `${API_BASE_URL}/api/matching/roles/${candidateId}`
+  const response = await apiFetch(`/api/matching/roles/${candidateId}`
   );
 
   if (!response.ok) {
@@ -320,8 +322,7 @@ export async function getRolesForCandidate(
 export async function batchCalculateForRole(
   roleId: string
 ): Promise<{ success: boolean; candidates_scored: number }> {
-  const response = await fetch(
-    `${API_BASE_URL}/api/matching/batch-calculate/${roleId}`,
+  const response = await apiFetch(`/api/matching/batch-calculate/${roleId}`,
     {
       method: "POST",
     }
@@ -338,8 +339,7 @@ export async function batchCalculateForRole(
 export async function getEmployerCandidates(): Promise<
   Array<CandidateMatchResult & { headline?: string }>
 > {
-  const response = await fetch(
-    `${API_BASE_URL}/api/matching/employer-candidates`
+  const response = await apiFetch(`/api/matching/employer-candidates`
   );
 
   if (!response.ok) {

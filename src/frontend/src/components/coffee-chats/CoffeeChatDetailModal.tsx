@@ -80,6 +80,7 @@ interface CoffeeChatDetailModalProps {
   partnerName: string;
   matchScore?: number;
   onMessage?: () => void;
+  onFeedback?: () => void;
 }
 
 export function CoffeeChatDetailModal({
@@ -90,6 +91,7 @@ export function CoffeeChatDetailModal({
   partnerName,
   matchScore,
   onMessage,
+  onFeedback,
 }: CoffeeChatDetailModalProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [employerDetails, setEmployerDetails] = useState<EmployerDetails | null>(null);
@@ -557,6 +559,11 @@ export function CoffeeChatDetailModal({
           <Button variant="outline" onClick={onClose}>
             Close
           </Button>
+          {onFeedback && (
+            <Button variant="outline" leftIcon={<Star className="w-4 h-4" />} onClick={onFeedback}>
+              Leave Feedback
+            </Button>
+          )}
           {onMessage && (
             <Button leftIcon={<MessageCircle className="w-4 h-4" />} onClick={onMessage}>
               Message

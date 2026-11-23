@@ -24,6 +24,7 @@ import {
 import { supabase, getCurrentUserWithProfile, isSupabaseConfigured } from '../lib/supabase';
 import type { User, Session, AuthError } from '@supabase/supabase-js';
 import type { Profile, UserRole } from '../types/auth.types';
+import { apiFetch } from '../utils/api';
 
 // Dev mode bypasses profile setup requirements for faster local development.
 // Toggle in browser console: localStorage.setItem('dev_mode', 'true')
@@ -289,7 +290,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Check if email exists in the database
   const checkEmailExists = useCallback(async (email: string): Promise<{ exists: boolean; message: string }> => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/auth/check-email`, {
+      const response = await apiFetch(`/api/auth/check-email`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

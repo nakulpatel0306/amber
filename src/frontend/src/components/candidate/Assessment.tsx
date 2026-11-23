@@ -24,6 +24,7 @@ import {
   type CandidateProfile,
 } from '../../lib/personalityEngine';
 import { cn } from '../../utils/cn';
+import { determineArchetype } from '../../lib/archetypes';
 import { CandidateSetupModal } from './CandidateSetupModal';
 
 interface AssessmentState {
@@ -334,6 +335,14 @@ export function Assessment() {
 
       if (assessmentError) throw assessmentError;
 
+      // The dashboard reads top_traits[0] as the archetype, so lead with the
+      // one the Ember engine assigns; constellations follow as extra traits.
+      const archetypeName = determineArchetype(generatedProfile.ocean).name;
+      const topTraits = [
+        archetypeName,
+        ...generatedProfile.constellations.map(c => c.name).filter(name => name !== archetypeName),
+      ];
+
       // Update candidate record with scores
       const { error: candidateError } = await supabase
         .from('candidates')
@@ -343,7 +352,7 @@ export function Assessment() {
           extraversion_score: generatedProfile.ocean.extraversion,
           agreeableness_score: generatedProfile.ocean.agreeableness,
           neuroticism_score: generatedProfile.ocean.neuroticism,
-          top_traits: generatedProfile.constellations.map(c => c.name),
+          top_traits: topTraits,
           assessment_status: 'completed',
           assessment_completed_at: new Date().toISOString(),
         })

@@ -20,8 +20,8 @@ import { InboxPanel } from '../connections/InboxPanel';
 import { Coffee, UserPlus, Clock, CheckCircle2, CalendarDays } from 'lucide-react';
 import { useConnections } from '../../contexts/ConnectionsContext';
 import { deriveDisplayStatus, type DisplayStatus } from '../../utils/coffeeChatStatus';
+import { apiFetch } from '../../utils/api';
 
-const API_BASE = 'http://127.0.0.1:8000';
 
 type TabValue = 'calendar' | 'pending' | 'upcoming' | 'completed';
 
@@ -179,7 +179,7 @@ export function EmployerCoffeeChats() {
   const updateChatStatus = async (chatId: string, status: string) => {
     try {
       const headers = await getAuthHeaders();
-      const res = await fetch(`${API_BASE}/api/coffee-chats/${chatId}/status?status=${status}`, {
+      const res = await apiFetch(`/api/coffee-chats/${chatId}/status?status=${status}`, {
         method: 'PATCH', headers,
       });
       if (!res.ok) throw new Error('Failed to update');
@@ -212,7 +212,7 @@ export function EmployerCoffeeChats() {
     if (!chatToAccept) return;
     try {
       const headers = await getAuthHeaders();
-      const res = await fetch(`${API_BASE}/api/coffee-chats/${chatToAccept.id}/schedule`, {
+      const res = await apiFetch(`/api/coffee-chats/${chatToAccept.id}/schedule`, {
         method: 'PATCH',
         headers,
         body: JSON.stringify({ scheduled_at: scheduledAt }),
@@ -237,7 +237,7 @@ export function EmployerCoffeeChats() {
     if (!activeChatId) return;
     try {
       const headers = await getAuthHeaders();
-      const res = await fetch(`${API_BASE}/api/coffee-chats/${activeChatId}/schedule`, {
+      const res = await apiFetch(`/api/coffee-chats/${activeChatId}/schedule`, {
         method: 'PATCH', headers,
         body: JSON.stringify({ scheduled_at: scheduledAt, meeting_link: meetingLink || null }),
       });
@@ -260,7 +260,7 @@ export function EmployerCoffeeChats() {
     if (!activeChatId) return;
     try {
       const headers = await getAuthHeaders();
-      const res = await fetch(`${API_BASE}/api/coffee-chats/${activeChatId}/feedback`, {
+      const res = await apiFetch(`/api/coffee-chats/${activeChatId}/feedback`, {
         method: 'PATCH', headers,
         body: JSON.stringify({ rating, feedback: feedback || null }),
       });

@@ -3,8 +3,6 @@
 export const APP_NAME = 'Amber Project';
 export const APP_DESCRIPTION = 'Culture-first job matching platform';
 
-// API endpoints
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 // Auth
 export const AUTH_STORAGE_KEY = 'amber-auth';
