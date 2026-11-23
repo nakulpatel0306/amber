@@ -22,16 +22,9 @@ dist/
 build/
 *.egg
 
-# Tauri/Rust
-src/frontend/src-tauri/target/
-target/
-
 # Build outputs
 src/frontend/dist/
 *.bundle.js
-
-# Firebase Hosting deploy cache
-.firebase/
 
 # Claude Code
 .claude/

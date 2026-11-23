@@ -8,9 +8,6 @@
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter"
   },
-  "[rust]": {
-    "editor.defaultFormatter": "rust-lang.rust-analyzer"
-  },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -20,9 +17,11 @@
   "python.linting.enabled": true,
   "python.linting.ruffEnabled": true,
   "python.formatting.provider": "black",
-  "rust-analyzer.checkOnSave.command": "clippy",
   "tailwindCSS.experimental.classRegex": [
-    ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+    [
+      "clsx\\(([^)]*)\\)",
+      "(?:'|\"|`)([^']*)(?:'|\"|`)"
+    ]
   ],
   "files.exclude": {
     "**/__pycache__": true,
