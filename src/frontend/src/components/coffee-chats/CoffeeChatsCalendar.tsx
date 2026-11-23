@@ -700,9 +700,10 @@ export function CoffeeChatsCalendar({
   }, []);
 
   return (
-    <div className="flex gap-4 items-start">
+    // Stacks on phones; the week grid needs the full width there
+    <div className="flex flex-col lg:flex-row gap-4 items-stretch lg:items-start">
       {/* LEFT SIDEBAR */}
-      <div className="w-[260px] flex-shrink-0 space-y-3">
+      <div className="w-full lg:w-[260px] flex-shrink-0 space-y-3">
         <SmallMonthCalendar
           currentMonth={currentMonth}
           onMonthChange={setCurrentMonth}
@@ -719,7 +720,7 @@ export function CoffeeChatsCalendar({
       </div>
 
       {/* RIGHT: WEEK CALENDAR */}
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 overflow-x-auto">
         <WeekCalendar
           weekStart={weekStart}
           onWeekChange={handleWeekChange}

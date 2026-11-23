@@ -19,7 +19,7 @@ export function DemoBanner() {
   return (
     <div
       role="status"
-      className="fixed bottom-3 left-1/2 -translate-x-1/2 z-[60] flex items-center gap-2 sm:gap-3 rounded-full border pl-3 pr-1.5 py-1.5 text-xs shadow-lg max-w-[calc(100vw-32px)]"
+      className="fixed bottom-3 inset-x-0 mx-auto w-fit z-[60] flex items-center gap-2 sm:gap-3 rounded-full border pl-3 pr-1.5 py-1.5 text-xs shadow-lg max-w-[calc(100vw-32px)]"
       style={{
         backgroundColor: 'color-mix(in srgb, var(--color-surface) 92%, transparent)',
         borderColor: 'var(--color-border)',
@@ -36,7 +36,7 @@ export function DemoBanner() {
       </span>
       <span className="truncate">
         <span className="hidden sm:inline">Made-up data, saved only in this browser</span>
-        <span className="sm:hidden">Made-up data, local only</span>
+        <span className="sm:hidden">Made-up data</span>
       </span>
       {confirming ? (
         <span className="flex items-center gap-1 flex-shrink-0">

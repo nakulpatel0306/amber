@@ -39,8 +39,9 @@ export function AppLayout() {
         onMobileClose={() => setMobileMenuOpen(false)}
       />
 
+      {/* min-w-0 stops wide children (tables, nowrap rows) from stretching the page past the viewport on phones */}
       <div
-        className="flex-1 flex flex-col min-h-screen"
+        className="flex-1 flex flex-col min-h-screen min-w-0"
         style={{ marginLeft: undefined }}
       >
         {/* Spacer for desktop sidebar */}
@@ -50,14 +51,14 @@ export function AppLayout() {
         />
         <div
           id="main-scroll-container"
-          className="flex-1 flex flex-col md:fixed md:inset-y-0 md:right-0 md:overflow-y-auto"
+          className="flex-1 flex flex-col min-w-0 md:fixed md:inset-y-0 md:right-0 md:overflow-y-auto"
           style={{
             left: sidebarWidth,
             transition: 'left 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         >
           <MobileTopBar onMenuClick={() => setMobileMenuOpen(true)} />
-          <main className="flex-1">
+          <main className="flex-1 min-w-0">
             <Outlet />
           </main>
         </div>
