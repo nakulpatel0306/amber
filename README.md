@@ -6,7 +6,7 @@ Amber matched candidates and companies on personality and culture fit instead of
 
 **Status:** shelved in 2026. Three of us built Amber from January to November 2026 and took it close to launch. The culture-fit hiring space filled up quickly, competing would have meant raising money, and we chose not to. The code stays open and the full stack still runs locally.
 
-![The case-study landing page and the job seeker dashboard](docs/screenshots/landing.png)
+![The case-study landing page](docs/screenshots/landing.png)
 
 ## At a Glance
 
@@ -24,7 +24,11 @@ Amber matched candidates and companies on personality and culture fit instead of
 - **Billing.** Two paid tiers per side as Stripe subscriptions, with Checkout, Customer Portal and webhooks
 - **Demo mode.** One build flag swaps Supabase and the FastAPI client for an in-browser stand-in, so the real components run against seeded fictional data on GitHub Pages
 
-![Ranked matches with the Ember deep dive](docs/screenshots/deep-dive.png)
+| Job seeker dashboard | Ember deep dive |
+|---|---|
+| ![Job seeker dashboard with archetype and match index](docs/screenshots/dashboard.png) | ![Per-trait breakdown of one match](docs/screenshots/deep-dive.png) |
+| **Employer: candidates ranked for a role** | **Coffee chat with an automatic demo reply** |
+| ![Top candidates ranked for the Customer Success Lead role](docs/screenshots/employer-candidates.png) | ![Coffee chat calendar and messaging panel](docs/screenshots/coffee-chat.png) |
 
 ## How Matching Works
 
