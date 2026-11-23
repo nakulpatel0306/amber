@@ -69,7 +69,7 @@ export function PrivacySection() {
       setOriginalSettings(settings);
       setHasChanges(false);
       success('Settings saved', 'Your privacy preferences have been updated.');
-    } catch (err) {
+    } catch {
       showError('Failed to save', 'Please try again later.');
     } finally {
       setIsSaving(false);

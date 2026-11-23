@@ -273,7 +273,7 @@ export function EmployerDashboard() {
 
         // Fetch profile names via RPC
         const candidateUserIds = candidatesData.map((c) => c.user_id as string).filter(Boolean);
-        let profileMap = new Map<string, string>();
+        const profileMap = new Map<string, string>();
         if (candidateUserIds.length > 0) {
           try {
             const { data: rpcData, error: rpcErr } = await supabase
@@ -288,7 +288,7 @@ export function EmployerDashboard() {
         }
 
         // Build candidate_id → chat status map
-        let chatStatusMap = new Map<string, string>();
+        const chatStatusMap = new Map<string, string>();
         const { data: chatData } = await supabase
           .from('coffee_chats')
           .select('candidate_id, status')

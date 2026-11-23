@@ -33,7 +33,7 @@ const _supabase = IS_DEMO
     );
 
 // Export with relaxed typing to avoid type conflicts before database is set up
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 export const supabase = _supabase as unknown as SupabaseClient<any>;
 
 // Helper to get current session
@@ -81,7 +81,7 @@ export const getUserSettings = async (userId: string) => {
 // Helper to update user settings
 export const updateUserSettings = async (
   userId: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   updates: any
 ) => {
   const { error } = await supabase

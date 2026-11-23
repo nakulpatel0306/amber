@@ -168,7 +168,7 @@ export function FeedbackSection() {
       setSubmitted(true);
 
       setTimeout(() => setSubmitted(false), 3000);
-    } catch (err) {
+    } catch {
       showError('Failed To Submit', 'Please try again later.');
     } finally {
       setIsSubmitting(false);

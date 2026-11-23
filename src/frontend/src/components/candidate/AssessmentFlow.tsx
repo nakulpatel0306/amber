@@ -89,7 +89,7 @@ export function AssessmentFlow() {
             const assessmentResults = await getAssessmentResults(candidateId);
             setResults(assessmentResults);
             setState('results');
-          } catch (err) {
+          } catch {
             setError('failed to get results');
             setState('assessment');
           }

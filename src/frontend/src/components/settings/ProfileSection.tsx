@@ -50,7 +50,7 @@ export function ProfileSection() {
       await updateProfile(formData);
       success('Profile updated', 'Your changes have been saved.');
       setIsEditing(false);
-    } catch (err) {
+    } catch {
       showError('Failed to update', 'Please try again later.');
     } finally {
       setIsSaving(false);
@@ -72,7 +72,7 @@ export function ProfileSection() {
     try {
       await updateProfile({ avatar_url: newAvatarUrl });
       success('Avatar updated', 'Your new look is saved!');
-    } catch (err) {
+    } catch {
       showError('Update failed', 'Please try again.');
     }
 

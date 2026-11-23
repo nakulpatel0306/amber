@@ -201,7 +201,7 @@ export function TopCandidates() {
     (selectedWorkStyleFilter ? 1 : 0);
 
   const filteredCandidates = useMemo(() => {
-    let result = candidates.filter(c => {
+    const result = candidates.filter(c => {
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
         if (

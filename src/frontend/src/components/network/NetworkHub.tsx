@@ -234,7 +234,7 @@ export function NetworkHub() {
       }
 
       // 2. Employer company names
-      let companyMap: Record<string, string> = {};
+      const companyMap: Record<string, string> = {};
       try {
         const { data: employers } = await supabase
           .from('employers')
@@ -264,7 +264,7 @@ export function NetworkHub() {
         .limit(100);
 
       // Caption data
-      let captionMap: Record<string, { url: string; caption: string }[]> = {};
+      const captionMap: Record<string, { url: string; caption: string }[]> = {};
       try {
         const { data: cd } = await supabase
           .from('candidates')

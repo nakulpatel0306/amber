@@ -141,7 +141,7 @@ export function AccountSection() {
       URL.revokeObjectURL(url);
 
       success('Data Exported', 'Your data has been downloaded as a JSON file.');
-    } catch (err) {
+    } catch {
       showError('Export Failed', 'Could not export your data. Please try again.');
     }
   };

@@ -274,7 +274,7 @@ export function JobSeekerDashboard() {
 
         // Fetch employer profile names
         const empUserIds = employersArr.map(e => e.user_id as string).filter(Boolean);
-        let empProfileMap = new Map<string, string>();
+        const empProfileMap = new Map<string, string>();
         if (empUserIds.length > 0) {
           try {
             const { data: rpcData, error: rpcErr } = await supabase
@@ -296,7 +296,7 @@ export function JobSeekerDashboard() {
           .single();
 
         // Build employer_id → chat status map
-        let chatStatusMap = new Map<string, string>();
+        const chatStatusMap = new Map<string, string>();
         if (candRecord) {
           const { data: chats } = await supabase
             .from('coffee_chats')

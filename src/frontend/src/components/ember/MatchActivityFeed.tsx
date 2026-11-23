@@ -224,7 +224,7 @@ export function MatchActivityFeed({ mode = 'candidate', matches = [], candidateM
     () => mode === 'employer'
       ? buildEmployerActivity(candidateMatches, savedMatches, pendingSent, acceptedConnections)
       : buildActivity(matches, savedMatches, pendingSent, acceptedConnections),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [mode, matches, candidateMatches, savedMatches, pendingSent, acceptedConnections],
   );
 

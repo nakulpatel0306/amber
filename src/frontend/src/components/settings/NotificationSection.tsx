@@ -120,7 +120,7 @@ export function NotificationSection() {
       setOriginalSettings(settings);
       setHasChanges(false);
       success('Settings Saved', 'Your notification preferences have been updated.');
-    } catch (err) {
+    } catch {
       showError('Failed to save', 'Please try again later.');
     } finally {
       setIsSaving(false);

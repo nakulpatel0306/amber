@@ -11,7 +11,7 @@
     "build:demo": "tsc && vite build --mode demo",
     "preview": "vite preview",
     "preview:demo": "vite preview --mode demo",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --max-warnings 0",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
@@ -35,17 +35,22 @@
     "zustand": "^5.0.10"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@types/node": "^25.0.9",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
     "autoprefixer": "^10.4.23",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.14.0",
     "jsdom": "^26.1.0",
     "postcss": "^8.5.6",
     "prettier": "^3.8.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^3.4.19",
     "typescript": "~5.8.3",
+    "typescript-eslint": "^8.72.2",
     "vite": "^7.0.4",
     "vitest": "^3.2.4"
   }

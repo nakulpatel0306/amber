@@ -51,7 +51,9 @@ function getPersistedState(): { read: string[]; dismissed: string[] } {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw);
-  } catch {}
+  } catch {
+    // Corrupt or blocked storage: fall back to empty state
+  }
   return { read: [], dismissed: [] };
 }
 

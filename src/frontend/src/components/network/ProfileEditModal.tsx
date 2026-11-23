@@ -156,7 +156,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
       if (error) throw error;
       setHobbies(newHobbies);
       showSuccess('Saved', 'Hobbies updated');
-    } catch (err) {
+    } catch {
       showError('Error', 'Failed to save hobbies');
     } finally {
       setIsSaving(false);
@@ -230,7 +230,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
 
       setPhotos(newPhotos);
       return true;
-    } catch (err) {
+    } catch {
       showError('Error', 'Failed to save photos');
       return false;
     }
@@ -280,7 +280,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
         setNewPhotoIndex(newIndex); // Mark as new photo requiring caption
         setCaptionText('');
       }
-    } catch (err) {
+    } catch {
       showError('Upload Failed', 'Failed to upload photo');
     } finally {
       setUploadingPhoto(false);

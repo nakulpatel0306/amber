@@ -135,7 +135,7 @@ export function NetworkRoles({ isCandidate }: Props) {
   }, [matches]);
 
   const filteredMatches = useMemo(() => {
-    let result = matches.filter(m => {
+    const result = matches.filter(m => {
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
         if (

@@ -238,7 +238,7 @@ export function MatchingAgent() {
     + (maxScore < 100 ? 1 : 0);
 
   const filteredMatches = useMemo(() => {
-    let result = matches.filter(m => {
+    const result = matches.filter(m => {
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
         const matchesSearch =
