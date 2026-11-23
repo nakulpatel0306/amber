@@ -194,7 +194,7 @@ export function NetworkPeople() {
         });
         showSuccess('Sent!', 'Coffee chat request sent');
       } else {
-        showSuccess('Coming soon', 'Peer-to-peer coffee chats launching soon!');
+        showSuccess('Not built yet', 'Peer-to-peer coffee chats were planned but never shipped.');
       }
     } catch { showError('Error', 'Failed to send request'); }
   };

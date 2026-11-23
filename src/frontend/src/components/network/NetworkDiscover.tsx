@@ -218,7 +218,7 @@ export function NetworkDiscover({ isCandidate }: Props) {
     try {
       const { data: myCandidate } = await supabase.from('candidates').select('id').eq('user_id', user.id).single();
       if (myCandidate) {
-        showSuccess('Coming soon', 'Peer-to-peer coffee chats launching soon!');
+        showSuccess('Not built yet', 'Peer-to-peer coffee chats were planned but never shipped.');
       }
     } catch { showError('Error', 'Something went wrong'); }
   };

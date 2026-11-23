@@ -64,7 +64,7 @@ export function PricingPage() {
 
     const priceId = billing === 'yearly' ? plan.stripeYearlyPriceId : plan.stripePriceId;
     if (!priceId) {
-      showSuccess('Coming Soon!', `${plan.name} plan will be available at launch`);
+      showError('Not configured', `No Stripe price is set for the ${plan.name} plan.`);
       return;
     }
 

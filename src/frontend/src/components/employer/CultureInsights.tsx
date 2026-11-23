@@ -1186,7 +1186,7 @@ export function CultureInsights() {
               About Culture Matching
             </p>
             <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
-              This profile is based on the Big Five (OCEAN) model. Research shows personality fit accounts for 15-25% of work performance variance. We use these preferences alongside skills and experience to suggest compatible candidates — never as a sole deciding factor.
+              This profile is based on the Big Five (OCEAN) model. We use these preferences alongside skills and experience to suggest compatible candidates — never as a sole deciding factor.
             </p>
           </div>
         </motion.div>

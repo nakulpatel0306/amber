@@ -110,7 +110,7 @@ export function PracticeCoffeeChat() {
           </div>
           <span className="flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-xl" style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textMuted)', border: '1px solid var(--color-border)' }}>
             <Sparkles className="w-3 h-3" />
-            Voice agent coming soon
+            Voice practice was planned but not built
           </span>
         </div>
       </div>
