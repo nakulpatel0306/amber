@@ -1,15 +1,15 @@
 # Features
 
-A comprehensive breakdown of all existing features, planned features, and the product roadmap for the Amber platform.
+Everything Amber shipped before it was shelved in 2026, followed by the features we had planned and never built.
 
-> For the full product vision, technical deep-dives, and styling direction, see [BLUEPRINT.md](./BLUEPRINT.md).
+> Amber will not launch. Every "Existing" feature below runs in the full stack, and most of them run in the [browser demo](https://nakulpatel0306.github.io/amber/). The planned sections are kept as a record of where the product was headed; see [BLUEPRINT.md](./BLUEPRINT.md) for the roadmap we had.
 
 ---
 
 ## Existing Features — Job Seeker Side
 
 ### Personality Assessment
-- **Big Five Assessment** — A 10-question assessment that measures the five core personality dimensions: Openness, Conscientiousness, Extraversion, Agreeableness, and Neuroticism (OCEAN). Questions are grouped into work style (4 questions), communication (3 questions), and values (3 questions) categories, each with four response options that map to specific trait scores.
+- **Big Five Assessment** — 16 questions that reveal personality through situations rather than agree/disagree statements: 5 scenarios, 3 metaphors, 3 trade-offs, 3 sliders, a ranking and a short reflection. Each answer feeds facet scores that map onto Openness, Conscientiousness, Extraversion, Agreeableness and Neuroticism (OCEAN). Progress saves after every answer and resumes where you left off. (An older 10-question flow backed by the API's local SQLite store is still in the code at `/app/assessment`.)
 - **Scoring Engine** — Responses are aggregated across 14 personality dimensions (structure, planning, autonomy, flexibility, adaptability, focus, directness, communication, collaboration, learning, impact, growth, alignment, balance), then normalized into 0–100 scores for each OCEAN dimension. Four derived composite scores are also calculated: culture fit (35% work style + 35% communication + 30% values), work style, communication, and values.
 - **Top Traits** — After assessment completion, the system identifies 3–5 key personality descriptors (e.g., "Highly Adaptable", "Team Player", "Detail-Oriented", "Direct Communicator") with contextual explanations.
 - **Supplementary Assessments** — Additional assessments are available for deeper personality profiling:
@@ -156,16 +156,10 @@ A comprehensive breakdown of all existing features, planned features, and the pr
 - **Protected Routes** — All authenticated routes are guarded by `ProtectedRoute` with optional role-based enforcement.
 - **Dev Mode** — When `SUPABASE_JWT_SECRET` is not configured, the backend skips authentication for local development.
 
-### Landing Page
-- **Animated Welcome Screen** — Full landing page with hero section, animated product demo, value propositions, process steps, and call-to-action sections.
-- **Interactive Elements** — Magnetic buttons, cursor spotlight, tilt cards, animated blobs, coffee steam, typewriter/text-scramble headlines, animated stat counters, and a scroll progress bar.
-- **Content Sections** — Feature bento grid, live stats section, product showcase and product journey walkthroughs, interactive dashboard preview, and an FAQ accordion.
-- **Floating Theme Selector** — Switch between Amber Light and Amber Dark directly from the landing page.
-- **Public Navigation** — Landing nav with links to all public pages.
-- **Footer** — Links to company pages, legal pages, and social media (Instagram, LinkedIn, TikTok).
-
-### Public Pages
-- About, Blog (with article detail), Careers, Press, Science (methodology), Help Center, Changelog, Status Page, Privacy Policy, Terms of Service, Cookie Policy, and Accessibility Statement.
+### Case Study and Demo
+- **Case-study landing page** - What Amber was, why it is shelved, an animated tour of the real screens, an interactive explainer that runs the actual scoring engine, the architecture, lessons learned and the team.
+- **Browser demo** - A `VITE_DEMO=1` build for GitHub Pages that swaps Supabase and the FastAPI client for in-browser stand-ins with invented people and companies. Visitors pick job seeker or employer, take the real assessment or skip with sample answers, and seeded people reply on their own (labelled as automatic). State stays in `localStorage` with a Reset control.
+- **Theme** - Amber Light and Amber Dark, following the operating system until the visitor picks one.
 
 ### Ember Agent (AI Matching Engine)
 - **Bidirectional Analysis** — Works from both the candidate perspective ("How compatible am I with this role?") and the employer perspective ("Which candidates fit our culture?").
@@ -173,10 +167,10 @@ A comprehensive breakdown of all existing features, planned features, and the pr
 - **Insight Generation** — Up to 8 actionable insights per match, categorized as strengths, cautions, highlights, and tips.
 - **Natural Language Summaries** — Score-tier-based assessments with hiring recommendations.
 - **Animated UI** — Flame mascot with mood-based animations, typing simulation during analysis, circular score rings, and dimension comparison bars.
-- **Client-Side Fallback** — If the backend is unavailable, the frontend runs the matching algorithm locally using data from Supabase.
+- **Client-Side Scoring** — The frontend scores matches with `lib/ember`, a TypeScript port of the Python engine that a shared fixture keeps identical.
 
 ### Payments
-- **Stripe Integration** — Full checkout session creation, customer portal for subscription management, webhook handling for 4 event types (checkout completed, invoice paid, invoice failed, subscription deleted), and subscription status API. Graceful fallback to demo data when Stripe is not configured.
+- **Stripe Integration** — Full checkout session creation, customer portal for subscription management, webhook handling for 4 event types (checkout completed, invoice paid, invoice failed, subscription deleted), and subscription status API. The browser demo shows the plans but takes no payments.
 
 ### Real-Time Features
 - **Supabase Realtime** — Postgres changes subscriptions for:
@@ -187,7 +181,7 @@ A comprehensive breakdown of all existing features, planned features, and the pr
 
 ---
 
-## Planned Features — Next Up
+## Planned Features (never built)
 
 > For detailed technical specifications on each phase, see [BLUEPRINT.md](./BLUEPRINT.md).
 
@@ -196,7 +190,7 @@ Transform Ember from a scoring engine into a conversational AI agent that conduc
 
 - Natural language personality interviews using OpenAI (already installed as dependency)
 - LangChain orchestration for multi-step trait extraction from conversation
-- Hybrid mode: candidates choose between quick 10-question assessment or full Ember conversation
+- Hybrid mode: candidates choose between the quick assessment or a full Ember conversation
 - Ongoing Ember interactions as a persistent career advisor (match explanations, pre-chat coaching)
 - Conversation transcripts stored with trait annotations for improving extraction accuracy over time
 
@@ -246,7 +240,7 @@ Strip away identifying information and force both sides to evaluate on culture a
 
 ---
 
-## Additional Planned Features
+## Additional Planned Features (never built)
 
 ### Job Listings and Search
 - **Public Job Board** — Searchable, filterable job listings page accessible to all candidates.
@@ -321,7 +315,7 @@ Strip away identifying information and force both sides to evaluate on culture a
 
 ---
 
-## Suggested Features and Ideas
+## Ideas We Discussed
 
 These are longer-term ideas that could further differentiate Amber as a culture-first hiring intelligence platform.
 

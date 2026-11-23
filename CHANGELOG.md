@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Showcase (November 2026)
+
+Amber is shelved and will not launch; this work turns the repository into a case study.
+
+#### Added
+- Browser-only demo mode (`VITE_DEMO=1`, `npm run build:demo`): in-browser stand-ins for supabase-js and the FastAPI client behind one seam, fictional seed data, automatic replies from seeded people, a demo banner with Reset, and a role picker at `/demo`.
+- Case-study landing page at the site root, with an interactive explainer that runs the real scoring engine.
+- `src/frontend/src/lib/ember/`: a line-for-line TypeScript port of the Python engine and Ember agent, and `tests/fixtures/ember-parity.json` checked by both pytest and vitest.
+- Backend pytest suite, frontend vitest suite, ESLint config, `test.yml` CI and `pages.yml` GitHub Pages deploy.
+- Self-hosted fonts.
+
+#### Changed
+- Frontend scoring and archetype classification now use the TypeScript port, so client-side scores match the API exactly.
+- All backend calls go through `apiFetch()` in `utils/api.ts` with `VITE_API_URL`, replacing hard-coded hosts.
+- Ember insight values are listed in sorted order, so the message is stable between runs.
+
+#### Fixed
+- Candidates could not leave coffee chat feedback: the modal existed but nothing opened it.
+- Dashboard archetype could differ from the Ember page's archetype; the assessment now saves the Ember archetype first.
+- Employer invites from Top Candidates showed "Unknown" because names were not stored on the chat.
+- An archetype-pair note differed between the Python and TypeScript matrices.
+
+#### Removed
+- Waitlist (modal, seeded counter, migration), social links, real-company logos, unsourced statistics and pages that implied a live service (blog, careers, press, status, changelog, help and legal pages).
+- Unused Tauri starter files, Firebase hosting config and empty test folders.
+
 ### Added
 - `docs/ARCHITECTURE.md` — end-to-end architecture overview (system diagram, backend/frontend/data layers, matching engine, and cross-cutting concerns).
 - `LICENSE` (MIT) at repo root.
@@ -19,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] — Initial Development
 
-Pre-release baseline. The platform is under active development; all features below are implemented but not production-released.
+Pre-release baseline built during 2026. All features below were implemented; the product was never released.
 
 ### Added
 - **Frontend**: React 19 + TypeScript + Vite 7 app with Tailwind 3 and Framer Motion 12.
@@ -36,5 +62,5 @@ Pre-release baseline. The platform is under active development; all features bel
 - **Payments**: Stripe checkout, customer portal, and webhook handling (with graceful demo-data fallback when unconfigured).
 - **Documentation**: root `README.md`, `BLUEPRINT.md`, `FEATURES.md`, and per-area READMEs under `src/frontend/`, `src/backend/`, and `supabase/`.
 
-[Unreleased]: https://github.com/nakulpatel0306/project-amber/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/nakulpatel0306/project-amber/releases/tag/v0.1.0
+[Unreleased]: https://github.com/nakulpatel0306/amber/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/nakulpatel0306/amber/releases/tag/v0.1.0

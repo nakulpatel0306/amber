@@ -4,12 +4,12 @@ React web application for the Amber platform. Built with React 19, TypeScript, V
 
 ## Application Sections
 
-- **Landing** — Public welcome screen with animated hero, interactive elements (magnetic buttons, cursor spotlight, tilt cards, floating coffee beans), and marketing content.
+- **Case study** — The site root: what Amber was, why it is shelved, an animated product tour, an interactive scoring explainer, architecture, lessons and team.
+- **Demo** — In demo builds, `/demo` lets visitors pick a side; `src/demo` stands in for Supabase and the backend.
 - **Authentication** — Signup, login, OAuth (Google/GitHub), password reset, email verification, role selection, and onboarding.
 - **Job Seeker App** — Dashboard, personality assessment, insights, top matches, Ember agent gallery, network hub, connections, coffee chats with real-time messaging (under `/app`).
 - **Employer App** — Dashboard, culture quiz, culture insights, role management, candidate browsing, Ember agent, connection inbox, coffee chats with real-time messaging (under `/app/employer`).
 - **Settings** — Profile management, appearance, notifications, privacy, account, subscription, and feedback.
-- **Public Pages** — Blog (with article detail), about, careers, press, science, help center, changelog, status, and legal pages.
 
 ## How It Works
 
@@ -17,7 +17,7 @@ React web application for the Amber platform. Built with React 19, TypeScript, V
 
 React Router is configured in `App.tsx`. Routes are organized into three groups:
 
-1. **Public routes** (`/`, `/auth/*`, `/blog`, `/about`, etc.) — Accessible to everyone. Wrapped in `PublicLayout` for pages that share the landing nav and footer.
+1. **Public routes** (`/`, `/pricing`, `/auth/*`, and `/demo` in demo builds) — Accessible to everyone. `/pricing` uses `PublicLayout` for the shared nav and footer.
 2. **Protected routes** (`/app/*`) — Wrapped in `ProtectedRoute`, which requires authentication and completed onboarding. Role-specific routes use the `allowedRoles` prop to restrict access to either candidates or employers.
 3. **Guest-only routes** (`/auth/login`, `/auth/signup`) — Wrapped in `GuestRoute`, which redirects authenticated users to their dashboard.
 
@@ -41,7 +41,7 @@ Two built-in themes:
 
 ### API Communication
 
-The backend base URL and auth token configuration live in `utils/api.ts`. All backend calls should use the helpers exported from this file to ensure consistent authentication headers and error handling.
+Every backend call goes through `apiFetch()` in `utils/api.ts`, which prefixes `VITE_API_URL` (default `http://localhost:8000`) or, in demo builds, hands the request to `src/demo/backend.ts`. Don't call `fetch` with a backend URL directly.
 
 ### State Management
 
@@ -81,11 +81,9 @@ components/
 │                     # EmailVerificationPage, RoleSelectionPage, Onboarding,
 │                     # ProtectedRoute, GuestRoute
 │
-├── landing/          # Public welcome screen
-│                     # WelcomeScreen, LandingNav, LandingFooter,
-│                     # AnimatedBlobs, CursorSpotlight, FloatingCoffeeBeans,
-│                     # InteractiveGreeting, MagneticButton, ScrollProgress,
-│                     # TiltCard, TypewriterText
+├── landing/          # Case-study landing page
+│                     # CaseStudy, LandingNav, LandingFooter, FeatureBento,
+│                     # MatchingExplainer, ArchitectureDiagram, AnimatedBlobs
 │
 ├── layout/           # App shell
 │                     # AppLayout, PublicLayout, Sidebar, MobileTopBar, ErrorBoundary
@@ -148,12 +146,7 @@ components/
 ├── pricing/          # Subscription and pricing
 │                     # PricingPage (plans, Stripe checkout integration)
 │
-├── pages/            # Content pages (14 components — 13 public + RolesPage)
-│                     # AboutPage, BlogPage, BlogArticlePage, CareersPage,
-│                     # PressPage, SciencePage, HelpCenterPage, ChangelogPage,
-│                     # StatusPage, PrivacyPolicyPage, TermsOfServicePage,
-│                     # CookiePolicyPage, AccessibilityPage,
-│                     # RolesPage (app-routed at /app/roles)
+├── pages/            # RolesPage (app-routed at /app/roles)
 │
 └── settings/         # User settings sections (9 components)
                       # SettingsPage, AccountSection, CandidateProfileSection,
@@ -190,7 +183,7 @@ Context-based hooks (accessed via their respective contexts):
 | Folder | Purpose |
 |--------|---------|
 | `contexts/` | 5 React context providers: Auth, Theme, Toast, Messaging, Connections |
-| `lib/` | Supabase client initialization (`supabase.ts`), personality engine (`personalityEngine.ts`), compatibility scoring (`compatibilityScoring.ts`), archetype definitions (`archetypes.ts`), archetype compatibility matrix (`archetypeCompatibility.ts`), Stripe configuration (`stripe/`) |
+| `lib/` | Supabase client initialization (`supabase.ts`, which returns the demo stand-in in demo builds), TypeScript port of the scoring engine and Ember agent (`ember/`), personality engine (`personalityEngine.ts`), compatibility scoring (`compatibilityScoring.ts`), archetype definitions (`archetypes.ts`), archetype compatibility matrix (`archetypeCompatibility.ts`), Stripe configuration (`stripe/`) |
 | `types/` | TypeScript type definitions: `auth.types.ts` (user, session), `matching.types.ts` (OCEAN scores, compatibility), `connections.types.ts` (connection, meet invite), `database.types.ts` (Supabase table shapes) |
 | `utils/` | `api.ts` (backend HTTP client with auth headers), `cn.ts` (class name utility using clsx + tailwind-merge), `constants.ts` (app-wide constants), `motion.ts` (Framer Motion presets: emberFadeUp, emberStagger), `matchHelpers.ts` (match score formatting), `coffeeChatStatus.ts` (status labels and colors), `seedTestData.ts` (development data seeding) |
 | `data/` | Assessment question definitions with trait mappings and scoring weights |
@@ -198,29 +191,39 @@ Context-based hooks (accessed via their respective contexts):
 
 ## Environment Variables
 
-Create `.env` from `.env.example` and set:
+Create `src/frontend/.env` and set:
 
 | Variable | Purpose |
 |----------|---------|
 | `VITE_SUPABASE_URL` | Your Supabase project URL |
 | `VITE_SUPABASE_ANON_KEY` | Your Supabase anonymous key |
 
-The backend URL is configured in `utils/api.ts` (defaults to `http://127.0.0.1:8000` in development).
+| `VITE_API_URL` | FastAPI base URL (default `http://localhost:8000`) |
+
+The demo build needs no environment variables.
+
+## Demo Mode
+
+`npm run dev:demo` and `npm run build:demo` use Vite's `demo` mode: `VITE_DEMO=1`, base path `/amber/`, and a `404.html` copy of `index.html` for GitHub Pages deep links. `src/demo/` holds the stand-ins (`client.ts`, `query.ts`, `backend.ts`), the localStorage store and seed data, automatic replies from seeded people, the banner and the `/demo` role picker. Production code reaches it only through `lib/supabase.ts` and `utils/api.ts`.
 
 ## Available Scripts
 
 | Command | Description |
 |---------|-------------|
 | `npm run dev` | Start the Vite development server (default: http://localhost:5173) |
+| `npm run dev:demo` | Start the browser-only demo at http://localhost:5173/amber/ |
 | `npm run build` | Type-check with TypeScript and build for production (output: `dist/`) |
+| `npm run build:demo` | Build the GitHub Pages demo into `dist/` |
 | `npm run preview` | Preview the production build locally |
+| `npm run typecheck` | `tsc --noEmit` |
+| `npm test` | Vitest: scoring, archetypes, Python parity, demo adapter |
 | `npm run lint` | Run ESLint on all TypeScript and TSX files |
 | `npm run format` | Format all source files with Prettier |
 
 ## Design Conventions
 
 - **Tailwind CSS** is used for all styling, with CSS variables defined in `styles/globals.css` for theme-aware colors.
-- **Lowercase UI copy** is used throughout the app for a modern, casual feel.
+- **Title Case UI copy** is used for in-app labels and headings.
 - The `components/ui/` folder is the source of truth for all primitive UI components (buttons, inputs, cards, etc.). Always use these instead of creating one-off styled elements.
 - New components should be placed in the appropriate feature folder and re-exported from its `index.ts` barrel file.
 - **Framer Motion** is used for all animations. Shared presets are defined in `utils/motion.ts` (`emberFadeUp`, `emberStagger`, etc.).
@@ -237,4 +240,4 @@ The Ember agent UI (`components/ember/`) provides the frontend interface for the
 - **Deep Dive Modals** — `CoffeeBrewModal` and `DeepDive` for detailed match analysis with trait breakdowns and insights.
 - **Candidate View** (`EmberAgent`) — Ranked employer/role matches with compatibility insights.
 - **Employer View** (`EmberEmployerPage`) — Ranked candidate matches with culture fit analysis.
-- **Client-Side Fallback** — If the backend is unavailable, the frontend queries Supabase directly and runs the matching algorithm locally using the personality engine in `lib/`.
+- **Client-Side Scoring** — Match lists are scored in the browser with `lib/ember`, the TypeScript port of the backend engine, so they show the same numbers as the API.

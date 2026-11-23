@@ -1,14 +1,14 @@
-# BLUEPRINT
+# Blueprint - The Roadmap We Had
 
-### The Architecture of Amber — Where We Stand, Where We're Going
+> **Status:** Amber was shelved in 2026 and will not launch. This is the product blueprint as we wrote it while building: what shipped, and the roadmap we planned but never built. It is kept as a record of the thinking, not a plan. For the current state of the code see the [README](./README.md).
 
 ---
 
 ## The Premise
 
-The hiring industry is broken in a specific, measurable way: **73% of employees who quit cite culture mismatch as the primary reason, yet zero major hiring platforms measure culture compatibility before the first interview.** LinkedIn matches keywords. Indeed matches job titles. Glassdoor lets you read anonymous complaints after the fact.
+Hiring mostly matches on keywords and job titles, while culture fit shows up only after someone starts, in exit interviews and anonymous reviews. Research on person-organization fit suggests that is worth measuring earlier: in a meta-analysis, fit correlated .51 with organizational commitment and -.35 with intent to quit ([Kristof-Brown, Zimmerman and Johnson, 2005](https://doi.org/10.1111/j.1744-6570.2005.00672.x)).
 
-Amber is the first platform that puts personality science and culture intelligence at the center of the hiring process. Not as a bolt-on. Not as a "nice to have" filter. As the **foundation** of every match, every connection, every hire.
+Amber set out to put personality science and culture intelligence at the center of the hiring process. Not as a bolt-on filter, but as the **foundation** of every match, connection and hire.
 
 The core thesis: **if you measure who someone is — how they think, communicate, collaborate, and what they value — and compare that against the real culture of a team, you can predict whether they'll thrive before they ever submit a resume.**
 
@@ -16,7 +16,7 @@ The core thesis: **if you measure who someone is — how they think, communicate
 
 ## Table of Contents
 
-- [Where Amber Stands Today](#where-amber-stands-today)
+- [What Amber Shipped](#what-amber-shipped)
   - [The Matching Engine](#the-matching-engine)
   - [The Ember Agent](#the-ember-agent)
   - [The Assessment System](#the-assessment-system)
@@ -28,7 +28,7 @@ The core thesis: **if you measure who someone is — how they think, communicate
   - [The Tech Stack](#the-tech-stack)
   - [API Surface](#api-surface)
   - [Database Architecture](#database-architecture)
-- [Where Amber Is Going](#where-amber-is-going)
+- [Where Amber Was Going (never built)](#where-amber-was-going-never-built)
   - [Phase 1: Conversational Ember AI](#phase-1-conversational-ember-ai)
   - [Phase 2: Team DNA Mapping](#phase-2-team-dna-mapping)
   - [Phase 3: Culture Verification Layer](#phase-3-culture-verification-layer)
@@ -40,7 +40,7 @@ The core thesis: **if you measure who someone is — how they think, communicate
 
 ---
 
-## Where Amber Stands Today
+## What Amber Shipped
 
 ### The Matching Engine
 
@@ -527,7 +527,7 @@ For local development without Supabase:
 
 ---
 
-## Where Amber Is Going
+## Where Amber Was Going (never built)
 
 The features below represent Amber's growth trajectory — from a matching platform into a **hiring intelligence system** that fundamentally changes how companies and candidates find each other.
 
@@ -1003,120 +1003,17 @@ Amber's visual identity is built around **warmth, approachability, and professio
 
 ---
 
-## Project Structure
+## Project Structure and Quick Start
 
-```
-amber/
-├── src/
-│   ├── frontend/                    # React 19 + TypeScript + Vite 7
-│   │   ├── src/
-│   │   │   ├── components/
-│   │   │   │   ├── ui/              # 31+ reusable design system components
-│   │   │   │   ├── auth/            # Login, signup, OAuth, role selection, onboarding
-│   │   │   │   ├── layout/          # AppLayout, PublicLayout, Sidebar, ErrorBoundary
-│   │   │   │   ├── landing/         # Animated welcome screen, nav, footer
-│   │   │   │   ├── candidate/       # Assessment, personality insights, results
-│   │   │   │   ├── employer/        # Culture quiz, role management, candidate browsing
-│   │   │   │   ├── dashboard/       # Job seeker (31 components) and employer dashboards
-│   │   │   │   ├── ember/           # Ember AI agent UI (11 components: gallery, deep dive, identity card)
-│   │   │   │   ├── assessments/     # 8 supplementary assessment components
-│   │   │   │   ├── coffee-chats/    # 13 components: calendar, cards, scheduling, feedback
-│   │   │   │   ├── connections/     # Inbox panel, connect modal, connect button
-│   │   │   │   ├── network/         # Network hub: roles, people, companies, discover tabs
-│   │   │   │   ├── messaging/       # Real-time message panel container
-│   │   │   │   ├── settings/        # 9 components: account, profile, appearance, notifications, privacy, subscription
-│   │   │   │   ├── pages/           # 14 content pages (blog, about, careers, science, legal, roles, etc.)
-│   │   │   │   └── pricing/         # Pricing and subscription page
-│   │   │   ├── contexts/            # 5 providers: Auth, Theme, Toast, Messaging, Connections
-│   │   │   ├── hooks/               # 8 custom hooks: auth, toast, messaging, connections, match data, localStorage, scroll, loader
-│   │   │   ├── lib/                 # Supabase client, personality engine, scoring, Stripe
-│   │   │   ├── types/               # TypeScript interfaces: auth, matching, connections, database
-│   │   │   ├── utils/               # API client, helpers, constants, motion presets
-│   │   │   ├── data/                # Assessment questions, mock data, static content
-│   │   │   └── styles/              # Global CSS with theme variables
-│   │   └── package.json
-│   │
-│   └── backend/                     # Python 3.11+ FastAPI
-│       ├── main.py                  # 38 API endpoints, CORS, middleware, request/response models (2000+ lines)
-│       ├── agent/
-│       │   ├── ember_agent.py       # 8 archetypes, classification, insight generation, summaries, prep briefs
-│       │   └── archetype_compatibility.py  # 8x8 archetype bonus matrix with synergy/friction notes
-│       ├── auth/
-│       │   ├── supabase_auth.py     # JWT verification via Supabase JWKS
-│       │   └── middleware.py        # Request-level auth, role-based access control
-│       ├── db/
-│       │   ├── database.py          # SQLite for development (5 tables)
-│       │   └── supabase_client.py   # Supabase CRUD for all production tables
-│       ├── engine/
-│       │   ├── compatibility.py     # Full OCEAN matching: trait, culture, work style, communication, overall
-│       │   ├── scoring.py           # Assessment response → OCEAN score computation
-│       │   └── questions.py         # 10 assessment questions with trait mappings
-│       └── scripts/
-│           ├── seed_ember_data.py   # Populate test candidates
-│           └── seed_arsh_nakul.py   # Populate specific test profiles
-│
-├── supabase/                        # Database infrastructure
-│   ├── schema.sql                   # Tables, indexes, triggers, functions
-│   ├── rls-policies.sql             # Row Level Security policies
-│   ├── seed-questions.sql           # Assessment question seed data
-│   ├── seed-test-users.sql          # Test user seed data
-│   ├── seed-test-responses.sql      # Test assessment response data
-│   ├── seed-test-roles.sql          # Test role seed data
-│   └── README.md                    # Database setup documentation
-│
-├── tests/
-│   ├── unit/                        # Unit tests
-│   ├── integration/                 # Integration tests
-│   └── e2e/                         # End-to-end tests
-│
-├── BLUEPRINT.md                     # This document
-├── FEATURES.md                      # Feature documentation
-├── README.md                        # Quick start and setup guide
-└── package.json                     # Root workspace (concurrently, workspaces)
-```
-
----
-
-## Quick Start
-
-### Prerequisites
-- Node.js 18+ and npm 9+
-- Python 3.11+
-- A Supabase project ([supabase.com](https://supabase.com))
-
-### Setup
-
-```bash
-# Clone and install
-git clone <repo-url>
-cd amber
-npm install
-
-# Backend
-cd src/backend
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env  # Configure Supabase + Stripe + OpenAI keys
-
-# Frontend
-cd ../frontend
-cp .env.example .env  # Configure Supabase keys
-
-# Run both
-cd ../..
-npm run dev
-```
-
-- Frontend: http://localhost:5173
-- Backend: http://127.0.0.1:8000
-- API Docs: http://127.0.0.1:8000/docs
+See the [README](./README.md#project-structure) for the current layout, the browser demo and full-stack setup.
 
 ---
 
 ## Authors
 
-**Nakul Patel** — Creator and lead engineer
+- **Nakul Patel** ([@nakulpatel0306](https://github.com/nakulpatel0306)) — Creator and lead engineer
+- **Arsh Patel** ([@Arshpatel10](https://github.com/Arshpatel10))
+- **Neel** ([@neelp04](https://github.com/neelp04))
 
 ---
 

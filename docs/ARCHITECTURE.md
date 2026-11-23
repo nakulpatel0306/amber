@@ -1,11 +1,11 @@
-# Amber — Architecture
+# Amber - Architecture
 
-Amber is a culture-first job matching platform. Instead of keyword-matching
+Amber was a culture-first job matching platform, built in 2026 and shelved before launch. Instead of keyword-matching
 resumes, it measures personality using the Big Five (OCEAN) model and matches
 candidates to employers on culture and values fit. This document describes how
 the codebase is organized and how the pieces fit together.
 
-For product vision and roadmap see [`BLUEPRINT.md`](../BLUEPRINT.md); for a
+For the roadmap we had see [`BLUEPRINT.md`](../BLUEPRINT.md); for a
 feature-level breakdown see [`FEATURES.md`](../FEATURES.md); for setup and API
 reference see [`README.md`](../README.md).
 
@@ -33,10 +33,11 @@ Two important architectural notes:
   realtime subscriptions (messages, connections, coffee chats). It calls the
   **FastAPI backend** primarily for compatibility scoring, the Ember agent,
   Stripe, and the logo proxy.
-- **Matching logic is intentionally duplicated** across Python (`src/backend`)
-  and TypeScript (`src/frontend/src/lib`). The TS port is a client-side fallback
-  used when the backend is unavailable and for rendering archetype details
-  without an API round-trip. Keep the two in sync when changing scoring.
+- **Matching logic exists in Python and TypeScript.** The Python engine
+  (`src/backend/engine`, `src/backend/agent`) is the source of truth;
+  `src/frontend/src/lib/ember` is a line-for-line port the UI uses to score
+  matches without a round-trip. `tests/fixtures/ember-parity.json` is checked by
+  both pytest and vitest, so the two cannot drift silently.
 
 ## Tech Stack
 
@@ -52,34 +53,27 @@ Two important architectural notes:
 | Auth | Supabase Auth (Email, Google OAuth, GitHub OAuth); JWT verified server-side |
 | Payments | Stripe (checkout, customer portal, webhooks) |
 | Matching | Custom OCEAN compatibility engine + Ember agent |
-| Desktop (scaffold) | Tauri (`src-tauri/`) — shell only, not the primary target |
-| AI/ML (reserved) | OpenAI, LangChain, Ollama — installed in `requirements.txt`, not yet wired in |
+| AI/ML (reserved) | OpenAI, LangChain, Ollama: listed in `requirements.txt`, never wired in |
 
 ## Repository Layout
 
 ```
-project-amber/
+amber/
 ├── src/
-│   ├── frontend/        # React web app — the primary application
-│   ├── backend/         # Python FastAPI server — scoring, Ember, Stripe
-│   ├── App.tsx          # Root-level Tauri desktop shell scaffold (separate from src/frontend)
-│   └── main.tsx
-├── src-tauri/           # Tauri desktop scaffolding (generated schemas)
+│   ├── frontend/        # React web app (npm workspace)
+│   └── backend/         # Python FastAPI server: scoring, Ember, Stripe
 ├── supabase/            # SQL schema, RLS policies, migrations, seed data
-├── tests/               # unit / integration / e2e (placeholders)
-├── docs/                # this document
-├── BLUEPRINT.md         # product vision + styling direction
-├── FEATURES.md          # detailed feature docs
+├── tests/fixtures/      # Parity fixture shared by pytest and vitest
+├── docs/                # this document and screenshots
+├── .github/workflows/   # test.yml (CI) and pages.yml (demo deploy)
+├── BLUEPRINT.md         # the roadmap we had
+├── FEATURES.md          # feature inventory as built
 └── package.json         # root npm workspace (workspaces: src/frontend)
 ```
 
-> Note: the root `src/App.tsx` / `src/main.tsx` and top-level `src-tauri/` are a
-> Tauri desktop shell scaffold and are distinct from the real application under
-> `src/frontend/`. Day-to-day work happens in `src/frontend` and `src/backend`.
-
 The root `package.json` defines convenience scripts: `npm run dev` starts the
-frontend and backend together via `concurrently`; `npm run frontend` /
-`npm run backend` run each independently.
+frontend and backend together via `concurrently`; `npm test` and `npm run lint`
+run both sides.
 
 ## Backend (`src/backend`)
 
@@ -100,7 +94,7 @@ connections, feedback, and Stripe.
 | `agent/archetype_compatibility.py` | 8×8 archetype-pair bonus/modifier matrix layered on top of raw scores |
 | `auth/supabase_auth.py` | Supabase JWT verification (`is_auth_configured` gate) |
 | `auth/middleware.py` | `AuthMiddleware`, `require_auth`, `require_role` dependencies |
-| `db/supabase_client.py` | Supabase (service-role) client — production data access (candidates, employers, roles, applications, coffee chats, connections, meet invites) |
+| `db/supabase_client.py` | Supabase (service-role) client - production data access (candidates, employers, roles, applications, coffee chats, connections, meet invites) |
 | `db/database.py` | Local SQLite used for the assessment flow in development |
 | `scripts/` | Seed scripts for test candidates and specific demo profiles |
 
@@ -116,14 +110,15 @@ appropriate layer per endpoint.
 
 JWT verification is gated by `is_auth_configured`. When `SUPABASE_JWT_SECRET` is
 **not** set, the API runs in development mode and skips auth on protected routes
-(hence many endpoints being marked "No auth" in the README table). Endpoints
+(so most endpoints are open in local dev). Endpoints
 that enforce roles (e.g. candidate listing) require the secret to be configured.
 
 ## Matching & Scoring Engine
 
 This is the heart of the product. Everything below lives in
-`engine/compatibility.py` (Python) and is mirrored in
-`src/frontend/src/lib/compatibilityScoring.ts` (TypeScript).
+`engine/compatibility.py` (Python) and is ported to
+`src/frontend/src/lib/ember/compatibility.ts` (TypeScript);
+`lib/compatibilityScoring.ts` is a camel-cased adapter over that port.
 
 Inputs are three dataclasses: `CandidateOCEAN` (the five trait scores, 0–100),
 `EmployerPreferences` (per-trait ideal scores + a list of `culture_values`), and
@@ -132,22 +127,22 @@ normalize to 0–100.
 
 **Score components:**
 
-- **Trait match** — weighted Euclidean distance between candidate OCEAN and
+- **Trait match** - weighted Euclidean distance between candidate OCEAN and
   employer preferences, normalized so 100 = identical.
-- **Culture match** — a weighted composite: work-style compatibility (30%),
+- **Culture match** - a weighted composite: work-style compatibility (30%),
   culture-values alignment (50%), and role-specific fit (20%).
 - **Culture-values alignment** uses `CULTURE_OCEAN_MAP`, a table mapping each
   culture value (e.g. `innovation`, `empathy`, `balance`) to the OCEAN traits it
   correlates with, and a signed weight. Positive weight → higher trait score is
   better; negative weight → lower score is better (e.g. `balance` favors low
   neuroticism).
-- **Role fit** — checks whether candidate traits fall inside the role's declared
+- **Role fit** - checks whether candidate traits fall inside the role's declared
   min/max ranges; out-of-range traits are penalized proportionally.
-- **Work style** — categorical compatibility between remote/hybrid/onsite/flexible.
-- **Communication fit** — derived from extraversion + agreeableness alignment.
-- **Overall** — `40% trait + 30% culture + 20% work style + 10% communication`.
+- **Work style** - categorical compatibility between remote/hybrid/onsite/flexible.
+- **Communication fit** - derived from extraversion + agreeableness alignment.
+- **Overall** - `40% trait + 30% culture + 20% work style + 10% communication`.
 
-**Bidirectional matching** — Amber scores fit in both directions.
+**Bidirectional matching** - Amber scores fit in both directions.
 `calculate_reverse_compatibility` scores how well the *employer* fits the
 *candidate's* stated preferences (preferred work style, company size, and the
 ideal cultures implied by the candidate's archetype).
@@ -160,13 +155,13 @@ candidate's profile is, so the UI can flag low-confidence matches.
 Ember (`agent/ember_agent.py`) is the product's AI mascot and matching persona.
 It sits on top of the compatibility engine and adds:
 
-- **Archetype classification** — maps an OCEAN profile to one of 8 archetypes
+- **Archetype classification** - maps an OCEAN profile to one of 8 archetypes
   (Innovator, Architect, Connector, Catalyst, Craftsperson, Harmonizer,
   Explorer, Strategist). Each archetype carries an OCEAN signature, ideal
   cultures, and display metadata.
-- **Archetype-pair modifiers** — `archetype_compatibility.py` holds an 8×8
+- **Archetype-pair modifiers** - `archetype_compatibility.py` holds an 8×8
   matrix that nudges raw scores based on how well two archetypes tend to mesh.
-- **Ranked matches + insights** — `run_ember_analysis` (candidate → roles) and
+- **Ranked matches + insights** - `run_ember_analysis` (candidate → roles) and
   `run_ember_employer_analysis` (employer → candidates) produce ordered lists
   with narrative, human-readable insights for the UI.
 
@@ -193,11 +188,10 @@ ErrorBoundary
 
 Routes fall into three groups:
 
-- **Public** (`/`, `/blog`, `/about`, `/science`, legal pages, `/pricing`) —
-  wrapped in `PublicLayout`, no auth.
-- **Auth** (`/auth/*`) — login, signup, OAuth callback, password reset, email
+- **Public** (`/` case study, `/pricing`, and `/demo` in demo builds) - no auth.
+- **Auth** (`/auth/*`) - login, signup, OAuth callback, password reset, email
   verification, and role selection; guest-only routes use `GuestRoute`.
-- **Protected app** (`/app/*`) — wrapped in `ProtectedRoute` + `AppLayout`, with
+- **Protected app** (`/app/*`) - wrapped in `ProtectedRoute` + `AppLayout`, with
   role enforcement via `allowedRoles`. Candidate routes (dashboard, assessment,
   insights, ember, supplementary assessments) and employer routes
   (`/app/employer/*`: culture quiz, roles, candidates, ember) live here, plus
@@ -210,39 +204,41 @@ layouts, guards, and the landing page load eagerly on the critical path.
 
 | Path | Contents |
 |------|----------|
-| `components/ui/` | Design system — `Button`, `Input`, `Card`, `Modal`, `Toast`, `Avatar`, charts (`RadarChart`, `OceanRadar`), loaders, `AmberLogo`, etc. All theme via CSS variables. |
+| `components/ui/` | Design system - `Button`, `Input`, `Card`, `Modal`, `Toast`, `Avatar`, charts (`RadarChart`, `OceanRadar`), loaders, `AmberLogo`, etc. All theme via CSS variables. |
 | `components/auth/` | Login, signup, OAuth callback, role selection, onboarding, route guards (`ProtectedRoute`, `GuestRoute`) |
 | `components/layout/` | `AppLayout`, `PublicLayout`, `Sidebar`, `Navbar`, `ErrorBoundary`, `RouteTitleSync`, notification/bookmark dropdowns |
-| `components/landing/` | Animated marketing/welcome screen and its effects |
+| `components/landing/` | Case-study landing page: hero, product tour, matching explainer, architecture diagram |
 | `components/candidate/` | Assessment flow, personality insights, results, matching |
 | `components/employer/` | Culture quiz/assessment, culture insights, role create/manage, candidate browsing |
 | `components/dashboard/` | Job-seeker and employer dashboards and their widgets (stats, calendars, radars, carousels) |
-| `components/ember/` | Ember agent UI — gallery, deep dive, identity card, match feed |
+| `components/ember/` | Ember agent UI - gallery, deep dive, identity card, match feed |
 | `components/assessments/` | Supplementary assessments (visual perception, work values, team dynamics, leadership, etc.) |
 | `components/coffee-chats/` | Scheduling, calendar, cards, prep, feedback |
 | `components/connections/` | Connection requests, inbox panel, connect modal |
-| `components/network/` | Network hub — roles, people, companies, discover, posts |
+| `components/network/` | Network hub - roles, people, companies, discover, posts |
 | `components/matches/` | Match pipeline and detail views |
 | `components/messaging/` | Realtime message panel |
-| `components/pricing/`, `components/settings/`, `components/pages/` | Billing, user settings sections, and public content pages |
+| `components/pricing/`, `components/settings/`, `components/pages/` | Billing, user settings sections, and the app's roles page |
+| `demo/` | In-browser Supabase and FastAPI stand-ins, seed data, demo banner and role picker (demo builds only) |
 | `contexts/` | `AuthContext`, `ThemeContext`, `ToastContext`, `MessagingContext`, `ConnectionsContext` |
 | `hooks/` | Data + UI hooks (`useMatchData`, `useNetworkData`, `useSavedMatches`, `useLocalStorage`, `useReducedMotion`, `usePageTitle`, …) |
 | `lib/` | `supabase.ts` (typed client), `personalityEngine.ts`, `compatibilityScoring.ts`, `archetypes.ts`, `archetypeCompatibility.ts`, `stripe/` |
 | `types/` | TypeScript types (`auth`, `matching`, `connections`, `database`) |
 | `utils/` | `api.ts` (typed backend client), `cn.ts`, `constants.ts`, `matchHelpers.ts`, `motion.ts`, `coffeeChatStatus.ts` |
-| `data/` | Static content — assessment questions, blog posts, employer archetypes, hobbies, personality facts |
+| `data/` | Static content - assessment questions, employer archetypes, hobbies, personality facts |
 | `styles/` | `globals.css` with theme CSS variables |
 
 ### Client-side libraries of note
 
-- `lib/supabase.ts` — the single typed Supabase client; degrades gracefully with
+- `lib/supabase.ts` - the single typed Supabase client; degrades gracefully with
   a warning when `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` are absent.
-- `lib/personalityEngine.ts` — maps scenario-based assessment responses to OCEAN
+- `lib/personalityEngine.ts` - maps scenario-based assessment responses to OCEAN
   scores, trait constellations, and culture-fit predictions on the client.
-- `lib/compatibilityScoring.ts` + `lib/archetypes.ts` — TypeScript ports of the
-  backend scoring and archetype logic (see the duplication note above).
-- `utils/api.ts` — all backend REST calls, typed; `API_BASE_URL` points at the
-  FastAPI dev server (`http://localhost:8000`).
+- `lib/ember/` - TypeScript port of `engine/compatibility.py` and
+  `agent/ember_agent.py`; `lib/compatibilityScoring.ts` and `lib/archetypes.ts`
+  are adapters over it for components.
+- `utils/api.ts` - `apiFetch()`, the one entry point for backend REST calls;
+  `API_BASE_URL` comes from `VITE_API_URL` (default `http://localhost:8000`).
 
 ## Data Layer (`supabase/`)
 
@@ -289,41 +285,66 @@ consult those before editing policies.
 
 ## Cross-Cutting Concerns
 
-- **Authentication** — Supabase Auth issues JWTs. The frontend manages the
+- **Authentication** - Supabase Auth issues JWTs. The frontend manages the
   session via `AuthContext`/supabase-js; the backend verifies the JWT when
   `SUPABASE_JWT_SECRET` is configured, otherwise runs open in dev mode. After
   signup, users pick a role (candidate/employer) then complete a role-specific
   onboarding wizard.
-- **Realtime** — Supabase `postgres_changes` subscriptions drive live messages,
+- **Realtime** - Supabase `postgres_changes` subscriptions drive live messages,
   connection updates, and coffee-chat changes, surfaced through
   `MessagingContext` and `ConnectionsContext`.
-- **Payments** — Stripe checkout and customer-portal sessions are created by the
+- **Payments** - Stripe checkout and customer-portal sessions are created by the
   backend; webhooks (`/api/stripe/webhook`) update subscription state on
   `profiles`. Frontend billing lives in `components/pricing/` and
   `lib/stripe/`.
-- **Theming** — a warm amber palette with Light and Dark themes, driven by CSS
+- **Theming** - a warm amber palette with Light and Dark themes, driven by CSS
   variables in `styles/globals.css` and persisted per user in `user_settings`.
-- **Logo proxy** — `/api/logo` fetches and disk-caches company logos
+- **Logo proxy** - `/api/logo` fetches and disk-caches company logos
   (`cache/logos/`) to avoid hotlinking and repeated fetches.
+
+## Demo Mode
+
+`npm run build:demo` (Vite `--mode demo`) sets `VITE_DEMO=1` and base `/amber/`
+for GitHub Pages and copies `index.html` to `404.html` so deep links work. The
+flag switches two modules and nothing else:
+
+- `lib/supabase.ts` returns `createDemoSupabase()` from `src/demo`. It implements
+  the supabase-js surface the app calls: `from()` with selects (including
+  embedded relations like `employers!inner(...)` and `profiles:user_id(...)`),
+  filters, ordering, ranges, `single()`, counts, insert/update/upsert/delete with
+  returning; `rpc()` for the four RPCs the app uses; `auth` (sign up, sign in,
+  sessions, auth events, with `handle_new_user()` emulated); `channel()` realtime
+  with `postgres_changes` filters; and `storage` (images become data URLs).
+  Row visibility for user-scoped tables mirrors the RLS policies.
+- `utils/api.ts` sends `apiFetch()` to `src/demo/backend.ts`, which implements the
+  FastAPI routes the app calls with the same request and response shapes, using
+  the TypeScript Ember port.
+
+Data lives in `localStorage` (`amber-demo-v1`) and starts from `src/demo/seed.ts`:
+16 candidates, 6 companies and 13 roles, all invented. `src/demo/autoReply.ts`
+lets seeded people accept requests, schedule chats and answer messages, with
+every reply prefixed "(Demo auto-reply)". Because `IS_DEMO` is a build-time
+constant, the normal build drops the demo code entirely.
 
 ## Local Development
 
-- `npm run dev` (root) — runs backend + frontend concurrently.
-- Backend: `cd src/backend && python main.py` → `http://127.0.0.1:8000`
+- `npm run dev` (root) - runs backend + frontend concurrently.
+- `npm run dev:demo --workspace src/frontend` - the demo at `http://localhost:5173/amber/`, no backend needed.
+- Backend: `cd src/backend && python main.py` -> `http://127.0.0.1:8000`
   (interactive docs at `/docs`).
-- Frontend: `cd src/frontend && npm run dev` → `http://localhost:5173`.
-- Tooling: frontend uses ESLint + Prettier; backend uses `ruff`, `black`,
-  `mypy`, and `pytest`. The `tests/` tree (unit/integration/e2e) is currently
-  scaffolding.
+- Tests: `npm test` runs vitest (scoring, archetypes, parity, demo adapter) and
+  pytest (engine, agent, parity). `npm run lint` runs ESLint and ruff. CI runs
+  both plus the full and demo builds on every push.
 
 ## Conventions & Gotchas
 
-- **Keep the Python and TypeScript scoring engines in sync.** Changing weights,
-  the `CULTURE_OCEAN_MAP`, or archetype definitions in one place requires the
-  matching change in the other.
-- **Two backend data stores.** Don't assume an endpoint hits Supabase — the
+- **Keep the Python and TypeScript scoring engines in sync.** Change Python
+  first, mirror it in `lib/ember`, then regenerate the parity fixture with
+  `src/backend/scripts/generate_parity_fixture.py`. Both test suites fail until
+  the two agree.
+- **Two backend data stores.** Don't assume an endpoint hits Supabase - the
   assessment flow uses local SQLite in development.
 - **RLS recursion.** Editing RLS policies is the most error-prone database task;
   the `fix-*-recursion.sql` history documents the pitfalls.
 - **Dev-mode auth.** Many endpoints are effectively unauthenticated unless
-  `SUPABASE_JWT_SECRET` is set — configure it before treating auth as enforced.
+  `SUPABASE_JWT_SECRET` is set - configure it before treating auth as enforced.

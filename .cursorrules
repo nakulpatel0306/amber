@@ -1,7 +1,7 @@
 this is the amber platform project - a culture-first job matching platform.
 
 code style:
-- use lowercase for all ui text
+- match existing ui copy (title case for in-app labels and headings)
 - prefer functional components in react
 - use type hints in python
 - write clear, self-documenting code
@@ -33,4 +33,4 @@ project values:
 - beautiful, accessible ui
 - type safety throughout
 - privacy conscious (rls policies)
-- simplicity (lowercase aesthetic, minimal ui)
+- simplicity (minimal ui)

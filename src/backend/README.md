@@ -63,10 +63,23 @@ backend/
 │   ├── compatibility.py              # OCEAN-based matching: trait, culture, work style, communication, overall
 │   ├── scoring.py                    # Assessment response → personality dimension → OCEAN score computation
 │   └── questions.py                  # 10 assessment questions with category groupings and trait mappings
-└── scripts/                          # One-time seed and utility scripts
-    ├── seed_ember_data.py            # Populates test candidates with diverse OCEAN profiles
-    └── seed_arsh_nakul.py            # Seeds specific test profiles
+├── scripts/                          # One-time seed and utility scripts
+│   ├── seed_ember_data.py            # Populates test candidates with diverse OCEAN profiles
+│   ├── seed_arsh_nakul.py            # Seeds specific test profiles
+│   └── generate_parity_fixture.py    # Writes tests/fixtures/ember-parity.json for pytest and vitest
+├── tests/                            # pytest: compatibility engine, Ember agent, TS parity fixture
+└── pyproject.toml                    # pytest and ruff configuration
 ```
+
+## Tests
+
+```bash
+source venv/bin/activate
+pytest          # engine, agent and parity tests
+ruff check .
+```
+
+The engine and agent are pure Python, so the tests need only `pytest`. `tests/test_parity.py` re-runs every case in `../../tests/fixtures/ember-parity.json`; the frontend runs the same file through its TypeScript port. After an intentional scoring change, run `python scripts/generate_parity_fixture.py` and update `src/frontend/src/lib/ember` to match.
 
 ## Module Details
 
@@ -225,7 +238,7 @@ Update the `origins` list in `main.py` for production domains.
 ## Notes
 
 - The assessment flow uses a local SQLite database in development. For production, this can be switched to Supabase by updating the database layer.
-- The Ember agent is designed with a client-side fallback — the frontend can run matching locally using Supabase data if the backend is unavailable.
+- The frontend scores matches client-side with `src/frontend/src/lib/ember`, a TypeScript port of `engine/` and `agent/`; the parity fixture keeps the two identical.
 - Seed scripts in `scripts/` are one-time utilities for populating test data. They require the `SUPABASE_SERVICE_ROLE_KEY` to be set.
-- OpenAI (1.54.0), LangChain (0.3.0), and Ollama (0.4.3) are installed as dependencies but not yet integrated into the Ember agent. They are reserved for Phase 1 of the product roadmap (Conversational Ember AI). See [BLUEPRINT.md](../../BLUEPRINT.md) for details.
+- OpenAI (1.54.0), LangChain (0.3.0), and Ollama (0.4.3) are listed as dependencies but were never integrated into the Ember agent. They were reserved for Phase 1 of the roadmap (Conversational Ember AI), which was not built before the project was shelved. See [BLUEPRINT.md](../../BLUEPRINT.md) for details.
 - Stripe returns demo subscription data when `STRIPE_SECRET_KEY` is not configured, allowing local development without a Stripe account.

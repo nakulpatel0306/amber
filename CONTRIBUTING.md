@@ -42,7 +42,7 @@ Prefixes like `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:` are encou
 
 The project follows the conventions in [`.cursorrules`](./.cursorrules). Highlights:
 
-- **UI copy**: lowercase text throughout (buttons, labels, headings in the app).
+- **UI copy**: match the screen you're editing; in-app labels and headings use Title Case.
 - **React**: functional components, hooks over class patterns.
 - **Python**: type hints on function signatures; small, focused functions.
 - **Theming**: use the CSS variables defined in `src/frontend/src/styles/globals.css` — do not hardcode colors.
@@ -70,7 +70,8 @@ npm run test:backend      # pytest
 
 - New features should include at least one test (unit or integration).
 - Bug fixes should add a regression test that fails without the fix.
-- E2E tests live in `tests/e2e/`; integration in `tests/integration/`; unit in `tests/unit/`.
+- Frontend tests sit next to the code as `*.test.ts` (vitest); backend tests live in `src/backend/tests/` (pytest).
+- Scoring changes start in Python. Mirror them in `src/frontend/src/lib/ember/`, then regenerate `tests/fixtures/ember-parity.json` with `src/backend/scripts/generate_parity_fixture.py`.
 
 ## Database Changes
 
