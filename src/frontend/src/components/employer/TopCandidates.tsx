@@ -463,6 +463,9 @@ export function TopCandidates() {
         initiated_by: 'employer',
         status: 'pending',
         match_score: candidate.overallScore,
+        // Stored on the chat so both sides can label it without cross-table reads under RLS
+        candidate_name: candidate.name,
+        company_name: employer.company_name,
       };
       if (selectedRoleId) {
         const role = roles.find(r => r.id === selectedRoleId);

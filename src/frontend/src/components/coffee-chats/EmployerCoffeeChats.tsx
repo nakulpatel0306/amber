@@ -113,9 +113,10 @@ export function EmployerCoffeeChats() {
     return () => { supabase.removeChannel(channel); };
   }, [_employerId]);
 
+  // isLoading starts true, so only the first load shows the full-screen loader;
+  // realtime refreshes update the calendar in place
   const loadChats = async () => {
     if (!user) return;
-    setIsLoading(true);
 
     try {
       const { data: employer } = await supabase

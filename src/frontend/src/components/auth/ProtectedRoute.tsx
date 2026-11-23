@@ -1,4 +1,5 @@
 import { Navigate, useLocation } from 'react-router-dom';
+import { IS_DEMO } from '../../demo/flag';
 import { useAuth } from '../../contexts/AuthContext';
 import { SplashScreen } from '../ui/SplashScreen';
 import type { UserRole } from '../../types/auth.types';
@@ -40,7 +41,8 @@ export function ProtectedRoute({
 
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
-    return <Navigate to="/auth/login" state={{ from: location }} replace />;
+    // The demo has no real accounts; send visitors to the role picker instead
+    return <Navigate to={IS_DEMO ? '/demo' : '/auth/login'} state={{ from: location }} replace />;
   }
 
   // Check if user needs onboarding (no role selected)
