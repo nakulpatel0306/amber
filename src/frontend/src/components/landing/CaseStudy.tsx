@@ -69,15 +69,9 @@ const LESSONS = [
 
 function Section({ id, title, intro, children }: { id?: string; title: string; intro?: ReactNode; children: ReactNode }) {
   return (
-    <section id={id} className="px-4 sm:px-6 lg:px-8 py-20 sm:py-24 scroll-mt-20">
+    <section id={id} className="px-4 sm:px-6 lg:px-8 py-14 sm:py-16 scroll-mt-20">
       <div className="max-w-5xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-          className="max-w-2xl mb-10"
-        >
+        <div className="max-w-2xl mb-10">
           <h2 className="text-headline" style={{ color: 'var(--color-text)' }}>
             {title}
           </h2>
@@ -86,7 +80,7 @@ function Section({ id, title, intro, children }: { id?: string; title: string; i
               {intro}
             </p>
           )}
-        </motion.div>
+        </div>
         {children}
       </div>
     </section>
@@ -122,7 +116,7 @@ export function CaseStudy() {
     <div className="min-h-screen [overflow-x:clip]" style={{ backgroundColor: 'var(--color-background)' }}>
       <LandingNav />
 
-      <header className="px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-16">
+      <header className="px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-10 sm:pb-14">
         <motion.div
           className="max-w-4xl mx-auto text-center"
           initial={{ opacity: 0, y: 16 }}
