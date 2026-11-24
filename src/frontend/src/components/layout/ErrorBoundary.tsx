@@ -1,7 +1,6 @@
 import { Component, type ReactNode, type ErrorInfo } from 'react';
 import { RefreshCw, Home } from 'lucide-react';
 import { Button } from '../ui/Button';
-import { EmberFirefly } from '../ember/EmberFirefly';
 
 interface Props {
   children: ReactNode;
@@ -47,21 +46,8 @@ export class ErrorBoundary extends Component<Props, State> {
           style={{ backgroundColor: 'var(--color-background)' }}
         >
           <div className="max-w-md w-full text-center">
-            {/* Dimmed / flickering Ember firefly */}
-            <div className="relative mx-auto mb-6 w-24 h-24 flex items-center justify-center">
-              <div
-                className="absolute inset-0 rounded-full animate-pulse"
-                style={{
-                  background: 'radial-gradient(circle, rgba(239, 68, 68, 0.12) 0%, transparent 70%)',
-                }}
-              />
-              <div style={{ opacity: 0.4, filter: 'grayscale(0.6)' }}>
-                <EmberFirefly size="lg" mood="thinking" animated />
-              </div>
-            </div>
-
             <h1
-              className="text-xl font-semibold mb-2"
+              className="text-title mb-2"
               style={{ color: 'var(--color-text)' }}
             >
               Something went wrong
@@ -69,10 +55,10 @@ export class ErrorBoundary extends Component<Props, State> {
 
             <p
               className="text-sm mb-6"
-              style={{ color: 'var(--color-textMuted)' }}
+              style={{ color: 'var(--color-textSecondary)' }}
             >
-              We encountered an unexpected error. Please try again or return to
-              the home page.
+              This screen hit an unexpected error. Try again, or go back to the
+              start.
             </p>
 
             {this.state.error && (

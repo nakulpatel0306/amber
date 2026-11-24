@@ -7,13 +7,13 @@
  * assessment, candidate, feedback and matching endpoints live below.
  */
 import { IS_DEMO } from '../demo/flag';
-import { demoFetch } from '../demo';
 
 export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 /** fetch() for a backend path such as "/api/connections/me". */
 export function apiFetch(path: string, init?: RequestInit): Promise<Response> {
-  return IS_DEMO ? demoFetch(path, init) : fetch(`${API_BASE_URL}${path}`, init);
+  if (IS_DEMO) return import('../demo/backend').then((m) => m.demoFetch(path, init));
+  return fetch(`${API_BASE_URL}${path}`, init);
 }
 
 // ============ Assessment Types ============

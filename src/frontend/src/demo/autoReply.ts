@@ -4,7 +4,6 @@
  * time and answers messages with canned lines that are labelled as automatic.
  * Only seeded accounts ever reply; nothing leaves the browser.
  */
-import { acceptConnection } from './backend';
 import { isSeedUser } from './seed';
 import { findOne, insertRow, sessionUserId, subscribe, updateRow, type Row } from './store';
 
@@ -68,6 +67,8 @@ function onConnection(conn: Row): void {
     if (!findOne('connections', (c) => c.id === conn.id)) return;
     const invite = findOne('connection_meet_invites', (i) => i.connection_id === conn.id);
     const times = (invite?.proposed_times as string[] | undefined) ?? [];
+    // Loaded on first use so the landing page doesn't download the demo backend
+    const { acceptConnection } = await import('./backend');
     await acceptConnection(conn.receiver_id as string, conn.id, {
       accept_meet_invite: true,
       confirmed_time: times[0] ?? nextWeekdayMorning(2),

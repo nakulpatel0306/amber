@@ -32,6 +32,17 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: "dist",
       sourcemap: false,
+      rollupOptions: {
+        output: {
+          // Libraries change less often than app code, so they get their own long-lived chunks
+          manualChunks(id) {
+            if (!id.includes("node_modules")) return undefined;
+            if (/node_modules\/(react|react-dom|scheduler|react-router|react-router-dom)\//.test(id)) return "react";
+            if (/node_modules\/(framer-motion|motion-dom|motion-utils)\//.test(id)) return "motion";
+            return undefined;
+          },
+        },
+      },
     },
     test: {
       environment: "jsdom",
