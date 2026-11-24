@@ -1,6 +1,19 @@
-import { UserPlus, Clock, Check, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { Button } from '../ui/Button';
 import type { ConnectionStatus } from '../../types/connections.types';
+
+// Connection state reads as a dot and a word, matching status everywhere else
+function StatusText({ dot, className, children }: { dot: string; className?: string; children: React.ReactNode }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 text-label font-normal ${className ?? ''}`}
+      style={{ color: 'var(--color-textSecondary)' }}
+    >
+      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: dot }} />
+      {children}
+    </span>
+  );
+}
 
 interface ConnectButtonProps {
   status: ConnectionStatus;
@@ -29,23 +42,15 @@ export function ConnectButton({
           onClick={(e) => { e.stopPropagation(); onConnect(); }}
           className={className}
         >
-          <UserPlus className="w-3.5 h-3.5 mr-1" />
           Connect
         </Button>
       );
 
     case 'pending_sent':
       return (
-        <span
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${className}`}
-          style={{
-            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-            color: 'var(--color-warning)',
-          }}
-        >
-          <Clock className="w-3 h-3" />
-          Pending
-        </span>
+        <StatusText dot="var(--color-warning)" className={className}>
+          Request sent
+        </StatusText>
       );
 
     case 'pending_received':
@@ -54,16 +59,15 @@ export function ConnectButton({
           <Button
             size={size}
             onClick={(e) => { e.stopPropagation(); onAccept?.(); }}
-            style={{ backgroundColor: 'var(--color-success)' }}
           >
-            <Check className="w-3.5 h-3.5 mr-1" />
             Accept
           </Button>
           <Button
             size={size}
             variant="ghost"
             onClick={(e) => { e.stopPropagation(); onDecline?.(); }}
-            style={{ color: 'var(--color-error)' }}
+            aria-label="Decline"
+            title="Decline"
           >
             <X className="w-3.5 h-3.5" />
           </Button>
@@ -72,16 +76,9 @@ export function ConnectButton({
 
     case 'accepted':
       return (
-        <span
-          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${className}`}
-          style={{
-            backgroundColor: 'rgba(22, 163, 74, 0.1)',
-            color: 'var(--color-success)',
-          }}
-        >
-          <Check className="w-3 h-3" />
+        <StatusText dot="var(--color-success)" className={className}>
           Connected
-        </span>
+        </StatusText>
       );
 
     default:

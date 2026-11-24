@@ -38,10 +38,12 @@ export function FeedbackModal({ isOpen, onClose, onSubmit, partnerName }: Feedba
               onClick={() => setRating(value)}
               onMouseEnter={() => setHoveredRating(value)}
               onMouseLeave={() => setHoveredRating(0)}
-              className="p-1 transition-transform hover:scale-110"
+              aria-label={`${value} out of 5`}
+              aria-pressed={rating === value}
+              className="p-1"
             >
               <Star
-                className="w-8 h-8"
+                className="w-7 h-7"
                 style={{
                   color: value <= (hoveredRating || rating) ? 'var(--color-warning)' : 'var(--color-border)',
                   fill: value <= (hoveredRating || rating) ? 'var(--color-warning)' : 'none',
@@ -52,9 +54,9 @@ export function FeedbackModal({ isOpen, onClose, onSubmit, partnerName }: Feedba
         </div>
 
         {rating > 0 && (
-          <p className="text-center text-sm" style={{ color: 'var(--color-textMuted)' }}>
+          <p className="text-center text-label font-normal" style={{ color: 'var(--color-textMuted)' }}>
             {rating === 5
-              ? 'Amazing!'
+              ? 'Amazing'
               : rating === 4
               ? 'Great experience'
               : rating === 3
@@ -67,14 +69,14 @@ export function FeedbackModal({ isOpen, onClose, onSubmit, partnerName }: Feedba
 
         <div>
           <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--color-text)' }}>
-            feedback (optional)
+            Feedback (optional)
           </label>
           <textarea
             value={feedback}
             onChange={e => setFeedback(e.target.value)}
-            placeholder="Share your thoughts about the conversation..."
+            placeholder="Share your thoughts about the conversation…"
             rows={3}
-            className="w-full px-3 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2 resize-none"
+            className="w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:border-[var(--color-accent)] resize-none"
             style={{
               backgroundColor: 'var(--color-surface)',
               borderColor: 'var(--color-border)',
@@ -85,9 +87,9 @@ export function FeedbackModal({ isOpen, onClose, onSubmit, partnerName }: Feedba
       </div>
 
       <ModalFooter>
-        <Button variant="outline" onClick={onClose}>skip</Button>
+        <Button variant="ghost" onClick={onClose}>Skip</Button>
         <Button onClick={handleSubmit} disabled={rating === 0}>
-          submit feedback
+          Submit feedback
         </Button>
       </ModalFooter>
     </Modal>

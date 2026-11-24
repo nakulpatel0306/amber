@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { X, Minus, Send, User, Smile, Paperclip } from 'lucide-react';
+import { X, Minus, Send, User } from 'lucide-react';
+import { Button } from '../ui/Button';
 import { useAuth } from '../../contexts/AuthContext';
 import { useMessaging, type Message, type ChatPartner } from '../../contexts/MessagingContext';
 import { format, isToday, isYesterday, isSameDay } from 'date-fns';
@@ -103,18 +104,19 @@ export function MessagePanel({
     return groups;
   }, [messages]);
 
-  // 384px wide + 24px gap per panel
+  // 384px wide + 24px gap per panel; phones get one full-width panel instead
   const rightOffset = 24 + position * 408;
+  const offsetStyle = { '--panel-right': `${rightOffset}px` } as React.CSSProperties;
 
   if (isMinimized) {
     return (
       <button
         onClick={() => maximizeChat(coffeeChatId)}
-        className="fixed bottom-4 flex items-center gap-2 px-3 py-2 rounded-full shadow-lg transition-all hover:scale-105"
+        className="fixed bottom-4 right-2 sm:right-[var(--panel-right)] flex items-center gap-2 px-3 py-2 rounded-full shadow-lg transition-colors hover:bg-[var(--color-accentHover)]"
         style={{
-          right: `${rightOffset}px`,
+          ...offsetStyle,
           backgroundColor: 'var(--color-accent)',
-          color: 'white',
+          color: 'var(--color-accentText)',
           zIndex: 50,
         }}
       >
@@ -131,8 +133,8 @@ export function MessagePanel({
         <span className="text-sm font-medium max-w-[120px] truncate">{partner.name}</span>
         {unreadCount > 0 && (
           <span
-            className="w-5 h-5 flex items-center justify-center rounded-full text-[10px] font-semibold"
-            style={{ backgroundColor: 'var(--color-error)', color: 'white' }}
+            className="min-w-5 h-5 px-1 flex items-center justify-center rounded-full text-2xs font-semibold tabular-nums"
+            style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
           >
             {unreadCount}
           </span>
@@ -143,54 +145,47 @@ export function MessagePanel({
 
   return (
     <div
-      className="fixed bottom-4 w-96 rounded-xl shadow-2xl overflow-hidden flex flex-col"
+      className="fixed bottom-2 inset-x-2 sm:bottom-4 sm:left-auto sm:right-[var(--panel-right)] sm:w-96 rounded-xl shadow-2xl overflow-hidden flex flex-col"
       style={{
-        right: `${rightOffset}px`,
-        height: '460px',
+        ...offsetStyle,
+        height: 'min(460px, calc(100dvh - 1rem))',
         backgroundColor: 'var(--color-surface)',
         border: '1px solid var(--color-border)',
         zIndex: 50,
       }}
     >
-      {/* Header — clean surface bg */}
       <div
         className="flex items-center justify-between px-4 py-3"
         style={{ backgroundColor: 'var(--color-surface)', borderBottom: '1px solid var(--color-border)' }}
       >
         <div className="flex items-center gap-3 min-w-0">
-          <div className="relative flex-shrink-0">
+          <div className="flex-shrink-0">
             {partner.avatarUrl ? (
-              <img src={partner.avatarUrl} alt="" className="w-9 h-9 rounded-full object-cover" />
+              <img src={partner.avatarUrl} alt="" className="w-8 h-8 rounded-full object-cover" />
             ) : (
               <div
-                className="w-9 h-9 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: 'var(--color-background)' }}
+                className="w-8 h-8 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: 'var(--color-surfaceHover)' }}
               >
                 <User className="w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
               </div>
             )}
-            {/* Online dot */}
-            <div
-              className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2"
-              style={{ backgroundColor: 'var(--color-success)', borderColor: 'var(--color-surface)' }}
-            />
           </div>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold truncate" style={{ color: 'var(--color-text)' }}>
-              {partner.name}
-            </p>
-            <p className="text-[10px]" style={{ color: 'var(--color-success)' }}>Active now</p>
-          </div>
+          <p className="text-sm font-semibold truncate min-w-0" style={{ color: 'var(--color-text)' }}>
+            {partner.name}
+          </p>
         </div>
         <div className="flex items-center gap-0.5">
           <button
             onClick={() => minimizeChat(coffeeChatId)}
+            aria-label="Minimize"
             className="p-1.5 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)]"
           >
             <Minus className="w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
           </button>
           <button
             onClick={() => closeChat(coffeeChatId)}
+            aria-label="Close"
             className="p-1.5 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)]"
           >
             <X className="w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
@@ -214,10 +209,7 @@ export function MessagePanel({
             if (item.type === 'date' && item.date) {
               return (
                 <div key={`date-${idx}`} className="flex justify-center my-3">
-                  <span
-                    className="text-[10px] font-medium px-3 py-1 rounded-full"
-                    style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textMuted)' }}
-                  >
+                  <span className="text-caption" style={{ color: 'var(--color-textMuted)' }}>
                     {formatDateSeparator(item.date)}
                   </span>
                 </div>
@@ -249,10 +241,10 @@ export function MessagePanel({
                     {!isOwn && !item.showAvatar && <div className="w-6 flex-shrink-0" />}
                     <div>
                       <div
-                        className="message-enter px-3 py-2 rounded-[20px] text-sm"
+                        className="message-enter px-3 py-2 rounded-xl text-sm"
                         style={{
                           backgroundColor: isOwn ? 'var(--color-accent)' : 'var(--color-surface)',
-                          color: isOwn ? 'white' : 'var(--color-text)',
+                          color: isOwn ? 'var(--color-accentText)' : 'var(--color-text)',
                           border: isOwn ? 'none' : '1px solid var(--color-border)',
                         }}
                       >
@@ -260,7 +252,7 @@ export function MessagePanel({
                       </div>
                       {item.showAvatar && (
                         <p
-                          className={`text-[10px] mt-0.5 ${isOwn ? 'text-right' : ''}`}
+                          className={`text-2xs tabular-nums mt-0.5 ${isOwn ? 'text-right' : ''}`}
                           style={{ color: 'var(--color-textMuted)' }}
                         >
                           {formatMessageTime(msg.created_at)}
@@ -277,35 +269,19 @@ export function MessagePanel({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Typing indicator placeholder */}
-      {/* (will show when partner is typing) */}
-
-      {/* Input */}
       <div
         className="p-3 border-t"
         style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}
       >
         <div className="flex items-end gap-2">
-          <button
-            className="p-1.5 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)] flex-shrink-0 mb-0.5"
-            title="Emoji"
-          >
-            <Smile className="w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
-          </button>
-          <button
-            className="p-1.5 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)] flex-shrink-0 mb-0.5"
-            title="Attach"
-          >
-            <Paperclip className="w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
-          </button>
           <textarea
             ref={inputRef}
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type a message..."
+            placeholder="Type a message…"
             rows={1}
-            className="flex-1 px-3 py-2 rounded-xl text-sm resize-none"
+            className="flex-1 min-w-0 px-3 py-2 rounded-lg text-sm resize-none focus:outline-none"
             style={{
               backgroundColor: 'var(--color-background)',
               color: 'var(--color-text)',
@@ -313,17 +289,15 @@ export function MessagePanel({
               maxHeight: '72px',
             }}
           />
-          <button
+          <Button
+            size="icon"
             onClick={handleSend}
             disabled={!newMessage.trim() || isSending}
-            className="p-2 rounded-xl transition-colors disabled:opacity-50 flex-shrink-0"
-            style={{
-              backgroundColor: 'var(--color-accent)',
-              color: 'white',
-            }}
+            aria-label="Send"
+            className="flex-shrink-0"
           >
             <Send className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
       </div>
     </div>

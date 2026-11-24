@@ -1,5 +1,3 @@
-import { ArrowRight, RefreshCw, Search, TrendingUp, HelpCircle, Sparkles } from 'lucide-react';
-import { EmberFirefly } from '../ember/EmberFirefly';
 import { CoffeeChatData } from './CoffeeChatCard';
 
 interface CoffeeChatFollowUpProps {
@@ -9,10 +7,7 @@ interface CoffeeChatFollowUpProps {
 interface FollowUpConfig {
   header: string;
   subheader: string;
-  suggestions: { text: string; icon: React.ReactNode }[];
-  accentColor: string;
-  bgColor: string;
-  borderColor: string;
+  suggestions: string[];
 }
 
 function getFollowUpConfig(rating: number): FollowUpConfig {
@@ -21,22 +16,10 @@ function getFollowUpConfig(rating: number): FollowUpConfig {
       header: 'Strong connection',
       subheader: 'Next steps',
       suggestions: [
-        {
-          text: 'Consider moving to a formal interview',
-          icon: <ArrowRight className="w-3.5 h-3.5" style={{ color: 'var(--color-success)' }} />,
-        },
-        {
-          text: 'Schedule a follow-up to discuss the role in depth',
-          icon: <TrendingUp className="w-3.5 h-3.5" style={{ color: 'var(--color-success)' }} />,
-        },
-        {
-          text: 'Share this match with your hiring team',
-          icon: <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--color-success)' }} />,
-        },
+        'Consider moving to a formal interview',
+        'Schedule a follow-up to discuss the role in depth',
+        'Share this match with your hiring team',
       ],
-      accentColor: 'var(--color-success)',
-      bgColor: 'rgba(22, 163, 74, 0.05)',
-      borderColor: 'rgba(22, 163, 74, 0.2)',
     };
   }
 
@@ -45,22 +28,10 @@ function getFollowUpConfig(rating: number): FollowUpConfig {
       header: 'Worth another look',
       subheader: 'Consider these factors',
       suggestions: [
-        {
-          text: 'Reflect on what aspects felt aligned',
-          icon: <HelpCircle className="w-3.5 h-3.5" style={{ color: 'var(--color-warning)' }} />,
-        },
-        {
-          text: 'Think about whether the gaps are dealbreakers',
-          icon: <RefreshCw className="w-3.5 h-3.5" style={{ color: 'var(--color-warning)' }} />,
-        },
-        {
-          text: 'A second conversation might reveal more',
-          icon: <Search className="w-3.5 h-3.5" style={{ color: 'var(--color-warning)' }} />,
-        },
+        'Reflect on what aspects felt aligned',
+        'Think about whether the gaps are dealbreakers',
+        'A second conversation might reveal more',
       ],
-      accentColor: 'var(--color-warning)',
-      bgColor: 'rgba(245, 158, 11, 0.05)',
-      borderColor: 'rgba(245, 158, 11, 0.2)',
     };
   }
 
@@ -68,25 +39,14 @@ function getFollowUpConfig(rating: number): FollowUpConfig {
     header: 'Other options',
     subheader: 'Explore these instead',
     suggestions: [
-      {
-        text: 'Check your other high-scoring matches',
-        icon: <Search className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />,
-      },
-      {
-        text: 'Consider what made this one feel off',
-        icon: <HelpCircle className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />,
-      },
-      {
-        text: 'Sometimes personality differences become strengths over time',
-        icon: <RefreshCw className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />,
-      },
+      'Check your other high-scoring matches',
+      'Consider what made this one feel off',
+      'Sometimes personality differences become strengths over time',
     ],
-    accentColor: 'var(--color-textMuted)',
-    bgColor: 'rgba(120, 113, 108, 0.05)',
-    borderColor: 'rgba(120, 113, 108, 0.15)',
   };
 }
 
+// Rendered inside the chat card as a divided section, not a tinted card of its own
 export function CoffeeChatFollowUp({ chat }: CoffeeChatFollowUpProps) {
   if (chat.status !== 'completed' || chat.rating == null) {
     return null;
@@ -95,43 +55,24 @@ export function CoffeeChatFollowUp({ chat }: CoffeeChatFollowUpProps) {
   const config = getFollowUpConfig(chat.rating);
 
   return (
-    <div
-      className="mt-2 bento-card overflow-hidden relative"
-      style={{
-        backgroundColor: config.bgColor,
-        borderColor: config.borderColor,
-      }}
-    >
-      {/* EmberFirefly in corner */}
-      <div className="absolute top-3 right-3 opacity-60">
-        <EmberFirefly size="sm" mood="happy" />
-      </div>
-
-      <div className="p-4">
-        <h4
-          className="text-base font-semibold mb-0.5"
-          style={{ color: config.accentColor }}
-        >
-          {config.header}
-        </h4>
-        <p
-          className="text-xs mb-3"
-          style={{ color: 'var(--color-textMuted)' }}
-        >
-          {config.subheader}
-        </p>
-
-        <ul className="space-y-2">
-          {config.suggestions.map((suggestion, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm">
-              <span className="flex-shrink-0 mt-0.5">{suggestion.icon}</span>
-              <span style={{ color: 'var(--color-textSecondary)' }}>
-                {suggestion.text}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <div className="mt-4 pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
+      <h4 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+        {config.header}
+      </h4>
+      <p className="text-label font-normal mt-0.5 mb-2" style={{ color: 'var(--color-textMuted)' }}>
+        {config.subheader}
+      </p>
+      <ul className="space-y-1.5">
+        {config.suggestions.map(text => (
+          <li key={text} className="flex items-start gap-2 text-sm">
+            <span
+              className="flex-shrink-0 w-1 h-1 rounded-full mt-2"
+              style={{ backgroundColor: 'var(--color-textMuted)' }}
+            />
+            <span style={{ color: 'var(--color-textSecondary)' }}>{text}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

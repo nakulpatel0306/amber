@@ -1,19 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  X,
-  Building2,
-  MapPin,
-  Users,
-  Globe,
-  Briefcase,
-  Star,
-  Sparkles,
-  User,
-  Heart,
-  Target,
-  MessageCircle,
-  Image as ImageIcon,
-} from 'lucide-react';
+import { X } from 'lucide-react';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { Avatar } from '../ui/Avatar';
@@ -153,7 +139,7 @@ export function CoffeeChatDetailModal({
   const formatSalary = (min: number | null, max: number | null) => {
     if (!min && !max) return null;
     const format = (n: number) => `$${(n / 1000).toFixed(0)}k`;
-    if (min && max) return `${format(min)} - ${format(max)}`;
+    if (min && max) return `${format(min)} – ${format(max)}`;
     if (min) return `From ${format(min)}`;
     if (max) return `Up to ${format(max)}`;
     return null;
@@ -171,406 +157,262 @@ export function CoffeeChatDetailModal({
     return determineArchetype(ocean);
   };
 
+  const meta = (items: (string | null | undefined | false)[]) => items.filter(Boolean).join(' · ');
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg" showCloseButton={false}>
       <div className="relative">
         {/* Header */}
         <div
-          className="px-6 py-4 border-b flex items-center justify-between"
+          className="px-6 py-4 border-b flex items-center justify-between gap-3"
           style={{ borderColor: 'var(--color-border)' }}
         >
-          <div className="flex items-center gap-3">
-            <div
-              className="w-12 h-12 rounded-xl flex items-center justify-center"
-              style={{
-                backgroundColor: 'var(--color-accent)',
-              }}
-            >
-              {viewerRole === 'candidate' ? (
-                <Building2 className="w-6 h-6 text-white" />
-              ) : (
-                <User className="w-6 h-6 text-white" />
-              )}
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
-                {partnerName}
-              </h2>
-              {matchScore && (
-                <div className="flex items-center gap-1 text-sm" style={{ color: 'var(--color-accent)' }}>
-                  <Star className="w-3.5 h-3.5" />
-                  {matchScore}% match
-                </div>
-              )}
-            </div>
+          <div className="min-w-0">
+            <h2 className="text-heading truncate" style={{ color: 'var(--color-text)' }}>
+              {partnerName}
+            </h2>
+            {matchScore != null && matchScore > 0 && (
+              <p className="text-label font-normal tabular-nums" style={{ color: 'var(--color-textSecondary)' }}>
+                {matchScore}% match
+              </p>
+            )}
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg transition-colors hover:bg-[var(--color-surface)]"
+            aria-label="Close"
+            className="p-2 rounded-lg transition-colors hover:bg-[var(--color-surface)] flex-shrink-0"
             style={{ color: 'var(--color-textMuted)' }}
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Content */}
+        {/* Content: plain sections separated by spacing, no boxes inside the modal */}
         <div className="px-6 py-5 max-h-[60vh] overflow-y-auto">
           {isLoading ? (
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-8 w-8 border-2 border-[var(--color-accent)] border-t-transparent" />
             </div>
           ) : viewerRole === 'candidate' && employerDetails ? (
-            // Employer details for candidate view
             <div className="space-y-6">
-              {/* Company Overview */}
-              <div>
-                <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                  <Building2 className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                  Company overview
-                </h3>
-                <div
-                  className="p-4 rounded-xl"
-                  style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
-                >
-                  {employerDetails.description && (
-                    <p className="text-sm mb-4" style={{ color: 'var(--color-textSecondary)' }}>
-                      {employerDetails.description}
-                    </p>
-                  )}
-                  <div className="grid grid-cols-2 gap-3 text-sm">
-                    {employerDetails.industry && (
-                      <div className="flex items-center gap-2" style={{ color: 'var(--color-textMuted)' }}>
-                        <Briefcase className="w-4 h-4" />
-                        <span>{employerDetails.industry}</span>
-                      </div>
-                    )}
-                    {employerDetails.company_size && (
-                      <div className="flex items-center gap-2" style={{ color: 'var(--color-textMuted)' }}>
-                        <Users className="w-4 h-4" />
-                        <span>{employerDetails.company_size} employees</span>
-                      </div>
-                    )}
-                    {employerDetails.location && (
-                      <div className="flex items-center gap-2" style={{ color: 'var(--color-textMuted)' }}>
-                        <MapPin className="w-4 h-4" />
-                        <span>{employerDetails.location}</span>
-                      </div>
-                    )}
-                    {employerDetails.company_website && (
+              <Section title="Company overview">
+                {employerDetails.description && (
+                  <p className="text-sm mb-2" style={{ color: 'var(--color-textSecondary)' }}>
+                    {employerDetails.description}
+                  </p>
+                )}
+                <p className="text-label font-normal" style={{ color: 'var(--color-textMuted)' }}>
+                  {meta([
+                    employerDetails.industry,
+                    employerDetails.company_size && `${employerDetails.company_size} employees`,
+                    employerDetails.location,
+                  ])}
+                  {employerDetails.company_website && (
+                    <>
+                      {' · '}
                       <a
                         href={employerDetails.company_website}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 hover:underline"
+                        className="hover:underline underline-offset-4"
                         style={{ color: 'var(--color-accent)' }}
                       >
-                        <Globe className="w-4 h-4" />
-                        <span>Website</span>
+                        Website
                       </a>
-                    )}
-                  </div>
-                </div>
-              </div>
+                    </>
+                  )}
+                </p>
+              </Section>
 
-              {/* Culture Values */}
               {employerDetails.culture_values && employerDetails.culture_values.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                    <Heart className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                    Culture values
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {employerDetails.culture_values.map((value, idx) => (
-                      <span
-                        key={idx}
-                        className="px-3 py-1.5 rounded-full text-xs font-medium"
-                        style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
-                      >
-                        {value}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                <Section title="Culture values">
+                  <TagList items={employerDetails.culture_values} />
+                </Section>
               )}
 
-              {/* Open Roles */}
               {roles.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                    <Target className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                    Open Roles ({roles.length})
-                  </h3>
-                  <div className="space-y-3">
-                    {roles.map(role => (
-                      <div
+                <Section title="Open roles" count={roles.length}>
+                  <ul>
+                    {roles.map((role, i) => (
+                      <li
                         key={role.id}
-                        className="p-4 rounded-xl"
-                        style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
+                        className="py-3"
+                        style={{ borderTop: i > 0 ? '1px solid var(--color-border)' : undefined }}
                       >
-                        <h4 className="font-medium mb-1" style={{ color: 'var(--color-text)' }}>
+                        <h4 className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
                           {role.title}
                         </h4>
                         {role.description && (
-                          <p className="text-sm mb-2 line-clamp-2" style={{ color: 'var(--color-textSecondary)' }}>
+                          <p className="text-sm mt-0.5 line-clamp-2" style={{ color: 'var(--color-textSecondary)' }}>
                             {role.description}
                           </p>
                         )}
-                        <div className="flex flex-wrap items-center gap-3 text-xs" style={{ color: 'var(--color-textMuted)' }}>
-                          {role.location && (
-                            <span className="flex items-center gap-1">
-                              <MapPin className="w-3 h-3" /> {role.location}
-                            </span>
-                          )}
-                          {role.work_style && (
-                            <span className="px-2 py-0.5 rounded-full" style={{ backgroundColor: 'var(--color-background)' }}>
-                              {role.work_style}
-                            </span>
-                          )}
-                          {role.employment_type && (
-                            <span className="px-2 py-0.5 rounded-full" style={{ backgroundColor: 'var(--color-background)' }}>
-                              {role.employment_type}
-                            </span>
-                          )}
-                          {formatSalary(role.salary_min, role.salary_max) && (
-                            <span style={{ color: 'var(--color-success)' }}>
-                              {formatSalary(role.salary_min, role.salary_max)}
-                            </span>
-                          )}
-                        </div>
-                      </div>
+                        <p className="text-label font-normal mt-1 tabular-nums" style={{ color: 'var(--color-textMuted)' }}>
+                          {meta([role.location, role.work_style, role.employment_type, formatSalary(role.salary_min, role.salary_max)])}
+                        </p>
+                      </li>
                     ))}
-                  </div>
-                </div>
+                  </ul>
+                </Section>
               )}
             </div>
           ) : viewerRole === 'employer' && candidateDetails ? (
-            // Candidate details for employer view
             <div className="space-y-6">
-              {/* Profile Overview */}
-              <div>
-                <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                  <User className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                  Profile overview
-                </h3>
-                <div
-                  className="p-4 rounded-xl"
-                  style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
-                >
-                  <div className="flex items-start gap-4 mb-3">
-                    <Avatar
-                      src={candidateDetails.profile?.avatar_url}
-                      fallback={candidateDetails.profile?.full_name || 'User'}
-                      size="lg"
-                    />
-                    <div className="flex-1">
-                      <h4 className="font-semibold" style={{ color: 'var(--color-text)' }}>
-                        {candidateDetails.profile?.full_name || 'Candidate'}
-                      </h4>
-                      {candidateDetails.headline && (
-                        <p className="text-sm" style={{ color: 'var(--color-accent)' }}>
-                          {candidateDetails.headline}
-                        </p>
-                      )}
-                      <div className="flex flex-wrap items-center gap-3 text-sm mt-2">
-                        {candidateDetails.location && (
-                          <div className="flex items-center gap-1.5" style={{ color: 'var(--color-textMuted)' }}>
-                            <MapPin className="w-3.5 h-3.5" />
-                            <span>{candidateDetails.location}</span>
-                          </div>
-                        )}
-                        {candidateDetails.preferred_work_style && (
-                          <span
-                            className="px-2 py-0.5 rounded-full text-xs"
-                            style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-text)' }}
-                          >
-                            {candidateDetails.preferred_work_style}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  {candidateDetails.bio && (
+              <div className="flex items-start gap-4">
+                <Avatar
+                  src={candidateDetails.profile?.avatar_url}
+                  fallback={candidateDetails.profile?.full_name || 'User'}
+                  size="lg"
+                />
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+                    {candidateDetails.profile?.full_name || 'Candidate'}
+                  </h3>
+                  {candidateDetails.headline && (
                     <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
-                      {candidateDetails.bio}
+                      {candidateDetails.headline}
+                    </p>
+                  )}
+                  {(candidateDetails.location || candidateDetails.preferred_work_style) && (
+                    <p className="text-label font-normal mt-1" style={{ color: 'var(--color-textMuted)' }}>
+                      {meta([candidateDetails.location, candidateDetails.preferred_work_style])}
                     </p>
                   )}
                 </div>
               </div>
+              {candidateDetails.bio && (
+                <p className="text-sm -mt-2" style={{ color: 'var(--color-textSecondary)' }}>
+                  {candidateDetails.bio}
+                </p>
+              )}
 
-              {/* Personality Archetype */}
               {(() => {
                 const archetype = getCandidateArchetype();
                 if (!archetype) return null;
                 return (
-                  <div>
-                    <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                      <Sparkles className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                      Personality archetype
-                    </h3>
-                    <div
-                      className="p-4 rounded-xl"
-                      style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
-                    >
-                      <div className="flex items-center gap-2 mb-2">
-                        <span
-                          className="px-2 py-1 rounded-full text-xs font-semibold"
-                          style={{ backgroundColor: `var(--color-accent)15`, color: 'var(--color-accent)' }}
-                        >
-                          {archetype.name}
-                        </span>
-                      </div>
-                      <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
-                        {archetype.description}
+                  <Section title={archetype.name}>
+                    <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+                      {archetype.description}
+                    </p>
+                    {archetype.strengths && archetype.strengths.length > 0 && (
+                      <p className="text-label font-normal mt-2" style={{ color: 'var(--color-textMuted)' }}>
+                        Strengths: {archetype.strengths.slice(0, 4).join(', ')}
                       </p>
-                      {archetype.strengths && archetype.strengths.length > 0 && (
-                        <div className="mt-3 flex flex-wrap gap-1.5">
-                          {archetype.strengths.slice(0, 4).map((strength, idx) => (
-                            <span
-                              key={idx}
-                              className="px-2 py-1 rounded-lg text-xs"
-                              style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textMuted)' }}
-                            >
-                              {strength}
-                            </span>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                    )}
+                  </Section>
                 );
               })()}
 
-              {/* OCEAN Scores */}
-              <div>
-                <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                  <Target className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                  Personality traits
-                </h3>
-                <div
-                  className="p-4 rounded-xl space-y-3"
-                  style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
-                >
+              <Section title="Personality traits">
+                <div className="space-y-3">
                   {[
-                    { label: 'Openness', score: candidateDetails.openness_score, color: '#8B5CF6' },
-                    { label: 'Conscientiousness', score: candidateDetails.conscientiousness_score, color: '#10B981' },
-                    { label: 'Extraversion', score: candidateDetails.extraversion_score, color: '#F59E0B' },
-                    { label: 'Agreeableness', score: candidateDetails.agreeableness_score, color: '#EC4899' },
-                    { label: 'Stability', score: 100 - (candidateDetails.neuroticism_score || 50), color: '#06B6D4' },
+                    { label: 'Openness', score: candidateDetails.openness_score, color: 'var(--color-trait-openness)' },
+                    { label: 'Conscientiousness', score: candidateDetails.conscientiousness_score, color: 'var(--color-trait-conscientiousness)' },
+                    { label: 'Extraversion', score: candidateDetails.extraversion_score, color: 'var(--color-trait-extraversion)' },
+                    { label: 'Agreeableness', score: candidateDetails.agreeableness_score, color: 'var(--color-trait-agreeableness)' },
+                    { label: 'Stability', score: 100 - (candidateDetails.neuroticism_score || 50), color: 'var(--color-trait-stability)' },
                   ].map(trait => (
                     <div key={trait.label}>
-                      <div className="flex items-center justify-between text-xs mb-1">
+                      <div className="flex items-center justify-between text-label font-normal mb-1">
                         <span style={{ color: 'var(--color-textSecondary)' }}>{trait.label}</span>
-                        <span style={{ color: trait.color }}>{trait.score}%</span>
+                        <span className="tabular-nums" style={{ color: 'var(--color-text)' }}>{trait.score}%</span>
                       </div>
-                      <div className="h-2 rounded-full" style={{ backgroundColor: 'var(--color-background)' }}>
+                      <div className="h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-surfaceHover)' }}>
                         <div
-                          className="h-full rounded-full transition-all"
+                          className="h-full rounded-full"
                           style={{ width: `${trait.score}%`, backgroundColor: trait.color }}
                         />
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
+              </Section>
 
-              {/* Top Traits */}
               {candidateDetails.top_traits && candidateDetails.top_traits.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                    <Star className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                    Top traits
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {candidateDetails.top_traits.map((trait, idx) => (
-                      <span
-                        key={idx}
-                        className="px-3 py-1.5 rounded-full text-xs font-medium"
-                        style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
-                      >
-                        {trait}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                <Section title="Top traits">
+                  <TagList items={candidateDetails.top_traits} />
+                </Section>
               )}
 
-              {/* Photo Gallery */}
               {candidateDetails.catalog_photos && candidateDetails.catalog_photos.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                    <ImageIcon className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                    Photos
-                  </h3>
+                <Section title="Photos">
                   <div className="grid grid-cols-3 gap-2">
                     {candidateDetails.catalog_photos.slice(0, 6).map((photo, idx) => (
-                      <div
-                        key={idx}
-                        className="aspect-square rounded-lg overflow-hidden"
-                      >
-                        <img
-                          src={photo}
-                          alt={`Photo ${idx + 1}`}
-                          className="w-full h-full object-cover"
-                        />
+                      <div key={idx} className="aspect-square rounded-lg overflow-hidden">
+                        <img src={photo} alt={`Photo ${idx + 1}`} className="w-full h-full object-cover" />
                       </div>
                     ))}
                   </div>
-                </div>
+                </Section>
               )}
 
-              {/* Hobbies & Interests */}
               {candidateDetails.hobbies && candidateDetails.hobbies.length > 0 && (
-                <div>
-                  <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                    <Heart className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                    Hobbies & interests
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {candidateDetails.hobbies.map((hobbyId, idx) => {
-                      const hobby = getHobbyById(hobbyId);
-                      if (!hobby) return null;
-                      return (
-                        <span
-                          key={idx}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium"
-                          style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
-                        >
-                          <span>{hobby.emoji}</span>
-                          {hobby.name}
-                        </span>
-                      );
-                    })}
-                  </div>
-                </div>
+                <Section title="Hobbies and interests">
+                  <TagList
+                    items={candidateDetails.hobbies
+                      .map(id => getHobbyById(id)?.name)
+                      .filter((name): name is string => Boolean(name))}
+                  />
+                </Section>
               )}
             </div>
           ) : (
-            <div className="text-center py-12" style={{ color: 'var(--color-textMuted)' }}>
+            <div className="text-center py-12 text-sm" style={{ color: 'var(--color-textMuted)' }}>
               No details available
             </div>
           )}
         </div>
 
-        {/* Footer */}
+        {/* Footer: one primary action */}
         <div
-          className="px-6 py-4 border-t flex items-center justify-end gap-3"
+          className="px-6 py-4 border-t flex flex-wrap items-center justify-end gap-2"
           style={{ borderColor: 'var(--color-border)' }}
         >
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="ghost" onClick={onClose}>
             Close
           </Button>
           {onFeedback && (
-            <Button variant="outline" leftIcon={<Star className="w-4 h-4" />} onClick={onFeedback}>
+            <Button variant={onMessage ? 'outline' : 'primary'} onClick={onFeedback}>
               Leave feedback
             </Button>
           )}
           {onMessage && (
-            <Button leftIcon={<MessageCircle className="w-4 h-4" />} onClick={onMessage}>
+            <Button onClick={onMessage}>
               Message
             </Button>
           )}
         </div>
       </div>
     </Modal>
+  );
+}
+
+function Section({ title, count, children }: { title: string; count?: number; children: React.ReactNode }) {
+  return (
+    <section>
+      <h3 className="text-sm font-semibold mb-2" style={{ color: 'var(--color-text)' }}>
+        {title}
+        {count != null && (
+          <span className="ml-1.5 font-normal tabular-nums" style={{ color: 'var(--color-textMuted)' }}>{count}</span>
+        )}
+      </h3>
+      {children}
+    </section>
+  );
+}
+
+function TagList({ items }: { items: string[] }) {
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {items.map((item, idx) => (
+        <span
+          key={`${item}-${idx}`}
+          className="px-2.5 py-1 rounded-full text-caption"
+          style={{ color: 'var(--color-textSecondary)', border: '1px solid var(--color-border)' }}
+        >
+          {item}
+        </span>
+      ))}
+    </div>
   );
 }

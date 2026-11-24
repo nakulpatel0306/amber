@@ -12,7 +12,7 @@ import { deriveDisplayStatus } from '../../utils/coffeeChatStatus';
 import { CoffeeChatDetailModal } from './CoffeeChatDetailModal';
 import { PageBanner } from '../ui/PageBanner';
 import { InboxPanel } from '../connections/InboxPanel';
-import { UserPlus } from 'lucide-react';
+import { RequestsButton } from './RequestsButton';
 import { useConnections } from '../../contexts/ConnectionsContext';
 import { pageEntrance } from '../../utils/motion';
 import { apiFetch } from '../../utils/api';
@@ -162,13 +162,13 @@ export function CandidateCoffeeChats() {
 
   if (showLoader) {
     return (
-      <CoffeeBrewLoader variant="fullscreen" message="Loading your coffee chats..." />
+      <CoffeeBrewLoader variant="fullscreen" message="Loading your coffee chats…" />
     );
   }
 
   return (
     <motion.div
-      className="max-w-7xl mx-auto px-4 sm:px-6 py-6"
+      className="max-w-7xl mx-auto px-4 sm:px-6 py-8"
       variants={pageEntrance}
       initial="hidden"
       animate="show"
@@ -176,23 +176,7 @@ export function CandidateCoffeeChats() {
       <PageBanner
         title="Coffee chats"
         subtitle="Connect with teams over casual conversations"
-        rightContent={
-          <button
-            onClick={() => setInboxOpen(true)}
-            className="relative p-2 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)]"
-            title="Connections"
-          >
-            <UserPlus className="w-5 h-5" style={{ color: 'var(--color-textSecondary)' }} />
-            {pendingReceivedCount > 0 && (
-              <span
-                className="absolute -top-0.5 -right-0.5 flex items-center justify-center rounded-full text-[9px] font-semibold text-white"
-                style={{ backgroundColor: 'var(--color-accent)', minWidth: '16px', height: '16px', padding: '0 3px' }}
-              >
-                {pendingReceivedCount}
-              </span>
-            )}
-          </button>
-        }
+        rightContent={<RequestsButton count={pendingReceivedCount} onClick={() => setInboxOpen(true)} />}
       />
 
       <CoffeeChatsCalendar

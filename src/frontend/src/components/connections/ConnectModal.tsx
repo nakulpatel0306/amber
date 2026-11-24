@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { UserPlus, Clock, Calendar, ChevronRight } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { Modal, ModalFooter } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { DatePicker } from '../ui/DatePicker';
@@ -85,47 +85,41 @@ export function ConnectModal({
       isOpen={isOpen}
       onClose={onClose}
       maxWidth={showCalendar ? '700px' : '384px'}
-      dialogClassName="transition-[max-width] duration-700 ease-in-out"
+      dialogClassName="transition-[max-width] duration-300 ease-out"
     >
-      <div className="flex gap-0 overflow-hidden">
-        {/* Left side — main form */}
-        <div className={`flex-1 min-w-0 ${showCalendar ? 'pr-5' : ''} transition-[padding] duration-700 ease-in-out`}>
+      {/* Side by side from sm up; on phones the scheduling panel stacks under the message */}
+      <div className="flex flex-col sm:flex-row gap-0">
+        <div className={`flex-1 min-w-0 ${showCalendar ? 'sm:pr-5' : ''}`}>
           {/* Header */}
           <div className="flex items-center gap-3 mb-3">
             <div
-              className="w-11 h-11 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
+              className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0"
               style={{ backgroundColor: avatarUrl ? undefined : 'var(--color-surfaceHover)' }}
             >
               {avatarUrl ? (
                 <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
               ) : (
-                <span className="text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>{initial}</span>
+                <span className="text-sm font-medium" style={{ color: 'var(--color-textSecondary)' }}>{initial}</span>
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>{name}</h3>
-                <span className="text-sm font-semibold tabular-nums" style={{ color: 'var(--color-accent)' }}>
+              <div className="flex items-baseline justify-between gap-2">
+                <h3 className="font-semibold text-sm truncate" style={{ color: 'var(--color-text)' }}>{name}</h3>
+                <span className="text-sm font-semibold tabular-nums flex-shrink-0" style={{ color: 'var(--color-text)' }}>
                   {overallScore}%
                 </span>
               </div>
-              {subtitle && (
-                <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>{subtitle}</p>
-              )}
-              {archetype && (
-                <span
-                  className="inline-block px-1.5 py-0.5 rounded-full text-[10px] font-medium -ml-1.5 mt-1"
-                  style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-accent)' }}
-                >
-                  {archetype.name}
-                </span>
+              {(subtitle || archetype) && (
+                <p className="text-caption truncate" style={{ color: 'var(--color-textMuted)' }}>
+                  {[subtitle, archetype?.name].filter(Boolean).join(' · ')}
+                </p>
               )}
             </div>
           </div>
 
           {/* Message field */}
           <div className="mb-3">
-            <label className="block text-xs font-medium mb-1" style={{ color: 'var(--color-textSecondary)' }}>
+            <label className="block text-label mb-1.5" style={{ color: 'var(--color-text)' }}>
               Message
             </label>
             <textarea
@@ -135,14 +129,14 @@ export function ConnectModal({
                 if (words.length <= 100) setMessage(e.target.value);
               }}
               rows={3}
-              className="w-full px-3 py-2 rounded-xl text-sm resize-none"
+              className="w-full px-3 py-2 rounded-lg text-sm resize-none focus:outline-none"
               style={{
                 backgroundColor: 'var(--color-background)',
                 color: 'var(--color-text)',
                 border: `1px solid ${message.trim().length === 0 ? 'var(--color-warning)' : 'var(--color-border)'}`,
               }}
             />
-            <p className="text-right text-[10px] mt-1" style={{ color: wordCount >= 90 ? 'var(--color-warning)' : 'var(--color-textMuted)' }}>
+            <p className="text-right text-caption tabular-nums mt-1" style={{ color: wordCount >= 90 ? 'var(--color-warning)' : 'var(--color-textMuted)' }}>
               {wordCount}/100 words
             </p>
           </div>
@@ -150,42 +144,30 @@ export function ConnectModal({
           {/* Coffee chat toggle */}
           <button
             onClick={() => setShowCalendar(!showCalendar)}
-            className="flex items-center gap-2 w-full py-2 px-3 rounded-xl transition-colors"
-            style={{
-              backgroundColor: showCalendar ? 'var(--color-surfaceHover)' : 'transparent',
-              border: '1px solid var(--color-border)',
-            }}
+            aria-expanded={showCalendar}
+            className="flex items-center gap-2 w-full py-2 px-3 rounded-lg border transition-colors hover:border-[var(--color-borderHover)]"
+            style={{ borderColor: 'var(--color-border)' }}
           >
-            <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-accent)' }} />
-            <span className="text-xs font-medium flex-1 text-left" style={{ color: 'var(--color-textSecondary)' }}>
+            <span className="text-label flex-1 text-left" style={{ color: 'var(--color-textSecondary)' }}>
               Include a coffee chat invite
             </span>
-            <ChevronRight
-              className="w-3.5 h-3.5 transition-transform duration-700 ease-in-out"
-              style={{
-                color: 'var(--color-textMuted)',
-                transform: showCalendar ? 'rotate(180deg)' : 'rotate(0deg)',
-              }}
+            <ChevronDown
+              className={`w-3.5 h-3.5 transition-transform sm:-rotate-90 ${showCalendar ? 'rotate-180 sm:rotate-90' : ''}`}
+              style={{ color: 'var(--color-textMuted)' }}
             />
           </button>
         </div>
 
         {/* Right side — calendar panel, expands outward */}
-        <div
-          className="transition-all duration-700 ease-in-out overflow-hidden flex-shrink-0"
-          style={{
-            width: showCalendar ? '292px' : '0px',
-            opacity: showCalendar ? 1 : 0,
-            borderLeft: showCalendar ? '1px solid var(--color-border)' : 'none',
-            paddingLeft: showCalendar ? '20px' : '0px',
-          }}
-        >
-          {showCalendar && (
+        {showCalendar && (
+          <div
+            className="w-full sm:w-[292px] flex-shrink-0 mt-4 pt-4 border-t sm:mt-0 sm:pt-0 sm:border-t-0 sm:border-l sm:pl-5 animate-fade-in"
+            style={{ borderColor: 'var(--color-border)' }}
+          >
             <div>
               {/* Duration picker */}
               <div className="mb-4">
-                <label className="flex items-center gap-1.5 text-xs font-medium mb-2" style={{ color: 'var(--color-textSecondary)' }}>
-                  <Clock className="w-3.5 h-3.5" />
+                <label className="block text-label mb-2" style={{ color: 'var(--color-text)' }}>
                   Duration
                 </label>
                 <div className="flex gap-1.5">
@@ -193,10 +175,10 @@ export function ConnectModal({
                     <button
                       key={d}
                       onClick={() => setDuration(d)}
-                      className="flex-1 py-1.5 rounded-lg text-xs font-medium transition-colors"
+                      aria-pressed={duration === d}
+                      className="flex-1 py-1.5 rounded-lg text-caption font-medium tabular-nums transition-colors"
                       style={{
-                        backgroundColor: duration === d ? 'var(--color-accent)' : 'var(--color-background)',
-                        color: duration === d ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
+                        color: duration === d ? 'var(--color-accent)' : 'var(--color-textSecondary)',
                         border: `1px solid ${duration === d ? 'var(--color-accent)' : 'var(--color-border)'}`,
                       }}
                     >
@@ -208,39 +190,33 @@ export function ConnectModal({
 
               {/* Date picker */}
               <div className="mb-4">
-                <label className="flex items-center gap-1.5 text-xs font-medium mb-2" style={{ color: 'var(--color-textSecondary)' }}>
-                  <Calendar className="w-3.5 h-3.5" />
+                <label className="block text-label mb-2" style={{ color: 'var(--color-text)' }}>
                   Preferred dates
                 </label>
-                <div
-                  className="p-3 rounded-xl"
-                  style={{ backgroundColor: 'var(--color-background)', border: '1px solid var(--color-border)' }}
-                >
-                  <DatePicker
-                    selectedDates={preferredDates}
-                    onChange={setPreferredDates}
-                    minDate={minDate}
-                    maxSelections={5}
-                  />
-                </div>
+                <DatePicker
+                  selectedDates={preferredDates}
+                  onChange={setPreferredDates}
+                  minDate={minDate}
+                  maxSelections={5}
+                />
               </div>
 
               {/* Time picker */}
               <div>
-                <label className="flex items-center gap-1.5 text-xs font-medium mb-2" style={{ color: 'var(--color-textSecondary)' }}>
-                  <Clock className="w-3.5 h-3.5" />
+                <label className="block text-label mb-2" style={{ color: 'var(--color-text)' }}>
                   Preferred time
                 </label>
                 <div
-                  className="grid grid-cols-3 gap-1 max-h-28 overflow-y-auto p-2 rounded-xl"
-                  style={{ backgroundColor: 'var(--color-background)', border: '1px solid var(--color-border)' }}
+                  className="grid grid-cols-3 gap-1 max-h-28 overflow-y-auto p-1.5 rounded-lg"
+                  style={{ border: '1px solid var(--color-border)' }}
                 >
                   {TIME_SLOTS.map(t => (
                     <button
                       key={t}
                       type="button"
                       onClick={() => setPreferredTime(t)}
-                      className="py-1 px-1 rounded-lg text-[10px] font-medium transition-colors"
+                      aria-pressed={preferredTime === t}
+                      className="py-1 px-1 rounded-md text-caption tabular-nums transition-colors"
                       style={{
                         backgroundColor: preferredTime === t ? 'var(--color-accent)' : 'transparent',
                         color: preferredTime === t ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
@@ -252,8 +228,8 @@ export function ConnectModal({
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <ModalFooter>
@@ -261,7 +237,6 @@ export function ConnectModal({
           Cancel
         </Button>
         <Button size="sm" onClick={handleSubmit} isLoading={isSubmitting} disabled={message.trim().length === 0}>
-          <UserPlus className="w-3.5 h-3.5 mr-1" />
           Send request
         </Button>
       </ModalFooter>

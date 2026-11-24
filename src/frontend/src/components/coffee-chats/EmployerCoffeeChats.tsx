@@ -1,4 +1,3 @@
-import { Facts } from '../ui/Facts';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -6,7 +5,6 @@ import { useToast } from '../../contexts/ToastContext';
 import { useMessaging } from '../../contexts/MessagingContext';
 import { supabase } from '../../lib/supabase';
 import { CoffeeBrewLoader, useMinLoader } from '../ui/CoffeeBrewLoader';
-import { EmberFirefly } from '../ember/EmberFirefly';
 import { CoffeeChatCard, CoffeeChatData, ChatStatus } from './CoffeeChatCard';
 import { CoffeeChatPrep } from './CoffeeChatPrep';
 import { CoffeeChatFollowUp } from './CoffeeChatFollowUp';
@@ -16,9 +14,10 @@ import { FeedbackModal } from './FeedbackModal';
 import { CoffeeChatDetailModal } from './CoffeeChatDetailModal';
 import { AcceptWithDateModal } from './AcceptWithDateModal';
 import { PageBanner } from '../ui/PageBanner';
+import { Facts } from '../ui/Facts';
 import { Button } from '../ui/Button';
 import { InboxPanel } from '../connections/InboxPanel';
-import { Coffee, UserPlus } from 'lucide-react';
+import { RequestsButton } from './RequestsButton';
 import { useConnections } from '../../contexts/ConnectionsContext';
 import { deriveDisplayStatus, type DisplayStatus } from '../../utils/coffeeChatStatus';
 import { apiFetch } from '../../utils/api';
@@ -33,18 +32,18 @@ const tabs: { value: TabValue; label: string }[] = [
   { value: 'completed', label: 'Completed' },
 ];
 
-const emptyStates: Partial<Record<TabValue, { mood: 'happy' | 'neutral' | 'thinking'; message: string }>> = {
+const emptyStates: Partial<Record<TabValue, { title: string; message: string }>> = {
   pending: {
-    mood: 'happy',
-    message: 'No pending requests. Explore your Ember matches to start connecting!',
+    title: 'No pending requests',
+    message: 'Explore your Ember matches to start connecting.',
   },
   upcoming: {
-    mood: 'neutral',
-    message: 'No upcoming chats. Accept a pending request to get started.',
+    title: 'No upcoming chats',
+    message: 'Accept a pending request to get started.',
   },
   completed: {
-    mood: 'thinking',
-    message: 'No completed chats yet. Your chat history will appear here.',
+    title: 'No completed chats',
+    message: 'Your chat history will appear here.',
   },
 };
 
@@ -280,14 +279,7 @@ export function EmployerCoffeeChats() {
     }
   };
 
-  // Stat pill counts for PageBanner
-  const statCounts = useMemo(() => ({
-    pending: chats.filter(c => c.status === 'pending').length,
-    upcoming: chats.filter(c => c.status === 'accepted' || c.status === 'scheduled').length,
-    completed: chats.filter(c => c.status === 'completed').length,
-  }), [chats]);
-
-  // Tab-based filtering using derived display status
+  // Tab-based filtering using derived display status; the header facts read the same counts
   const tabCounts = useMemo(() => ({
     calendar: chats.filter(c => c.status !== 'cancelled').length,
     pending: chats.filter(c => getDisplayStatus(c) === 'pending').length,
@@ -308,60 +300,53 @@ export function EmployerCoffeeChats() {
 
   if (showLoader) {
     return (
-      <CoffeeBrewLoader variant="fullscreen" message="Loading coffee chats..." />
+      <CoffeeBrewLoader variant="fullscreen" message="Loading coffee chats…" />
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
       <PageBanner
         title="Coffee chats"
         subtitle="Manage conversations with potential hires"
-        belowSubtitle={<Facts items={[{ label: 'Pending', value: statCounts.pending }, { label: 'Upcoming', value: statCounts.upcoming }, { label: 'Completed', value: statCounts.completed }]} />}
+        belowSubtitle={
+          <Facts
+            items={[
+              { label: 'Pending', value: tabCounts.pending },
+              { label: 'Upcoming', value: tabCounts.upcoming },
+              { label: 'Completed', value: tabCounts.completed },
+            ]}
+          />
+        }
         rightContent={
-          <div className="flex items-center gap-3 flex-wrap">
-            <Button size="sm" leftIcon={<Coffee className="w-3.5 h-3.5" />} onClick={() => navigate('/app/employer/ember')}>
-              Find match
+          <>
+            <RequestsButton count={pendingReceivedCount} onClick={() => setInboxOpen(true)} />
+            <Button size="sm" onClick={() => navigate('/app/employer/ember')}>
+              Find a match
             </Button>
-            <Button variant="outline" size="sm" leftIcon={<UserPlus className="w-3.5 h-3.5" />} onClick={() => setInboxOpen(true)} className="relative">
-              Requests
-              {pendingReceivedCount > 0 && (
-                <span
-                  className="absolute -top-1.5 -right-1.5 flex items-center justify-center rounded-full text-[9px] font-semibold text-white"
-                  style={{ backgroundColor: 'var(--color-accent)', minWidth: '16px', height: '16px', padding: '0 3px' }}
-                >
-                  {pendingReceivedCount}
-                </span>
-              )}
-            </Button>
-          </div>
+          </>
         }
       />
 
-      {/* Tab bar */}
-      <div className="bento-card flex items-center gap-1 !p-1 mb-6 overflow-x-auto">
-        {tabs.map(tab => (
-          <button
-            key={tab.value}
-            onClick={() => setActiveTab(tab.value)}
-            className="flex-shrink-0 sm:flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all"
-            style={{
-              backgroundColor: activeTab === tab.value ? 'var(--color-accent)' : 'transparent',
-              color: activeTab === tab.value ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
-            }}
-          >
-            {tab.label}
-            <span
-              className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full min-w-[20px]"
+      {/* Tabs: quiet selected state, counts live in the header facts */}
+      <div className="flex items-center gap-1 mb-6 overflow-x-auto scrollbar-hidden border-b" style={{ borderColor: 'var(--color-border)' }}>
+        {tabs.map(tab => {
+          const isActive = activeTab === tab.value;
+          return (
+            <button
+              key={tab.value}
+              onClick={() => setActiveTab(tab.value)}
+              aria-pressed={isActive}
+              className="flex-shrink-0 -mb-px px-3 py-2.5 text-sm font-medium border-b-2 transition-colors hover:text-[var(--color-text)]"
               style={{
-                backgroundColor: activeTab === tab.value ? 'color-mix(in srgb, var(--color-accentText) 20%, transparent)' : 'var(--color-background)',
-                color: activeTab === tab.value ? 'var(--color-accentText)' : 'var(--color-textMuted)',
+                borderColor: isActive ? 'var(--color-accent)' : 'transparent',
+                color: isActive ? 'var(--color-text)' : 'var(--color-textSecondary)',
               }}
             >
-              {tabCounts[tab.value]}
-            </span>
-          </button>
-        ))}
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* Calendar view */}
@@ -373,9 +358,8 @@ export function EmployerCoffeeChats() {
         />
       ) : filteredChats.length === 0 ? (
         <div className="bento-card text-center py-16">
-          {empty && <EmberFirefly size="lg" mood={empty.mood} animated />}
-          <h3 className="mt-6 text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
-            {activeTab === 'pending' ? 'No pending requests' : activeTab === 'upcoming' ? 'No upcoming chats' : 'No completed chats'}
+          <h3 className="text-heading" style={{ color: 'var(--color-text)' }}>
+            {empty?.title}
           </h3>
           <p className="mt-2 text-sm max-w-sm mx-auto" style={{ color: 'var(--color-textMuted)' }}>
             {empty?.message}
@@ -384,45 +368,45 @@ export function EmployerCoffeeChats() {
       ) : (
         <div className="space-y-4">
           {filteredChats.map(chat => (
-            <div key={chat.id}>
-              <CoffeeChatCard
-                chat={chat}
-                userRole="employer"
-                onAccept={handleAcceptChat}
-                onDecline={id => updateChatStatus(id, 'cancelled')}
-                onSchedule={id => {
-                  setActiveChatId(id);
-                  setScheduleModalOpen(true);
-                }}
-                onReschedule={id => {
-                  setActiveChatId(id);
-                  setScheduleModalOpen(true);
-                }}
-                onComplete={id => updateChatStatus(id, 'completed')}
-                onFeedback={id => {
-                  const c = chats.find(ch => ch.id === id);
-                  setActiveChatId(id);
-                  setActiveChatPartner(c?.partner_name || '');
-                  setFeedbackModalOpen(true);
-                }}
-                onViewMatch={id => {
-                  const c = chats.find(ch => ch.id === id);
-                  if (c?.candidate_id) {
-                    navigate(`/app/employer/ember?deepdive=${c.candidate_id}`);
-                  } else {
-                    navigate('/app/employer/ember');
-                  }
-                }}
-                onMessage={handleMessage}
-                onViewDetails={handleViewDetails}
-              />
+            <CoffeeChatCard
+              key={chat.id}
+              chat={chat}
+              userRole="employer"
+              onAccept={handleAcceptChat}
+              onDecline={id => updateChatStatus(id, 'cancelled')}
+              onSchedule={id => {
+                setActiveChatId(id);
+                setScheduleModalOpen(true);
+              }}
+              onReschedule={id => {
+                setActiveChatId(id);
+                setScheduleModalOpen(true);
+              }}
+              onComplete={id => updateChatStatus(id, 'completed')}
+              onFeedback={id => {
+                const c = chats.find(ch => ch.id === id);
+                setActiveChatId(id);
+                setActiveChatPartner(c?.partner_name || '');
+                setFeedbackModalOpen(true);
+              }}
+              onViewMatch={id => {
+                const c = chats.find(ch => ch.id === id);
+                if (c?.candidate_id) {
+                  navigate(`/app/employer/ember?deepdive=${c.candidate_id}`);
+                } else {
+                  navigate('/app/employer/ember');
+                }
+              }}
+              onMessage={handleMessage}
+              onViewDetails={handleViewDetails}
+            >
               {(chat.status === 'accepted' || chat.status === 'scheduled') && (
                 <CoffeeChatPrep chatId={chat.id} />
               )}
               {chat.status === 'completed' && chat.rating && (
                 <CoffeeChatFollowUp chat={chat} />
               )}
-            </div>
+            </CoffeeChatCard>
           ))}
         </div>
       )}

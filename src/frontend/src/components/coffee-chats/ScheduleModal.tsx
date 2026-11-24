@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { Link as LinkIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   startOfMonth,
   endOfMonth,
@@ -88,10 +88,9 @@ export function ScheduleModal({ isOpen, onClose, onSchedule, initialDate }: Sche
           <div className="flex items-center justify-between mb-3">
             <button
               onClick={() => setCurrentMonth(prev => subMonths(prev, 1))}
-              className="p-1.5 rounded-lg transition-colors"
+              aria-label="Previous month"
+              className="p-1.5 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)]"
               style={{ color: 'var(--color-textMuted)' }}
-              onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--color-surfaceHover)')}
-              onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -100,10 +99,9 @@ export function ScheduleModal({ isOpen, onClose, onSchedule, initialDate }: Sche
             </span>
             <button
               onClick={() => setCurrentMonth(prev => addMonths(prev, 1))}
-              className="p-1.5 rounded-lg transition-colors"
+              aria-label="Next month"
+              className="p-1.5 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)]"
               style={{ color: 'var(--color-textMuted)' }}
-              onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--color-surfaceHover)')}
-              onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
             >
               <ChevronRight className="w-4 h-4" />
             </button>
@@ -114,7 +112,7 @@ export function ScheduleModal({ isOpen, onClose, onSchedule, initialDate }: Sche
             {WEEKDAYS.map(day => (
               <div
                 key={day}
-                className="text-center text-[11px] font-medium py-1"
+                className="text-center text-caption py-1"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 {day}
@@ -136,10 +134,10 @@ export function ScheduleModal({ isOpen, onClose, onSchedule, initialDate }: Sche
                   key={idx}
                   disabled={disabled}
                   onClick={() => !disabled && setSelectedDate(day)}
-                  className="relative flex items-center justify-center py-2 rounded-lg text-sm transition-colors"
+                  className="relative flex items-center justify-center py-2 rounded-lg text-sm tabular-nums transition-colors"
                   style={{
                     color: selected
-                      ? 'white'
+                      ? 'var(--color-accentText)'
                       : disabled
                       ? 'var(--color-textMuted)'
                       : 'var(--color-text)',
@@ -163,10 +161,7 @@ export function ScheduleModal({ isOpen, onClose, onSchedule, initialDate }: Sche
         {/* Right: Details */}
         <div className="flex flex-col">
           {/* Selected date display */}
-          <div
-            className="mb-4 p-3 rounded-xl text-center"
-            style={{ backgroundColor: 'var(--color-background)' }}
-          >
+          <div className="mb-4">
             <p className="text-sm font-medium" style={{ color: selectedDate ? 'var(--color-text)' : 'var(--color-textMuted)' }}>
               {selectedDate
                 ? format(selectedDate, 'EEEE, MMMM d, yyyy')
@@ -183,7 +178,7 @@ export function ScheduleModal({ isOpen, onClose, onSchedule, initialDate }: Sche
               type="time"
               value={time}
               onChange={e => setTime(e.target.value)}
-              className="w-full px-3 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2"
+              className="w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:border-[var(--color-accent)]"
               style={{
                 backgroundColor: 'var(--color-surface)',
                 borderColor: 'var(--color-border)',
@@ -195,15 +190,14 @@ export function ScheduleModal({ isOpen, onClose, onSchedule, initialDate }: Sche
           {/* Meeting link input */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--color-text)' }}>
-              <LinkIcon className="w-4 h-4 inline mr-1.5" />
-              Meeting Link (optional)
+              Meeting link (optional)
             </label>
             <input
               type="url"
               value={meetingLink}
               onChange={e => setMeetingLink(e.target.value)}
-              placeholder="https://meet.google.com/..."
-              className="w-full px-3 py-2 rounded-xl border text-sm focus:outline-none focus:ring-2"
+              placeholder="https://meet.google.com/…"
+              className="w-full px-3 py-2 rounded-lg border text-sm focus:outline-none focus:border-[var(--color-accent)]"
               style={{
                 backgroundColor: 'var(--color-surface)',
                 borderColor: 'var(--color-border)',
@@ -217,7 +211,7 @@ export function ScheduleModal({ isOpen, onClose, onSchedule, initialDate }: Sche
 
           {/* Action buttons */}
           <div className="flex items-center justify-end gap-2 pt-3 border-t" style={{ borderColor: 'var(--color-border)' }}>
-            <Button variant="outline" onClick={handleClose}>Cancel</Button>
+            <Button variant="ghost" onClick={handleClose}>Cancel</Button>
             <Button onClick={handleSubmit} disabled={!selectedDate || !time}>
               Schedule chat
             </Button>

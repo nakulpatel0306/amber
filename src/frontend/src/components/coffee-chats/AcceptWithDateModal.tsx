@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Check, CalendarPlus } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { ScheduleModal } from './ScheduleModal';
@@ -56,10 +56,10 @@ export function AcceptWithDateModal({
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} title="Accept & schedule" size="sm">
+      <Modal isOpen={isOpen} onClose={onClose} title="Accept and schedule" size="sm">
         <div className="py-2">
           <p className="text-sm mb-4" style={{ color: 'var(--color-textSecondary)' }}>
-            <span className="font-medium" style={{ color: 'var(--color-text)' }}>{partnerName}</span> proposed the following times. Select one to schedule the meeting:
+            <span className="font-medium" style={{ color: 'var(--color-text)' }}>{partnerName}</span> proposed these times. Pick one to schedule the chat.
           </p>
 
           <div className="space-y-2 mb-6 max-h-[280px] overflow-y-auto pr-1">
@@ -71,14 +71,13 @@ export function AcceptWithDateModal({
                 <button
                   key={`${dateStr}-${idx}`}
                   onClick={() => setSelectedDate(dateStr)}
-                  className="w-full flex items-center gap-3 p-3 rounded-xl border transition-all"
+                  aria-pressed={isSelected}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-colors hover:border-[var(--color-borderHover)]"
                   style={{
-                    backgroundColor: isSelected ? 'var(--color-accent)' : 'var(--color-surface)',
                     borderColor: isSelected ? 'var(--color-accent)' : 'var(--color-border)',
-                    color: isSelected ? 'var(--color-accentText)' : 'var(--color-text)',
+                    color: 'var(--color-text)',
                   }}
                 >
-                  <Calendar className="w-4 h-4" />
                   <span className="flex-1 text-left text-sm font-medium">
                     {date.toLocaleDateString(undefined, {
                       weekday: 'long',
@@ -87,7 +86,7 @@ export function AcceptWithDateModal({
                       year: 'numeric'
                     })}
                   </span>
-                  <span className="text-sm">
+                  <span className="text-sm tabular-nums" style={{ color: 'var(--color-textSecondary)' }}>
                     {date.toLocaleTimeString(undefined, {
                       hour: 'numeric',
                       minute: '2-digit',
@@ -95,14 +94,11 @@ export function AcceptWithDateModal({
                     })}
                   </span>
                   {isCustom && !isSelected && (
-                    <span
-                      className="text-caption font-medium px-1.5 py-0.5 rounded"
-                      style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textMuted)' }}
-                    >
+                    <span className="text-caption" style={{ color: 'var(--color-textMuted)' }}>
                       New
                     </span>
                   )}
-                  {isSelected && <Check className="w-4 h-4" />}
+                  {isSelected && <Check className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />}
                 </button>
               );
             })}
@@ -110,16 +106,14 @@ export function AcceptWithDateModal({
 
           <div className="flex items-center justify-end gap-2 pt-3 border-t" style={{ borderColor: 'var(--color-border)' }}>
             <Button variant="outline" onClick={() => setScheduleOpen(true)}>
-              <CalendarPlus className="w-4 h-4 mr-1" />
-              Reschedule
+              Propose another time
             </Button>
             <Button
               onClick={handleAccept}
               disabled={!selectedDate}
               isLoading={isSubmitting}
             >
-              <Check className="w-4 h-4 mr-1" />
-              Accept & schedule
+              Accept and schedule
             </Button>
           </div>
         </div>

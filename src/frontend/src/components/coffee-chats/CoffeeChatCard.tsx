@@ -1,16 +1,4 @@
-import {
-  Calendar,
-  MapPin,
-  Clock,
-  CheckCircle2,
-  XCircle,
-  MessageCircle,
-  ExternalLink,
-  Star,
-  Sparkles,
-  User,
-  RefreshCw,
-} from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 export type ChatStatus = 'pending' | 'accepted' | 'scheduled' | 'completed' | 'cancelled';
@@ -52,15 +40,26 @@ interface CoffeeChatCardProps {
   onMessage?: (chatId: string, partnerName: string) => void;
   onViewDetails?: (chat: CoffeeChatData) => void;
   onReschedule?: (chatId: string) => void;
+  // Extra sections (prep brief, follow-up) that live inside the same card
+  children?: React.ReactNode;
 }
 
-const statusConfig: Record<ChatStatus, { label: string; color: string; bg: string }> = {
-  pending: { label: 'Pending', color: 'var(--color-warning)', bg: 'rgba(245, 158, 11, 0.2)' },
-  accepted: { label: 'Accepted', color: 'var(--color-success)', bg: 'rgba(22, 163, 74, 0.1)' },
-  scheduled: { label: 'Scheduled', color: 'var(--color-accent)', bg: 'rgba(217, 119, 6, 0.1)' },
-  completed: { label: 'Completed', color: 'var(--color-textMuted)', bg: 'rgba(120, 113, 108, 0.1)' },
-  cancelled: { label: 'Cancelled', color: 'var(--color-error)', bg: 'rgba(220, 38, 38, 0.1)' },
+// Status is a dot and a word; only the dot carries color
+const statusConfig: Record<ChatStatus, { label: string; dot: string }> = {
+  pending: { label: 'Pending', dot: 'var(--color-warning)' },
+  accepted: { label: 'Accepted', dot: 'var(--color-success)' },
+  scheduled: { label: 'Scheduled', dot: 'var(--color-accent)' },
+  completed: { label: 'Completed', dot: 'var(--color-textMuted)' },
+  cancelled: { label: 'Cancelled', dot: 'var(--color-error)' },
 };
+
+function formatSlot(dateStr: string, durationMin: number) {
+  const start = new Date(dateStr);
+  const end = new Date(start.getTime() + durationMin * 60_000);
+  const dateLabel = start.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+  const timeOpts: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: '2-digit' };
+  return `${dateLabel} · ${start.toLocaleTimeString(undefined, timeOpts)} – ${end.toLocaleTimeString(undefined, timeOpts)}`;
+}
 
 export function CoffeeChatCard({
   chat,
@@ -74,278 +73,175 @@ export function CoffeeChatCard({
   onMessage,
   onViewDetails,
   onReschedule,
+  children,
 }: CoffeeChatCardProps) {
   const status = statusConfig[chat.status];
   const isIncoming = chat.initiated_by !== userRole;
+  const statusLabel = chat.status === 'pending'
+    ? (isIncoming ? 'Awaiting your reply' : 'Waiting for a reply')
+    : status.label;
 
-  const scheduledDate = chat.scheduled_at
-    ? new Date(chat.scheduled_at)
-    : null;
+  const scheduledDate = chat.scheduled_at ? new Date(chat.scheduled_at) : null;
+  const meta = [
+    chat.partner_company,
+    chat.role_title ? `Re: ${chat.role_title}` : null,
+    chat.partner_location,
+  ].filter(Boolean).join(' · ');
+
+  const canCancel = chat.status !== 'completed' && chat.status !== 'cancelled' && !(chat.status === 'pending' && isIncoming);
 
   return (
-    <div className="bento-card transition-all hover:border-[var(--color-borderHover)]">
-
-      <div className="flex items-start gap-4">
-        {/* Avatar - Clickable */}
+    <div className="bento-card">
+      <div className="flex items-start gap-3 sm:gap-4">
         <button
           onClick={() => onViewDetails?.(chat)}
-          className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 transition-transform hover:scale-105"
-          style={{
-            backgroundColor: 'var(--color-accent)',
-          }}
+          aria-label={`View ${chat.partner_name}`}
+          className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-medium"
+          style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-textSecondary)' }}
         >
-          <span className="text-sm font-semibold text-white">
-            {chat.partner_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
-          </span>
+          {chat.partner_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
         </button>
 
-        {/* Info */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <button
-              onClick={() => onViewDetails?.(chat)}
-              className="font-semibold hover:underline text-left"
-              style={{ color: 'var(--color-text)' }}
-            >
-              {chat.partner_name}
-            </button>
-            <span
-              className="px-2 py-0.5 rounded-full text-xs font-medium"
-              style={{ backgroundColor: status.bg, color: status.color }}
-            >
-              {status.label}
+          <button
+            onClick={() => onViewDetails?.(chat)}
+            className="text-heading hover:underline underline-offset-4 text-left"
+            style={{ color: 'var(--color-text)' }}
+          >
+            {chat.partner_name}
+          </button>
+          {meta && (
+            <p className="text-label font-normal mt-0.5" style={{ color: 'var(--color-textSecondary)' }}>
+              {meta}
+            </p>
+          )}
+          <p className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-2 text-label font-normal" style={{ color: 'var(--color-textSecondary)' }}>
+            <span className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: status.dot }} />
+              {statusLabel}
             </span>
-            {isIncoming && chat.status === 'pending' && (
-              <span
-                className="px-2 py-0.5 rounded-full text-xs font-medium"
-                style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)', color: '#3B82F6' }}
-              >
-                Incoming
-              </span>
-            )}
-          </div>
-
-          {chat.partner_company && (
-            <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
-              {chat.partner_company}
-            </p>
-          )}
-
-          {chat.role_title && (
-            <p className="text-xs mt-0.5" style={{ color: 'var(--color-textMuted)' }}>
-              re: {chat.role_title}
-            </p>
-          )}
-
-          <div className="flex flex-wrap items-center gap-3 mt-2 text-xs">
-            {chat.partner_location && (
-              <span className="flex items-center gap-1" style={{ color: 'var(--color-textMuted)' }}>
-                <MapPin className="w-3 h-3" /> {chat.partner_location}
-              </span>
-            )}
             {scheduledDate && (
-              <span className="flex items-center gap-1" style={{ color: 'var(--color-textMuted)' }}>
-                <Calendar className="w-3 h-3" />
-                {scheduledDate.toLocaleDateString()} at{' '}
-                {scheduledDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              <span className="tabular-nums" style={{ color: 'var(--color-textMuted)' }}>
+                {scheduledDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })},{' '}
+                {scheduledDate.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
               </span>
             )}
-            {chat.match_score && (
-              <span className="flex items-center gap-1" style={{ color: 'var(--color-accent)' }}>
-                <Star className="w-3 h-3" /> {chat.match_score}% match
-              </span>
-            )}
-          </div>
-
-          {chat.message && (
-            <div
-              className="mt-3 p-3 rounded-xl text-sm"
-              style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textSecondary)' }}
-            >
-              <MessageCircle className="w-3.5 h-3.5 inline mr-1.5" style={{ color: 'var(--color-textMuted)' }} />
-              {chat.message}
-            </div>
-          )}
-
-          {/* Preferred dates for pending chats */}
-          {chat.preferred_dates && chat.preferred_dates.length > 0 && chat.status === 'pending' && (
-            <div
-              className="mt-3 p-3 rounded-xl"
-              style={{ backgroundColor: 'var(--color-background)' }}
-            >
-              <div className="flex items-center gap-1.5 mb-2">
-                <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-accent)' }} />
-                <span className="text-xs font-medium" style={{ color: 'var(--color-textSecondary)' }}>
-                  {userRole === 'employer' ? 'Requested coffee chat' : 'Preferred dates'}
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-1.5">
-                {chat.preferred_dates.map((dateStr, idx) => {
-                  const start = new Date(dateStr);
-                  const durationMin = chat.duration_minutes ?? 30;
-                  const end = new Date(start.getTime() + durationMin * 60_000);
-                  const dateLabel = start.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
-                  const timeOpts: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: '2-digit' };
-                  const timeLabel = `${start.toLocaleTimeString(undefined, timeOpts)} – ${end.toLocaleTimeString(undefined, timeOpts)}`;
-                  return (
-                    <span
-                      key={idx}
-                      className="px-2 py-1 rounded-lg text-xs font-medium"
-                      style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
-                    >
-                      {dateLabel} · {timeLabel}
-                    </span>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {chat.rating && (
-            <div className="mt-2 flex items-center gap-1">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-3.5 h-3.5"
-                  style={{
-                    color: i < chat.rating! ? 'var(--color-warning)' : 'var(--color-border)',
-                    fill: i < chat.rating! ? 'var(--color-warning)' : 'none',
-                  }}
-                />
-              ))}
-              {chat.feedback && (
-                <span className="text-xs ml-2" style={{ color: 'var(--color-textMuted)' }}>
-                  "{chat.feedback}"
-                </span>
-              )}
-            </div>
-          )}
+          </p>
         </div>
 
-        {/* Match score */}
-        {chat.match_score && chat.match_score > 0 && (
-          <div className="text-right flex-shrink-0 hidden sm:block">
-            <div
-              className="text-2xl font-semibold"
-              style={{
-                color: chat.match_score >= 80
-                  ? 'var(--color-success)'
-                  : chat.match_score >= 65
-                  ? 'var(--color-accent)'
-                  : 'var(--color-textMuted)',
-              }}
-            >
+        {chat.match_score != null && chat.match_score > 0 && (
+          <div className="text-right flex-shrink-0">
+            <p className="text-heading tabular-nums" style={{ color: 'var(--color-text)' }}>
               {chat.match_score}%
-            </div>
-            <p className="text-caption font-medium" style={{ color: 'var(--color-textMuted)' }}>match</p>
+            </p>
+            <p className="text-caption" style={{ color: 'var(--color-textMuted)' }}>match</p>
           </div>
         )}
       </div>
 
-      {/* Actions */}
-      <div className="mt-4 flex flex-wrap items-center gap-2 pt-3 border-t" style={{ borderColor: 'var(--color-border)' }}>
-        {/* Pending: Accept / Decline (only for receiver) */}
+      {chat.message && (
+        <p className="mt-4 text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+          “{chat.message}”
+        </p>
+      )}
+
+      {chat.preferred_dates && chat.preferred_dates.length > 0 && chat.status === 'pending' && (
+        <div className="mt-4">
+          <p className="text-label" style={{ color: 'var(--color-text)' }}>
+            {userRole === 'employer' ? 'Requested times' : 'Preferred times'}
+          </p>
+          <ul className="mt-1 space-y-0.5">
+            {chat.preferred_dates.map(dateStr => (
+              <li key={dateStr} className="text-sm tabular-nums" style={{ color: 'var(--color-textSecondary)' }}>
+                {formatSlot(dateStr, chat.duration_minutes ?? 30)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {chat.rating != null && chat.rating > 0 && (
+        <p className="mt-4 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+          <span className="tabular-nums" style={{ color: 'var(--color-text)' }}>Rated {chat.rating}/5</span>
+          {chat.feedback && <> · “{chat.feedback}”</>}
+        </p>
+      )}
+
+      {/* Actions: one primary per state, everything else quiet */}
+      <div className="mt-4 flex flex-wrap items-center gap-2 pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
         {chat.status === 'pending' && isIncoming && (
           <>
-            <Button size="sm" leftIcon={<CheckCircle2 className="w-4 h-4" />} onClick={() => onAccept?.(chat.id)}>
+            <Button size="sm" onClick={() => onAccept?.(chat.id)}>
               Accept
             </Button>
-            <Button size="sm" variant="outline" leftIcon={<XCircle className="w-4 h-4" />} onClick={() => onDecline?.(chat.id)}>
+            <Button size="sm" variant="outline" onClick={() => onDecline?.(chat.id)}>
               Decline
             </Button>
           </>
         )}
 
-        {/* Pending: Waiting (for sender) */}
-        {chat.status === 'pending' && !isIncoming && (
-          <span className="text-xs flex items-center gap-1" style={{ color: 'var(--color-textMuted)' }}>
-            <Clock className="w-3.5 h-3.5" /> Waiting for response...
-          </span>
-        )}
-
-        {/* Accepted: Schedule */}
         {chat.status === 'accepted' && (
-          <Button size="sm" leftIcon={<Calendar className="w-4 h-4" />} onClick={() => onSchedule?.(chat.id)}>
+          <Button size="sm" onClick={() => onSchedule?.(chat.id)}>
             Schedule
           </Button>
         )}
 
-        {/* Scheduled: Join / Reschedule / Complete */}
         {chat.status === 'scheduled' && (
           <>
             {chat.meeting_link && (
-              <a href={chat.meeting_link} target="_blank" rel="noopener noreferrer">
-                <Button size="sm" leftIcon={<ExternalLink className="w-4 h-4" />}>
-                  Join meeting
-                </Button>
+              <a
+                href={chat.meeting_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-8 items-center gap-2 rounded-lg px-3 py-1 text-label transition-colors bg-[var(--color-accent)] text-[var(--color-accentText)] hover:bg-[var(--color-accentHover)]"
+              >
+                Join meeting
+                <ExternalLink className="w-3.5 h-3.5" />
               </a>
             )}
+            <Button size="sm" variant={chat.meeting_link ? 'outline' : 'primary'} onClick={() => onComplete?.(chat.id)}>
+              Mark complete
+            </Button>
             {onReschedule && (
-              <Button size="sm" variant="outline" leftIcon={<RefreshCw className="w-4 h-4" />} onClick={() => onReschedule(chat.id)}>
+              <Button size="sm" variant="outline" onClick={() => onReschedule(chat.id)}>
                 Reschedule
               </Button>
             )}
-            <Button size="sm" variant="outline" leftIcon={<CheckCircle2 className="w-4 h-4" />} onClick={() => onComplete?.(chat.id)}>
-              Mark complete
-            </Button>
           </>
         )}
 
-        {/* Completed: Feedback */}
         {chat.status === 'completed' && !chat.rating && (
-          <Button size="sm" variant="outline" leftIcon={<Star className="w-4 h-4" />} onClick={() => onFeedback?.(chat.id)}>
+          <Button size="sm" onClick={() => onFeedback?.(chat.id)}>
             Leave feedback
           </Button>
         )}
 
-        {/* View Match in Ember */}
-        {onViewMatch && (
-          <Button
-            size="sm"
-            variant="outline"
-            leftIcon={<Sparkles className="w-4 h-4" />}
-            onClick={() => onViewMatch(chat.id)}
-          >
-            View match
-          </Button>
-        )}
-
-        {/* Message button - available for non-cancelled chats */}
         {onMessage && chat.status !== 'cancelled' && (
-          <Button
-            size="sm"
-            variant="outline"
-            leftIcon={<MessageCircle className="w-4 h-4" />}
-            onClick={() => onMessage(chat.id, chat.partner_name)}
-          >
+          <Button size="sm" variant="outline" onClick={() => onMessage(chat.id, chat.partner_name)}>
             Message
           </Button>
         )}
 
-        {/* View Profile button */}
         {onViewDetails && (
-          <Button
-            size="sm"
-            variant="outline"
-            leftIcon={<User className="w-4 h-4" />}
-            onClick={() => onViewDetails(chat)}
-          >
+          <Button size="sm" variant="ghost" onClick={() => onViewDetails(chat)}>
             View profile
           </Button>
         )}
 
-        {/* Cancel option for non-completed chats */}
-        {chat.status !== 'completed' && chat.status !== 'cancelled' && (
-          <Button
-            size="sm"
-            variant="ghost"
-            className="ml-auto"
-            onClick={() => onDecline?.(chat.id)}
-          >
-            Cancel
+        {onViewMatch && (
+          <Button size="sm" variant="ghost" onClick={() => onViewMatch(chat.id)}>
+            View match
+          </Button>
+        )}
+
+        {canCancel && (
+          <Button size="sm" variant="ghost" className="ml-auto" onClick={() => onDecline?.(chat.id)}>
+            Cancel chat
           </Button>
         )}
       </div>
+
+      {children}
     </div>
   );
 }
