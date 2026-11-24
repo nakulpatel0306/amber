@@ -14,7 +14,19 @@ export interface UpcomingChat {
 }
 
 // The one line under the dashboard's coffee chat count: the next booked chat, else what is waiting
-export function chatSummary(chats: UpcomingChat[], pending: number, accepted: number, completed: number): string {
+export interface ChatCounts {
+  pending: number;
+  accepted: number;
+  scheduled: number;
+  completed: number;
+}
+
+// Every chat that hasn't been cancelled, so the count matches the statuses shown in the match lists
+export function totalChats(counts: ChatCounts): number {
+  return counts.pending + counts.accepted + counts.scheduled + counts.completed;
+}
+
+export function chatSummary(chats: UpcomingChat[], { pending, accepted, scheduled, completed }: ChatCounts): string {
   const now = Date.now();
   const next = chats
     .filter((c) => c.scheduledAt && new Date(c.scheduledAt).getTime() > now)
@@ -24,6 +36,7 @@ export function chatSummary(chats: UpcomingChat[], pending: number, accepted: nu
   const parts = [
     pending > 0 && `${pending} pending`,
     accepted > 0 && `${accepted} to schedule`,
+    scheduled > 0 && `${scheduled} booked`,
     completed > 0 && `${completed} completed`,
   ].filter(Boolean);
   return parts.length > 0 ? parts.join(' · ') : 'No chats yet';

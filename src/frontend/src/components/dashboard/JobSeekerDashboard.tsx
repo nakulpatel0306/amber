@@ -17,7 +17,7 @@ import { SummaryCard } from './SummaryCard';
 import { MatchingTable } from './MatchingTable';
 import { ArchetypeStrip } from './ArchetypeStrip';
 
-import { chatSummary, type UpcomingChat } from './chatSummary';
+import { chatSummary, totalChats, type UpcomingChat } from './chatSummary';
 
 interface PersonalityScores {
   openness: number;
@@ -70,6 +70,7 @@ export function JobSeekerDashboard() {
   const [pendingChats, setPendingChats] = useState(0);
   const [_connectionsCount, setConnectionsCount] = useState(0);
   const [acceptedChats, setAcceptedChats] = useState(0);
+  const [scheduledChats, setScheduledChats] = useState(0);
   const [completedChats, setCompletedChats] = useState(0);
   const [_totalRoles, setTotalRoles] = useState(0);
   const [uniqueCompanies, setUniqueCompanies] = useState(0);
@@ -186,10 +187,11 @@ export function JobSeekerDashboard() {
           .from('coffee_chats')
           .select('id, status')
           .eq('candidate_id', candidate.id)
-          .in('status', ['accepted', 'completed']);
+          .in('status', ['accepted', 'scheduled', 'completed']);
 
         setConnectionsCount(connectionData?.length || 0);
         setAcceptedChats(connectionData?.filter(c => c.status === 'accepted').length || 0);
+        setScheduledChats(connectionData?.filter(c => c.status === 'scheduled').length || 0);
         setCompletedChats(connectionData?.filter(c => c.status === 'completed').length || 0);
 
         // Get ALL non-cancelled coffee chats with full data (same as CandidateCoffeeChats)
@@ -452,7 +454,7 @@ export function JobSeekerDashboard() {
     return <CoffeeBrewLoader variant="fullscreen" />;
   }
 
-  const totalChats = pendingChats + acceptedChats + completedChats;
+  const chatCounts = { pending: pendingChats, accepted: acceptedChats, scheduled: scheduledChats, completed: completedChats };
 
   return (
     <motion.div
@@ -506,8 +508,8 @@ export function JobSeekerDashboard() {
         <SummaryCard
           label="Coffee chats"
           loading={!chatsLoaded}
-          value={totalChats}
-          detail={chatSummary(upcomingChats, pendingChats, acceptedChats, completedChats)}
+          value={totalChats(chatCounts)}
+          detail={chatSummary(upcomingChats, chatCounts)}
           action="Open coffee chats"
           to="/app/chats"
         />
