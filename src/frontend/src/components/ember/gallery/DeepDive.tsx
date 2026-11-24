@@ -609,7 +609,7 @@ export function DeepDive({
                 className="bento-card relative overflow-hidden cursor-pointer"
                 style={{ borderLeft: `3px solid ${color}` }}
                 whileHover={{ y: -2, scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 40 }}
                 onClick={() => setCompositeModal(label)}
               >
                 <div className="flex items-center justify-between mb-2">
@@ -842,7 +842,7 @@ export function DeepDive({
             className="bento-card relative overflow-hidden"
             style={{ borderLeft: '3px solid var(--color-accent)' }}
             whileHover={{ y: -2 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 40 }}
           >
             <div className="flex items-center gap-2 mb-2">
               <Icon className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />

@@ -198,9 +198,9 @@ export function StreakTracker() {
             })}
 
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.1 }}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1], delay: 0.1 }}
             >
               <div
                 className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3"

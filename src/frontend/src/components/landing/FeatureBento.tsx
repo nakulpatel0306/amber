@@ -671,7 +671,7 @@ function SceneInsights() {
             }}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            transition={{ delay: 0.7, type: 'spring', stiffness: 300 }}
+            transition={{ delay: 0.7, duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
           >
             <TrendingUp className="w-2.5 h-2.5" />
             Strong fit

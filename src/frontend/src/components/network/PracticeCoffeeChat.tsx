@@ -181,9 +181,9 @@ export function PracticeCoffeeChat() {
                 </div>
                 <div className="px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
                   <div className="flex gap-1">
-                    <span className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: 'var(--color-textMuted)', animationDelay: '0ms' }} />
-                    <span className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: 'var(--color-textMuted)', animationDelay: '150ms' }} />
-                    <span className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: 'var(--color-textMuted)', animationDelay: '300ms' }} />
+                    <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-textMuted)', animationDelay: '0ms' }} />
+                    <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-textMuted)', animationDelay: '150ms' }} />
+                    <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-textMuted)', animationDelay: '300ms' }} />
                   </div>
                 </div>
               </div>

@@ -14,11 +14,7 @@ export const fadeUp: Variants = {
   show: {
     opacity: 1,
     y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 300,
-      damping: 24,
-    },
+    transition: { duration: 0.35, ease: [0.23, 1, 0.32, 1] },
   },
 };
 
@@ -36,7 +32,7 @@ export const bentoItem: Variants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { type: 'spring', stiffness: 260, damping: 20 },
+    transition: { duration: 0.35, ease: [0.23, 1, 0.32, 1] },
   },
 };
 
@@ -53,7 +49,7 @@ export const cardItem: Variants = {
   show: {
     opacity: 1,
     y: 0,
-    transition: { type: 'spring', stiffness: 300, damping: 24 },
+    transition: { duration: 0.35, ease: [0.23, 1, 0.32, 1] },
   },
 };
 
@@ -63,7 +59,7 @@ export const slideInLeft: Variants = {
   show: {
     opacity: 1,
     x: 0,
-    transition: { type: 'spring', stiffness: 260, damping: 22 },
+    transition: { duration: 0.35, ease: [0.23, 1, 0.32, 1] },
   },
 };
 
@@ -72,7 +68,7 @@ export const slideInRight: Variants = {
   show: {
     opacity: 1,
     x: 0,
-    transition: { type: 'spring', stiffness: 260, damping: 22 },
+    transition: { duration: 0.35, ease: [0.23, 1, 0.32, 1] },
   },
 };
 
@@ -82,7 +78,7 @@ export const counterReveal: Variants = {
   show: {
     opacity: 1,
     scale: 1,
-    transition: { type: 'spring', stiffness: 300, damping: 20 },
+    transition: { duration: 0.35, ease: [0.23, 1, 0.32, 1] },
   },
 };
 
@@ -204,13 +200,13 @@ export const answerItem: Variants = {
   },
 };
 
-/** Celebration / milestone bounce */
+/** Celebration / milestone reveal */
 export const celebrationBounce: Variants = {
   hidden: { opacity: 0, scale: 0.8 },
   show: {
     opacity: 1,
     scale: 1,
-    transition: { type: 'spring', stiffness: 300, damping: 15 },
+    transition: { duration: 0.35, ease: [0.23, 1, 0.32, 1] },
   },
 };
 

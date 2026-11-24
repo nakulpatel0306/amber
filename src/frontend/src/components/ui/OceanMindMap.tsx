@@ -120,10 +120,8 @@ export function OceanMindMap({
             animate={animated ? { opacity: 1, scale: 1 } : undefined}
             transition={{
               delay: 0.2 + i * 0.1,
-              duration: 0.5,
-              type: 'spring',
-              stiffness: 200,
-              damping: 15,
+              duration: 0.4,
+              ease: [0.23, 1, 0.32, 1],
             }}
             style={{
               transformOrigin: `${x}px ${y}px`,
@@ -177,7 +175,7 @@ export function OceanMindMap({
       <motion.g
         initial={animated ? { opacity: 0, scale: 0 } : undefined}
         animate={animated ? { opacity: 1, scale: 1 } : undefined}
-        transition={{ delay: 0.1, duration: 0.5, type: 'spring', stiffness: 200, damping: 15 }}
+        transition={{ delay: 0.1, duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
         style={{ transformOrigin: `${cx}px ${cy}px` }}
       >
         <circle

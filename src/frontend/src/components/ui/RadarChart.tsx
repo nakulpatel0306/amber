@@ -196,7 +196,7 @@ export function RadarChart({
               strokeWidth="2"
               initial={animated ? { scale: 0 } : undefined}
               animate={{ scale: 1 }}
-              transition={{ delay: 0.3 + i * 0.1, duration: 0.3, type: 'spring' }}
+              transition={{ delay: 0.3 + i * 0.1, duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
             />
           </g>
         );

@@ -80,7 +80,7 @@ export function AssessmentResultsTemplate({
             style={{ backgroundColor: accentColor }}
             initial={{ scale: 0, rotate: -180 }}
             animate={{ scale: 1, rotate: 0 }}
-            transition={{ delay: 0.1, duration: 0.6, type: 'spring' }}
+            transition={{ delay: 0.1, duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
           >
             {icon}
           </motion.div>

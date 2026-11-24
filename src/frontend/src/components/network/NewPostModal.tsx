@@ -233,7 +233,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
         initial={{ opacity: 0, y: 60 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 60 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+        transition={{ type: 'spring', damping: 35, stiffness: 300 }}
         className="fixed inset-0 z-50 flex items-center justify-center p-4"
       >
         <div
