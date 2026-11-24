@@ -531,7 +531,11 @@ export function TopCandidates() {
               showError('Error', 'Failed to remove');
             }
           }}
-          onCoffeeChat={() => {}}
+          onCoffeeChat={(match) => {
+            const candidate = candidates.find((c) => c.candidateId === match.candidate_id);
+            if (candidate) handleInviteChat(candidate);
+            else showError('Not available', 'This candidate is no longer in your results');
+          }}
         />
       )}
 

@@ -37,7 +37,7 @@ export function PipelineCard({
     <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3.5">
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium truncate" style={{ color: 'var(--color-text)' }}>
-          {match.target_type === 'role' ? 'Role match' : 'Candidate match'}
+          {match.candidate_name || (match.target_type === 'role' ? 'Role match' : 'Candidate match')}
         </p>
         <p className="flex items-center gap-1.5 text-label font-normal mt-0.5" style={{ color: 'var(--color-textSecondary)' }}>
           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: statusDots[match.status] ?? 'var(--color-textMuted)' }} />
