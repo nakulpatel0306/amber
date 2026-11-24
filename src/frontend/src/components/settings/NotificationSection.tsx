@@ -119,7 +119,7 @@ export function NotificationSection() {
 
       setOriginalSettings(settings);
       setHasChanges(false);
-      success('Settings Saved', 'Your notification preferences have been updated.');
+      success('Settings saved', 'Your notification preferences have been updated.');
     } catch {
       showError('Failed to save', 'Please try again later.');
     } finally {
@@ -142,19 +142,19 @@ export function NotificationSection() {
   const candidateNotifications: NotificationItem[] = [
     {
       key: 'sms_enabled',
-      label: 'SMS Notifications',
+      label: 'SMS notifications',
       description: 'Receive text messages for urgent updates and interview requests',
       icon: Phone,
     },
     {
       key: 'email_daily_digest',
-      label: 'Daily Job Digest',
+      label: 'Daily job digest',
       description: 'A daily email with new job matches and opportunities',
       icon: Mail,
     },
     {
       key: 'email_matches',
-      label: 'New Job Matches',
+      label: 'New job matches',
       description: 'Instant notifications when companies match your profile',
       icon: Briefcase,
     },
@@ -166,13 +166,13 @@ export function NotificationSection() {
     },
     {
       key: 'email_product_updates',
-      label: 'Product Updates',
+      label: 'Product updates',
       description: 'New features, improvements, and platform news',
       icon: Sparkles,
     },
     {
       key: 'email_tips',
-      label: 'Career Tips',
+      label: 'Career tips',
       description: 'Weekly tips on improving your profile and interview skills',
       icon: Bell,
     },
@@ -181,37 +181,37 @@ export function NotificationSection() {
   const employerNotifications: NotificationItem[] = [
     {
       key: 'sms_enabled',
-      label: 'SMS Notifications',
+      label: 'SMS notifications',
       description: 'Receive text messages for urgent candidate responses',
       icon: Phone,
     },
     {
       key: 'email_daily_digest',
-      label: 'Daily Candidate Digest',
+      label: 'Daily candidate digest',
       description: 'A daily summary of new candidates matching your roles',
       icon: Mail,
     },
     {
       key: 'email_matches',
-      label: 'New Candidate Matches',
+      label: 'New candidate matches',
       description: 'Instant notifications when candidates match your culture',
       icon: Users,
     },
     {
       key: 'email_messages',
-      label: 'Candidate Messages',
+      label: 'Candidate messages',
       description: 'When candidates respond to your outreach',
       icon: MessageSquare,
     },
     {
       key: 'email_product_updates',
-      label: 'Product Updates',
+      label: 'Product updates',
       description: 'New features, improvements, and platform news',
       icon: Sparkles,
     },
     {
       key: 'email_tips',
-      label: 'Hiring Tips',
+      label: 'Hiring tips',
       description: 'Weekly tips on improving your hiring process',
       icon: Bell,
     },
@@ -238,8 +238,8 @@ export function NotificationSection() {
         </div>
         <p className="text-sm mt-1" style={{ color: 'var(--color-textMuted)' }}>
           {isEmployer
-            ? 'Choose How You Want To Be Notified About Candidates & Hiring Activity'
-            : 'Choose How You Want To Be Notified About Jobs & Opportunities'}
+            ? 'Choose how you want to be notified about candidates & hiring activity'
+            : 'Choose how you want to be notified about jobs & opportunities'}
         </p>
       </div>
 
@@ -264,7 +264,7 @@ export function NotificationSection() {
                 className="text-sm font-medium"
                 style={{ color: 'var(--color-text)' }}
               >
-                SMS Notifications
+                SMS notifications
               </p>
               <p
                 className="text-xs mt-0.5"
@@ -298,7 +298,7 @@ export function NotificationSection() {
         {settings.sms_enabled && (
           <div className="mt-4 space-y-3">
             <Input
-              label="Phone Number"
+              label="Phone number"
               type="tel"
               value={settings.phone_number}
               onChange={(e) => handlePhoneChange(e.target.value)}
@@ -321,7 +321,7 @@ export function NotificationSection() {
           className="text-xs font-semibold uppercase tracking-widest mb-3 flex items-center gap-2"
           style={{ color: 'var(--color-textMuted)' }}
         >
-          Email Preferences
+          Email preferences
         </h3>
 
         <div className="space-y-1">
@@ -379,7 +379,7 @@ export function NotificationSection() {
             Reset
           </Button>
           <Button onClick={handleSave} isLoading={isSaving}>
-            Save Changes
+            Save changes
           </Button>
         </div>
       )}

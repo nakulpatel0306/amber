@@ -138,7 +138,7 @@ export function ProfileSection() {
           </h2>
         </div>
         <p className="text-sm mt-1" style={{ color: 'var(--color-textMuted)' }}>
-          Manage Your Personal Information
+          Manage your personal information
         </p>
       </div>
 
@@ -164,10 +164,10 @@ export function ProfileSection() {
         </div>
         <div>
           <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-            Profile Avatar
+            Profile avatar
           </p>
           <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
-            Click To Choose A Fun Avatar
+            Click to choose a fun avatar
           </p>
         </div>
       </div>
@@ -191,7 +191,7 @@ export function ProfileSection() {
                 className="text-lg font-semibold mb-4 text-center"
                 style={{ color: 'var(--color-text)' }}
               >
-                Choose Your Avatar
+                Choose your avatar
               </h3>
               <AvatarPicker
                 selectedAvatar={avatarData.type === 'emoji' ? avatarData.avatarId || null : null}
@@ -207,7 +207,7 @@ export function ProfileSection() {
       {/* Form fields */}
       <div className="space-y-4">
         <Input
-          label="Full Name"
+          label="Full name"
           type="text"
           value={formData.full_name}
           onChange={e => setFormData(prev => ({ ...prev, full_name: e.target.value }))}
@@ -226,7 +226,7 @@ export function ProfileSection() {
 
         <div>
           <p className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
-            Account Type
+            Account type
           </p>
           <div
             className="px-4 py-2.5 rounded-xl text-sm"
@@ -235,7 +235,7 @@ export function ProfileSection() {
               color: 'var(--color-textSecondary)',
             }}
           >
-            {isCandidate ? 'Job Seeker' : 'Employer'}
+            {isCandidate ? 'Job seeker' : 'Employer'}
           </div>
           <p className="text-xs mt-1" style={{ color: 'var(--color-textMuted)' }}>
             Account type cannot be changed
@@ -251,11 +251,11 @@ export function ProfileSection() {
               Cancel
             </Button>
             <Button onClick={handleSave} isLoading={isSaving}>
-              Save Changes
+              Save changes
             </Button>
           </>
         ) : (
-          <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>
+          <Button onClick={() => setIsEditing(true)}>Edit profile</Button>
         )}
       </div>
     </div>

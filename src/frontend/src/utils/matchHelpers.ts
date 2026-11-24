@@ -15,10 +15,10 @@ export function generateHighlightPills(match: {
   breakdown: { workStyleFit: number; valuesFit: number };
 }): string[] {
   const pills: string[] = [];
-  if (match.cultureMatchScore >= 80) pills.push('Strong Culture Fit');
-  if (match.breakdown.valuesFit >= 75) pills.push('Values Aligned');
-  if (match.breakdown.workStyleFit >= 85) pills.push('Work Style Match');
-  if (match.traitMatchScore >= 80) pills.push('Personality Match');
+  if (match.cultureMatchScore >= 80) pills.push('Strong culture fit');
+  if (match.breakdown.valuesFit >= 75) pills.push('Values aligned');
+  if (match.breakdown.workStyleFit >= 85) pills.push('Work style match');
+  if (match.traitMatchScore >= 80) pills.push('Personality match');
   return pills.slice(0, 3);
 }
 

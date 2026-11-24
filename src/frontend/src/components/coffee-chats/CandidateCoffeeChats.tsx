@@ -174,7 +174,7 @@ export function CandidateCoffeeChats() {
       animate="show"
     >
       <PageBanner
-        title="Coffee Chats"
+        title="Coffee chats"
         subtitle="Connect with teams over casual conversations"
         icon={Coffee}
         rightContent={

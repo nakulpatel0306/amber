@@ -18,17 +18,18 @@ import type { ConnectionStatus } from '../../../types/connections.types';
 import { apiFetch } from '../../../utils/api';
 
 
-/* ── Title case helper ── */
-function titleCase(str: string): string {
-  return str.replace(/\b\w/g, c => c.toUpperCase());
+/* ── Enum labels: full_time -> Full time ── */
+function enumLabel(str: string): string {
+  const s = str.replace(/_/g, ' ');
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 /* ── Brew helpers ── */
 function getBrewLabel(score: number): string {
-  if (score >= 90) return "Barista's Choice";
-  if (score >= 80) return 'Perfect Brew';
-  if (score >= 70) return 'Strong Pour';
-  if (score >= 60) return 'Warming Up';
+  if (score >= 90) return "Barista's choice";
+  if (score >= 80) return 'Perfect brew';
+  if (score >= 70) return 'Strong pour';
+  if (score >= 60) return 'Warming up';
   if (score >= 40) return 'Lukewarm';
   return 'Cold Brew';
 }
@@ -38,17 +39,17 @@ const INSIGHT_COLORS = ['var(--color-trait-openness)', 'var(--color-trait-consci
 
 /* ── Composite meta ── */
 const COMPOSITE_META: Record<string, { color: string; description: string; bullets: string[] }> = {
-  'Trait Match': {
+  'Trait match': {
     color: INSIGHT_COLORS[0],
     description: 'Measures how closely your personality traits align with what this role demands. High scores indicate a natural fit between who you are and what the position requires.',
     bullets: ['Based on Big Five personality assessment', 'Compares your OCEAN scores against role benchmarks', 'Higher alignment means less adaptation needed', 'Considers both trait level and trait importance'],
   },
-  'Culture Fit': {
+  'Culture fit': {
     color: INSIGHT_COLORS[1],
     description: "Evaluates how well your values, work preferences, and interpersonal style match the company's culture and team dynamics.",
     bullets: ['Assesses shared values and priorities', 'Considers team collaboration preferences', 'Factors in communication norms', 'Accounts for organizational structure fit'],
   },
-  'Work Style': {
+  'Work style': {
     color: INSIGHT_COLORS[2],
     description: 'Compares your preferred way of working (pace, structure, autonomy) with the environment this role offers.',
     bullets: ['Evaluates pace and deadline preferences', 'Considers autonomy vs. guidance needs', 'Factors in decision-making style', 'Assesses adaptability to role structure'],
@@ -314,9 +315,9 @@ export function DeepDive({
 
   /* Composite scores */
   const compositeScores = [
-    { label: 'Trait Match', score: traitScore, icon: Brain },
-    { label: 'Culture Fit', score: cultureScore, icon: Heart },
-    { label: 'Work Style', score: workStyleScore, icon: Zap },
+    { label: 'Trait match', score: traitScore, icon: Brain },
+    { label: 'Culture fit', score: cultureScore, icon: Heart },
+    { label: 'Work style', score: workStyleScore, icon: Zap },
     { label: 'Communication', score: communicationScore, icon: MessageCircle },
   ];
 
@@ -509,7 +510,7 @@ export function DeepDive({
                   <Briefcase className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
                 </div>
                 <h3 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
-                  {titleCase(selectedRole.title)}
+                  {selectedRole.title}
                 </h3>
               </div>
 
@@ -518,19 +519,19 @@ export function DeepDive({
                 {selectedRole.employment_type && (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-medium" style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }}>
                     <Briefcase className="w-3 h-3" style={{ color: 'var(--color-accent)' }} />
-                    {titleCase(selectedRole.employment_type.replace(/_/g, ' '))}
+                    {enumLabel(selectedRole.employment_type)}
                   </span>
                 )}
                 {selectedRole.location && (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-medium" style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }}>
                     <MapPin className="w-3 h-3" style={{ color: 'var(--color-trait-extraversion)' }} />
-                    {titleCase(selectedRole.location)}
+                    {selectedRole.location}
                   </span>
                 )}
                 {selectedRole.work_style && (
                   <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-medium" style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }}>
                     <Users className="w-3 h-3" style={{ color: 'var(--color-trait-openness)' }} />
-                    {titleCase(selectedRole.work_style.replace(/_/g, ' '))}
+                    {enumLabel(selectedRole.work_style)}
                   </span>
                 )}
                 {(selectedRole.salary_min || selectedRole.salary_max) && (
@@ -548,7 +549,7 @@ export function DeepDive({
               {/* Description */}
               {selectedRole.description && (
                 <div className="mt-4 pt-3" style={{ borderTop: '1px solid var(--color-border)' }}>
-                  <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1.5" style={{ color: 'var(--color-textMuted)' }}>About This Role</p>
+                  <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1.5" style={{ color: 'var(--color-textMuted)' }}>About this role</p>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
                     {selectedRole.description}
                   </p>
@@ -564,7 +565,7 @@ export function DeepDive({
                       {selectedRole.requirements.map((req, i) => (
                         <li key={i} className="flex items-start gap-2 text-xs" style={{ color: 'var(--color-text)' }}>
                           <CheckCircle2 className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-accent)' }} />
-                          {titleCase(req)}
+                          {req}
                         </li>
                       ))}
                     </ul>
@@ -573,7 +574,7 @@ export function DeepDive({
 
                 {selectedRole.nice_to_have && selectedRole.nice_to_have.length > 0 && (
                   <div className="rounded-xl p-3" style={{ backgroundColor: 'var(--color-surfaceHover)' }}>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-2" style={{ color: 'var(--color-textMuted)' }}>Nice To Have</p>
+                    <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-2" style={{ color: 'var(--color-textMuted)' }}>Nice to have</p>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedRole.nice_to_have.map((trait, i) => (
                         <span
@@ -581,7 +582,7 @@ export function DeepDive({
                           className="px-2.5 py-1 rounded-full text-[10px] font-semibold"
                           style={{ backgroundColor: 'color-mix(in srgb, var(--color-accent) 10%, transparent)', color: 'var(--color-accent)', border: '1px solid color-mix(in srgb, var(--color-accent) 20%, transparent)' }}
                         >
-                          {titleCase(trait)}
+                          {trait}
                         </span>
                       ))}
                     </div>
@@ -596,7 +597,7 @@ export function DeepDive({
       {/* ═══ 2. Composite Score Cards ═══ */}
       <div>
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3" style={{ color: 'var(--color-textMuted)' }}>
-          Score Breakdown //
+          Score breakdown //
         </p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {compositeScores.map(({ label, score, icon: Icon }) => {
@@ -667,7 +668,7 @@ export function DeepDive({
       {/* ═══ 3. Flavor Profile (interactive donut with breakdown) ═══ */}
       <div className="bento-card">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4" style={{ color: 'var(--color-textMuted)' }}>
-          Flavor Profile //
+          Flavor profile //
         </p>
 
         <div className="flex flex-col md:flex-row items-center gap-6">
@@ -710,7 +711,7 @@ export function DeepDive({
                 {overallScore}
               </span>
               <span className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: 'var(--color-textMuted)' }}>
-                Match Score
+                Match score
               </span>
             </div>
           </div>
@@ -831,9 +832,9 @@ export function DeepDive({
       {/* ═══ 4. Key Insights ═══ */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { label: 'Overall Match', value: `${overallScore}%`, sub: getBrewLabel(overallScore), icon: Coffee },
+          { label: 'Overall match', value: `${overallScore}%`, sub: getBrewLabel(overallScore), icon: Coffee },
           { label: 'Strongest', value: bestDimension ? `${bestDimension.fitScore}%` : '-', sub: bestDimension?.name ?? '', icon: TrendingUp },
-          { label: 'Growth Edge', value: weakDimension ? `${weakDimension.fitScore}%` : '-', sub: weakDimension?.name ?? '', icon: Target },
+          { label: 'Growth edge', value: weakDimension ? `${weakDimension.fitScore}%` : '-', sub: weakDimension?.name ?? '', icon: Target },
           { label: 'Alignment', value: `${alignedCount}/${dimensions.length}`, sub: 'dimensions aligned', icon: CheckCircle2 },
         ].map(({ label, value, sub, icon: Icon }) => (
           <motion.div
@@ -875,7 +876,7 @@ export function DeepDive({
             <div className="flex items-center gap-2 mb-5">
               <BarChart3 className="w-5 h-5" style={{ color: INSIGHT_COLORS[0] }} />
               <h2 className="text-base font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>
-                Compatibility Deep Dive
+                Compatibility deep dive
               </h2>
             </div>
 
@@ -953,7 +954,7 @@ export function DeepDive({
                     </div>
                     <div className="text-right">
                       <p className="font-mono text-[9px] uppercase tracking-[0.15em]" style={{ color: 'var(--color-textMuted)' }}>
-                        {mode === 'candidate' ? 'Employer' : 'Your Pref'}
+                        {mode === 'candidate' ? 'Employer' : 'Your pref'}
                       </p>
                       <span className="text-2xl font-extrabold" style={{ color: 'var(--color-textSecondary)' }}>{dim.employerPreference}</span>
                     </div>
@@ -982,7 +983,7 @@ export function DeepDive({
                   </div>
 
                   <div>
-                    <p className="text-xs font-bold mb-2" style={{ color: 'var(--color-text)' }}>Alignment Analysis</p>
+                    <p className="text-xs font-bold mb-2" style={{ color: 'var(--color-text)' }}>Alignment analysis</p>
                     <p className="text-xs leading-relaxed mb-3" style={{ color: 'var(--color-textSecondary)' }}>
                       {getGapAnalysis(dim.candidateScore, dim.employerPreference, dim.name)}
                     </p>
@@ -1007,7 +1008,7 @@ export function DeepDive({
         <div className="flex items-center gap-2 mb-5">
           <EmberFirefly size="sm" mood="happy" />
           <h2 className="text-base font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>
-            Ember's Analysis
+            Ember's analysis
           </h2>
           <span className="font-mono text-[10px] uppercase tracking-[0.25em] ml-auto" style={{ color: 'var(--color-textMuted)' }}>
             AI Insights //
@@ -1034,7 +1035,7 @@ export function DeepDive({
                   <div className="flex items-center gap-2 mb-3">
                     <CheckCircle2 className="w-4 h-4" style={{ color: 'var(--color-trait-conscientiousness)' }} />
                     <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-trait-conscientiousness)' }}>
-                      {mode === 'candidate' ? 'Why This Works' : 'What They Bring'}
+                      {mode === 'candidate' ? 'Why this works' : 'What they bring'}
                     </h4>
                   </div>
                   {narrative.ember_strengths.map((s, i) => (
@@ -1051,7 +1052,7 @@ export function DeepDive({
                   <div className="flex items-center gap-2 mb-3">
                     <AlertTriangle className="w-4 h-4" style={{ color: 'var(--color-trait-extraversion)' }} />
                     <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-trait-extraversion)' }}>
-                      {mode === 'candidate' ? 'Watch Out For' : 'Potential Friction'}
+                      {mode === 'candidate' ? 'Watch out for' : 'Potential friction'}
                     </h4>
                   </div>
                   {narrative.ember_friction.map((f, i) => (
@@ -1073,7 +1074,7 @@ export function DeepDive({
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Lightbulb className="w-4 h-4" style={{ color: 'var(--color-trait-openness)' }} />
-                    <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-trait-openness)' }}>Your Playbook</h4>
+                    <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-trait-openness)' }}>Your playbook</h4>
                   </div>
                   <div className="relative pl-6">
                     <div className="absolute left-[7px] top-1 bottom-1 w-px" style={{ backgroundColor: '#8B5CF640' }} />
@@ -1123,30 +1124,30 @@ export function DeepDive({
               const n = dimensions.find(d => d.name.toLowerCase() === 'neuroticism') ?? dimensions.find(d => d.name.toLowerCase() === 'stability');
 
               if (o && c && o.candidateScore >= 70 && c.candidateScore >= 70)
-                traitInsights.push({ title: 'Creative Discipline', description: 'You combine creativity with discipline, allowing you to both generate innovative ideas and execute on them reliably. This is a rare and valuable combination.' });
+                traitInsights.push({ title: 'Creative discipline', description: 'You combine creativity with discipline, allowing you to both generate innovative ideas and execute on them reliably. This is a rare and valuable combination.' });
               if (o && c && o.candidateScore >= 70 && c.candidateScore < 40)
-                traitInsights.push({ title: 'Unstructured Creativity', description: 'Your creative energy is strong, but you may start many projects without finishing them. Pairing with structured teammates or using project management tools can help.' });
+                traitInsights.push({ title: 'Unstructured creativity', description: 'Your creative energy is strong, but you may start many projects without finishing them. Pairing with structured teammates or using project management tools can help.' });
               if (e && a && e.candidateScore >= 70 && a.candidateScore >= 70)
-                traitInsights.push({ title: 'Natural Team Builder', description: "You're a natural team player and relationship builder. People trust you and enjoy working with you. Be mindful of saying yes too often." });
+                traitInsights.push({ title: 'Natural team builder', description: "You're a natural team player and relationship builder. People trust you and enjoy working with you. Be mindful of saying yes too often." });
               if (e && a && e.candidateScore >= 70 && a.candidateScore < 40)
-                traitInsights.push({ title: 'Assertive Driver', description: "You're assertive and outspoken. You're effective at driving decisions but may need to watch how you deliver critical feedback." });
+                traitInsights.push({ title: 'Assertive driver', description: "You're assertive and outspoken. You're effective at driving decisions but may need to watch how you deliver critical feedback." });
               if (c && n && c.candidateScore >= 70 && n?.candidateScore >= 70)
-                traitInsights.push({ title: 'Perfectionist Tendencies', description: 'Your high standards combined with emotional sensitivity can lead to perfectionism and self-criticism. Build in breaks and celebrate small wins.' });
+                traitInsights.push({ title: 'Perfectionist tendencies', description: 'Your high standards combined with emotional sensitivity can lead to perfectionism and self-criticism. Build in breaks and celebrate small wins.' });
               if (e && n && e.candidateScore < 40 && n?.candidateScore < 40)
-                traitInsights.push({ title: 'Calm Independent', description: "You're a calm, independent thinker. You excel in deep-focus roles and bring stability to teams, but make sure to stay visible and communicate your contributions." });
+                traitInsights.push({ title: 'Calm independent', description: "You're a calm, independent thinker. You excel in deep-focus roles and bring stability to teams, but make sure to stay visible and communicate your contributions." });
               if (o && a && o.candidateScore >= 70 && a.candidateScore >= 70)
                 traitInsights.push({ title: 'Empathetic Innovator', description: "You're empathetic and imaginative, great at understanding diverse perspectives and creating inclusive solutions." });
               if (c && e && c.candidateScore >= 70 && e.candidateScore >= 70)
-                traitInsights.push({ title: 'Organized Leader', description: "You're a driven, organized communicator, natural for leadership roles where you need to rally teams around structured goals." });
+                traitInsights.push({ title: 'Organized leader', description: "You're a driven, organized communicator, natural for leadership roles where you need to rally teams around structured goals." });
 
               if (traitInsights.length === 0)
-                traitInsights.push({ title: 'Balanced Profile', description: 'Your personality traits create a balanced profile without extreme combinations. This gives you flexibility to adapt to various work environments and team dynamics.' });
+                traitInsights.push({ title: 'Balanced profile', description: 'Your personality traits create a balanced profile without extreme combinations. This gives you flexibility to adapt to various work environments and team dynamics.' });
 
               return (
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
                     <Shield className="w-4 h-4" style={{ color: INSIGHT_COLORS[4] }} />
-                    <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: INSIGHT_COLORS[4] }}>How Your Traits Align</h4>
+                    <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: INSIGHT_COLORS[4] }}>How your traits align</h4>
                   </div>
                   <div className="space-y-3">
                     {traitInsights.map((insight, ii) => (
@@ -1188,7 +1189,7 @@ export function DeepDive({
         <div className="flex items-center gap-2 mb-4">
           <Users className="w-5 h-5" style={{ color: INSIGHT_COLORS[0] }} />
           <h2 className="text-base font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>
-            Personality Snapshot
+            Personality snapshot
           </h2>
           <span className="font-mono text-[10px] uppercase tracking-[0.25em] ml-auto" style={{ color: 'var(--color-textMuted)' }}>
             OCEAN Profile //
@@ -1219,7 +1220,7 @@ export function DeepDive({
             {[
               { heading: 'Strongest', dim: sortedDims[0], color: INSIGHT_COLORS[1] },
               { heading: 'Notable', dim: sortedDims[1], color: INSIGHT_COLORS[0] },
-              { heading: 'Growth Edge', dim: sortedDims[sortedDims.length - 1], color: INSIGHT_COLORS[2] },
+              { heading: 'Growth edge', dim: sortedDims[sortedDims.length - 1], color: INSIGHT_COLORS[2] },
             ].map(({ heading, dim, color }) => (
               <div key={heading} className="p-3 rounded-xl text-center" style={{ backgroundColor: 'var(--color-background)' }}>
                 <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color }}>{heading}</p>
@@ -1233,7 +1234,7 @@ export function DeepDive({
         {/* Full OCEAN dimension profiles */}
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3" style={{ color: 'var(--color-textMuted)' }}>
-            Trait Profiles //
+            Trait profiles //
           </p>
           <div className="space-y-0">
             {dimensions.map((dim, i) => {
@@ -1300,17 +1301,17 @@ export function DeepDive({
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="flex-1">
             <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-0.5" style={{ color: 'var(--color-textMuted)' }}>
-              Next Steps //
+              Next steps //
             </p>
             <p className="text-sm font-medium" style={{ color: 'var(--color-textSecondary)' }}>
-              Take This Match Further
+              Take this match further
             </p>
           </div>
           <div className="flex items-center gap-2">
             {connectionStatus === 'accepted' ? (
               <Button onClick={onBrew}>
                 <Coffee className="w-4 h-4 mr-1.5" />
-                Let's Brew
+                Let's brew
               </Button>
             ) : (
               <ConnectButton
@@ -1333,7 +1334,7 @@ export function DeepDive({
             {mode === 'candidate' && (
               <Button variant="ghost" onClick={() => { /* share */ }}>
                 <Share2 className="w-4 h-4 mr-1.5" />
-                Share Match
+                Share match
               </Button>
             )}
           </div>

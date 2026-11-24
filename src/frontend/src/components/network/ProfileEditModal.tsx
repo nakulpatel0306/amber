@@ -174,7 +174,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
         return prev.filter(h => h !== hobbyId);
       }
       if (prev.length >= 10) {
-        showError('Limit Reached', 'You can select up to 10 hobbies');
+        showError('Limit reached', 'You can select up to 10 hobbies');
         return prev;
       }
       return [...prev, hobbyId];
@@ -188,12 +188,12 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
     const customId = `custom:${trimmed.toLowerCase().replace(/\s+/g, '-')}`;
 
     if (tempSelectedHobbies.includes(customId)) {
-      showError('Already Added', 'This hobby is already in your list');
+      showError('Already added', 'This hobby is already in your list');
       return;
     }
 
     if (tempSelectedHobbies.length >= 10) {
-      showError('Limit Reached', 'You can select up to 10 hobbies');
+      showError('Limit reached', 'You can select up to 10 hobbies');
       return;
     }
 
@@ -241,17 +241,17 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
     if (!file || !user) return;
 
     if (photos.length >= 6) {
-      showError('Limit Reached', 'You can upload up to 6 photos');
+      showError('Limit reached', 'You can upload up to 6 photos');
       return;
     }
 
     if (!file.type.startsWith('image/')) {
-      showError('Invalid File', 'Please select an image file');
+      showError('Invalid file', 'Please select an image file');
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      showError('File Too Large', 'Image must be under 5MB');
+      showError('File too large', 'Image must be under 5MB');
       return;
     }
 
@@ -274,14 +274,14 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
       const success = await savePhotos(newPhotos);
 
       if (success) {
-        showSuccess('Photo Uploaded', 'Please add a caption (required)');
+        showSuccess('Photo uploaded', 'Please add a caption (required)');
         const newIndex = newPhotos.length - 1;
         setEditingCaption(newIndex);
         setNewPhotoIndex(newIndex); // Mark as new photo requiring caption
         setCaptionText('');
       }
     } catch {
-      showError('Upload Failed', 'Failed to upload photo');
+      showError('Upload failed', 'Failed to upload photo');
     } finally {
       setUploadingPhoto(false);
       if (fileInputRef.current) {
@@ -295,20 +295,20 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
     const newPhotos = photos.filter((_, i) => i !== index);
     const success = await savePhotos(newPhotos);
     if (success) {
-      showSuccess('Photo Removed', 'The photo has been deleted');
+      showSuccess('Photo removed', 'The photo has been deleted');
     }
   };
 
   const saveCaption = async (index: number) => {
     if (!captionText.trim()) {
-      showError('Caption Required', 'Please add a caption for your photo');
+      showError('Caption required', 'Please add a caption for your photo');
       return;
     }
     const newPhotos = [...photos];
     newPhotos[index] = { ...newPhotos[index], caption: captionText.trim() };
     const success = await savePhotos(newPhotos);
     if (success) {
-      showSuccess('Caption Saved', 'Your caption has been updated');
+      showSuccess('Caption saved', 'Your caption has been updated');
       setEditingCaption(null);
       setNewPhotoIndex(null); // Clear new photo marker
       setCaptionText('');
@@ -324,7 +324,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
   }).filter(Boolean) as Hobby[];
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg" title="Edit Profile">
+    <Modal isOpen={isOpen} onClose={onClose} size="lg" title="Edit profile">
       <div className="space-y-6 max-h-[70vh] overflow-y-auto -mx-6 px-6">
         {isLoading ? (
           <div className="flex items-center justify-center py-10">
@@ -347,7 +347,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploadingPhoto}
                   >
-                    {uploadingPhoto ? 'Uploading...' : 'Add Photo'}
+                    {uploadingPhoto ? 'Uploading...' : 'Add photo'}
                   </Button>
                 )}
               </div>
@@ -573,7 +573,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                 </div>
               ) : (
                 <p className="text-sm py-4 text-center" style={{ color: 'var(--color-textMuted)' }}>
-                  No posts yet. Use the "+ New Post" button to create one.
+                  No posts yet. Use the "+ New post" button to create one.
                 </p>
               )}
             </div>
@@ -604,7 +604,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
             style={{ backgroundColor: 'var(--color-surface)' }}
           >
             <div className="p-4 border-b flex items-center justify-between" style={{ borderColor: 'var(--color-border)' }}>
-              <h3 className="font-semibold" style={{ color: 'var(--color-text)' }}>Select Hobbies</h3>
+              <h3 className="font-semibold" style={{ color: 'var(--color-text)' }}>Select hobbies</h3>
               <button onClick={() => setShowHobbyPicker(false)} style={{ color: 'var(--color-textMuted)' }}>
                 <X className="w-5 h-5" />
               </button>

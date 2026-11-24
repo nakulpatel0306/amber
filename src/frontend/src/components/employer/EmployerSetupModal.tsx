@@ -35,7 +35,7 @@ interface EmployerData {
 }
 
 const COMPANY_SIZES = [
-  { id: '1-10', label: 'Early Stage', description: '1-10 employees' },
+  { id: '1-10', label: 'Early stage', description: '1-10 employees' },
   { id: '11-50', label: 'Growing', description: '11-50 employees' },
   { id: '51-200', label: 'Scaling', description: '51-200 employees' },
 ];
@@ -348,7 +348,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                     className="text-xl font-bold mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Tell Us About Your Company
+                    Tell us about your company
                   </h2>
                   <p
                     className="text-sm"
@@ -359,7 +359,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                 </div>
 
                 <Input
-                  label="Company Name"
+                  label="Company name"
                   type="text"
                   value={data.company_name}
                   onChange={(e) => setData({ ...data, company_name: e.target.value })}
@@ -373,7 +373,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                     className="block text-sm font-medium mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Company Description <span style={{ color: 'var(--color-error)' }}>*</span>
+                    Company description <span style={{ color: 'var(--color-error)' }}>*</span>
                   </label>
                   <textarea
                     value={data.description}
@@ -457,7 +457,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                     className="text-xl font-bold mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Company Details
+                    Company details
                   </h2>
                   <p
                     className="text-sm"
@@ -472,7 +472,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                     className="block text-sm font-medium mb-3"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Company Size <span style={{ color: 'var(--color-error)' }}>*</span>
+                    Company size <span style={{ color: 'var(--color-error)' }}>*</span>
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {COMPANY_SIZES.map((size) => (
@@ -510,7 +510,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                 </div>
 
                 <LocationPicker
-                  label="Headquarters Location *"
+                  label="Headquarters location *"
                   value={data.location}
                   onChange={(location) => setData({ ...data, location })}
                   placeholder="Select headquarters location"
@@ -527,7 +527,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                     className="text-xl font-bold mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Company Links
+                    Company links
                   </h2>
                   <p
                     className="text-sm"
@@ -538,7 +538,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                 </div>
 
                 <Input
-                  label="Your LinkedIn Profile (Optional)"
+                  label="Your LinkedIn profile (optional)"
                   type="url"
                   value={data.linkedin_url}
                   onChange={(e) => setData({ ...data, linkedin_url: e.target.value })}
@@ -547,7 +547,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                 />
 
                 <Input
-                  label="Company Website (Optional)"
+                  label="Company website (optional)"
                   type="url"
                   value={data.company_website}
                   onChange={(e) => setData({ ...data, company_website: e.target.value })}
@@ -574,7 +574,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                       className="text-xs mt-0.5"
                       style={{ color: 'var(--color-textMuted)' }}
                     >
-                      Click "Complete Setup" to save your company profile. Next, take the culture quiz to start matching with candidates.
+                      Click "Complete setup" to save your company profile. Next, take the culture quiz to start matching with candidates.
                     </p>
                   </div>
                 </div>
@@ -603,7 +603,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                   onClick={handleNext}
                   rightIcon={<ArrowRight className="w-4 h-4" />}
                 >
-                  {currentStep === 0 ? 'Get Started' : 'Continue'}
+                  {currentStep === 0 ? 'Get started' : 'Continue'}
                 </Button>
               ) : (
                 <Button
@@ -611,7 +611,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                   isLoading={isSaving}
                   rightIcon={!isSaving ? <CheckCircle2 className="w-4 h-4" /> : undefined}
                 >
-                  Complete Setup
+                  Complete setup
                 </Button>
               )}
             </div>

@@ -47,7 +47,7 @@ export function OceanRadar({ scores }: OceanRadarProps) {
         className="text-sm font-semibold mb-2"
         style={{ color: 'var(--color-text)' }}
       >
-        OCEAN Profile
+        OCEAN profile
       </h3>
 
       <div className="flex justify-center">

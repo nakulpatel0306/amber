@@ -314,8 +314,8 @@ export function EmployerCoffeeChats() {
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
       <PageBanner
-        title="Coffee Chats"
-        subtitle="Manage Conversations With Potential Hires"
+        title="Coffee chats"
+        subtitle="Manage conversations with potential hires"
         iconNode={
           <div
             className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -355,7 +355,7 @@ export function EmployerCoffeeChats() {
         rightContent={
           <div className="flex items-center gap-3 flex-wrap">
             <Button size="sm" leftIcon={<Coffee className="w-3.5 h-3.5" />} onClick={() => navigate('/app/employer/ember')}>
-              Find Match
+              Find match
             </Button>
             <Button variant="outline" size="sm" leftIcon={<UserPlus className="w-3.5 h-3.5" />} onClick={() => setInboxOpen(true)} className="relative">
               Requests
@@ -409,7 +409,7 @@ export function EmployerCoffeeChats() {
         <div className="bento-card text-center py-16">
           {empty && <EmberFirefly size="lg" mood={empty.mood} animated />}
           <h3 className="mt-6 text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
-            {activeTab === 'pending' ? 'No Pending Requests' : activeTab === 'upcoming' ? 'No Upcoming Chats' : 'No Completed Chats'}
+            {activeTab === 'pending' ? 'No pending requests' : activeTab === 'upcoming' ? 'No upcoming chats' : 'No completed chats'}
           </h3>
           <p className="mt-2 text-sm max-w-sm mx-auto" style={{ color: 'var(--color-textMuted)' }}>
             {empty?.message}

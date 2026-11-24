@@ -64,7 +64,7 @@ export function MatchFlowChart({ matchesAvailable, avgMatchScore }: MatchFlowCha
           className="text-sm font-semibold"
           style={{ color: 'var(--color-text)' }}
         >
-          Match Flow
+          Match flow
         </h3>
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded" style={{ backgroundColor: 'var(--color-accent)' }} />
@@ -72,7 +72,7 @@ export function MatchFlowChart({ matchesAvailable, avgMatchScore }: MatchFlowCha
             className="text-[10px] uppercase tracking-wider font-medium"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            Active Matches
+            Active matches
           </span>
         </div>
       </div>

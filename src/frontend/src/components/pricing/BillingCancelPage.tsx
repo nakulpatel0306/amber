@@ -16,17 +16,17 @@ export function BillingCancelPage() {
           style={{ color: 'var(--color-textMuted)' }}
         />
         <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
-          Checkout Canceled
+          Checkout canceled
         </h1>
         <p className="text-sm mb-8" style={{ color: 'var(--color-textMuted)' }}>
           No worries! You weren't charged. You can upgrade anytime from the pricing page.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button onClick={() => navigate('/app/pricing')}>
-            Back to Pricing
+            Back to pricing
           </Button>
           <Button variant="outline" onClick={() => navigate('/app/dashboard')}>
-            Go to Dashboard
+            Go to dashboard
           </Button>
         </div>
       </div>

@@ -68,14 +68,14 @@ interface PersonalityData {
 const OCEAN_INFO = {
   openness: {
     label: 'Openness',
-    fullLabel: 'Openness to Experience',
-    shortDesc: 'Creativity & Curiosity',
+    fullLabel: 'Openness to experience',
+    shortDesc: 'Creativity & curiosity',
     description: 'Measures your intellectual curiosity, creativity, and preference for novelty and variety.',
     workplaceImpact: 'Influences how you approach problem-solving, adapt to change, and engage with innovative ideas.',
     highTraits: ['Creative and imaginative thinking', 'Intellectual curiosity and love of learning', 'Comfort with ambiguity', 'Willingness to try new approaches'],
     lowTraits: ['Practical and grounded decision-making', 'Preference for proven methods', 'Focus on concrete outcomes', 'Detail-oriented execution'],
-    idealRoles: ['Product Design', 'R&D', 'Marketing', 'Strategy', 'Content Creation'],
-    cultureMatch: ['Innovative Startups', 'Creative Agencies', 'Research Institutions'],
+    idealRoles: ['Product design', 'R&D', 'Marketing', 'Strategy', 'Content creation'],
+    cultureMatch: ['Innovative startups', 'Creative agencies', 'Research institutions'],
     icon: Lightbulb,
     color: 'var(--color-trait-openness)',
     progressColor: 'purple',
@@ -83,13 +83,13 @@ const OCEAN_INFO = {
   conscientiousness: {
     label: 'Conscientiousness',
     fullLabel: 'Conscientiousness',
-    shortDesc: 'Organization & Discipline',
+    shortDesc: 'Organization & discipline',
     description: 'Reflects your tendency to be organized, dependable, and goal-directed.',
     workplaceImpact: 'The strongest personality predictor of job performance across most occupations.',
     highTraits: ['Strong organizational skills', 'Reliable and meets deadlines', 'Attention to detail and quality', 'Self-disciplined and motivated'],
     lowTraits: ['Flexible and spontaneous', 'Comfortable with last-minute changes', 'Big-picture focus', 'Adaptable to shifting priorities'],
-    idealRoles: ['Project Management', 'Operations', 'Finance', 'QA', 'Data Analysis'],
-    cultureMatch: ['Structured Enterprises', 'Regulated Industries', 'Process-Driven Orgs'],
+    idealRoles: ['Project management', 'Operations', 'Finance', 'QA', 'Data analysis'],
+    cultureMatch: ['Structured enterprises', 'Regulated industries', 'Process-driven orgs'],
     icon: Target,
     color: 'var(--color-trait-conscientiousness)',
     progressColor: 'green',
@@ -97,13 +97,13 @@ const OCEAN_INFO = {
   extraversion: {
     label: 'Extraversion',
     fullLabel: 'Extraversion',
-    shortDesc: 'Social Energy & Assertiveness',
+    shortDesc: 'Social energy & assertiveness',
     description: 'Indicates how much you are energized by social interaction and external stimulation.',
     workplaceImpact: 'Influences your collaboration style, leadership approach, and professional relationships.',
     highTraits: ['Energized by teamwork', 'Natural communicator', 'Builds rapport easily', 'Thrives in fast-paced environments'],
     lowTraits: ['Deep, focused work', 'Thoughtful listener', 'Independent problem-solving', 'Reflective decision-making'],
-    idealRoles: ['Sales', 'Leadership', 'Public Relations', 'Client Success', 'Team Management'],
-    cultureMatch: ['Collaborative Teams', 'Client-Facing Roles', 'High-Energy Environments'],
+    idealRoles: ['Sales', 'Leadership', 'Public relations', 'Client success', 'Team management'],
+    cultureMatch: ['Collaborative teams', 'Client-facing roles', 'High-energy environments'],
     icon: Zap,
     color: 'var(--color-trait-extraversion)',
     progressColor: 'amber',
@@ -111,27 +111,27 @@ const OCEAN_INFO = {
   agreeableness: {
     label: 'Agreeableness',
     fullLabel: 'Agreeableness',
-    shortDesc: 'Cooperation & Empathy',
+    shortDesc: 'Cooperation & empathy',
     description: 'Measures your tendency toward cooperation, trust, and consideration for others.',
     workplaceImpact: 'Affects team dynamics, conflict resolution, and stakeholder management.',
     highTraits: ['Builds harmonious relationships', 'Empathetic and understanding', 'Skilled at conflict resolution', 'Customer and people-focused'],
     lowTraits: ['Objective and analytical thinking', 'Comfortable with difficult decisions', 'Direct and straightforward', 'Competitive drive'],
-    idealRoles: ['Human Resources', 'Customer Service', 'Healthcare', 'Teaching', 'Counseling'],
-    cultureMatch: ['People-First Cultures', 'Service Industries', 'Mission-Driven Orgs'],
+    idealRoles: ['Human resources', 'Customer service', 'Healthcare', 'Teaching', 'Counseling'],
+    cultureMatch: ['People-first cultures', 'Service industries', 'Mission-driven orgs'],
     icon: Heart,
     color: 'var(--color-trait-agreeableness)',
     progressColor: 'pink',
   },
   neuroticism: {
     label: 'Stability',
-    fullLabel: 'Emotional Stability',
-    shortDesc: 'Resilience & Composure',
+    fullLabel: 'Emotional stability',
+    shortDesc: 'Resilience & composure',
     description: 'Reflects your emotional resilience and ability to remain calm under pressure.',
     workplaceImpact: 'Influences how you handle pressure, respond to criticism, and maintain performance.',
     highTraits: ['Calm under pressure', 'Resilient when facing setbacks', 'Consistent performance', 'Steady emotional presence'],
     lowTraits: ['Highly attuned to risks', 'Passionate and emotionally invested', 'Detail-conscious', 'Empathetic to concerns'],
-    idealRoles: ['Crisis Management', 'Executive Leadership', 'High-Stakes Negotiations'],
-    cultureMatch: ['Fast-Paced Startups', 'High-Pressure Industries'],
+    idealRoles: ['Crisis management', 'Executive leadership', 'High-stakes negotiations'],
+    cultureMatch: ['Fast-paced startups', 'High-pressure industries'],
     icon: Anchor,
     color: 'var(--color-trait-stability)',
     progressColor: 'cyan',
@@ -141,7 +141,7 @@ const OCEAN_INFO = {
 const ADDITIONAL_ASSESSMENTS = [
   {
     id: 'visual-perception',
-    name: 'Visual Perception Test',
+    name: 'Visual perception test',
     description: 'Discover your perceptual style through visual challenges.',
     icon: Eye,
     color: 'var(--color-trait-openness)',
@@ -153,7 +153,7 @@ const ADDITIONAL_ASSESSMENTS = [
   },
   {
     id: 'work-values',
-    name: 'Drive & Motivation',
+    name: 'Drive & motivation',
     description: 'Explore what drives you at work — purpose, growth, recognition, and more.',
     icon: Scale,
     color: 'var(--color-trait-conscientiousness)',
@@ -165,7 +165,7 @@ const ADDITIONAL_ASSESSMENTS = [
   },
   {
     id: 'situational-judgment',
-    name: 'Social Energy',
+    name: 'Social energy',
     description: 'How do you handle real workplace scenarios? Conflicts, pressure, and feedback.',
     icon: Shield,
     color: 'var(--color-trait-extraversion)',
@@ -177,7 +177,7 @@ const ADDITIONAL_ASSESSMENTS = [
   },
   {
     id: 'cognitive-patterns',
-    name: 'Cognitive Style',
+    name: 'Cognitive style',
     description: 'Explore your problem-solving approach, decision-making, and learning preferences.',
     icon: GraduationCap,
     color: 'var(--color-trait-agreeableness)',
@@ -307,12 +307,12 @@ export function PersonalityInsights() {
           <div className="w-20 h-20 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}>
             <Brain className="w-10 h-10" style={{ color: 'var(--color-trait-openness)' }} />
           </div>
-          <h1 className="text-3xl font-serif font-normal tracking-tight mb-4" style={{ color: 'var(--color-text)' }}>Discover Your Personality</h1>
+          <h1 className="text-3xl font-serif font-normal tracking-tight mb-4" style={{ color: 'var(--color-text)' }}>Discover your personality</h1>
           <p className="mb-6 max-w-sm mx-auto" style={{ color: 'var(--color-textSecondary)' }}>
             Take the personality assessment to unlock your insights and find jobs that truly fit your style.
           </p>
           <Link to="/app/personality">
-            <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>Start Assessment</Button>
+            <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>Start assessment</Button>
           </Link>
         </div>
       </div>
@@ -377,7 +377,7 @@ export function PersonalityInsights() {
 
   const handleAssessmentClick = (assessmentId: string, isCompleted: boolean, cooldown: number | null | undefined) => {
     if (isCompleted && cooldown !== null && cooldown !== undefined && cooldown > 0) {
-      showError('Cooldown Active', `You can retake this in ${Math.ceil(cooldown / (1000 * 60 * 60 * 24))} days`);
+      showError('Cooldown active', `You can retake this in ${Math.ceil(cooldown / (1000 * 60 * 60 * 24))} days`);
       return;
     }
     navigate(`/app/assessments/${assessmentId}`);
@@ -452,7 +452,7 @@ export function PersonalityInsights() {
               {([
                 { label: 'Strongest', value: OCEAN_INFO[dominantDimension]?.label || 'Openness', color: 'var(--color-trait-openness)', Icon: Brain },
                 { label: 'Style', value: decisionStyle, color: 'var(--color-trait-conscientiousness)', Icon: Compass },
-                { label: 'Top Score', value: `${sortedScores[0]?.[1] || 0}%`, color: '#f59e0b', Icon: TrendingUp },
+                { label: 'Top score', value: `${sortedScores[0]?.[1] || 0}%`, color: '#f59e0b', Icon: TrendingUp },
               ] as const).map(stat => (
                 <span
                   key={stat.label}
@@ -479,7 +479,7 @@ export function PersonalityInsights() {
             <div className="flex items-center gap-3 flex-wrap">
               <ProfileCompleteness completedCount={completionCount} variant="ring" size="sm" showLabel={false} />
               <Button variant="ghost" size="sm" onClick={() => setShowSnapshotCard(!showSnapshotCard)}>
-                {showSnapshotCard ? 'Hide Snapshot' : 'Share Profile'}
+                {showSnapshotCard ? 'Hide snapshot' : 'Share profile'}
               </Button>
               {cooldownRemaining && cooldownRemaining > 0 ? (
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ backgroundColor: 'var(--color-surface)' }}>
@@ -524,7 +524,7 @@ export function PersonalityInsights() {
           >
             <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
               <Brain className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              OCEAN Profile
+              OCEAN profile
             </h2>
             {completionCount > 1 && (
               <p className="font-mono text-[9px] uppercase tracking-[0.2em] mt-1 mb-3" style={{ color: 'var(--color-accent)' }}>
@@ -563,7 +563,7 @@ export function PersonalityInsights() {
               <div>
                 <h2 className="text-base font-bold tracking-tight mb-2 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
                   <Layers className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-                  Dimension Breakdown
+                  Dimension breakdown
                 </h2>
                 <div className="space-y-4">
                   {(Object.entries(OCEAN_INFO) as [keyof typeof OCEAN_INFO, typeof OCEAN_INFO[keyof typeof OCEAN_INFO]][]).map(([key, info]) => (
@@ -632,7 +632,7 @@ export function PersonalityInsights() {
           >
             <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
               <Sparkles className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              Your Personality Archetypes
+              Your personality archetypes
             </h2>
             <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4" style={{ color: 'var(--color-textMuted)' }}>
               Work, Lead, Collaborate //
@@ -666,13 +666,13 @@ export function PersonalityInsights() {
         >
           <h2 className="text-base font-bold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Puzzle className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Thinking & Operating Style
+            Thinking & operating style
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { icon: Brain, label: 'Decision-Making', value: decisionStyle, color: 'var(--color-trait-openness)' },
+              { icon: Brain, label: 'Decision-making', value: decisionStyle, color: 'var(--color-trait-openness)' },
               { icon: MessageCircle, label: 'Communication', value: communicationStyle, color: 'var(--color-trait-conscientiousness)' },
-              { icon: Lightbulb, label: 'Problem-Solving', value: problemSolvingStyle, color: 'var(--color-trait-extraversion)' },
+              { icon: Lightbulb, label: 'Problem-solving', value: problemSolvingStyle, color: 'var(--color-trait-extraversion)' },
             ].map((item) => (
               <div key={item.label} className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
                 <div className="flex items-center gap-2 mb-2">
@@ -694,12 +694,12 @@ export function PersonalityInsights() {
         >
           <h2 className="text-base font-bold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Battery className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Your Energy Map
+            Your energy map
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: 'var(--color-trait-conscientiousness)' }}>
-                <Zap className="w-4 h-4" /> What Energizes You
+                <Zap className="w-4 h-4" /> What energizes you
               </p>
               <div className="space-y-2">
                 {energizers.map((item, i) => (
@@ -712,7 +712,7 @@ export function PersonalityInsights() {
             </div>
             <div>
               <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: '#EF4444' }}>
-                <Battery className="w-4 h-4" /> What Drains You
+                <Battery className="w-4 h-4" /> What drains you
               </p>
               <div className="space-y-2">
                 {drainers.map((item, i) => (
@@ -735,34 +735,34 @@ export function PersonalityInsights() {
         >
           <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Building2 className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Environments You Thrive In
+            Environments you thrive in
           </h2>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4" style={{ color: 'var(--color-textMuted)' }}>
-            Ideal Work Settings //
+            Ideal work settings //
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               {
                 icon: scores.openness > 60 ? Palette : Shield,
-                label: scores.openness > 60 ? 'Innovation-Driven' : 'Proven Methods',
+                label: scores.openness > 60 ? 'Innovation-driven' : 'Proven methods',
                 desc: scores.openness > 60 ? 'Values creativity' : 'Values stability',
                 color: 'var(--color-trait-openness)',
               },
               {
                 icon: scores.conscientiousness > 60 ? Target : Compass,
-                label: scores.conscientiousness > 60 ? 'Goal-Oriented' : 'Flexible Goals',
+                label: scores.conscientiousness > 60 ? 'Goal-oriented' : 'Flexible goals',
                 desc: scores.conscientiousness > 60 ? 'Clear metrics' : 'Adaptive objectives',
                 color: 'var(--color-trait-conscientiousness)',
               },
               {
                 icon: scores.extraversion > 60 ? Users : Focus,
-                label: scores.extraversion > 60 ? 'Collaborative' : 'Focused Work',
+                label: scores.extraversion > 60 ? 'Collaborative' : 'Focused work',
                 desc: scores.extraversion > 60 ? 'Team-based' : 'Independent',
                 color: 'var(--color-trait-extraversion)',
               },
               {
                 icon: scores.agreeableness > 60 ? Heart : Award,
-                label: scores.agreeableness > 60 ? 'People-First' : 'Results-First',
+                label: scores.agreeableness > 60 ? 'People-first' : 'Results-first',
                 desc: scores.agreeableness > 60 ? 'Relationships' : 'Outcomes',
                 color: 'var(--color-trait-agreeableness)',
               },
@@ -787,7 +787,7 @@ export function PersonalityInsights() {
         >
           <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Leaf className="w-5 h-5" style={{ color: 'var(--color-trait-conscientiousness)' }} />
-            Growth Edges
+            Growth edges
           </h2>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4" style={{ color: 'var(--color-textMuted)' }}>
             Room to Grow //
@@ -828,34 +828,34 @@ export function PersonalityInsights() {
         >
           <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <TrendingUp className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Compatibility Signals
+            Compatibility signals
           </h2>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3" style={{ color: 'var(--color-textMuted)' }}>
             Team & Culture Fit //
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Company Size</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Company size</p>
               <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
-                {scores.conscientiousness > 65 ? 'Mid-Size to Enterprise' : scores.openness > 65 ? 'Startups to Mid-Size' : 'Flexible Across Sizes'}
+                {scores.conscientiousness > 65 ? 'Mid-size to enterprise' : scores.openness > 65 ? 'Startups to mid-size' : 'Flexible across sizes'}
               </p>
             </div>
             <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Team Dynamic</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Team dynamic</p>
               <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
-                {scores.extraversion > 65 ? 'Collaborative & Social' : scores.extraversion < 35 ? 'Small & Focused' : 'Balanced Teams'}
+                {scores.extraversion > 65 ? 'Collaborative & social' : scores.extraversion < 35 ? 'Small & focused' : 'Balanced teams'}
               </p>
             </div>
             <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Management Style</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Management style</p>
               <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
-                {scores.conscientiousness > 65 ? 'Structured & Clear' : scores.openness > 65 ? 'Autonomous & Trust-Based' : 'Supportive & Flexible'}
+                {scores.conscientiousness > 65 ? 'Structured & clear' : scores.openness > 65 ? 'Autonomous & trust-based' : 'Supportive & flexible'}
               </p>
             </div>
           </div>
           <Link to="/app/matches">
             <Button variant="outline" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
-              View Your Matches
+              View your matches
             </Button>
           </Link>
         </motion.div>
@@ -869,7 +869,7 @@ export function PersonalityInsights() {
         >
           <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Rocket className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Enhance Your Profile
+            Enhance your profile
           </h2>
           <div className="flex items-center justify-between mb-4">
             <p className="font-mono text-[10px] uppercase tracking-[0.25em]" style={{ color: 'var(--color-textMuted)' }}>
@@ -966,12 +966,12 @@ export function PersonalityInsights() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <h3 className="text-base font-bold tracking-tight mb-2" style={{ color: 'var(--color-text)' }}>Ready to Find Your Match?</h3>
+          <h3 className="text-base font-bold tracking-tight mb-2" style={{ color: 'var(--color-text)' }}>Ready to find your match?</h3>
           <p className="text-sm mb-4" style={{ color: 'var(--color-textSecondary)' }}>
             Discover companies whose culture aligns with your personality profile
           </p>
           <Link to="/app/matches">
-            <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>View Matches</Button>
+            <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>View matches</Button>
           </Link>
         </motion.div>
       </div>
@@ -1012,13 +1012,13 @@ function DimensionDetail({
       <p className="text-sm mt-3 mb-3" style={{ color: 'var(--color-textSecondary)' }}>{info.description}</p>
 
       <div className="p-3 rounded-lg mb-4" style={{ backgroundColor: 'var(--color-background)' }}>
-        <p className="text-xs font-medium mb-1" style={{ color: 'var(--color-text)' }}>Workplace Impact</p>
+        <p className="text-xs font-medium mb-1" style={{ color: 'var(--color-text)' }}>Workplace impact</p>
         <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>{info.workplaceImpact}</p>
       </div>
 
       <div className="flex-1 overflow-auto">
         <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
-          {score >= 50 ? 'Your Strengths' : 'Your Approach'}
+          {score >= 50 ? 'Your strengths' : 'Your approach'}
         </h3>
         <ul className="space-y-1.5 mb-4">
           {(score >= 50 ? info.highTraits : info.lowTraits).map((trait, i) => (
@@ -1029,14 +1029,14 @@ function DimensionDetail({
           ))}
         </ul>
 
-        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Ideal Roles</h3>
+        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Ideal roles</h3>
         <div className="flex flex-wrap gap-1.5 mb-4">
           {info.idealRoles.map((role, i) => (
             <span key={i} className="px-2 py-1 rounded-md text-xs" style={{ backgroundColor: `${info.color}15`, color: info.color }}>{role}</span>
           ))}
         </div>
 
-        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Culture Match</h3>
+        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Culture match</h3>
         <div className="flex flex-wrap gap-1.5">
           {info.cultureMatch.map((culture, i) => (
             <span key={i} className="px-2 py-1 rounded-md text-xs" style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textSecondary)' }}>{culture}</span>

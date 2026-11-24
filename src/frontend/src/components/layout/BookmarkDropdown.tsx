@@ -108,7 +108,7 @@ export function BookmarkDropdown() {
               style={{ borderColor: 'var(--color-border)' }}
             >
               <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-                Saved Candidates
+                Saved candidates
               </h3>
               {savedCandidates.length > 0 && (
                 <span className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
@@ -148,7 +148,7 @@ export function BookmarkDropdown() {
 
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate" style={{ color: 'var(--color-text)' }}>
-                        {candidate.candidate_name || 'Unknown Candidate'}
+                        {candidate.candidate_name || 'Unknown candidate'}
                       </p>
                       <div className="flex items-center gap-2 mt-0.5">
                         {candidate.match_score && (
@@ -180,7 +180,7 @@ export function BookmarkDropdown() {
                   className="text-xs font-medium transition-colors hover:underline"
                   style={{ color: 'var(--color-accent)' }}
                 >
-                  View All Saved
+                  View all saved
                 </button>
               </div>
             )}

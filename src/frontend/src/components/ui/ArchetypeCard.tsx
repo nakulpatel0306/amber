@@ -114,7 +114,7 @@ export function ArchetypeCard({
               className="text-xs font-semibold uppercase tracking-wide"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              {idealCandidates ? 'Ideal Candidates' : 'Ideal For'}
+              {idealCandidates ? 'Ideal candidates' : 'Ideal for'}
             </span>
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -143,7 +143,7 @@ export function ArchetypeCard({
               className="text-xs font-semibold uppercase tracking-wide"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              Watch For
+              Watch for
             </span>
           </div>
           <div className="flex flex-wrap gap-1.5">

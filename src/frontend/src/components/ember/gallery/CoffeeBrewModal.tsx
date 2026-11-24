@@ -129,11 +129,11 @@ export function CoffeeBrewModal({
 
       <ModalFooter>
         <Button variant="ghost" size="sm" onClick={onClose}>
-          Not Yet
+          Not yet
         </Button>
         <Button size="sm" onClick={handleSubmit} isLoading={isSubmitting}>
           <Coffee className="w-3.5 h-3.5 mr-1" />
-          Brew It
+          Brew it
         </Button>
       </ModalFooter>
     </Modal>

@@ -36,7 +36,7 @@ const tabs: FeedbackTab[] = [
   },
   {
     id: 'bug_report',
-    label: 'Bug Report',
+    label: 'Bug report',
     icon: Bug,
     placeholder: 'Describe the issue you encountered. Include steps to reproduce if possible...',
   },
@@ -109,7 +109,7 @@ const mockFeatureRequests: FeatureRequest[] = [
 const statusConfig: Record<FeatureStatus, { label: string; color: string; icon: React.ElementType }> = {
   requested: { label: 'Requested', color: '#78716C', icon: Clock },
   planned: { label: 'Planned', color: '#8B5CF6', icon: Lightbulb },
-  in_progress: { label: 'In Progress', color: '#F59E0B', icon: Zap },
+  in_progress: { label: 'In progress', color: '#F59E0B', icon: Zap },
   completed: { label: 'Completed', color: '#10B981', icon: CheckCircle2 },
 };
 
@@ -129,17 +129,17 @@ export function FeedbackSection() {
 
   const handleSubmit = async () => {
     if (activeTab === 'bug_report' && !bugTitle.trim()) {
-      showError('Title Required', 'Please enter a title for the bug report.');
+      showError('Title required', 'Please enter a title for the bug report.');
       return;
     }
 
     if (!message.trim()) {
-      showError('Message Required', 'Please enter your feedback before submitting.');
+      showError('Message required', 'Please enter your feedback before submitting.');
       return;
     }
 
     if (activeTab === 'satisfaction' && !rating) {
-      showError('Rating Required', 'Please select a rating before submitting.');
+      showError('Rating required', 'Please select a rating before submitting.');
       return;
     }
 
@@ -158,7 +158,7 @@ export function FeedbackSection() {
 
       if (error) throw error;
 
-      success('Thank You!', activeTab === 'bug_report'
+      success('Thank you!', activeTab === 'bug_report'
         ? 'Bug report submitted. We\'ll investigate ASAP.'
         : 'Your feedback has been submitted successfully.');
       setMessage('');
@@ -169,7 +169,7 @@ export function FeedbackSection() {
 
       setTimeout(() => setSubmitted(false), 3000);
     } catch {
-      showError('Failed To Submit', 'Please try again later.');
+      showError('Failed to submit', 'Please try again later.');
     } finally {
       setIsSubmitting(false);
     }
@@ -213,11 +213,11 @@ export function FeedbackSection() {
             className="text-base font-semibold"
             style={{ color: 'var(--color-text)' }}
           >
-            Feedback & Features
+            Feedback & features
           </h2>
         </div>
         <p className="text-sm mt-1" style={{ color: 'var(--color-textMuted)' }}>
-          Help Shape The Future Of Amber
+          Help shape the future of Amber
         </p>
       </div>
 
@@ -376,7 +376,7 @@ export function FeedbackSection() {
               style={{ color: 'var(--color-text)' }}
             >
               <Lightbulb className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-              Suggest A Feature
+              Suggest a feature
             </h4>
             <Textarea
               value={message}
@@ -419,7 +419,7 @@ export function FeedbackSection() {
                 className="text-sm font-medium"
                 style={{ color: 'var(--color-text)' }}
               >
-                Report A Bug
+                Report a bug
               </h4>
             </div>
             <p
@@ -431,7 +431,7 @@ export function FeedbackSection() {
 
             <div className="space-y-3">
               <Input
-                label="Bug Title"
+                label="Bug title"
                 value={bugTitle}
                 onChange={e => setBugTitle(e.target.value)}
                 placeholder="Brief description of the issue"
@@ -494,7 +494,7 @@ export function FeedbackSection() {
                 isLoading={isSubmitting}
                 leftIcon={<Send className="w-4 h-4" />}
               >
-                Submit Bug Report
+                Submit bug report
               </Button>
             </div>
           </div>
@@ -584,7 +584,7 @@ export function FeedbackSection() {
                 isLoading={isSubmitting}
                 leftIcon={<Send className="w-4 h-4" />}
               >
-                Submit Feedback
+                Submit feedback
               </Button>
             </div>
           </div>

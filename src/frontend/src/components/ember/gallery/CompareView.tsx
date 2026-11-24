@@ -39,7 +39,7 @@ export function CompareView({ candidates, employerOcean, onBack }: CompareViewPr
         style={{ color: 'var(--color-accent)' }}
       >
         <ArrowLeft className="w-4 h-4" />
-        Back to Gallery
+        Back to gallery
       </button>
 
       <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
@@ -77,15 +77,15 @@ export function CompareView({ candidates, employerOcean, onBack }: CompareViewPr
       {/* Score comparison */}
       <div className="bento-card">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-bold" style={{ color: 'var(--color-text)' }}>Score Comparison</h2>
+          <h2 className="text-base font-bold" style={{ color: 'var(--color-text)' }}>Score comparison</h2>
           <ArrowUpRight className="w-4 h-4" style={{ color: 'var(--color-textMuted)', opacity: 0.3 }} />
         </div>
         <div className="space-y-4">
           {[
             { label: 'Overall', key: 'overallScore' as const, icon: Zap },
-            { label: 'Trait Match', key: 'traitScore' as const, icon: Brain },
-            { label: 'Culture Fit', key: 'cultureScore' as const, icon: Heart },
-            { label: 'Work Style', key: 'workStyleFit' as const, icon: Zap },
+            { label: 'Trait match', key: 'traitScore' as const, icon: Brain },
+            { label: 'Culture fit', key: 'cultureScore' as const, icon: Heart },
+            { label: 'Work style', key: 'workStyleFit' as const, icon: Zap },
           ].map(({ label, key, icon: Icon }) => (
             <div key={label}>
               <div className="flex items-center gap-2 mb-2">
@@ -121,7 +121,7 @@ export function CompareView({ candidates, employerOcean, onBack }: CompareViewPr
 
       {/* OCEAN Dimension Comparison */}
       <div className="bento-card">
-        <h2 className="text-base font-bold mb-4" style={{ color: 'var(--color-text)' }}>OCEAN Profile Comparison</h2>
+        <h2 className="text-base font-bold mb-4" style={{ color: 'var(--color-text)' }}>OCEAN profile comparison</h2>
         <div className="space-y-4">
           {dimensions.map(dim => (
             <div key={dim}>
@@ -131,7 +131,7 @@ export function CompareView({ candidates, employerOcean, onBack }: CompareViewPr
               <div className="space-y-1">
                 {/* Employer preference line */}
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-medium w-20 truncate" style={{ color: 'var(--color-textMuted)' }}>Your Pref</span>
+                  <span className="text-[10px] font-medium w-20 truncate" style={{ color: 'var(--color-textMuted)' }}>Your pref</span>
                   <div className="flex-1 h-3 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-border)' }}>
                     <div
                       className="h-full rounded-full"
@@ -170,7 +170,7 @@ export function CompareView({ candidates, employerOcean, onBack }: CompareViewPr
       <div className="text-center pb-8">
         <Button variant="ghost" onClick={onBack}>
           <ArrowLeft className="w-4 h-4 mr-1.5" />
-          Back to Gallery
+          Back to gallery
         </Button>
       </div>
     </motion.div>

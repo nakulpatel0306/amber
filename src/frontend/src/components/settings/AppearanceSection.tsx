@@ -22,7 +22,7 @@ export function AppearanceSection() {
           </h2>
         </div>
         <p className="text-sm mt-1" style={{ color: 'var(--color-textMuted)' }}>
-          Customize How Amber Looks On Your Device
+          Customize how Amber looks on your device
         </p>
       </div>
 
@@ -42,7 +42,7 @@ export function AppearanceSection() {
           )}
           <div>
             <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-              {isDark ? 'Dark Mode' : 'Light Mode'}
+              {isDark ? 'Dark mode' : 'Light mode'}
             </p>
             <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
               {isDark ? 'Amber Dark theme active' : 'Amber Light theme active'}

@@ -27,7 +27,7 @@ interface EmployerData {
 }
 
 const COMPANY_SIZES = [
-  { id: '1-10', label: 'Early Stage (1-10)' },
+  { id: '1-10', label: 'Early stage (1-10)' },
   { id: '11-50', label: 'Growing (11-50)' },
   { id: '51-200', label: 'Scaling (51-200)' },
 ];
@@ -171,11 +171,11 @@ export function EmployerProfileSection() {
             className="text-base font-semibold"
             style={{ color: 'var(--color-text)' }}
           >
-            Company Profile
+            Company profile
           </h2>
         </div>
         <p className="text-sm mt-1" style={{ color: 'var(--color-textMuted)' }}>
-          Information Visible To Candidates When They View Your Job Postings
+          Information visible to candidates when they view your job postings
         </p>
       </div>
 
@@ -186,11 +186,11 @@ export function EmployerProfileSection() {
           style={{ color: 'var(--color-textMuted)' }}
         >
           <Building2 className="w-3.5 h-3.5" style={{ color: '#d97706' }} />
-          Company Information
+          Company information
         </h3>
 
         <Input
-          label="Company Name"
+          label="Company name"
           type="text"
           value={data.company_name}
           onChange={(e) => handleChange('company_name', e.target.value)}
@@ -202,7 +202,7 @@ export function EmployerProfileSection() {
             className="block text-sm font-medium mb-2"
             style={{ color: 'var(--color-text)' }}
           >
-            Company Description
+            Company description
           </label>
           <textarea
             value={data.description}
@@ -294,7 +294,7 @@ export function EmployerProfileSection() {
           style={{ color: 'var(--color-textMuted)' }}
         >
           <Users className="w-3.5 h-3.5" style={{ color: '#d97706' }} />
-          Company Size
+          Company size
         </h3>
 
         <div className="flex flex-wrap gap-2">
@@ -330,7 +330,7 @@ export function EmployerProfileSection() {
         </h3>
 
         <Input
-          label="Your LinkedIn Profile (Optional)"
+          label="Your LinkedIn profile (optional)"
           type="url"
           value={data.linkedin_url}
           onChange={(e) => handleChange('linkedin_url', e.target.value)}
@@ -339,7 +339,7 @@ export function EmployerProfileSection() {
         />
 
         <Input
-          label="Company Website (Optional)"
+          label="Company website (optional)"
           type="url"
           value={data.company_website}
           onChange={(e) => handleChange('company_website', e.target.value)}
@@ -355,7 +355,7 @@ export function EmployerProfileSection() {
             Reset
           </Button>
           <Button onClick={handleSave} isLoading={isSaving} leftIcon={<Save className="w-4 h-4" />}>
-            Save Changes
+            Save changes
           </Button>
         </div>
       )}

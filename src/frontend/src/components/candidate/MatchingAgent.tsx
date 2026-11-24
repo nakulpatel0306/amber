@@ -159,11 +159,11 @@ function generateHighlightPills(match: {
   breakdown: { workStyleFit: number; valuesFit: number };
 }): string[] {
   const pills: string[] = [];
-  if (match.cultureMatchScore >= 80) pills.push('Strong Culture Fit');
-  if (match.breakdown.valuesFit >= 75) pills.push('Values Aligned');
-  if (match.breakdown.workStyleFit >= 85) pills.push('Work Style Match');
-  if (match.traitMatchScore >= 80) pills.push('Personality Match');
-  if (match.traitMatchScore >= 90) pills.push('Top Trait Fit');
+  if (match.cultureMatchScore >= 80) pills.push('Strong culture fit');
+  if (match.breakdown.valuesFit >= 75) pills.push('Values aligned');
+  if (match.breakdown.workStyleFit >= 85) pills.push('Work style match');
+  if (match.traitMatchScore >= 80) pills.push('Personality match');
+  if (match.traitMatchScore >= 90) pills.push('Top trait fit');
   // Cap at 3 pills
   return pills.slice(0, 3);
 }
@@ -510,12 +510,12 @@ export function MatchingAgent() {
             <Target className="w-10 h-10 text-white" />
           </div>
           <h2 className="text-3xl font-serif font-normal tracking-tight mb-4" style={{ color: 'var(--color-text)' }}>
-            Complete Your Assessment First
+            Complete your assessment first
           </h2>
           <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
             Take our personality assessment to discover your unique traits and find roles that match your values and work style.
           </p>
-          <Button onClick={() => navigate('/app/personality')}>Start Assessment</Button>
+          <Button onClick={() => navigate('/app/personality')}>Start assessment</Button>
         </div>
       </div>
     );
@@ -538,7 +538,7 @@ export function MatchingAgent() {
                 color: activeView === 'browse' ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
               }}
             >
-              Browse All
+              Browse all
             </button>
             <button
               onClick={() => setActiveView('pipeline')}
@@ -560,7 +560,7 @@ export function MatchingAgent() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
-                {activeView === 'browse' ? 'Browse Roles' : 'Your Pipeline'}
+                {activeView === 'browse' ? 'Browse roles' : 'Your pipeline'}
               </h1>
               <p className="text-sm" style={{ color: 'var(--color-textMuted)' }}>
                 {activeView === 'browse'
@@ -582,9 +582,9 @@ export function MatchingAgent() {
                     border: '1px solid var(--color-border)',
                   }}
                 >
-                  <option value="score">Match Score</option>
-                  <option value="recent">Recently Added</option>
-                  <option value="company_size">Company Size</option>
+                  <option value="score">Match score</option>
+                  <option value="recent">Recently added</option>
+                  <option value="company_size">Company size</option>
                 </select>
                 <ArrowUpDown className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: 'var(--color-textMuted)' }} />
                 <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: 'var(--color-textMuted)' }} />
@@ -647,7 +647,7 @@ export function MatchingAgent() {
                 </div>
                 {/* Work Style */}
                 <div>
-                  <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Work Style</label>
+                  <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Work style</label>
                   <select
                     value={selectedWorkStyle || ''}
                     onChange={e => setSelectedWorkStyle(e.target.value || null)}
@@ -660,7 +660,7 @@ export function MatchingAgent() {
                 </div>
                 {/* Company Size */}
                 <div>
-                  <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Company Size</label>
+                  <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Company size</label>
                   <select
                     value={selectedCompanySize || ''}
                     onChange={e => setSelectedCompanySize(e.target.value || null)}
@@ -688,7 +688,7 @@ export function MatchingAgent() {
 
               {/* Match score range */}
               <div>
-                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Match Score Range</label>
+                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Match score range</label>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
@@ -875,7 +875,7 @@ export function MatchingAgent() {
                         await handleRequestChat(match);
                       }}
                     >
-                      Coffee Chat
+                      Coffee chat
                     </Button>
                     <Button
                       size="sm"

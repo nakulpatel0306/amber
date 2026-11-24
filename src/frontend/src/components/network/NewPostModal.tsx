@@ -21,9 +21,9 @@ interface ImageItem {
 
 const VISIBILITY_OPTIONS: { value: PostVisibility; label: string }[] = [
   { value: 'everyone', label: 'Everyone' },
-  { value: 'connections', label: 'Connections Only' },
-  { value: 'job_seekers', label: 'Job Seekers Only' },
-  { value: 'employers', label: 'Employers Only' },
+  { value: 'connections', label: 'Connections only' },
+  { value: 'job_seekers', label: 'Job seekers only' },
+  { value: 'employers', label: 'Employers only' },
 ];
 
 const MAX_IMAGES = 10;
@@ -92,7 +92,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
     const fileArr = Array.from(files);
     const remaining = MAX_IMAGES - images.length;
     if (remaining <= 0) {
-      showError('Limit Reached', `Maximum ${MAX_IMAGES} images per post`);
+      showError('Limit reached', `Maximum ${MAX_IMAGES} images per post`);
       return;
     }
 
@@ -105,7 +105,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
       .slice(0, remaining);
 
     if (validFiles.length < fileArr.length) {
-      showError('Some Skipped', 'Only images under 5MB are accepted');
+      showError('Some skipped', 'Only images under 5MB are accepted');
     }
 
     const newItems: ImageItem[] = validFiles.map(file => ({
@@ -209,7 +209,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
       onClose();
     } catch (err) {
       console.error('Error creating post:', err);
-      showError('Post Failed', 'Something went wrong. Please try again.');
+      showError('Post failed', 'Something went wrong. Please try again.');
     } finally {
       setIsUploading(false);
     }
@@ -250,7 +250,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
             style={{ borderColor: 'var(--color-border)' }}
           >
             <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
-              Create Post
+              Create post
             </h2>
             <button
               onClick={onClose}
@@ -362,7 +362,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
             {/* Hobby Tags */}
             <div>
               <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--color-text)' }}>
-                Hobbies & Interests
+                Hobbies & interests
               </label>
               <div className="flex flex-wrap gap-1.5 mb-2">
                 {userHobbies.map(id => {
@@ -429,7 +429,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
             {userTraits.length > 0 && (
               <div>
                 <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--color-text)' }}>
-                  Personality Tags
+                  Personality tags
                 </label>
                 <div className="flex flex-wrap gap-1.5">
                   {userTraits.map((trait, i) => {

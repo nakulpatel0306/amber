@@ -89,7 +89,7 @@ export function NetworkProfile() {
     try {
       const result = await seedMyProfile(user.id, { photoCount: 4, hobbyCount: 6 });
       if (result.success) {
-        showSuccess('Test Data Added', 'Random photos and hobbies have been added');
+        showSuccess('Test data added', 'Random photos and hobbies have been added');
         loadCatalogData(); // Reload to show new data
       } else {
         showError('Error', result.error || 'Failed to seed test data');
@@ -114,7 +114,7 @@ export function NetworkProfile() {
       if (error) throw error;
 
       setCatalogData(prev => ({ ...prev, hobbies }));
-      showSuccess('Hobbies Updated', 'Your hobbies have been saved');
+      showSuccess('Hobbies updated', 'Your hobbies have been saved');
     } catch (err) {
       console.error('Error saving hobbies:', err);
       showError('Error', 'Failed to save hobbies');
@@ -139,7 +139,7 @@ export function NetworkProfile() {
         return prev.filter(h => h !== hobbyId);
       }
       if (prev.length >= 10) {
-        showError('Limit Reached', 'You can select up to 10 hobbies');
+        showError('Limit reached', 'You can select up to 10 hobbies');
         return prev;
       }
       return [...prev, hobbyId];
@@ -151,17 +151,17 @@ export function NetworkProfile() {
     if (!file || !user) return;
 
     if (catalogData.photos.length >= 6) {
-      showError('Limit Reached', 'You can upload up to 6 photos');
+      showError('Limit reached', 'You can upload up to 6 photos');
       return;
     }
 
     if (!file.type.startsWith('image/')) {
-      showError('Invalid File', 'Please select an image file');
+      showError('Invalid file', 'Please select an image file');
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      showError('File Too Large', 'Image must be under 5MB');
+      showError('File too large', 'Image must be under 5MB');
       return;
     }
 
@@ -190,11 +190,11 @@ export function NetworkProfile() {
       if (updateError) throw updateError;
 
       setCatalogData(prev => ({ ...prev, photos: newPhotos }));
-      showSuccess('Photo Uploaded', 'Your photo has been added');
+      showSuccess('Photo uploaded', 'Your photo has been added');
       setShowPhotoModal(false);
     } catch (err) {
       console.error('Error uploading photo:', err);
-      showError('Upload Failed', 'Failed to upload photo');
+      showError('Upload failed', 'Failed to upload photo');
     } finally {
       setUploadingPhoto(false);
       if (fileInputRef.current) {
@@ -216,7 +216,7 @@ export function NetworkProfile() {
       if (error) throw error;
 
       setCatalogData(prev => ({ ...prev, photos: newPhotos }));
-      showSuccess('Photo Removed', 'The photo has been deleted');
+      showSuccess('Photo removed', 'The photo has been deleted');
     } catch (err) {
       console.error('Error removing photo:', err);
       showError('Error', 'Failed to remove photo');
@@ -245,7 +245,7 @@ export function NetworkProfile() {
           />
           <div className="flex-1 min-w-0">
             <h2 className="text-xl font-semibold mb-1" style={{ color: 'var(--color-text)' }}>
-              {profile?.full_name || 'Your Name'}
+              {profile?.full_name || 'Your name'}
             </h2>
             {catalogData.headline && (
               <p className="text-sm mb-2" style={{ color: 'var(--color-accent)' }}>
@@ -282,7 +282,7 @@ export function NetworkProfile() {
                 onClick={handleSeedTestData}
                 disabled={isSeeding}
               >
-                {isSeeding ? 'Seeding...' : 'Seed Test Data'}
+                {isSeeding ? 'Seeding...' : 'Seed test data'}
               </Button>
             )}
           </div>
@@ -297,7 +297,7 @@ export function NetworkProfile() {
             <div className="flex items-center gap-2">
               <ImageIcon className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
               <h3 className="font-semibold" style={{ color: 'var(--color-text)' }}>
-                Photo Gallery
+                Photo gallery
               </h3>
               <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textMuted)' }}>
                 {catalogData.photos.length}/6
@@ -356,7 +356,7 @@ export function NetworkProfile() {
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
               <h3 className="font-semibold" style={{ color: 'var(--color-text)' }}>
-                Hobbies & Interests
+                Hobbies & interests
               </h3>
               <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textMuted)' }}>
                 {catalogData.hobbies.length}/10
@@ -420,7 +420,7 @@ export function NetworkProfile() {
         isOpen={showHobbyModal}
         onClose={() => setShowHobbyModal(false)}
         size="lg"
-        title="Select Your Hobbies"
+        title="Select your hobbies"
       >
         <div className="p-4">
           {/* Category Tabs */}
@@ -451,7 +451,7 @@ export function NetworkProfile() {
                 className="text-sm hover:underline"
                 style={{ color: 'var(--color-accent)' }}
               >
-                Clear All
+                Clear all
               </button>
             )}
           </div>
@@ -497,7 +497,7 @@ export function NetworkProfile() {
                   Saving...
                 </>
               ) : (
-                'Save Hobbies'
+                'Save hobbies'
               )}
             </Button>
           </div>
@@ -509,7 +509,7 @@ export function NetworkProfile() {
         isOpen={showPhotoModal}
         onClose={() => setShowPhotoModal(false)}
         size="sm"
-        title="Add Photo"
+        title="Add photo"
       >
         <div className="p-6 text-center">
           <div

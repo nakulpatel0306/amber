@@ -213,7 +213,7 @@ export function NetworkPeople() {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold font-display flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Users className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Community Members
+            Community members
           </h2>
           <div className="flex items-center gap-3 text-xs" style={{ color: 'var(--color-textMuted)' }}>
             <span>{candidateCount} candidates</span>
@@ -467,7 +467,7 @@ export function NetworkPeople() {
               leftIcon={<Coffee className="w-4 h-4" />}
               onClick={() => { handleRequestChat(selectedPerson); setSelectedPerson(null); }}
             >
-              Request Coffee Chat
+              Request coffee chat
             </Button>
           </div>
         )}

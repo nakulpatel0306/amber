@@ -226,7 +226,7 @@ export function CoffeeChatDetailModal({
               <div>
                 <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
                   <Building2 className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                  Company Overview
+                  Company overview
                 </h3>
                 <div
                   className="p-4 rounded-xl"
@@ -277,7 +277,7 @@ export function CoffeeChatDetailModal({
                 <div>
                   <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
                     <Heart className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                    Culture Values
+                    Culture values
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {employerDetails.culture_values.map((value, idx) => (
@@ -350,7 +350,7 @@ export function CoffeeChatDetailModal({
               <div>
                 <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
                   <User className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                  Profile Overview
+                  Profile overview
                 </h3>
                 <div
                   className="p-4 rounded-xl"
@@ -405,7 +405,7 @@ export function CoffeeChatDetailModal({
                   <div>
                     <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
                       <Sparkles className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                      Personality Archetype
+                      Personality archetype
                     </h3>
                     <div
                       className="p-4 rounded-xl"
@@ -444,7 +444,7 @@ export function CoffeeChatDetailModal({
               <div>
                 <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
                   <Target className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                  Personality Traits
+                  Personality traits
                 </h3>
                 <div
                   className="p-4 rounded-xl space-y-3"
@@ -478,7 +478,7 @@ export function CoffeeChatDetailModal({
                 <div>
                   <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
                     <Star className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                    Top Traits
+                    Top traits
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {candidateDetails.top_traits.map((trait, idx) => (
@@ -523,7 +523,7 @@ export function CoffeeChatDetailModal({
                 <div>
                   <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
                     <Heart className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                    Hobbies & Interests
+                    Hobbies & interests
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {candidateDetails.hobbies.map((hobbyId, idx) => {
@@ -561,7 +561,7 @@ export function CoffeeChatDetailModal({
           </Button>
           {onFeedback && (
             <Button variant="outline" leftIcon={<Star className="w-4 h-4" />} onClick={onFeedback}>
-              Leave Feedback
+              Leave feedback
             </Button>
           )}
           {onMessage && (

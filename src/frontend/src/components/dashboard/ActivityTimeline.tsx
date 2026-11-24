@@ -94,7 +94,7 @@ export function ActivityTimeline({ matchCount, chatCount, connectionCount }: Act
         className="text-sm font-semibold mb-4"
         style={{ color: 'var(--color-text)' }}
       >
-        Recent Activity
+        Recent activity
       </h3>
 
       <div className="space-y-0">

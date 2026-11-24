@@ -66,7 +66,7 @@ interface CultureData {
 const EMPLOYER_ADDITIONAL_ASSESSMENTS = [
   {
     id: 'team-dynamics',
-    name: 'Team Dynamics',
+    name: 'Team dynamics',
     description: 'Collaboration, communication, and conflict handling style.',
     icon: Users,
     color: 'var(--color-trait-extraversion)',
@@ -77,7 +77,7 @@ const EMPLOYER_ADDITIONAL_ASSESSMENTS = [
   },
   {
     id: 'leadership-style',
-    name: 'Leadership & Management',
+    name: 'Leadership & management',
     description: 'Management philosophy, feedback culture, and decision authority.',
     icon: Award,
     color: 'var(--color-trait-openness)',
@@ -88,7 +88,7 @@ const EMPLOYER_ADDITIONAL_ASSESSMENTS = [
   },
   {
     id: 'growth-philosophy',
-    name: 'Growth & Development',
+    name: 'Growth & development',
     description: 'Learning culture, mentorship, and career path philosophy.',
     icon: Rocket,
     color: 'var(--color-trait-conscientiousness)',
@@ -99,7 +99,7 @@ const EMPLOYER_ADDITIONAL_ASSESSMENTS = [
   },
   {
     id: 'work-environment',
-    name: 'Work Environment & Pace',
+    name: 'Work environment & pace',
     description: 'Remote/hybrid preferences, work-life balance, and urgency culture.',
     icon: Building2,
     color: 'var(--color-trait-stability)',
@@ -126,7 +126,7 @@ const DIMENSION_INFO: Record<string, {
 }> = {
   openness: {
     label: 'Openness',
-    fullLabel: 'Openness to Experience',
+    fullLabel: 'Openness to experience',
     shortDesc: 'Creativity & curiosity',
     description: 'Your preference for candidates who are intellectually curious, creative, and open to new ideas. High scores attract innovative thinkers who thrive with ambiguity.',
     workplaceImpact: 'Candidates strong in openness excel in roles requiring creative problem-solving, innovation, and adapting to change.',
@@ -222,7 +222,7 @@ const DIMENSION_INFO: Record<string, {
   },
   neuroticism: {
     label: 'Stability',
-    fullLabel: 'Emotional Stability',
+    fullLabel: 'Emotional stability',
     shortDesc: 'Resilience & composure',
     description: 'Your preference for emotionally stable, resilient candidates. High stability scores attract calm performers who handle pressure well.',
     workplaceImpact: 'Emotional stability influences how candidates handle stress, criticism, and high-pressure situations.',
@@ -408,14 +408,14 @@ export function CultureInsights() {
             <Building2 className="w-10 h-10" style={{ color: 'var(--color-trait-openness)' }} />
           </div>
           <h1 className="text-3xl font-serif font-normal tracking-tight mb-4" style={{ color: 'var(--color-text)' }}>
-            Define Your Culture
+            Define your culture
           </h1>
           <p className="mb-6 max-w-sm mx-auto" style={{ color: 'var(--color-textSecondary)' }}>
             Take the culture assessment to define your ideal candidate profile and start matching with compatible talent.
           </p>
           <Link to="/app/employer/culture-assessment">
             <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>
-              Start Assessment
+              Start assessment
             </Button>
           </Link>
         </div>
@@ -467,7 +467,7 @@ export function CultureInsights() {
 
   const handleAssessmentClick = (assessmentId: string, isCompleted: boolean, cooldown: number | null | undefined) => {
     if (isCompleted && cooldown !== null && cooldown !== undefined && cooldown > 0) {
-      showError('Cooldown Active', `You can retake this in ${Math.ceil(cooldown / (1000 * 60 * 60 * 24))} days`);
+      showError('Cooldown active', `You can retake this in ${Math.ceil(cooldown / (1000 * 60 * 60 * 24))} days`);
       return;
     }
     navigate(`/app/employer/assessments/${assessmentId}`);
@@ -496,26 +496,26 @@ export function CultureInsights() {
   const sortedPrefs = Object.entries(preferences).sort((a, b) => b[1] - a[1]);
   // Derive operating style
   const decisionStyle = preferences.openness > 60 && preferences.conscientiousness > 60
-    ? 'Data-Informed Innovation'
+    ? 'Data-informed innovation'
     : preferences.openness > 60
-    ? 'Intuition-Led'
+    ? 'Intuition-led'
     : preferences.conscientiousness > 60
-    ? 'Data-Driven'
-    : 'Balanced Analysis';
+    ? 'Data-driven'
+    : 'Balanced analysis';
 
   const communicationStyle = preferences.extraversion > 60 && preferences.agreeableness > 60
-    ? 'Open & Supportive'
+    ? 'Open & supportive'
     : preferences.extraversion > 60
-    ? 'Direct & Energetic'
+    ? 'Direct & energetic'
     : preferences.agreeableness > 60
-    ? 'Thoughtful & Caring'
-    : 'Balanced Dialogue';
+    ? 'Thoughtful & caring'
+    : 'Balanced dialogue';
 
   const teamDynamic = preferences.extraversion > 60
-    ? 'Collaborative-First'
+    ? 'Collaborative-first'
     : preferences.conscientiousness > 60
-    ? 'Structured & Focused'
-    : 'Flexible Hybrid';
+    ? 'Structured & focused'
+    : 'Flexible hybrid';
 
   // Energy map: what attracts vs repels talent
   const attractors: string[] = [];
@@ -532,11 +532,11 @@ export function CultureInsights() {
 
   // Culture strengths (top dimensions) & growth areas (bottom dimensions)
   const dimensionMeta: { key: string; icon: React.ElementType; strengthLabel: string; strengthDesc: string; gapLabel: string; gapDesc: string; color: string }[] = [
-    { key: 'openness', icon: Lightbulb, strengthLabel: 'Innovation-First', strengthDesc: 'Your culture prizes creative thinking and new approaches', gapLabel: 'Innovation Opportunities', gapDesc: 'Creating more space for creative experimentation could attract diverse thinkers', color: 'var(--color-trait-openness)' },
-    { key: 'conscientiousness', icon: Target, strengthLabel: 'Results-Driven', strengthDesc: 'Clear accountability and high performance standards', gapLabel: 'Structure Opportunities', gapDesc: 'Adding clearer goals and processes could boost team performance', color: 'var(--color-trait-conscientiousness)' },
-    { key: 'extraversion', icon: Users, strengthLabel: 'Highly Collaborative', strengthDesc: 'Strong team dynamics and open communication', gapLabel: 'Collaboration Opportunities', gapDesc: 'More team interaction and social touchpoints could enhance outcomes', color: 'var(--color-trait-extraversion)' },
-    { key: 'agreeableness', icon: Heart, strengthLabel: 'People-First', strengthDesc: 'Empathy and support are core to your culture', gapLabel: 'Empathy Opportunities', gapDesc: 'More emphasis on interpersonal warmth could improve retention', color: 'var(--color-trait-agreeableness)' },
-    { key: 'neuroticism', icon: Shield, strengthLabel: 'Resilient & Steady', strengthDesc: 'Calm under pressure with consistent performance', gapLabel: 'Resilience Opportunities', gapDesc: 'Building stress-management practices could strengthen your team', color: 'var(--color-trait-stability)' },
+    { key: 'openness', icon: Lightbulb, strengthLabel: 'Innovation-first', strengthDesc: 'Your culture prizes creative thinking and new approaches', gapLabel: 'Innovation opportunities', gapDesc: 'Creating more space for creative experimentation could attract diverse thinkers', color: 'var(--color-trait-openness)' },
+    { key: 'conscientiousness', icon: Target, strengthLabel: 'Results-driven', strengthDesc: 'Clear accountability and high performance standards', gapLabel: 'Structure opportunities', gapDesc: 'Adding clearer goals and processes could boost team performance', color: 'var(--color-trait-conscientiousness)' },
+    { key: 'extraversion', icon: Users, strengthLabel: 'Highly collaborative', strengthDesc: 'Strong team dynamics and open communication', gapLabel: 'Collaboration opportunities', gapDesc: 'More team interaction and social touchpoints could enhance outcomes', color: 'var(--color-trait-extraversion)' },
+    { key: 'agreeableness', icon: Heart, strengthLabel: 'People-first', strengthDesc: 'Empathy and support are core to your culture', gapLabel: 'Empathy opportunities', gapDesc: 'More emphasis on interpersonal warmth could improve retention', color: 'var(--color-trait-agreeableness)' },
+    { key: 'neuroticism', icon: Shield, strengthLabel: 'Resilient & steady', strengthDesc: 'Calm under pressure with consistent performance', gapLabel: 'Resilience opportunities', gapDesc: 'Building stress-management practices could strengthen your team', color: 'var(--color-trait-stability)' },
   ];
 
   const cultureStrengths: { icon: React.ElementType; label: string; desc: string; color: string }[] = [];
@@ -553,22 +553,22 @@ export function CultureInsights() {
 
   // Compatibility signals
   const hiringPace = preferences.extraversion > 60 && preferences.conscientiousness > 60
-    ? 'Rapid & Structured'
+    ? 'Rapid & structured'
     : preferences.extraversion > 60
-    ? 'Fast & Dynamic'
+    ? 'Fast & dynamic'
     : preferences.conscientiousness > 60
-    ? 'Methodical & Steady'
-    : 'Flexible & Adaptive';
+    ? 'Methodical & steady'
+    : 'Flexible & adaptive';
 
   const idealCandidateType = sortedPrefs[0][0] === 'openness'
-    ? 'Creative Visionaries & Problem-Solvers'
+    ? 'Creative visionaries & problem-solvers'
     : sortedPrefs[0][0] === 'conscientiousness'
-    ? 'Disciplined Achievers & Organizers'
+    ? 'Disciplined achievers & organizers'
     : sortedPrefs[0][0] === 'extraversion'
-    ? 'Energetic Collaborators & Communicators'
+    ? 'Energetic collaborators & communicators'
     : sortedPrefs[0][0] === 'agreeableness'
-    ? 'Empathetic Team Players & Mediators'
-    : 'Steady Performers & Resilient Anchors';
+    ? 'Empathetic team players & mediators'
+    : 'Steady performers & resilient anchors';
 
   // Personality facts (reuse for employer context)
   const personalityFacts = getFactsForProfile(preferences, 4);
@@ -597,7 +597,7 @@ export function CultureInsights() {
               {([
                 { label: 'Strongest', value: DIMENSION_INFO[sortedPrefs[0]?.[0]]?.label || 'Openness', color: 'var(--color-trait-openness)', Icon: Brain },
                 { label: 'Style', value: decisionStyle, color: 'var(--color-trait-conscientiousness)', Icon: Compass },
-                { label: 'Top Score', value: `${sortedPrefs[0]?.[1] || 0}%`, color: '#f59e0b', Icon: TrendingUp },
+                { label: 'Top score', value: `${sortedPrefs[0]?.[1] || 0}%`, color: '#f59e0b', Icon: TrendingUp },
               ] as const).map(stat => (
                 <span key={stat.label} className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full text-[11px] font-semibold"
                   style={{ background: `linear-gradient(135deg, ${stat.color}18, ${stat.color}08)`, border: `1px solid ${stat.color}30`, color: 'var(--color-text)' }}>
@@ -637,7 +637,7 @@ export function CultureInsights() {
           >
             <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
               <Brain className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              Ideal Candidate Profile
+              Ideal candidate profile
             </h2>
             {completionCount > 1 && (
               <p className="text-xs mb-3 flex items-center gap-1.5" style={{ color: 'var(--color-accent)' }}>
@@ -679,7 +679,7 @@ export function CultureInsights() {
               <div>
                 <h2 className="text-base font-bold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
                   <Layers className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-                  Preference Breakdown
+                  Preference breakdown
                 </h2>
                 <div className="space-y-4">
                   {(Object.entries(DIMENSION_INFO) as [string, typeof DIMENSION_INFO[string]][]).map(([key, info]) => (
@@ -747,7 +747,7 @@ export function CultureInsights() {
         >
           <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Sparkles className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Your Culture Archetypes
+            Your culture archetypes
           </h2>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4" style={{ color: 'var(--color-textMuted)' }}>
             Attract, Retain, Develop //
@@ -792,13 +792,13 @@ export function CultureInsights() {
         >
           <h2 className="text-base font-bold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Puzzle className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Operating Style
+            Operating style
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { icon: Brain, label: 'Decision Making', value: decisionStyle, color: 'var(--color-trait-openness)' },
+              { icon: Brain, label: 'Decision-making', value: decisionStyle, color: 'var(--color-trait-openness)' },
               { icon: MessageCircle, label: 'Communication', value: communicationStyle, color: 'var(--color-trait-conscientiousness)' },
-              { icon: Users, label: 'Team Dynamic', value: teamDynamic, color: 'var(--color-trait-extraversion)' },
+              { icon: Users, label: 'Team dynamic', value: teamDynamic, color: 'var(--color-trait-extraversion)' },
             ].map((item) => (
               <div key={item.label} className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
                 <div className="flex items-center gap-2 mb-2">
@@ -820,12 +820,12 @@ export function CultureInsights() {
         >
           <h2 className="text-base font-bold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Battery className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Hiring Energy Map
+            Hiring energy map
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: 'var(--color-trait-conscientiousness)' }}>
-                <Zap className="w-4 h-4" /> What Attracts Talent
+                <Zap className="w-4 h-4" /> What attracts talent
               </p>
               <div className="space-y-2">
                 {attractors.map((item, i) => (
@@ -838,7 +838,7 @@ export function CultureInsights() {
             </div>
             <div>
               <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: '#EF4444' }}>
-                <Battery className="w-4 h-4" /> What May Repel Talent
+                <Battery className="w-4 h-4" /> What may repel talent
               </p>
               <div className="space-y-2">
                 {repellers.map((item, i) => (
@@ -861,34 +861,34 @@ export function CultureInsights() {
         >
           <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Building2 className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            The Environment You Create
+            The environment you create
           </h2>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4" style={{ color: 'var(--color-textMuted)' }}>
-            Culture Environment //
+            Culture environment //
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               {
                 icon: preferences.openness > 60 ? Palette : Shield,
-                label: preferences.openness > 60 ? 'Innovation-Driven' : 'Stability-Focused',
+                label: preferences.openness > 60 ? 'Innovation-driven' : 'Stability-focused',
                 desc: preferences.openness > 60 ? 'Encourages creativity' : 'Values consistency',
                 color: 'var(--color-trait-openness)',
               },
               {
                 icon: preferences.conscientiousness > 60 ? Target : Compass,
-                label: preferences.conscientiousness > 60 ? 'Goal-Oriented' : 'Flexible Goals',
+                label: preferences.conscientiousness > 60 ? 'Goal-oriented' : 'Flexible goals',
                 desc: preferences.conscientiousness > 60 ? 'Clear metrics' : 'Adaptive objectives',
                 color: 'var(--color-trait-conscientiousness)',
               },
               {
                 icon: preferences.extraversion > 60 ? Users : Focus,
-                label: preferences.extraversion > 60 ? 'Team-Centric' : 'Focus-Centric',
+                label: preferences.extraversion > 60 ? 'Team-centric' : 'Focus-Centric',
                 desc: preferences.extraversion > 60 ? 'Collaborative work' : 'Independent work',
                 color: 'var(--color-trait-extraversion)',
               },
               {
                 icon: preferences.agreeableness > 60 ? Heart : Award,
-                label: preferences.agreeableness > 60 ? 'People-First' : 'Results-First',
+                label: preferences.agreeableness > 60 ? 'People-first' : 'Results-first',
                 desc: preferences.agreeableness > 60 ? 'Relationships matter' : 'Outcomes matter',
                 color: 'var(--color-trait-agreeableness)',
               },
@@ -913,7 +913,7 @@ export function CultureInsights() {
         >
           <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Leaf className="w-5 h-5" style={{ color: 'var(--color-trait-conscientiousness)' }} />
-            Growth Edges
+            Growth edges
           </h2>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4" style={{ color: 'var(--color-textMuted)' }}>
             Room to Grow //
@@ -956,7 +956,7 @@ export function CultureInsights() {
           >
             <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
               <TrendingUp className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              Culture Strengths & Growth Areas
+              Culture strengths & growth areas
             </h2>
             <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4" style={{ color: 'var(--color-textMuted)' }}>
               Strengths & Growth Areas //
@@ -988,7 +988,7 @@ export function CultureInsights() {
               {cultureGaps.length > 0 && (
                 <div>
                   <p className="text-sm font-medium mb-3" style={{ color: 'var(--color-trait-extraversion)' }}>
-                    Growth Areas
+                    Growth areas
                   </p>
                   <div className="space-y-3">
                     {cultureGaps.map((item, i) => (
@@ -1021,34 +1021,34 @@ export function CultureInsights() {
         >
           <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Rocket className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Compatibility Signals
+            Compatibility signals
           </h2>
           <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3" style={{ color: 'var(--color-textMuted)' }}>
             Candidate & Culture Fit //
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Hiring Pace</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Hiring pace</p>
               <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>{hiringPace}</p>
             </div>
             <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Ideal Candidates</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Ideal candidates</p>
               <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>{idealCandidateType}</p>
             </div>
             <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Work Pace</p>
+              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Work pace</p>
               <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
                 {(preferences.extraversion + preferences.openness) / 2 > 60
-                  ? 'Fast-Paced & Dynamic'
+                  ? 'Fast-paced & dynamic'
                   : (preferences.extraversion + preferences.openness) / 2 < 40
-                  ? 'Measured & Thoughtful'
-                  : 'Balanced Rhythm'}
+                  ? 'Measured & thoughtful'
+                  : 'Balanced rhythm'}
               </p>
             </div>
           </div>
           <Link to="/app/employer/candidates">
             <Button variant="outline" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
-              Browse Candidates
+              Browse candidates
             </Button>
           </Link>
         </motion.div>
@@ -1063,7 +1063,7 @@ export function CultureInsights() {
           >
             <h2 className="text-base font-bold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
               <Sparkles className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              Your Culture Values
+              Your culture values
             </h2>
             <div className="flex flex-wrap gap-3">
               {cultureData.culture_values.map((value, index) => {
@@ -1093,11 +1093,11 @@ export function CultureInsights() {
         >
           <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Rocket className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Enhance Your Culture Profile
+            Enhance your culture profile
           </h2>
           <div className="flex items-center justify-between mb-4">
             <p className="font-mono text-[10px] uppercase tracking-[0.25em]" style={{ color: 'var(--color-textMuted)' }}>
-              Deeper Culture Insights //
+              Deeper culture insights //
             </p>
             <ProfileCompleteness completedCount={completionCount} variant="ring" size="sm" showLabel={false} />
           </div>
@@ -1183,7 +1183,7 @@ export function CultureInsights() {
           <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-textMuted)' }} />
           <div>
             <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-text)' }}>
-              About Culture Matching
+              About culture matching
             </p>
             <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
               This profile is based on the Big Five (OCEAN) model. We use these preferences alongside skills and experience to suggest compatible candidates — never as a sole deciding factor.
@@ -1198,12 +1198,12 @@ export function CultureInsights() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
         >
-          <h3 className="text-base font-bold tracking-tight mb-2" style={{ color: 'var(--color-text)' }}>Ready to Find Your Matches?</h3>
+          <h3 className="text-base font-bold tracking-tight mb-2" style={{ color: 'var(--color-text)' }}>Ready to find your matches?</h3>
           <p className="text-sm mb-4" style={{ color: 'var(--color-textSecondary)' }}>
             Discover candidates whose personality aligns with your culture
           </p>
           <Link to="/app/employer/candidates">
-            <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>Browse Candidates</Button>
+            <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>Browse candidates</Button>
           </Link>
         </motion.div>
       </div>
@@ -1244,13 +1244,13 @@ function DimensionDetail({
       <p className="text-sm mt-3 mb-3" style={{ color: 'var(--color-textSecondary)' }}>{info.description}</p>
 
       <div className="p-3 rounded-lg mb-4" style={{ backgroundColor: 'var(--color-background)' }}>
-        <p className="text-xs font-medium mb-1" style={{ color: 'var(--color-text)' }}>Hiring Impact</p>
+        <p className="text-xs font-medium mb-1" style={{ color: 'var(--color-text)' }}>Hiring impact</p>
         <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>{info.workplaceImpact}</p>
       </div>
 
       <div className="flex-1 overflow-auto">
         <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
-          Candidates You Attract
+          Candidates you attract
         </h3>
         <ul className="space-y-1.5 mb-4">
           {(score >= 50 ? info.highCandidates : info.lowCandidates).map((trait, i) => (
@@ -1261,14 +1261,14 @@ function DimensionDetail({
           ))}
         </ul>
 
-        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Ideal Roles</h3>
+        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Ideal roles</h3>
         <div className="flex flex-wrap gap-1.5 mb-4">
           {info.idealFor.map((role, i) => (
             <span key={i} className="px-2 py-1 rounded-md text-xs" style={{ backgroundColor: `${info.color}15`, color: info.color }}>{role}</span>
           ))}
         </div>
 
-        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Candidate Types</h3>
+        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Candidate types</h3>
         <div className="flex flex-wrap gap-1.5">
           {info.candidateTypes.map((type, i) => (
             <span key={i} className="px-2 py-1 rounded-md text-xs" style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textSecondary)' }}>{type}</span>

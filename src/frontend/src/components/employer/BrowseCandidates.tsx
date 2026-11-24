@@ -78,7 +78,7 @@ interface CandidateMatch {
 }
 
 const statusOptions = [
-  { value: 'all', label: 'All Status' },
+  { value: 'all', label: 'All status' },
   { value: 'new', label: 'New' },
   { value: 'reviewed', label: 'Reviewed' },
   { value: 'shortlisted', label: 'Shortlisted' },
@@ -309,7 +309,7 @@ export function BrowseCandidates() {
       <div className="max-w-7xl mx-auto px-6 py-8 text-center">
         <Users className="w-16 h-16 mx-auto mb-4" style={{ color: 'var(--color-textMuted)' }} />
         <h2 className="text-xl font-semibold mb-2" style={{ color: 'var(--color-text)' }}>
-          Complete Your Profile
+          Complete your profile
         </h2>
         <p style={{ color: 'var(--color-textMuted)' }}>
           Please complete your employer profile to browse candidates.
@@ -326,7 +326,7 @@ export function BrowseCandidates() {
           className="text-3xl font-serif font-normal tracking-tight mb-3"
           style={{ color: 'var(--color-text)' }}
         >
-          Browse Candidates
+          Browse candidates
         </h1>
         <p style={{ color: 'var(--color-textSecondary)' }}>
           Candidates ranked by culture fit for your company
@@ -382,7 +382,7 @@ export function BrowseCandidates() {
                 color: 'var(--color-text)',
               }}
             >
-              <option value="all">All Roles</option>
+              <option value="all">All roles</option>
               {roles.map(role => (
                 <option key={role.id} value={role.id}>
                   {role.title}
@@ -604,7 +604,7 @@ export function BrowseCandidates() {
                         className="text-xs"
                         style={{ color: 'var(--color-textMuted)' }}
                       >
-                        Culture Fit
+                        Culture fit
                       </p>
                     </div>
                   </div>
@@ -674,7 +674,7 @@ export function BrowseCandidates() {
                           }
                         }}
                       >
-                        Request Coffee Chat
+                        Request coffee chat
                       </Button>
                     </div>
 
@@ -685,7 +685,7 @@ export function BrowseCandidates() {
                           borderColor: 'var(--color-border)',
                           color: 'var(--color-textMuted)',
                         }}
-                        title="Mark As Reviewed"
+                        title="Mark as reviewed"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleStatusChange(match.candidate.id, 'reviewed');
@@ -719,7 +719,7 @@ export function BrowseCandidates() {
       {/* Load More */}
       {filteredCandidates.length > 0 && filteredCandidates.length >= 10 && (
         <div className="text-center mt-8">
-          <Button variant="outline">Load More Candidates</Button>
+          <Button variant="outline">Load more candidates</Button>
         </div>
       )}
     </div>

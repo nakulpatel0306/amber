@@ -245,7 +245,7 @@ export function NetworkDiscover({ isCandidate }: Props) {
                 {myArchetype.emoji}
               </div>
               <div>
-                <p className="text-[11px] font-medium uppercase tracking-wider" style={{ color: 'var(--color-textMuted)' }}>Your Archetype</p>
+                <p className="text-[11px] font-medium uppercase tracking-wider" style={{ color: 'var(--color-textMuted)' }}>Your archetype</p>
                 <p className="text-base font-bold" style={{ color: 'var(--color-text)' }}>{myArchetype.name}</p>
               </div>
             </div>
@@ -255,7 +255,7 @@ export function NetworkDiscover({ isCandidate }: Props) {
               { label: 'Members', value: stats.memberCount, icon: Users, color: 'var(--color-accent)' },
               { label: 'Connections', value: stats.connectionCount, icon: Link2, color: '#10B981' },
               { label: 'Chats this week', value: stats.chatsThisWeek, icon: Coffee, color: '#8B5CF6' },
-              { label: 'Open Roles', value: stats.openRolesCount, icon: Briefcase, color: '#06B6D4' },
+              { label: 'Open roles', value: stats.openRolesCount, icon: Briefcase, color: '#06B6D4' },
             ].map(stat => (
               <div key={stat.label}>
                 <div className="flex items-center gap-1.5 mb-1">
@@ -278,7 +278,7 @@ export function NetworkDiscover({ isCandidate }: Props) {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold font-display flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
               <Zap className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              Latest Roles
+              Latest roles
             </h2>
             <button
               onClick={() => setSearchParams({ tab: 'roles' })}
@@ -365,7 +365,7 @@ export function NetworkDiscover({ isCandidate }: Props) {
           <div className="p-6 rounded-xl border" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
             <h3 className="text-lg font-semibold font-display flex items-center gap-2 mb-4" style={{ color: 'var(--color-text)' }}>
               <TrendingUp className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              Recent Activity
+              Recent activity
             </h3>
             {recentActivity.length === 0 ? (
               <p className="text-xs py-4 text-center" style={{ color: 'var(--color-textMuted)' }}>No recent activity</p>
@@ -402,14 +402,14 @@ export function NetworkDiscover({ isCandidate }: Props) {
             <div className="w-11 h-11 rounded-xl mx-auto mb-3 flex items-center justify-center" style={{ backgroundColor: 'color-mix(in srgb, var(--color-accentText) 20%, transparent)' }}>
               <Mic className="w-5 h-5" style={{ color: 'var(--color-accentText)' }} />
             </div>
-            <h3 className="text-sm font-bold text-white mb-1">Practice Your Pitch</h3>
+            <h3 className="text-sm font-bold text-white mb-1">Practice your pitch</h3>
             <p className="text-xs text-white/75 mb-4">Sharpen your intro with AI coaching</p>
             <Button
               size="sm"
               onClick={() => navigate('/app/practice')}
               className="!bg-white !text-[var(--color-accent)] font-semibold hover:!bg-white/90"
             >
-              Start Practicing
+              Start practicing
             </Button>
           </div>
         </div>
@@ -421,7 +421,7 @@ export function NetworkDiscover({ isCandidate }: Props) {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold font-display flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
               <Building2 className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              Featured Companies
+              Featured companies
             </h2>
             <button
               onClick={() => setSearchParams({ tab: 'companies' })}
@@ -476,7 +476,7 @@ export function NetworkDiscover({ isCandidate }: Props) {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold font-display flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
               <Sparkles className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              People You Should Meet
+              People you should meet
             </h2>
             <button
               onClick={() => setSearchParams({ tab: 'people' })}

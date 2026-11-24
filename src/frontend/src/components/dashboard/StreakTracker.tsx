@@ -38,9 +38,9 @@ function daysBetween(a: string, b: string) {
 const WEEK_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 const GOAL_LABELS: Record<StreakGoal, string> = {
-  7: '7-Day Streak',
-  14: '14-Day Streak',
-  30: '30-Day Streak',
+  7: '7-Day streak',
+  14: '14-Day streak',
+  30: '30-Day streak',
 };
 
 const CELEBRATION_MSG: Record<StreakGoal, string> = {
@@ -392,7 +392,7 @@ export function StreakTracker() {
           className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1.5"
           style={{ color: 'var(--color-textMuted)' }}
         >
-          This Week
+          This week
         </p>
         <div className="flex items-center gap-1">
           {weekDots.map((active, i) => (

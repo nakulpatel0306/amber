@@ -86,7 +86,7 @@ export function AssessmentResults() {
 
   return (
     <AssessmentResultsTemplate
-      title="Assessment Complete!"
+      title="Assessment complete!"
       subtitle="Your personality profile has been created"
       dimensions={dimensions}
       enhancedMessage="Your OCEAN profile is now active. Employers can discover you based on culture fit."
@@ -94,8 +94,8 @@ export function AssessmentResults() {
       accentColor="#8B5CF6"
       profileUrl="/app/insights"
       matchesUrl="/app/matches"
-      profileLabel="View Insights"
-      matchesLabel="Find Matches"
+      profileLabel="View insights"
+      matchesLabel="Find matches"
     />
   );
 }

@@ -89,7 +89,7 @@ export function ProfileSidebar() {
     try {
       const result = await seedMyProfile(user.id, { photoCount: 4, hobbyCount: 6 });
       if (result.success) {
-        showSuccess('Test Data Added', 'Random photos and hobbies have been added');
+        showSuccess('Test data added', 'Random photos and hobbies have been added');
         loadCatalogData();
       } else {
         showError('Error', result.error || 'Failed to seed test data');
@@ -114,7 +114,7 @@ export function ProfileSidebar() {
       if (error) throw error;
 
       setCatalogData(prev => ({ ...prev, hobbies }));
-      showSuccess('Hobbies Updated', 'Your hobbies have been saved');
+      showSuccess('Hobbies updated', 'Your hobbies have been saved');
     } catch (err) {
       console.error('Error saving hobbies:', err);
       showError('Error', 'Failed to save hobbies');
@@ -139,7 +139,7 @@ export function ProfileSidebar() {
         return prev.filter(h => h !== hobbyId);
       }
       if (prev.length >= 10) {
-        showError('Limit Reached', 'You can select up to 10 hobbies');
+        showError('Limit reached', 'You can select up to 10 hobbies');
         return prev;
       }
       return [...prev, hobbyId];
@@ -151,17 +151,17 @@ export function ProfileSidebar() {
     if (!file || !user) return;
 
     if (catalogData.photos.length >= 6) {
-      showError('Limit Reached', 'You can upload up to 6 photos');
+      showError('Limit reached', 'You can upload up to 6 photos');
       return;
     }
 
     if (!file.type.startsWith('image/')) {
-      showError('Invalid File', 'Please select an image file');
+      showError('Invalid file', 'Please select an image file');
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      showError('File Too Large', 'Image must be under 5MB');
+      showError('File too large', 'Image must be under 5MB');
       return;
     }
 
@@ -190,11 +190,11 @@ export function ProfileSidebar() {
       if (updateError) throw updateError;
 
       setCatalogData(prev => ({ ...prev, photos: newPhotos }));
-      showSuccess('Photo Uploaded', 'Your photo has been added');
+      showSuccess('Photo uploaded', 'Your photo has been added');
       setShowPhotoModal(false);
     } catch (err) {
       console.error('Error uploading photo:', err);
-      showError('Upload Failed', 'Failed to upload photo');
+      showError('Upload failed', 'Failed to upload photo');
     } finally {
       setUploadingPhoto(false);
       if (fileInputRef.current) {
@@ -216,7 +216,7 @@ export function ProfileSidebar() {
       if (error) throw error;
 
       setCatalogData(prev => ({ ...prev, photos: newPhotos }));
-      showSuccess('Photo Removed', 'The photo has been deleted');
+      showSuccess('Photo removed', 'The photo has been deleted');
     } catch (err) {
       console.error('Error removing photo:', err);
       showError('Error', 'Failed to remove photo');
@@ -245,7 +245,7 @@ export function ProfileSidebar() {
           />
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-sm truncate" style={{ color: 'var(--color-text)' }}>
-              {profile?.full_name || 'Your Name'}
+              {profile?.full_name || 'Your name'}
             </h3>
             {catalogData.headline && (
               <p className="text-xs truncate" style={{ color: 'var(--color-accent)' }}>
@@ -414,7 +414,7 @@ export function ProfileSidebar() {
         isOpen={showHobbyModal}
         onClose={() => setShowHobbyModal(false)}
         size="lg"
-        title="Select Your Hobbies"
+        title="Select your hobbies"
       >
         <div className="p-4">
           <div className="flex flex-wrap gap-2 mb-4 pb-4 border-b" style={{ borderColor: 'var(--color-border)' }}>
@@ -443,7 +443,7 @@ export function ProfileSidebar() {
                 className="text-sm hover:underline"
                 style={{ color: 'var(--color-accent)' }}
               >
-                Clear All
+                Clear all
               </button>
             )}
           </div>
@@ -487,7 +487,7 @@ export function ProfileSidebar() {
                   Saving...
                 </>
               ) : (
-                'Save Hobbies'
+                'Save hobbies'
               )}
             </Button>
           </div>
@@ -499,7 +499,7 @@ export function ProfileSidebar() {
         isOpen={showPhotoModal}
         onClose={() => setShowPhotoModal(false)}
         size="sm"
-        title="Add Photo"
+        title="Add photo"
       >
         <div className="p-6 text-center">
           <div

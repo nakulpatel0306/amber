@@ -154,10 +154,6 @@ const employerDailyInsights = [
   },
 ];
 
-function toTitleCase(str: string): string {
-  return str.replace(/\./g, '').replace(/\b\w/g, c => c.toUpperCase());
-}
-
 function getDayOfYear(): number {
   const now = new Date();
   const start = new Date(now.getFullYear(), 0, 0);
@@ -245,7 +241,7 @@ export function CompatibilityInsights({ viewerRole = 'candidate' }: Compatibilit
             className="text-[10px] font-semibold uppercase tracking-widest"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            Your Daily Reading
+            Your daily reading
           </span>
           <Sparkles className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
         </div>
@@ -353,7 +349,7 @@ export function CompatibilityInsights({ viewerRole = 'candidate' }: Compatibilit
                   className="text-[10px] font-semibold uppercase tracking-widest"
                   style={{ color: 'var(--color-textMuted)' }}
                 >
-                  {viewerRole === 'employer' ? 'Daily Culture Reading' : 'Daily Personality Reading'}
+                  {viewerRole === 'employer' ? 'Daily culture reading' : 'Daily personality reading'}
                 </span>
               </div>
 
@@ -384,7 +380,7 @@ export function CompatibilityInsights({ viewerRole = 'candidate' }: Compatibilit
                   className="text-[10px] font-semibold uppercase tracking-widest"
                   style={{ color: 'var(--color-textMuted)' }}
                 >
-                  Your Readings
+                  Your readings
                 </p>
                 <button
                   onClick={refreshReadings}
@@ -420,7 +416,7 @@ export function CompatibilityInsights({ viewerRole = 'candidate' }: Compatibilit
                         color: i === currentIndex ? 'var(--color-accent)' : 'var(--color-text)',
                       }}
                     >
-                      {toTitleCase(insight.short)}
+                      {insight.short}
                     </p>
                   </button>
                 ))}

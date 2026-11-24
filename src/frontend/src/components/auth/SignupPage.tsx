@@ -41,23 +41,23 @@ export function SignupPage() {
     const newErrors: Record<string, string> = {};
 
     if (!fullName.trim()) {
-      newErrors.fullName = 'Name Is Required';
+      newErrors.fullName = 'Name is required';
     }
 
     if (!email) {
-      newErrors.email = 'Email Is Required';
+      newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'Please Enter A Valid Email';
+      newErrors.email = 'Please enter a valid email';
     }
 
     if (!password) {
-      newErrors.password = 'Password Is Required';
+      newErrors.password = 'Password is required';
     } else if (password.length < 8) {
-      newErrors.password = 'Password Must Be At Least 8 Characters';
+      newErrors.password = 'Password must be at least 8 characters';
     }
 
     if (password !== confirmPassword) {
-      newErrors.confirmPassword = 'Passwords Do Not Match';
+      newErrors.confirmPassword = 'Passwords do not match';
     }
 
     setErrors(newErrors);
@@ -116,14 +116,14 @@ export function SignupPage() {
   const roleOptions = [
     {
       id: 'candidate' as const,
-      label: 'I\'m Looking For Jobs',
-      description: 'Find Roles That Match Your Personality And Values',
+      label: 'I\'m looking for jobs',
+      description: 'Find roles that match your personality and values',
       icon: User,
     },
     {
       id: 'employer' as const,
       label: 'I\'m Hiring',
-      description: 'Find Candidates Who Fit Your Company Culture',
+      description: 'Find candidates who fit your company culture',
       icon: Building2,
     },
   ];
@@ -141,7 +141,7 @@ export function SignupPage() {
           style={{ color: 'var(--color-textSecondary)' }}
         >
           <ArrowLeft className="w-4 h-4" />
-          Back To Home
+          Back to home
         </Link>
       </header>
 
@@ -167,15 +167,15 @@ export function SignupPage() {
               className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
               style={{ color: 'var(--color-text)' }}
             >
-              {step === 'role' ? 'Join Amber' : 'Create Your Account'}
+              {step === 'role' ? 'Join Amber' : 'Create your account'}
             </h1>
             <p
               className="text-sm mt-2"
               style={{ color: 'var(--color-textMuted)' }}
             >
               {step === 'role'
-                ? 'How Will You Be Using Amber?'
-                : `Signing Up As ${role === 'candidate' ? 'A Job Seeker' : 'An Employer'}`}
+                ? 'How will you be using Amber?'
+                : `Signing up as ${role === 'candidate' ? 'a job seeker' : 'an employer'}`}
             </p>
           </div>
 
@@ -255,7 +255,7 @@ export function SignupPage() {
                   leftIcon={<Chrome className="w-4 h-4" />}
                   disabled={isLoading}
                 >
-                  Continue With Google
+                  Continue with Google
                 </Button>
                 <Button
                   variant="secondary"
@@ -264,7 +264,7 @@ export function SignupPage() {
                   leftIcon={<Github className="w-4 h-4" />}
                   disabled={isLoading}
                 >
-                  Continue With GitHub
+                  Continue with GitHub
                 </Button>
               </div>
 
@@ -287,7 +287,7 @@ export function SignupPage() {
                       color: 'var(--color-textMuted)',
                     }}
                   >
-                    Or Continue With Email
+                    Or continue with email
                   </span>
                 </div>
               </div>
@@ -295,7 +295,7 @@ export function SignupPage() {
               {/* Email form */}
               <form onSubmit={handleEmailSignUp} className="space-y-4">
                 <Input
-                  label="Full Name"
+                  label="Full name"
                   type="text"
                   value={fullName}
                   onChange={e => setFullName(e.target.value)}
@@ -321,7 +321,7 @@ export function SignupPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={e => setPassword(e.target.value)}
-                  placeholder="At Least 8 Characters"
+                  placeholder="At least 8 characters"
                   leftIcon={<Lock className="w-4 h-4" />}
                   rightIcon={
                     <button
@@ -341,11 +341,11 @@ export function SignupPage() {
                 />
 
                 <Input
-                  label="Confirm Password"
+                  label="Confirm password"
                   type={showPassword ? 'text' : 'password'}
                   value={confirmPassword}
                   onChange={e => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm Your Password"
+                  placeholder="Confirm your password"
                   leftIcon={<Lock className="w-4 h-4" />}
                   error={errors.confirmPassword}
                   disabled={isLoading}
@@ -361,7 +361,7 @@ export function SignupPage() {
                     Back
                   </Button>
                   <Button type="submit" fullWidth isLoading={isLoading || isCheckingEmail}>
-                    Create Account
+                    Create account
                   </Button>
                 </div>
               </form>
@@ -373,13 +373,13 @@ export function SignupPage() {
             className="text-center text-sm mt-6"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            Already Have An Account?{' '}
+            Already have an account?{' '}
             <Link
               to="/auth/login"
               className="font-medium transition-colors"
               style={{ color: 'var(--color-accent)' }}
             >
-              Sign In
+              Sign in
             </Link>
           </p>
         </motion.div>

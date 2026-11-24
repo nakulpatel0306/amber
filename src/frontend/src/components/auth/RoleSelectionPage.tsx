@@ -94,14 +94,14 @@ export function RoleSelectionPage() {
   const roleOptions = [
     {
       id: 'candidate' as const,
-      label: "I'm Looking For Jobs",
-      description: 'Find Roles That Match Your Personality And Values',
+      label: "I'm looking for jobs",
+      description: 'Find roles that match your personality and values',
       icon: User,
     },
     {
       id: 'employer' as const,
-      label: "I'm Hiring",
-      description: 'Find Candidates Who Fit Your Company Culture',
+      label: "I'm hiring",
+      description: 'Find candidates who fit your company culture',
       icon: Building2,
     },
   ];
@@ -123,13 +123,13 @@ export function RoleSelectionPage() {
               className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
               style={{ color: 'var(--color-text)' }}
             >
-              One More Step
+              One more step
             </h1>
             <p
               className="text-sm mt-2"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              How Will You Be Using Amber?
+              How will you be using Amber?
             </p>
           </div>
 

@@ -42,7 +42,7 @@ const COMPANY_SIZES = [
   { id: 'small', label: 'Small (50-200)' },
   { id: 'medium', label: 'Medium (200-1000)' },
   { id: 'large', label: 'Large (1000+)' },
-  { id: 'any', label: 'Any Size' },
+  { id: 'any', label: 'Any size' },
 ];
 
 export function CandidateProfileSection() {
@@ -182,11 +182,11 @@ export function CandidateProfileSection() {
             className="text-base font-semibold"
             style={{ color: 'var(--color-text)' }}
           >
-            Work Profile
+            Work profile
           </h2>
         </div>
         <p className="text-sm mt-1" style={{ color: 'var(--color-textMuted)' }}>
-          Information Visible To Employers When You Apply For Jobs
+          Information visible to employers when you apply for jobs
         </p>
       </div>
 
@@ -197,11 +197,11 @@ export function CandidateProfileSection() {
           style={{ color: 'var(--color-textMuted)' }}
         >
           <User className="w-3.5 h-3.5" style={{ color: '#d97706' }} />
-          Professional Info
+          Professional info
         </h3>
 
         <Input
-          label="Professional Headline"
+          label="Professional headline"
           type="text"
           value={data.headline}
           onChange={(e) => handleChange('headline', e.target.value)}
@@ -237,7 +237,7 @@ export function CandidateProfileSection() {
             placeholder="Select your location"
           />
           <Input
-            label="Years of Experience"
+            label="Years of experience"
             type="number"
             value={data.years_experience?.toString() || ''}
             onChange={(e) => handleChange('years_experience', e.target.value ? parseInt(e.target.value) : null)}
@@ -254,7 +254,7 @@ export function CandidateProfileSection() {
           style={{ color: 'var(--color-textMuted)' }}
         >
           <Building2 className="w-3.5 h-3.5" style={{ color: '#d97706' }} />
-          Work Preferences
+          Work preferences
         </h3>
 
         <div>
@@ -262,7 +262,7 @@ export function CandidateProfileSection() {
             className="block text-sm font-medium mb-2"
             style={{ color: 'var(--color-text)' }}
           >
-            Preferred Work Style
+            Preferred work style
           </label>
           <div className="flex flex-wrap gap-2">
             {WORK_STYLES.map((style) => (
@@ -291,7 +291,7 @@ export function CandidateProfileSection() {
             className="block text-sm font-medium mb-2"
             style={{ color: 'var(--color-text)' }}
           >
-            Preferred Company Size
+            Preferred company size
           </label>
           <div className="flex flex-wrap gap-2">
             {COMPANY_SIZES.map((size) => (
@@ -385,7 +385,7 @@ export function CandidateProfileSection() {
             Reset
           </Button>
           <Button onClick={handleSave} isLoading={isSaving} leftIcon={<Save className="w-4 h-4" />}>
-            Save Changes
+            Save changes
           </Button>
         </div>
       )}

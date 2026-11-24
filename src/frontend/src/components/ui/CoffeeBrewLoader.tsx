@@ -3,10 +3,10 @@ import { createPortal } from 'react-dom';
 import { cn } from '../../utils/cn';
 
 const STEPS = [
-  'Grinding Fresh Beans...',
-  'Heating The Water...',
-  'Brewing Your Perfect Cup...',
-  'Almost Ready...',
+  'Grinding fresh beans...',
+  'Heating the water...',
+  'Brewing your perfect cup...',
+  'Almost ready...',
 ] as const;
 
 const STEP_DURATION = 1800;

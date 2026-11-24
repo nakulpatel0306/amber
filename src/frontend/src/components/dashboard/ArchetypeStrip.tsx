@@ -37,10 +37,6 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?:
   brain: Brain,
 };
 
-function titleCase(str: string): string {
-  return str.replace(/\b\w/g, c => c.toUpperCase());
-}
-
 export function ArchetypeStrip({ personalityScores, topTraits }: ArchetypeStripProps) {
   const primaryArchetype = topTraits[0] ? getArchetypeByName(topTraits[0]) : null;
   if (!primaryArchetype) return null;
@@ -90,7 +86,7 @@ export function ArchetypeStrip({ personalityScores, topTraits }: ArchetypeStripP
         className="text-sm italic mb-3"
         style={{ color: 'var(--color-textSecondary)' }}
       >
-        {titleCase(primaryArchetype.description)}
+        {primaryArchetype.description}
       </p>
 
       {/* Divider */}
@@ -115,7 +111,7 @@ export function ArchetypeStrip({ personalityScores, topTraits }: ArchetypeStripP
         className="font-mono text-xs font-medium transition-opacity hover:opacity-70"
         style={{ color: 'var(--color-accent)' }}
       >
-        View Insights →
+        View insights →
       </Link>
     </motion.div>
   );

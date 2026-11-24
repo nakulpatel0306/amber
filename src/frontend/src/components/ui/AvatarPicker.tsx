@@ -5,34 +5,34 @@ import { cn } from '../../utils/cn';
 // Fun avatar options - mix of animals, expressions, and characters
 const AVATAR_OPTIONS = [
   // Animals
-  { id: 'cat', emoji: '🐱', label: 'Cool Cat' },
-  { id: 'dog', emoji: '🐶', label: 'Good Boy' },
-  { id: 'fox', emoji: '🦊', label: 'Sly Fox' },
-  { id: 'panda', emoji: '🐼', label: 'Chill Panda' },
-  { id: 'koala', emoji: '🐨', label: 'Sleepy Koala' },
-  { id: 'lion', emoji: '🦁', label: 'Brave Lion' },
-  { id: 'unicorn', emoji: '🦄', label: 'Magical Unicorn' },
-  { id: 'owl', emoji: '🦉', label: 'Wise Owl' },
-  { id: 'penguin', emoji: '🐧', label: 'Fancy Penguin' },
-  { id: 'butterfly', emoji: '🦋', label: 'Free Spirit' },
+  { id: 'cat', emoji: '🐱', label: 'Cool cat' },
+  { id: 'dog', emoji: '🐶', label: 'Good boy' },
+  { id: 'fox', emoji: '🦊', label: 'Sly fox' },
+  { id: 'panda', emoji: '🐼', label: 'Chill panda' },
+  { id: 'koala', emoji: '🐨', label: 'Sleepy koala' },
+  { id: 'lion', emoji: '🦁', label: 'Brave lion' },
+  { id: 'unicorn', emoji: '🦄', label: 'Magical unicorn' },
+  { id: 'owl', emoji: '🦉', label: 'Wise owl' },
+  { id: 'penguin', emoji: '🐧', label: 'Fancy penguin' },
+  { id: 'butterfly', emoji: '🦋', label: 'Free spirit' },
 
   // Fun faces
-  { id: 'cool', emoji: '😎', label: 'Too Cool' },
-  { id: 'nerd', emoji: '🤓', label: 'Big Brain' },
+  { id: 'cool', emoji: '😎', label: 'Too cool' },
+  { id: 'nerd', emoji: '🤓', label: 'Big brain' },
   { id: 'wink', emoji: '😉', label: 'Charmer' },
   { id: 'star', emoji: '🤩', label: 'Starstruck' },
-  { id: 'chill', emoji: '😌', label: 'Zen Master' },
-  { id: 'think', emoji: '🤔', label: 'Deep Thinker' },
+  { id: 'chill', emoji: '😌', label: 'Zen master' },
+  { id: 'think', emoji: '🤔', label: 'Deep thinker' },
 
   // Objects & misc
-  { id: 'rocket', emoji: '🚀', label: 'Go-Getter' },
-  { id: 'alien', emoji: '👽', label: 'Out of This World' },
-  { id: 'robot', emoji: '🤖', label: 'Tech Wizard' },
+  { id: 'rocket', emoji: '🚀', label: 'Go-getter' },
+  { id: 'alien', emoji: '👽', label: 'Out of this world' },
+  { id: 'robot', emoji: '🤖', label: 'Tech wizard' },
   { id: 'ghost', emoji: '👻', label: 'Mysterious' },
   { id: 'ninja', emoji: '🥷', label: 'Stealthy' },
   { id: 'astronaut', emoji: '🧑‍🚀', label: 'Explorer' },
-  { id: 'artist', emoji: '🧑‍🎨', label: 'Creative Soul' },
-  { id: 'scientist', emoji: '🧑‍🔬', label: 'Curious Mind' },
+  { id: 'artist', emoji: '🧑‍🎨', label: 'Creative soul' },
+  { id: 'scientist', emoji: '🧑‍🔬', label: 'Curious mind' },
 ];
 
 // Background colors for avatars
@@ -81,7 +81,7 @@ export function AvatarPicker({ selectedAvatar, selectedColor, onSelect, onClose 
       {/* Color selection */}
       <div>
         <p className="text-sm font-medium mb-3" style={{ color: 'var(--color-text)' }}>
-          Background Color
+          Background color
         </p>
         <div className="flex flex-wrap gap-2 justify-center">
           {AVATAR_COLORS.map((color) => (
@@ -103,7 +103,7 @@ export function AvatarPicker({ selectedAvatar, selectedColor, onSelect, onClose 
       {/* Avatar selection */}
       <div>
         <p className="text-sm font-medium mb-3" style={{ color: 'var(--color-text)' }}>
-          Choose Your Avatar
+          Choose your avatar
         </p>
         <div className="grid grid-cols-6 gap-2 max-h-48 overflow-y-auto p-1">
           {AVATAR_OPTIONS.map((avatar) => (
@@ -146,7 +146,7 @@ export function AvatarPicker({ selectedAvatar, selectedColor, onSelect, onClose 
             color: 'white',
           }}
         >
-          Save Avatar
+          Save avatar
         </button>
       </div>
     </div>

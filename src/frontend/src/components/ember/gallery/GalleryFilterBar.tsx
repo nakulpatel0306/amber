@@ -41,15 +41,15 @@ interface GalleryFilterBarProps {
 }
 
 const quickFilters = [
-  { value: 'all', label: 'All Matches' },
+  { value: 'all', label: 'All matches' },
   { value: 'top5', label: 'Top 5' },
   { value: 'top10', label: 'Top 10' },
 ];
 
 const sortOptions: { value: SortOption; label: string }[] = [
-  { value: 'score', label: 'Best Match' },
-  { value: 'culture', label: 'Culture Fit' },
-  { value: 'workstyle', label: 'Work Style' },
+  { value: 'score', label: 'Best match' },
+  { value: 'culture', label: 'Culture fit' },
+  { value: 'workstyle', label: 'Work style' },
   { value: 'recent', label: 'Recent' },
 ];
 
@@ -215,7 +215,7 @@ export function GalleryFilterBar({
                     border: '1px solid var(--color-border)',
                   }}
                 >
-                  <option value="">All Industries</option>
+                  <option value="">All industries</option>
                   {industries.map(i => <option key={i} value={i}>{i}</option>)}
                 </select>
               </div>
@@ -224,7 +224,7 @@ export function GalleryFilterBar({
             {/* Work Style */}
             {mode === 'candidate' && (
               <div>
-                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Work Style</label>
+                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Work style</label>
                 <select
                   value={selectedWorkStyle || ''}
                   onChange={e => onWorkStyleChange?.(e.target.value)}
@@ -235,7 +235,7 @@ export function GalleryFilterBar({
                     border: '1px solid var(--color-border)',
                   }}
                 >
-                  <option value="">All Styles</option>
+                  <option value="">All styles</option>
                   {['remote', 'hybrid', 'onsite', 'flexible'].map(ws => (
                     <option key={ws} value={ws}>{ws.charAt(0).toUpperCase() + ws.slice(1)}</option>
                   ))}
@@ -257,7 +257,7 @@ export function GalleryFilterBar({
                     border: '1px solid var(--color-border)',
                   }}
                 >
-                  <option value="">All Locations</option>
+                  <option value="">All locations</option>
                   {locations.map(l => <option key={l} value={l}>{l}</option>)}
                 </select>
               </div>
@@ -288,7 +288,7 @@ export function GalleryFilterBar({
 
             {/* Score range */}
             <div>
-              <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Min Score</label>
+              <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Min score</label>
               <input
                 type="number"
                 min={0}
@@ -304,7 +304,7 @@ export function GalleryFilterBar({
               />
             </div>
             <div>
-              <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Max Score</label>
+              <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Max score</label>
               <input
                 type="number"
                 min={0}

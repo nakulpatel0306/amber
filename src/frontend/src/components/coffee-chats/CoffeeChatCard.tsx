@@ -176,7 +176,7 @@ export function CoffeeChatCard({
               <div className="flex items-center gap-1.5 mb-2">
                 <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-accent)' }} />
                 <span className="text-xs font-medium" style={{ color: 'var(--color-textSecondary)' }}>
-                  {userRole === 'employer' ? 'Requested Coffee Chat' : 'Preferred Dates'}
+                  {userRole === 'employer' ? 'Requested coffee chat' : 'Preferred dates'}
                 </span>
               </div>
               <div className="flex flex-wrap gap-1.5">
@@ -276,7 +276,7 @@ export function CoffeeChatCard({
             {chat.meeting_link && (
               <a href={chat.meeting_link} target="_blank" rel="noopener noreferrer">
                 <Button size="sm" leftIcon={<ExternalLink className="w-4 h-4" />}>
-                  Join Meeting
+                  Join meeting
                 </Button>
               </a>
             )}
@@ -286,7 +286,7 @@ export function CoffeeChatCard({
               </Button>
             )}
             <Button size="sm" variant="outline" leftIcon={<CheckCircle2 className="w-4 h-4" />} onClick={() => onComplete?.(chat.id)}>
-              Mark Complete
+              Mark complete
             </Button>
           </>
         )}
@@ -294,7 +294,7 @@ export function CoffeeChatCard({
         {/* Completed: Feedback */}
         {chat.status === 'completed' && !chat.rating && (
           <Button size="sm" variant="outline" leftIcon={<Star className="w-4 h-4" />} onClick={() => onFeedback?.(chat.id)}>
-            Leave Feedback
+            Leave feedback
           </Button>
         )}
 
@@ -306,7 +306,7 @@ export function CoffeeChatCard({
             leftIcon={<Sparkles className="w-4 h-4" />}
             onClick={() => onViewMatch(chat.id)}
           >
-            View Match
+            View match
           </Button>
         )}
 
@@ -330,7 +330,7 @@ export function CoffeeChatCard({
             leftIcon={<User className="w-4 h-4" />}
             onClick={() => onViewDetails(chat)}
           >
-            View Profile
+            View profile
           </Button>
         )}
 

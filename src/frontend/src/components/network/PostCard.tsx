@@ -104,7 +104,7 @@ export function PostCard({ post, isOwn, onLike, onDelete }: PostCardProps) {
   const roleBadge = post.user.role === 'employer'
     ? { label: post.user.companyName ? `@ ${post.user.companyName}` : 'Employer', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' }
     : post.user.role === 'job_seeker'
-      ? { label: 'Job Seeker', color: '#22c55e', bg: 'rgba(34, 197, 94, 0.1)' }
+      ? { label: 'Job seeker', color: '#22c55e', bg: 'rgba(34, 197, 94, 0.1)' }
       : null;
 
   const handleLike = useCallback(() => {

@@ -47,7 +47,7 @@ export function Navbar() {
     { path: '/app/insights', label: 'Insights', icon: Sparkles },
     { path: '/app/ember', label: 'Ember', icon: Flame },
     { path: '/app/network', label: 'Community', icon: Users },
-    { path: '/app/chats', label: 'Coffee Chats', icon: Coffee },
+    { path: '/app/chats', label: 'Coffee chats', icon: Coffee },
   ];
 
   const employerNavItems: { path: string; label: string; icon: React.ElementType }[] = [
@@ -55,7 +55,7 @@ export function Navbar() {
     { path: '/app/employer/insights', label: 'Insights', icon: Sparkles },
     { path: '/app/employer/ember', label: 'Ember', icon: Flame },
     { path: '/app/network', label: 'Community', icon: Users },
-    { path: '/app/employer/chats', label: 'Coffee Chats', icon: Coffee },
+    { path: '/app/employer/chats', label: 'Coffee chats', icon: Coffee },
   ];
 
   const navItems = isEmployer ? employerNavItems : candidateNavItems;
@@ -171,7 +171,7 @@ export function Navbar() {
                 icon={<Crown className="w-4 h-4" />}
                 onClick={() => navigate('/app/pricing')}
               >
-                Upgrade Plan
+                Upgrade plan
               </DropdownItem>
               <DropdownItem
                 icon={<Settings className="w-4 h-4" />}
@@ -185,7 +185,7 @@ export function Navbar() {
                 onClick={handleSignOut}
                 danger
               >
-                Sign Out
+                Sign out
               </DropdownItem>
             </Dropdown>
 

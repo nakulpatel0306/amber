@@ -13,25 +13,25 @@ export function QuickActions({ hasCompletedAssessment }: QuickActionsProps) {
       ? [
           {
             icon: Search,
-            label: 'View Matches',
+            label: 'View matches',
             onClick: () => navigate('/app/ember'),
           },
         ]
       : [
           {
             icon: Pencil,
-            label: 'Take Assessment',
+            label: 'Take assessment',
             onClick: () => navigate('/app/personality'),
           },
         ]),
     {
       icon: Search,
-      label: 'Browse Roles',
+      label: 'Browse roles',
       onClick: () => navigate('/app/roles'),
     },
     {
       icon: MessageCircle,
-      label: 'Coffee Chats',
+      label: 'Coffee chats',
       onClick: () => navigate('/app/chats'),
     },
     {
@@ -46,7 +46,7 @@ export function QuickActions({ hasCompletedAssessment }: QuickActionsProps) {
     },
     {
       icon: User,
-      label: 'My Profile',
+      label: 'My profile',
       onClick: () => navigate('/app/settings'),
     },
   ];

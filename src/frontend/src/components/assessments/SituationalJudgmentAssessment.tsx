@@ -90,7 +90,7 @@ export function SituationalJudgmentAssessment() {
           })
           .eq('user_id', user.id);
 
-        showSuccess('Assessment Complete!', 'Your situational judgment results have been added to your profile.');
+        showSuccess('Assessment complete!', 'Your situational judgment results have been added to your profile.');
       } catch (err) {
         console.error('Error saving situational judgment data:', err);
       }
@@ -106,12 +106,12 @@ export function SituationalJudgmentAssessment() {
       { key: 'conscientiousness', label: 'Conscientiousness', value: oceanScores.conscientiousness, color: '#10B981', progressColor: 'green' },
       { key: 'extraversion', label: 'Extraversion', value: oceanScores.extraversion, color: '#F59E0B', progressColor: 'amber' },
       { key: 'agreeableness', label: 'Agreeableness', value: oceanScores.agreeableness, color: '#EC4899', progressColor: 'pink' },
-      { key: 'neuroticism', label: 'Emotional Stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
+      { key: 'neuroticism', label: 'Emotional stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
     ];
 
     return (
       <AssessmentResultsTemplate
-        title="Social Energy Results"
+        title="Social energy results"
         subtitle="Here's what your workplace responses reveal about your behavioral tendencies"
         dimensions={dimensions}
         enhancedMessage="Your situational judgment responses have been factored into your personality profile with a 15% weight, improving the accuracy of your behavioral predictions."
@@ -138,7 +138,7 @@ export function SituationalJudgmentAssessment() {
               <Shield className="w-5 h-5" style={{ color: ACCENT }} />
             </div>
             <div>
-              <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Situational Judgment</h1>
+              <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Situational judgment</h1>
               <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
                 Question {currentQuestion + 1} of {situationalJudgmentQuestions.length}
               </p>

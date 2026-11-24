@@ -58,7 +58,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
     { path: '/app/insights', label: 'Insights', icon: Sparkles },
     { path: '/app/ember', label: 'Ember', icon: Flame },
     { path: '/app/network', label: 'Network', icon: Globe },
-    { path: '/app/chats', label: 'Coffee Chats', icon: Coffee },
+    { path: '/app/chats', label: 'Coffee chats', icon: Coffee },
   ];
 
   const employerNavItems = [
@@ -66,7 +66,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
     { path: '/app/employer/insights', label: 'Insights', icon: Sparkles },
     { path: '/app/employer/ember', label: 'Ember', icon: Flame },
     { path: '/app/network', label: 'Network', icon: Globe },
-    { path: '/app/employer/chats', label: 'Coffee Chats', icon: Coffee },
+    { path: '/app/employer/chats', label: 'Coffee chats', icon: Coffee },
   ];
 
   const navItems = isEmployer ? employerNavItems : candidateNavItems;
@@ -209,7 +209,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
         {/* Sign Out */}
         <button
           onClick={handleSignOut}
-          title={collapsed ? 'Sign Out' : undefined}
+          title={collapsed ? 'Sign out' : undefined}
           className={cn(
             'flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm transition-colors hover:bg-[var(--color-surfaceHover)] whitespace-nowrap overflow-hidden',
             collapsed && 'justify-center px-0'
@@ -220,7 +220,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
           <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">
             <LogOut className="w-[18px] h-[18px]" />
           </div>
-          {!collapsed && 'Sign Out'}
+          {!collapsed && 'Sign out'}
         </button>
       </div>
     </div>

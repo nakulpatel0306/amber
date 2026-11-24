@@ -42,15 +42,15 @@ interface SectionConfig {
 }
 
 const allSections: SectionConfig[] = [
-  { id: 'profile', label: 'Profile', icon: User, description: 'Your Personal Information' },
-  { id: 'work-profile', label: 'Work Profile', icon: Briefcase, description: 'Job Preferences & Experience', candidateOnly: true },
-  { id: 'company-profile', label: 'Company Profile', icon: Building2, description: 'Company Information', employerOnly: true },
-  { id: 'subscription', label: 'Subscription', icon: Crown, description: 'Plan & Billing' },
-  { id: 'notifications', label: 'Notifications', icon: Bell, description: 'Email & Push Preferences' },
-  { id: 'privacy', label: 'Privacy', icon: Shield, description: 'Control Your Visibility' },
-  { id: 'appearance', label: 'Appearance', icon: Palette, description: 'Theme & Display' },
-  { id: 'feedback', label: 'Feedback', icon: MessageSquare, description: 'Report Bugs Or Suggest' },
-  { id: 'account', label: 'Account', icon: Settings, description: 'Password & Security' },
+  { id: 'profile', label: 'Profile', icon: User, description: 'Your personal information' },
+  { id: 'work-profile', label: 'Work profile', icon: Briefcase, description: 'Job preferences & experience', candidateOnly: true },
+  { id: 'company-profile', label: 'Company profile', icon: Building2, description: 'Company information', employerOnly: true },
+  { id: 'subscription', label: 'Subscription', icon: Crown, description: 'Plan & billing' },
+  { id: 'notifications', label: 'Notifications', icon: Bell, description: 'Email & push preferences' },
+  { id: 'privacy', label: 'Privacy', icon: Shield, description: 'Control your visibility' },
+  { id: 'appearance', label: 'Appearance', icon: Palette, description: 'Theme & display' },
+  { id: 'feedback', label: 'Feedback', icon: MessageSquare, description: 'Report bugs or suggest' },
+  { id: 'account', label: 'Account', icon: Settings, description: 'Password & security' },
 ];
 
 export function SettingsPage() {
@@ -78,7 +78,7 @@ export function SettingsPage() {
   const headerPills = [
     { label: 'Sections', value: `${isCandidate || isEmployer ? 8 : 7}`, color: '#f59e0b', Icon: Sliders },
     { label: 'Profile', value: profileComplete ? 'Complete' : 'Incomplete', color: profileComplete ? '#10B981' : '#ef4444', Icon: CheckCircle2 },
-    { label: 'Status', value: completedCount >= 2 ? 'Configured' : 'Setup Needed', color: completedCount >= 2 ? '#8B5CF6' : '#06B6D4', Icon: Sparkles },
+    { label: 'Status', value: completedCount >= 2 ? 'Configured' : 'Setup needed', color: completedCount >= 2 ? '#8B5CF6' : '#06B6D4', Icon: Sparkles },
   ];
 
   // Filter sections based on user role
@@ -139,7 +139,7 @@ export function SettingsPage() {
               className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              Manage Your Account & Preferences
+              Manage your account & preferences
             </p>
             {/* Stat pills */}
             <div className="flex flex-wrap gap-2 mt-3">

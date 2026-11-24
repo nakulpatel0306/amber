@@ -291,7 +291,7 @@ export function CultureAssessment() {
             className="text-3xl font-serif font-normal tracking-tight mb-4"
             style={{ color: 'var(--color-text)' }}
           >
-            Set Up Your Company First
+            Set up your company first
           </h1>
           <p
             className="mb-6"
@@ -304,11 +304,11 @@ export function CultureAssessment() {
               onClick={() => setShowSetupModal(true)}
               rightIcon={<ArrowRight className="w-4 h-4" />}
             >
-              Set Up Company
+              Set up company
             </Button>
             <Link to="/app/employer">
               <Button variant="ghost" className="w-full">
-                Back to Dashboard
+                Back to dashboard
               </Button>
             </Link>
           </div>
@@ -348,7 +348,7 @@ export function CultureAssessment() {
             className="text-3xl font-serif font-normal tracking-tight mb-4"
             style={{ color: 'var(--color-text)' }}
           >
-            Assessment Cooldown
+            Assessment cooldown
           </h1>
           <p
             className="mb-6"
@@ -403,12 +403,12 @@ export function CultureAssessment() {
           <div className="flex flex-col gap-3">
             <Link to="/app/employer/insights">
               <Button variant="primary" className="w-full" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                View Your Insights
+                View your insights
               </Button>
             </Link>
             <Link to="/app/employer/candidates">
               <Button variant="ghost" className="w-full">
-                Browse Candidates
+                Browse candidates
               </Button>
             </Link>
             <div
@@ -453,7 +453,7 @@ export function CultureAssessment() {
             </div>
             <div>
               <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-                Culture Assessment
+                Culture assessment
               </p>
               <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
                 Question {state.currentIndex + 1} of {employerQuestions.length}

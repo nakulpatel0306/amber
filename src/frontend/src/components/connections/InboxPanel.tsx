@@ -121,7 +121,7 @@ export function InboxPanel({ isOpen, onClose }: InboxPanelProps) {
           <div className="flex items-center gap-2">
             <UserPlus className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
             <h2 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-              Connection Requests
+              Connection requests
             </h2>
             {pendingReceived.length > 0 && (
               <span
@@ -258,7 +258,7 @@ export function InboxPanel({ isOpen, onClose }: InboxPanelProps) {
                             title={selectedTimeIdx[conn.id] === undefined ? 'Select a time above' : undefined}
                           >
                             <Check className="w-3.5 h-3.5 mr-1" />
-                            {selectedTimeIdx[conn.id] !== undefined ? 'Accept & Schedule' : 'Select Time'}
+                            {selectedTimeIdx[conn.id] !== undefined ? 'Accept & schedule' : 'Select time'}
                           </Button>
                           <Button
                             size="sm"
@@ -279,7 +279,7 @@ export function InboxPanel({ isOpen, onClose }: InboxPanelProps) {
                             className="flex-1"
                           >
                             <Calendar className="w-3.5 h-3.5 mr-1" />
-                            Accept & Schedule
+                            Accept & schedule
                           </Button>
                           <Button
                             size="sm"

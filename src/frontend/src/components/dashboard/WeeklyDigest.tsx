@@ -16,12 +16,12 @@ function getTrend(value: number): { icon: React.ElementType; color: string; labe
 export function WeeklyDigest({ avgMatchScore, matchesAvailable, connectionsCount, pendingChats }: WeeklyDigestProps) {
   const insights = [
     {
-      label: 'Match Quality',
+      label: 'Match quality',
       value: avgMatchScore > 0 ? `${avgMatchScore}%` : '--',
       trend: getTrend(avgMatchScore > 70 ? 8 : avgMatchScore > 50 ? 3 : -2),
     },
     {
-      label: 'Open Roles',
+      label: 'Open roles',
       value: String(matchesAvailable),
       trend: getTrend(matchesAvailable > 10 ? 12 : matchesAvailable > 3 ? 5 : 0),
     },
@@ -43,7 +43,7 @@ export function WeeklyDigest({ avgMatchScore, matchesAvailable, connectionsCount
         className="text-sm font-semibold mb-3"
         style={{ color: 'var(--color-text)' }}
       >
-        Weekly Insights
+        Weekly insights
       </h3>
 
       <div className="grid grid-cols-2 gap-3">

@@ -73,7 +73,7 @@ export function PersonalityPlayerCard({ personalityScores, topTraits }: Personal
   const operatingStyles = [
     { icon: Brain, label: 'Decision', value: decisionStyle, color: 'var(--color-trait-openness)' },
     { icon: MessageCircle, label: 'Communication', value: communicationStyle, color: 'var(--color-trait-conscientiousness)' },
-    { icon: Lightbulb, label: 'Problem-Solving', value: problemSolvingStyle, color: 'var(--color-trait-extraversion)' },
+    { icon: Lightbulb, label: 'Problem-solving', value: problemSolvingStyle, color: 'var(--color-trait-extraversion)' },
   ];
 
   const oceanBars = [
@@ -109,7 +109,7 @@ export function PersonalityPlayerCard({ personalityScores, topTraits }: Personal
             </div>
             <div>
               <h3 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
-                {primaryArchetype?.name || 'Your Archetype'}
+                {primaryArchetype?.name || 'Your archetype'}
               </h3>
               {primaryArchetype && (
                 <p className="text-xs leading-relaxed" style={{ color: 'var(--color-textMuted)' }}>
@@ -194,7 +194,7 @@ export function PersonalityPlayerCard({ personalityScores, topTraits }: Personal
           {/* Footer CTA */}
           <div className="flex justify-center">
             <Button variant="ghost" size="sm" rightIcon={<ArrowRight className="w-3 h-3" />}>
-              View Full Insights
+              View full insights
             </Button>
           </div>
         </div>

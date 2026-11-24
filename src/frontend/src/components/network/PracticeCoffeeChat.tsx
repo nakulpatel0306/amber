@@ -105,7 +105,7 @@ export function PracticeCoffeeChat() {
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div className="flex-1">
-            <p className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Practice Coffee Chat</p>
+            <p className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Practice coffee chat</p>
             <p className="text-[11px]" style={{ color: 'var(--color-textMuted)' }}>Sharpen your networking skills with AI coaching</p>
           </div>
           <span className="flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-xl" style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textMuted)', border: '1px solid var(--color-border)' }}>

@@ -20,23 +20,19 @@ interface ActivityItem {
   sortDate: number;
 }
 
-function titleCase(str: string): string {
-  return str.replace(/\b\w/g, c => c.toUpperCase());
-}
-
 function timeAgo(dateStr: string): string {
   const now = Date.now();
   const then = new Date(dateStr).getTime();
   const diffMs = now - then;
   const diffMin = Math.floor(diffMs / 60000);
-  if (diffMin < 1) return 'Just Now';
-  if (diffMin < 60) return `${diffMin}m Ago`;
+  if (diffMin < 1) return 'Just now';
+  if (diffMin < 60) return `${diffMin}m ago`;
   const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `${diffHr}h Ago`;
+  if (diffHr < 24) return `${diffHr}h ago`;
   const diffDay = Math.floor(diffHr / 24);
-  if (diffDay < 7) return `${diffDay}d Ago`;
+  if (diffDay < 7) return `${diffDay}d ago`;
   const diffWeek = Math.floor(diffDay / 7);
-  return `${diffWeek}w Ago`;
+  return `${diffWeek}w ago`;
 }
 
 function buildActivity(
@@ -52,7 +48,7 @@ function buildActivity(
   if (sorted[0]) {
     items.push({
       icon: TrendingUp,
-      text: titleCase(`Top Match: ${sorted[0].companyName} At ${sorted[0].overallScore}%`),
+      text: `Top match: ${sorted[0].companyName} at ${sorted[0].overallScore}%`,
       time: 'Live',
       sortDate: Date.now(),
     });
@@ -63,7 +59,7 @@ function buildActivity(
   if (strong > 0) {
     items.push({
       icon: Zap,
-      text: titleCase(`${strong} Strong Match${strong > 1 ? 'es' : ''} (80%+)`),
+      text: `${strong} strong match${strong > 1 ? 'es' : ''} (80%+)`,
       time: 'Live',
       sortDate: Date.now() - 1000,
     });
@@ -72,10 +68,10 @@ function buildActivity(
   // Real saved matches
   for (const sm of savedMatches.slice(0, 2)) {
     const employer = matches.find(e => e.employerId === sm.employer_id);
-    const name = employer?.companyName || 'A Company';
+    const name = employer?.companyName || 'A company';
     items.push({
       icon: Bookmark,
-      text: titleCase(`Saved ${name} To Matches`),
+      text: `Saved ${name}`,
       time: timeAgo(sm.created_at),
       sortDate: new Date(sm.created_at).getTime(),
     });
@@ -83,10 +79,10 @@ function buildActivity(
 
   // Pending connection requests
   for (const conn of pendingSent.slice(0, 2)) {
-    const name = conn.receiver_name || conn.receiver_company || 'A Company';
+    const name = conn.receiver_name || conn.receiver_company || 'A company';
     items.push({
       icon: UserPlus,
-      text: titleCase(`Requested ${name}`),
+      text: `Requested ${name}`,
       time: timeAgo(conn.created_at),
       sortDate: new Date(conn.created_at).getTime(),
     });
@@ -94,10 +90,10 @@ function buildActivity(
 
   // Accepted connections
   for (const conn of acceptedConnections.slice(0, 2)) {
-    const name = conn.receiver_name || conn.receiver_company || conn.sender_name || 'A Company';
+    const name = conn.receiver_name || conn.receiver_company || conn.sender_name || 'A company';
     items.push({
       icon: Coffee,
-      text: titleCase(`Connected With ${name}`),
+      text: `Connected with ${name}`,
       time: timeAgo(conn.updated_at),
       sortDate: new Date(conn.updated_at).getTime(),
     });
@@ -107,7 +103,7 @@ function buildActivity(
   if (sorted.length > 0) {
     items.push({
       icon: ArrowUpRight,
-      text: titleCase(`Scanning ${sorted.length} Companies`),
+      text: `Ranked ${sorted.length} companies`,
       time: 'Live',
       sortDate: 0,
     });
@@ -117,7 +113,7 @@ function buildActivity(
   if (items.length === 0) {
     items.push({
       icon: Star,
-      text: 'Complete Your Assessment To See Matches',
+      text: 'Complete your assessment to see matches',
       time: 'Now',
       sortDate: 0,
     });
@@ -139,7 +135,7 @@ function buildEmployerActivity(
   if (sorted[0]) {
     items.push({
       icon: TrendingUp,
-      text: titleCase(`Top Candidate: ${sorted[0].name} At ${sorted[0].overallScore}%`),
+      text: `Top candidate: ${sorted[0].name} at ${sorted[0].overallScore}%`,
       time: 'Live',
       sortDate: Date.now(),
     });
@@ -150,7 +146,7 @@ function buildEmployerActivity(
   if (strong > 0) {
     items.push({
       icon: Zap,
-      text: titleCase(`${strong} Strong Candidate${strong > 1 ? 's' : ''} (80%+)`),
+      text: `${strong} strong candidate${strong > 1 ? 's' : ''} (80%+)`,
       time: 'Live',
       sortDate: Date.now() - 1000,
     });
@@ -159,10 +155,10 @@ function buildEmployerActivity(
   // Saved candidates
   for (const sm of savedMatches.slice(0, 2)) {
     const candidate = candidates.find(c => c.candidateId === sm.candidate_id);
-    const name = candidate?.name || 'A Candidate';
+    const name = candidate?.name || 'A candidate';
     items.push({
       icon: Bookmark,
-      text: titleCase(`Shortlisted ${name}`),
+      text: `Shortlisted ${name}`,
       time: timeAgo(sm.created_at),
       sortDate: new Date(sm.created_at).getTime(),
     });
@@ -170,10 +166,10 @@ function buildEmployerActivity(
 
   // Pending connection requests
   for (const conn of pendingSent.slice(0, 2)) {
-    const name = conn.receiver_name || 'A Candidate';
+    const name = conn.receiver_name || 'A candidate';
     items.push({
       icon: UserPlus,
-      text: titleCase(`Requested ${name}`),
+      text: `Requested ${name}`,
       time: timeAgo(conn.created_at),
       sortDate: new Date(conn.created_at).getTime(),
     });
@@ -181,10 +177,10 @@ function buildEmployerActivity(
 
   // Accepted connections
   for (const conn of acceptedConnections.slice(0, 2)) {
-    const name = conn.receiver_name || conn.sender_name || 'A Candidate';
+    const name = conn.receiver_name || conn.sender_name || 'A candidate';
     items.push({
       icon: Coffee,
-      text: titleCase(`Connected With ${name}`),
+      text: `Connected with ${name}`,
       time: timeAgo(conn.updated_at),
       sortDate: new Date(conn.updated_at).getTime(),
     });
@@ -194,7 +190,7 @@ function buildEmployerActivity(
   if (sorted.length > 0) {
     items.push({
       icon: ArrowUpRight,
-      text: titleCase(`Scanning ${sorted.length} Candidates`),
+      text: `Ranked ${sorted.length} candidates`,
       time: 'Live',
       sortDate: 0,
     });
@@ -203,7 +199,7 @@ function buildEmployerActivity(
   if (items.length === 0) {
     items.push({
       icon: Star,
-      text: 'Complete Your Culture Quiz To See Candidates',
+      text: 'Complete your culture quiz to see candidates',
       time: 'Now',
       sortDate: 0,
     });
@@ -234,7 +230,7 @@ export function MatchActivityFeed({ mode = 'candidate', matches = [], candidateM
         className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3"
         style={{ color: 'var(--color-textMuted)' }}
       >
-        Recent Activity
+        Recent activity
       </p>
 
       <div className="space-y-0">

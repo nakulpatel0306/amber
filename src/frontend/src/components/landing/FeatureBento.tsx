@@ -23,25 +23,25 @@ const PROCESS_STEPS = [
   {
     number: '01',
     label: 'Dashboard',
-    caption: 'Your Home Base For Matches, Chats, And Metrics.',
+    caption: 'Your home base for matches, chats, and metrics.',
     icon: Target,
   },
   {
     number: '02',
     label: 'Assessment',
-    caption: '15 Min Big Five · Scenario-Based Questions.',
+    caption: '15-min Big Five · Scenario-based questions.',
     icon: Sparkles,
   },
   {
     number: '03',
     label: 'Insights',
-    caption: 'Your Archetype · OCEAN Trait Breakdown.',
+    caption: 'Your archetype · OCEAN trait breakdown.',
     icon: Brain,
   },
   {
     number: '04',
     label: 'Connect',
-    caption: 'Pick A Match · Book A 15-Min Coffee Chat.',
+    caption: 'Pick a match · Book a 15-min coffee chat.',
     icon: Coffee,
   },
 ];
@@ -94,7 +94,7 @@ function CompanyLogoTile({ fallback, size = 20 }: { domain?: string; fallback: s
 
 function SceneDashboard() {
   const stats = [
-    { label: 'Match Index', value: 83, suffix: '%', chip: 'Best 87%' },
+    { label: 'Match index', value: 83, suffix: '%', chip: 'Best 87%' },
     { label: 'Available', value: 230, suffix: '', chip: '110 Co' },
     { label: 'Chats', value: 4, suffix: '', chip: '3 Pending' },
   ];
@@ -133,7 +133,7 @@ function SceneDashboard() {
             className="text-[13px] font-serif leading-none"
             style={{ color: 'var(--color-text)' }}
           >
-            Good Evening,{' '}
+            Good evening,{' '}
             <span className="italic" style={{ color: 'var(--color-accent)' }}>
               Alex
             </span>
@@ -239,14 +239,14 @@ function SceneDashboard() {
               transition={{ duration: 1.8, repeat: Infinity }}
             />
             <p className="text-[10px] font-semibold" style={{ color: 'var(--color-text)' }}>
-              Top Personality Matches
+              Top personality matches
             </p>
           </div>
           <span
             className="text-[8px] font-mono uppercase tracking-[0.2em]"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            This Week
+            This week
           </span>
         </div>
         <div className="space-y-1 flex-1 flex flex-col justify-evenly">
@@ -327,20 +327,20 @@ function TypedText({ text, delay = 0 }: { text: string; delay?: number }) {
 function SceneAssessmentScene({ pickedIndex, hoverIndex }: { pickedIndex: number; hoverIndex: number }) {
   const options = [
     {
-      title: 'Take The Leap',
-      desc: 'Growth Happens Outside Comfort Zones. The Learning Opportunity Is Worth The Risk.',
+      title: 'Take the leap',
+      desc: 'Growth happens outside comfort zones. The learning opportunity is worth the risk.',
     },
     {
-      title: 'Stay The Course',
-      desc: 'Building Mastery In Your Field Is Underrated. Depth Over Breadth.',
+      title: 'Stay the course',
+      desc: 'Building mastery in your field is underrated. Depth over breadth.',
     },
     {
-      title: 'Negotiate A Hybrid',
-      desc: 'Can You Try It Part-Time First? Test Before Fully Committing.',
+      title: 'Negotiate a hybrid',
+      desc: 'Can you try it part-time first? Test before fully committing.',
     },
     {
-      title: 'Need More Information',
-      desc: 'Too Many Unknowns. Research Thoroughly Before Deciding.',
+      title: 'Need more information',
+      desc: 'Too many unknowns. Research thoroughly before deciding.',
     },
   ];
 
@@ -384,14 +384,14 @@ function SceneAssessmentScene({ pickedIndex, hoverIndex }: { pickedIndex: number
             className="text-[11px] font-semibold leading-none"
             style={{ color: 'var(--color-text)' }}
           >
-            Personality Assessment
+            Personality assessment
           </p>
           <div className="flex items-center gap-1.5 mt-1">
             <p
               className="text-[8.5px] leading-none"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              Question 11 Of 16
+              Question 11 of 16
             </p>
             <span
               className="w-[3px] h-[3px] rounded-full"
@@ -639,7 +639,7 @@ function SceneInsights() {
               className="text-[8.5px] leading-none font-mono uppercase tracking-wider"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              Ember › Deep Dive
+              Ember › deep dive
             </p>
             <span
               className="w-[3px] h-[3px] rounded-full"
@@ -674,7 +674,7 @@ function SceneInsights() {
             transition={{ delay: 0.7, type: 'spring', stiffness: 300 }}
           >
             <TrendingUp className="w-2.5 h-2.5" />
-            Strong Fit
+            Strong fit
           </motion.div>
         </div>
       </motion.div>
@@ -690,7 +690,7 @@ function SceneInsights() {
             className="text-[8px] font-mono uppercase tracking-[0.25em]"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            Score Breakdown //
+            Score breakdown //
           </p>
           <p
             className="text-[8px] font-mono uppercase tracking-[0.2em]"
@@ -764,7 +764,7 @@ function SceneInsights() {
             className="text-[7.5px] font-mono uppercase tracking-[0.25em]"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            Flavor Profile //
+            Flavor profile //
           </p>
           <div className="flex items-center gap-2 text-[7px] font-mono" style={{ color: 'var(--color-textMuted)' }}>
             <span className="flex items-center gap-0.5">
@@ -880,7 +880,7 @@ function SceneInsights() {
               className="text-[7.5px] font-mono uppercase tracking-[0.2em]"
               style={{ color: 'var(--color-accent)' }}
             >
-              Ember's Take
+              Ember's take
             </p>
             <div className="flex items-center gap-1">
               <span
@@ -899,7 +899,7 @@ function SceneInsights() {
                   backgroundColor: 'color-mix(in srgb, #F59E0B 12%, transparent)',
                 }}
               >
-                1 To Discuss
+                1 to discuss
               </span>
             </div>
           </div>
@@ -967,7 +967,7 @@ function SceneConnect({ stage }: { stage: number }) {
               className="text-[8.5px] leading-none"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              Senior Product Designer
+              Senior product designer
             </p>
             <span
               className="w-[3px] h-[3px] rounded-full"
@@ -999,7 +999,7 @@ function SceneConnect({ stage }: { stage: number }) {
             }}
           >
             <TrendingUp className="w-2.5 h-2.5" />
-            Strong Fit
+            Strong fit
           </span>
         </div>
       </motion.div>
@@ -1140,7 +1140,7 @@ function SceneConnect({ stage }: { stage: number }) {
           style={{ color: 'var(--color-textMuted)' }}
         >
           <Calendar className="w-2.5 h-2.5" />
-          Preferred Time · Thu Apr 23
+          Preferred time · Thu Apr 23
         </div>
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-1">
           {times.map((t, i) => {
@@ -1231,7 +1231,7 @@ function SceneConnect({ stage }: { stage: number }) {
           ) : (
             <>
               <Send className="w-3 h-3" />
-              Send Request
+              Send request
             </>
           )}
         </motion.div>
@@ -1319,7 +1319,7 @@ function ProcessCard() {
             className="text-[10px] font-mono uppercase tracking-[0.3em] font-semibold"
             style={{ color: 'var(--color-accent)' }}
           >
-            The 4-Step Journey
+            The 4-step journey
           </span>
         </div>
 
@@ -1327,7 +1327,7 @@ function ProcessCard() {
           className="text-2xl lg:text-3xl font-serif font-normal tracking-tight mb-1 leading-[1.1]"
           style={{ color: 'var(--color-text)' }}
         >
-          From Dashboard To Offer.{' '}
+          From dashboard to offer.{' '}
           <span className="italic" style={{ color: 'var(--color-accent)' }}>
             Effortlessly.
           </span>
@@ -1487,9 +1487,9 @@ function ScienceCard() {
           className="text-2xl font-serif font-normal tracking-tight mb-2 leading-tight"
           style={{ color: 'var(--color-text)' }}
         >
-          Decades Of Research,{' '}
+          Decades of research,{' '}
           <span className="italic" style={{ color: 'var(--color-accent)' }}>
-            In 15 Minutes.
+            in 15 minutes.
           </span>
         </h3>
 
@@ -1583,9 +1583,9 @@ function SpeedCard() {
         className="text-2xl font-serif font-normal tracking-tight mb-2 leading-tight"
         style={{ color: 'var(--color-text)' }}
       >
-        No Resume.{' '}
+        No resume.{' '}
         <span className="italic" style={{ color: 'var(--color-accent)' }}>
-          No Cover Letter.
+          No cover letter.
         </span>
       </h3>
 
@@ -1607,7 +1607,7 @@ function SpeedCard() {
               className="text-[10px] uppercase tracking-[0.25em] font-mono font-medium mb-1"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              Time Remaining
+              Time remaining
             </p>
             <p
               className="text-3xl font-serif font-normal tabular-nums"
@@ -1682,9 +1682,9 @@ function CoffeeChatCard() {
         className="text-2xl font-serif font-normal tracking-tight mb-2 leading-tight"
         style={{ color: 'var(--color-text)' }}
       >
-        Book A Coffee. Skip The{' '}
+        Book a coffee. Skip the{' '}
         <span className="italic" style={{ color: 'var(--color-accent)' }}>
-          Cold Apply.
+          cold apply.
         </span>
       </h3>
 
@@ -1751,7 +1751,7 @@ function TwoSidedCard() {
           className="text-[10px] font-mono uppercase tracking-[0.25em]"
           style={{ color: 'var(--color-textMuted)' }}
         >
-          Two-Way Matching
+          Two-way matching
         </span>
       </div>
 
@@ -1759,9 +1759,9 @@ function TwoSidedCard() {
         className="text-2xl font-serif font-normal tracking-tight mb-2 leading-tight"
         style={{ color: 'var(--color-text)' }}
       >
-        Made For Both{' '}
+        Made for both{' '}
         <span className="italic" style={{ color: 'var(--color-accent)' }}>
-          Sides.
+          sides.
         </span>
       </h3>
 
@@ -1832,9 +1832,9 @@ function PrivacyCard() {
         className="text-2xl font-serif font-normal tracking-tight mb-2 leading-tight"
         style={{ color: 'var(--color-text)' }}
       >
-        Scoped By{' '}
+        Scoped by{' '}
         <span className="italic" style={{ color: 'var(--color-accent)' }}>
-          Design.
+          design.
         </span>
       </h3>
 
@@ -1910,9 +1910,9 @@ export function FeatureBento() {
             className="text-4xl sm:text-5xl lg:text-6xl font-serif font-normal tracking-tight leading-[1.05]"
             style={{ color: 'var(--color-text)' }}
           >
-            The Whole Job Search,{' '}
+            The whole job search,{' '}
             <span className="italic" style={{ color: 'var(--color-accent)' }}>
-              Rethought.
+              rethought.
             </span>
           </h2>
         </motion.div>

@@ -18,8 +18,8 @@ interface FollowUpConfig {
 function getFollowUpConfig(rating: number): FollowUpConfig {
   if (rating >= 4) {
     return {
-      header: 'Strong Connection',
-      subheader: 'Next Steps',
+      header: 'Strong connection',
+      subheader: 'Next steps',
       suggestions: [
         {
           text: 'Consider moving to a formal interview',
@@ -42,8 +42,8 @@ function getFollowUpConfig(rating: number): FollowUpConfig {
 
   if (rating === 3) {
     return {
-      header: 'Worth Another Look',
-      subheader: 'Consider These Factors',
+      header: 'Worth another look',
+      subheader: 'Consider these factors',
       suggestions: [
         {
           text: 'Reflect on what aspects felt aligned',
@@ -65,8 +65,8 @@ function getFollowUpConfig(rating: number): FollowUpConfig {
   }
 
   return {
-    header: 'Other Options',
-    subheader: 'Explore These Instead',
+    header: 'Other options',
+    subheader: 'Explore these instead',
     suggestions: [
       {
         text: 'Check your other high-scoring matches',

@@ -49,7 +49,7 @@ export function PipelineCard({
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <span className="font-semibold text-sm line-clamp-1" style={{ color: 'var(--color-text)' }}>
-            {match.target_type === 'role' ? 'Role Match' : 'Candidate Match'}
+            {match.target_type === 'role' ? 'Role match' : 'Candidate match'}
           </span>
           <span
             className="text-[10px] font-medium px-1.5 py-0.5 rounded-full"
@@ -79,7 +79,7 @@ export function PipelineCard({
           <Eye className="w-3.5 h-3.5" />
         </Button>
         {match.status === 'saved' && (
-          <Button size="xs" variant="ghost" onClick={onCoffeeChat} title="Coffee Chat">
+          <Button size="xs" variant="ghost" onClick={onCoffeeChat} title="Coffee chat">
             <Coffee className="w-3.5 h-3.5" />
           </Button>
         )}

@@ -56,7 +56,7 @@ export function AcceptWithDateModal({
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} title="Accept & Schedule" size="sm">
+      <Modal isOpen={isOpen} onClose={onClose} title="Accept & schedule" size="sm">
         <div className="py-2">
           <p className="text-sm mb-4" style={{ color: 'var(--color-textSecondary)' }}>
             <span className="font-medium" style={{ color: 'var(--color-text)' }}>{partnerName}</span> proposed the following times. Select one to schedule the meeting:
@@ -119,7 +119,7 @@ export function AcceptWithDateModal({
               isLoading={isSubmitting}
             >
               <Check className="w-4 h-4 mr-1" />
-              Accept & Schedule
+              Accept & schedule
             </Button>
           </div>
         </div>

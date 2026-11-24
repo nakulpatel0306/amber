@@ -167,7 +167,7 @@ export function CultureQuiz() {
             className="text-2xl font-semibold mb-3"
             style={{ color: 'var(--color-text)' }}
           >
-            Define Your Company Culture
+            Define your company culture
           </h1>
           <p
             className="text-base mb-8"
@@ -183,7 +183,7 @@ export function CultureQuiz() {
               className="text-sm font-medium mb-4"
               style={{ color: 'var(--color-text)' }}
             >
-              What You'll Define:
+              What you'll define
             </h3>
             <div className="space-y-3">
               {['work style', 'communication preferences', 'decision making', 'growth & learning', 'feedback culture', 'core values', 'work-life balance', 'team dynamics'].map((item, i) => (
@@ -207,7 +207,7 @@ export function CultureQuiz() {
             rightIcon={<ArrowRight className="w-4 h-4" />}
             size="lg"
           >
-            Start Quiz
+            Start quiz
           </Button>
 
           <p
@@ -234,7 +234,7 @@ export function CultureQuiz() {
             className="text-xl font-semibold mb-2"
             style={{ color: 'var(--color-text)' }}
           >
-            Saving Your Culture Profile...
+            Saving your culture profile...
           </h2>
           <p
             className="text-sm"
@@ -265,7 +265,7 @@ export function CultureQuiz() {
             className="text-xl font-semibold mb-2"
             style={{ color: 'var(--color-text)' }}
           >
-            Culture Profile Complete!
+            Culture profile complete!
           </h2>
           <p
             className="text-sm mb-8"
@@ -281,7 +281,7 @@ export function CultureQuiz() {
               className="text-sm font-medium mb-4"
               style={{ color: 'var(--color-text)' }}
             >
-              Your Culture Highlights
+              Your culture highlights
             </h3>
             <div className="flex flex-wrap gap-2 justify-center">
               {Object.entries(answers).slice(0, 4).map(([key, value]) => (
@@ -304,13 +304,13 @@ export function CultureQuiz() {
               variant="outline"
               onClick={() => navigate('/app/employer')}
             >
-              Back to Dashboard
+              Back to dashboard
             </Button>
             <Button
               onClick={() => navigate('/app/employer/roles/new')}
               rightIcon={<ArrowRight className="w-4 h-4" />}
             >
-              Create Your First Role
+              Create your first role
             </Button>
           </div>
         </div>

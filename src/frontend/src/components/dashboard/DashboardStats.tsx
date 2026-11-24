@@ -34,10 +34,10 @@ export function DashboardStats({
 }: DashboardStatsProps) {
   const stats = [
     { label: 'Connections', value: String(connectionsCount), icon: Users },
-    { label: 'Pending Invites', value: String(pendingChats), icon: Coffee },
-    { label: 'Matches Available', value: String(matchesAvailable), icon: Briefcase },
-    { label: 'Avg Match Score', value: avgMatchScore > 0 ? `${avgMatchScore}%` : '--', icon: BarChart3 },
-    { label: 'Profile Complete', value: `${profileCompletion}%`, icon: CheckCircle2 },
+    { label: 'Pending invites', value: String(pendingChats), icon: Coffee },
+    { label: 'Matches available', value: String(matchesAvailable), icon: Briefcase },
+    { label: 'Avg match score', value: avgMatchScore > 0 ? `${avgMatchScore}%` : '--', icon: BarChart3 },
+    { label: 'Profile complete', value: `${profileCompletion}%`, icon: CheckCircle2 },
   ];
 
   return (

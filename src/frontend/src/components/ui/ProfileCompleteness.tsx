@@ -109,7 +109,7 @@ export function ProfileCompleteness({
               className={`font-medium ${config.fontSize}`}
               style={{ color: 'var(--color-text)' }}
             >
-              Profile Completeness
+              Profile completeness
             </span>
             <span
               className={`font-semibold ${config.fontSize}`}

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const SUFFIX = 'Amber | Culture Match';
+const SUFFIX = 'Amber | Culture match';
 
 /**
  * Maps a URL path → page title.
@@ -9,14 +9,14 @@ const SUFFIX = 'Amber | Culture Match';
  */
 const EXACT: Record<string, string> = {
   '/': '',
-  '/demo': 'Try the Demo',
+  '/demo': 'Try the demo',
   '/pricing': 'Plans',
-  '/auth/login': 'Sign In',
-  '/auth/signup': 'Sign Up',
-  '/auth/forgot-password': 'Reset Password',
-  '/auth/callback': 'Signing In',
-  '/auth/select-role': 'Choose Your Role',
-  '/auth/verify-email': 'Verify Email',
+  '/auth/login': 'Sign in',
+  '/auth/signup': 'Sign up',
+  '/auth/forgot-password': 'Reset password',
+  '/auth/callback': 'Signing in',
+  '/auth/select-role': 'Choose your role',
+  '/auth/verify-email': 'Verify email',
   '/auth/onboarding': 'Welcome',
   '/app': 'Dashboard',
   '/app/dashboard': 'Dashboard',
@@ -24,19 +24,19 @@ const EXACT: Record<string, string> = {
   '/app/insights': 'Insights',
   '/app/ember': 'Ember',
   '/app/matches': 'Matches',
-  '/app/coffee-chats': 'Coffee Chats',
-  '/app/chats': 'Coffee Chats',
+  '/app/coffee-chats': 'Coffee chats',
+  '/app/chats': 'Coffee chats',
   '/app/network': 'Network',
   '/app/practice': 'Practice',
   '/app/settings': 'Settings',
   '/app/pricing': 'Pricing',
-  '/app/employer/dashboard': 'Employer Dashboard',
-  '/app/employer/culture-quiz': 'Culture Quiz',
-  '/app/employer/culture': 'Culture Insights',
-  '/app/employer/roles': 'Manage Roles',
-  '/app/employer/roles/create': 'Create Role',
+  '/app/employer/dashboard': 'Employer dashboard',
+  '/app/employer/culture-quiz': 'Culture quiz',
+  '/app/employer/culture': 'Culture insights',
+  '/app/employer/roles': 'Manage roles',
+  '/app/employer/roles/create': 'Create role',
   '/app/employer/candidates': 'Candidates',
-  '/app/employer/coffee-chats': 'Coffee Chats',
+  '/app/employer/coffee-chats': 'Coffee chats',
   '/app/employer/ember': 'Ember',
 };
 

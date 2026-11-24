@@ -19,7 +19,7 @@ export function PersonalitySnapshotCard({
     const text = `My personality archetype is "${archetypeName}" on Ember! Top traits: ${topTraits.join(', ')}`;
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'My Ember Personality', text });
+        await navigator.share({ title: 'My Ember personality', text });
       } catch {
         // User cancelled
       }
@@ -45,7 +45,7 @@ export function PersonalitySnapshotCard({
       <div className="flex items-start justify-between mb-4">
         <div>
           <p className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--color-textMuted)' }}>
-            Your Personality Snapshot
+            Your personality snapshot
           </p>
           <h3 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
             {archetypeName}
@@ -72,7 +72,7 @@ export function PersonalitySnapshotCard({
         </div>
         <div className="flex-1">
           <p className="text-xs font-medium mb-2" style={{ color: 'var(--color-text)' }}>
-            Top Traits
+            Top traits
           </p>
           <div className="flex flex-wrap gap-1.5">
             {topTraits.map((trait, i) => {

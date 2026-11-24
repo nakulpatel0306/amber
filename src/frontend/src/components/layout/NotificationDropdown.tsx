@@ -128,7 +128,7 @@ export function NotificationDropdown() {
               notifs.push({
                 id: `chat-${chat.id}`,
                 type: 'coffee_chat',
-                title: 'New Coffee Chat Request',
+                title: 'New coffee chat request',
                 message: `${chat.candidate_name || 'A candidate'} wants to chat`,
                 read: false,
                 createdAt: new Date(chat.created_at),
@@ -151,7 +151,7 @@ export function NotificationDropdown() {
               notifs.push({
                 id: `accepted-${chat.id}`,
                 type: 'achievement',
-                title: 'Chat Confirmed',
+                title: 'Chat confirmed',
                 message: `${chat.candidate_name || 'A candidate'} accepted your invite`,
                 read: false,
                 createdAt: new Date(chat.created_at),
@@ -174,7 +174,7 @@ export function NotificationDropdown() {
               notifs.push({
                 id: `conn-${conn.id}`,
                 type: 'connection',
-                title: 'Connection Request',
+                title: 'Connection request',
                 message: `${conn.sender_name || 'Someone'} wants to connect`,
                 read: false,
                 createdAt: new Date(conn.created_at),
@@ -186,7 +186,7 @@ export function NotificationDropdown() {
             notifs.push({
               id: 'culture-quiz',
               type: 'assessment',
-              title: 'Complete Your Culture Quiz',
+              title: 'Complete your culture quiz',
               message: 'Define your culture to start matching with candidates',
               read: false,
               createdAt: new Date(),
@@ -205,7 +205,7 @@ export function NotificationDropdown() {
             notifs.push({
               id: 'no-roles',
               type: 'system',
-              title: 'Post Your First Role',
+              title: 'Post your first role',
               message: 'Create a role listing to start finding candidates',
               read: false,
               createdAt: new Date(),
@@ -237,7 +237,7 @@ export function NotificationDropdown() {
               notifs.push({
                 id: `chat-${chat.id}`,
                 type: 'coffee_chat',
-                title: 'Coffee Chat Invitation',
+                title: 'Coffee chat invitation',
                 message: `${chat.company_name || 'A company'} wants to chat with you`,
                 read: false,
                 createdAt: new Date(chat.created_at),
@@ -261,7 +261,7 @@ export function NotificationDropdown() {
               notifs.push({
                 id: `accepted-${chat.id}`,
                 type: 'achievement',
-                title: 'Chat Request Accepted',
+                title: 'Chat request accepted',
                 message: `${chat.company_name || 'A company'} accepted your chat request`,
                 read: false,
                 createdAt: new Date(chat.created_at),
@@ -285,7 +285,7 @@ export function NotificationDropdown() {
               notifs.push({
                 id: `feedback-${chat.id}`,
                 type: 'system',
-                title: 'Rate Your Chat',
+                title: 'Rate your chat',
                 message: `How was your chat with ${chat.company_name || 'the employer'}?`,
                 read: false,
                 createdAt: new Date(chat.created_at),
@@ -308,7 +308,7 @@ export function NotificationDropdown() {
               notifs.push({
                 id: `conn-${conn.id}`,
                 type: 'connection',
-                title: 'Connection Request',
+                title: 'Connection request',
                 message: `${conn.sender_name || conn.sender_company || 'Someone'} wants to connect`,
                 read: false,
                 createdAt: new Date(conn.created_at),
@@ -321,7 +321,7 @@ export function NotificationDropdown() {
             notifs.push({
               id: 'assessment',
               type: 'assessment',
-              title: 'Take Your Assessment',
+              title: 'Take your assessment',
               message: '15 minutes to discover your personality profile',
               read: false,
               createdAt: new Date(),
@@ -334,7 +334,7 @@ export function NotificationDropdown() {
             notifs.push({
               id: 'profile-incomplete',
               type: 'system',
-              title: 'Complete Your Profile',
+              title: 'Complete your profile',
               message: 'Add a headline and bio to stand out to employers',
               read: false,
               createdAt: new Date(),
@@ -350,7 +350,7 @@ export function NotificationDropdown() {
               notifs.push({
                 id: 'retake',
                 type: 'assessment',
-                title: 'Retake Available',
+                title: 'Retake available',
                 message: 'You can retake your personality assessment',
                 read: false,
                 createdAt: new Date(),
@@ -370,7 +370,7 @@ export function NotificationDropdown() {
               notifs.push({
                 id: 'new-matches',
                 type: 'match',
-                title: 'Matches Available',
+                title: 'Matches available',
                 message: `${count} ${count === 1 ? 'role matches' : 'roles match'} your personality profile`,
                 read: false,
                 createdAt: new Date(),
@@ -518,7 +518,7 @@ export function NotificationDropdown() {
                     className="text-xs font-medium transition-colors hover:underline"
                     style={{ color: 'var(--color-accent)' }}
                   >
-                    Mark All Read
+                    Mark all read
                   </button>
                 )}
                 {visibleNotifications.length > 0 && (

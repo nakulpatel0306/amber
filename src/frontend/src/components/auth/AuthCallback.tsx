@@ -134,7 +134,7 @@ export function AuthCallback() {
           // Small delay to ensure React state updates
           await new Promise(resolve => setTimeout(resolve, 100));
 
-          // No toast for returning users - they already see "Welcome Back" on the login page
+          // No toast for returning users - they already see "Welcome back" on the login page
           console.log('AuthCallback: Navigating to', getDashboardPath(profile.role));
           navigate(getDashboardPath(profile.role), { replace: true });
         } else {

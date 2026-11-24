@@ -51,8 +51,8 @@ export function AssessmentResultsTemplate({
   accentColor = 'var(--color-accent)',
   profileUrl = '/app/insights',
   matchesUrl = '/app/matches',
-  profileLabel = 'View Full Profile',
-  matchesLabel = 'Find Matches',
+  profileLabel = 'View full profile',
+  matchesLabel = 'Find matches',
 }: AssessmentResultsTemplateProps) {
   const navigate = useNavigate();
 
@@ -113,7 +113,7 @@ export function AssessmentResultsTemplate({
             transition={{ delay: 0.4 }}
           >
             <p className="text-xs font-medium mb-1" style={{ color: 'var(--color-textMuted)' }}>
-              Strongest Signal
+              Strongest signal
             </p>
             <p className="text-xl font-bold" style={{ color: topDimension.color }}>
               {topDimension.label}
@@ -150,7 +150,7 @@ export function AssessmentResultsTemplate({
           transition={{ delay: 0.6 }}
         >
           <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--color-text)' }}>
-            OCEAN Modifiers
+            OCEAN modifiers
           </h2>
           <div className="space-y-3">
             {sortedDimensions.map((dim, i) => (
@@ -186,7 +186,7 @@ export function AssessmentResultsTemplate({
           </div>
           <div>
             <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-text)' }}>
-              Profile Enhanced
+              Profile enhanced
             </p>
             <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
               {enhancedMessage}

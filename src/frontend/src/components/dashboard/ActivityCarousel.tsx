@@ -111,7 +111,7 @@ export function ActivityCarousel() {
     <div>
       {/* Section header */}
       <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-        Recent Activity
+        Recent activity
       </h3>
       <p
         className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3"

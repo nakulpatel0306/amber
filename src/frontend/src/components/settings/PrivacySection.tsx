@@ -105,7 +105,7 @@ export function PrivacySection() {
           </h2>
         </div>
         <p className="text-sm mt-1" style={{ color: 'var(--color-textMuted)' }}>
-          Control Who Can See Your Information
+          Control who can see your information
         </p>
       </div>
 
@@ -131,7 +131,7 @@ export function PrivacySection() {
                 className="text-sm font-medium"
                 style={{ color: 'var(--color-text)' }}
               >
-                Profile Visible to Employers
+                Profile visible to employers
               </p>
               <p
                 className="text-xs mt-0.5 max-w-sm"
@@ -188,7 +188,7 @@ export function PrivacySection() {
                   className="text-sm font-medium"
                   style={{ color: 'var(--color-text)' }}
                 >
-                  Show Salary Expectations
+                  Show salary expectations
                 </p>
                 <p
                   className="text-xs mt-0.5 max-w-sm"
@@ -242,7 +242,7 @@ export function PrivacySection() {
             Reset
           </Button>
           <Button onClick={handleSave} isLoading={isSaving}>
-            Save Changes
+            Save changes
           </Button>
         </div>
       )}

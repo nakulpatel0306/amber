@@ -158,7 +158,7 @@ export function ConnectModal({
           >
             <Calendar className="w-3.5 h-3.5" style={{ color: 'var(--color-accent)' }} />
             <span className="text-xs font-medium flex-1 text-left" style={{ color: 'var(--color-textSecondary)' }}>
-              Include A Coffee Chat Invite
+              Include a coffee chat invite
             </span>
             <ChevronRight
               className="w-3.5 h-3.5 transition-transform duration-700 ease-in-out"
@@ -210,7 +210,7 @@ export function ConnectModal({
               <div className="mb-4">
                 <label className="flex items-center gap-1.5 text-xs font-medium mb-2" style={{ color: 'var(--color-textSecondary)' }}>
                   <Calendar className="w-3.5 h-3.5" />
-                  Preferred Dates
+                  Preferred dates
                 </label>
                 <div
                   className="p-3 rounded-xl"
@@ -229,7 +229,7 @@ export function ConnectModal({
               <div>
                 <label className="flex items-center gap-1.5 text-xs font-medium mb-2" style={{ color: 'var(--color-textSecondary)' }}>
                   <Clock className="w-3.5 h-3.5" />
-                  Preferred Time
+                  Preferred time
                 </label>
                 <div
                   className="grid grid-cols-3 gap-1 max-h-28 overflow-y-auto p-2 rounded-xl"
@@ -262,7 +262,7 @@ export function ConnectModal({
         </Button>
         <Button size="sm" onClick={handleSubmit} isLoading={isSubmitting} disabled={message.trim().length === 0}>
           <UserPlus className="w-3.5 h-3.5 mr-1" />
-          Send Request
+          Send request
         </Button>
       </ModalFooter>
     </Modal>

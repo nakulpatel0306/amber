@@ -68,7 +68,7 @@ export function SmartSuggestions({
       <div className="flex items-center gap-2 mb-3">
         <Lightbulb className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
         <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-          Smart Suggestions
+          Smart suggestions
         </h3>
       </div>
       <div className="space-y-2">

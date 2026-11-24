@@ -68,7 +68,7 @@ export function DashboardGreeting({
           </div>
           <Link to="/app/personality">
             <Button rightIcon={<ArrowRight className="w-4 h-4" />}>
-              Take Assessment
+              Take assessment
             </Button>
           </Link>
         </div>

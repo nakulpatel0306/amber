@@ -531,7 +531,7 @@ export function TopCandidates() {
         <div className="text-center max-w-md">
           <EmberFirefly size="xl" mood="neutral" />
           <h2 className="text-xl font-bold mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
-            Complete Your Setup
+            Complete your setup
           </h2>
           <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
             Set up your employer profile to start finding candidates.
@@ -547,7 +547,7 @@ export function TopCandidates() {
         <div className="text-center max-w-md">
           <EmberFirefly size="xl" mood="neutral" />
           <h2 className="text-xl font-bold mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
-            No Candidates Yet
+            No candidates yet
           </h2>
           <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
             No candidates have completed their assessments yet. Check back soon!
@@ -574,7 +574,7 @@ export function TopCandidates() {
                 color: activeView === 'browse' ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
               }}
             >
-              Browse All
+              Browse all
             </button>
             <button
               onClick={() => setActiveView('pipeline')}
@@ -597,7 +597,7 @@ export function TopCandidates() {
             <div>
               <h1 className="text-xl font-bold flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
                 <Trophy className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-                {activeView === 'browse' ? 'Top Candidates' : 'Your Pipeline'}
+                {activeView === 'browse' ? 'Top candidates' : 'Your pipeline'}
               </h1>
               <p className="text-sm" style={{ color: 'var(--color-textMuted)' }}>
                 {activeView === 'browse'
@@ -626,7 +626,7 @@ export function TopCandidates() {
                       border: '1px solid var(--color-border)',
                     }}
                   >
-                    <option value="">All Roles</option>
+                    <option value="">All roles</option>
                     {roles.map(r => <option key={r.id} value={r.id}>{r.title}</option>)}
                   </select>
                   <Briefcase className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: 'var(--color-textMuted)' }} />
@@ -646,9 +646,9 @@ export function TopCandidates() {
                     border: '1px solid var(--color-border)',
                   }}
                 >
-                  <option value="overall">Overall Match</option>
-                  <option value="culture">Culture Fit</option>
-                  <option value="trait">Trait Match</option>
+                  <option value="overall">Overall match</option>
+                  <option value="culture">Culture fit</option>
+                  <option value="trait">Trait match</option>
                   <option value="archetype">Archetype</option>
                 </select>
                 <ArrowUpDown className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: 'var(--color-textMuted)' }} />
@@ -698,7 +698,7 @@ export function TopCandidates() {
             <div className="mt-4 p-4 rounded-xl space-y-4" style={{ backgroundColor: 'var(--color-background)', border: '1px solid var(--color-border)' }}>
               {/* Match score range */}
               <div>
-                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Match Score Range</label>
+                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Match score range</label>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
@@ -751,7 +751,7 @@ export function TopCandidates() {
 
               {/* Work style preference */}
               <div>
-                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Work Style Preference</label>
+                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Work style preference</label>
                 <select
                   value={selectedWorkStyleFilter || ''}
                   onChange={e => setSelectedWorkStyleFilter(e.target.value || null)}
@@ -768,7 +768,7 @@ export function TopCandidates() {
               {activeFilterCount > 0 && (
                 <div className="flex justify-end">
                   <button onClick={clearFilters} className="text-xs font-medium" style={{ color: 'var(--color-accent)' }}>
-                    Clear All Filters
+                    Clear all filters
                   </button>
                 </div>
               )}
@@ -805,13 +805,13 @@ export function TopCandidates() {
         {filteredCandidates.length === 0 ? (
           <div className="bento-card text-center py-12">
             <Users className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--color-textMuted)' }} />
-            <p className="font-medium mb-1" style={{ color: 'var(--color-text)' }}>No Candidates Match Your Filters</p>
+            <p className="font-medium mb-1" style={{ color: 'var(--color-text)' }}>No candidates match your filters</p>
             <p className="text-sm" style={{ color: 'var(--color-textMuted)' }}>
               Try adjusting your filters or search query.
             </p>
             {activeFilterCount > 0 && (
               <button onClick={clearFilters} className="mt-4 text-sm font-medium" style={{ color: 'var(--color-accent)' }}>
-                Clear All Filters
+                Clear all filters
               </button>
             )}
           </div>
@@ -918,7 +918,7 @@ export function TopCandidates() {
                         await handleInviteChat(c);
                       }}
                     >
-                      Invite to Chat
+                      Invite to chat
                     </Button>
                     <Button
                       size="sm"

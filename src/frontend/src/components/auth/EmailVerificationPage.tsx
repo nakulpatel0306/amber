@@ -48,7 +48,7 @@ export function EmailVerificationPage() {
           style={{ color: 'var(--color-textSecondary)' }}
         >
           <ArrowLeft className="w-4 h-4" />
-          Back To Sign In
+          Back to sign in
         </Link>
       </header>
 
@@ -69,16 +69,16 @@ export function EmailVerificationPage() {
               className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
               style={{ color: 'var(--color-text)' }}
             >
-              Check Your Email
+              Check your email
             </h1>
             <p
               className="text-sm mt-2"
               style={{ color: 'var(--color-textMuted)' }}
             >
               {email ? (
-                <>We've Sent A Verification Link To <strong style={{ color: 'var(--color-text)' }}>{email}</strong></>
+                <>We've sent a verification link to <strong style={{ color: 'var(--color-text)' }}>{email}</strong></>
               ) : (
-                "We've Sent A Verification Link To Your Email"
+                "We've sent a verification link to your email"
               )}
             </p>
           </div>
@@ -98,13 +98,13 @@ export function EmailVerificationPage() {
                   className="text-sm font-medium"
                   style={{ color: 'var(--color-text)' }}
                 >
-                  Click The Link In Your Email To Verify Your Account
+                  Click the link in your email to verify your account
                 </p>
                 <p
                   className="text-xs mt-1"
                   style={{ color: 'var(--color-textMuted)' }}
                 >
-                  The Link Will Expire In 24 Hours
+                  The link will expire in 24 hours
                 </p>
               </div>
             </div>
@@ -119,7 +119,7 @@ export function EmailVerificationPage() {
               disabled={isResending || isLoading || !email}
               leftIcon={<RefreshCw className={`w-4 h-4 ${isResending ? 'animate-spin' : ''}`} />}
             >
-              {isResending ? 'Sending...' : 'Resend Verification Email'}
+              {isResending ? 'Sending...' : 'Resend verification email'}
             </Button>
 
             <Button
@@ -127,7 +127,7 @@ export function EmailVerificationPage() {
               fullWidth
               onClick={() => navigate('/auth/login')}
             >
-              Back to Sign In
+              Back to sign in
             </Button>
           </div>
 
@@ -136,13 +136,13 @@ export function EmailVerificationPage() {
             className="text-center text-xs mt-6"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            Didn't Receive The Email? Check Your Spam Folder Or{' '}
+            Didn't get the email? Check your spam folder or{' '}
             <Link
               to="/auth/signup"
               className="font-medium"
               style={{ color: 'var(--color-accent)' }}
             >
-              Try A Different Email
+              Try a different email
             </Link>
           </p>
         </div>

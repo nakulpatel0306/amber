@@ -65,7 +65,7 @@ export function DidYouKnowCard({
           className="text-sm font-semibold"
           style={{ color: 'var(--color-text)' }}
         >
-          Did You Know?
+          Did you know?
         </h3>
       </div>
 

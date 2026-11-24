@@ -47,7 +47,7 @@ export function ChatHeatmap({ matchCount = 0 }: ChatHeatmapProps) {
           className="text-sm font-semibold"
           style={{ color: 'var(--color-text)' }}
         >
-          Optimal Chat Slots
+          Optimal chat slots
         </h3>
         <div className="flex items-center gap-3">
           {[

@@ -126,7 +126,7 @@ export function WorkEnvironmentAssessment() {
           })
           .eq('user_id', user.id);
 
-        showSuccess('Assessment Complete!', 'Your work environment profile has been added.');
+        showSuccess('Assessment complete!', 'Your work environment profile has been added.');
       } catch (err) {
         console.error('Error saving work environment data:', err);
       }
@@ -141,12 +141,12 @@ export function WorkEnvironmentAssessment() {
       { key: 'conscientiousness', label: 'Conscientiousness', value: oceanScores.conscientiousness, color: '#10B981', progressColor: 'green' },
       { key: 'extraversion', label: 'Extraversion', value: oceanScores.extraversion, color: '#F59E0B', progressColor: 'amber' },
       { key: 'agreeableness', label: 'Agreeableness', value: oceanScores.agreeableness, color: '#EC4899', progressColor: 'pink' },
-      { key: 'neuroticism', label: 'Emotional Stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
+      { key: 'neuroticism', label: 'Emotional stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
     ];
 
     return (
       <AssessmentResultsTemplate
-        title="Work Environment & Pace Results"
+        title="Work environment & pace results"
         subtitle="Here's how your work environment and pace preferences shape your culture"
         dimensions={dimensions}
         enhancedMessage="Your work environment preferences have been factored into your culture profile with a 10% weight, making your candidate matches more accurate."
@@ -154,8 +154,8 @@ export function WorkEnvironmentAssessment() {
         accentColor={ACCENT}
         profileUrl="/app/employer/insights"
         matchesUrl="/app/employer/candidates"
-        profileLabel="View Culture Profile"
-        matchesLabel="Browse Candidates"
+        profileLabel="View culture profile"
+        matchesLabel="Browse candidates"
       />
     );
   }
@@ -174,7 +174,7 @@ export function WorkEnvironmentAssessment() {
               <Building className="w-5 h-5" style={{ color: ACCENT }} />
             </div>
             <div>
-              <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Work Environment & Pace</h1>
+              <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Work environment & pace</h1>
               <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
                 Question {currentQuestion + 1} of {workEnvironmentQuestions.length}
               </p>

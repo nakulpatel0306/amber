@@ -195,7 +195,7 @@ function StatusLegend() {
       style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
     >
       <p className="text-xs font-semibold mb-3" style={{ color: 'var(--color-textSecondary)' }}>
-        Status Legend
+        Status legend
       </p>
       <div className="grid grid-cols-2 gap-2">
         {items.map(({ label, status }) => (
@@ -228,7 +228,7 @@ function NextUpCard({
         style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
       >
         <p className="text-xs font-semibold mb-3" style={{ color: 'var(--color-textSecondary)' }}>
-          Next Up
+          Next up
         </p>
         <div className="flex flex-col items-center py-4">
           <Coffee className="w-6 h-6 mb-2" style={{ color: 'var(--color-textMuted)' }} />
@@ -255,7 +255,7 @@ function NextUpCard({
       />
 
       <p className="text-xs font-semibold mb-3" style={{ color: 'var(--color-textSecondary)' }}>
-        Next Up
+        Next up
       </p>
 
       <div className="flex items-start gap-3">

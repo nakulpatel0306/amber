@@ -90,7 +90,7 @@ export function WorkValuesAssessment() {
           })
           .eq('user_id', user.id);
 
-        showSuccess('Assessment Complete!', 'Your work values have been added to your profile.');
+        showSuccess('Assessment complete!', 'Your work values have been added to your profile.');
       } catch (err) {
         console.error('Error saving work values data:', err);
       }
@@ -106,12 +106,12 @@ export function WorkValuesAssessment() {
       { key: 'conscientiousness', label: 'Conscientiousness', value: oceanScores.conscientiousness, color: '#10B981', progressColor: 'green' },
       { key: 'extraversion', label: 'Extraversion', value: oceanScores.extraversion, color: '#F59E0B', progressColor: 'amber' },
       { key: 'agreeableness', label: 'Agreeableness', value: oceanScores.agreeableness, color: '#EC4899', progressColor: 'pink' },
-      { key: 'neuroticism', label: 'Emotional Stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
+      { key: 'neuroticism', label: 'Emotional stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
     ];
 
     return (
       <AssessmentResultsTemplate
-        title="Drive & Motivation Results"
+        title="Drive & motivation results"
         subtitle="Here's what your work values reveal about your motivational drivers"
         dimensions={dimensions}
         enhancedMessage="Your work values have been factored into your personality profile with a 15% weight, making your culture matches more accurate."
@@ -138,7 +138,7 @@ export function WorkValuesAssessment() {
               <Scale className="w-5 h-5" style={{ color: ACCENT }} />
             </div>
             <div>
-              <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Work Values Assessment</h1>
+              <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Work values assessment</h1>
               <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
                 Question {currentQuestion + 1} of {workValuesQuestions.length}
               </p>

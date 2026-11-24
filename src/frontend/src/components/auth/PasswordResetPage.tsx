@@ -38,12 +38,12 @@ export function PasswordResetPage() {
     e.preventDefault();
 
     if (!email) {
-      setErrors({ email: 'Email Is Required' });
+      setErrors({ email: 'Email is required' });
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setErrors({ email: 'Please Enter A Valid Email' });
+      setErrors({ email: 'Please enter a valid email' });
       return;
     }
 
@@ -62,13 +62,13 @@ export function PasswordResetPage() {
     const newErrors: Record<string, string> = {};
 
     if (!password) {
-      newErrors.password = 'Password Is Required';
+      newErrors.password = 'Password is required';
     } else if (password.length < 8) {
-      newErrors.password = 'Password Must Be At Least 8 Characters';
+      newErrors.password = 'Password must be at least 8 characters';
     }
 
     if (password !== confirmPassword) {
-      newErrors.confirmPassword = 'Passwords Do Not Match';
+      newErrors.confirmPassword = 'Passwords do not match';
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -99,7 +99,7 @@ export function PasswordResetPage() {
           style={{ color: 'var(--color-textSecondary)' }}
         >
           <ArrowLeft className="w-4 h-4" />
-          Back To Sign In
+          Back to sign in
         </Link>
       </header>
 
@@ -126,19 +126,19 @@ export function PasswordResetPage() {
               className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
               style={{ color: 'var(--color-text)' }}
             >
-              {step === 'request' && 'Forgot Password?'}
-              {step === 'reset' && 'Set New Password'}
-              {step === 'success' && 'Check Your Email'}
+              {step === 'request' && 'Forgot password?'}
+              {step === 'reset' && 'Set new password'}
+              {step === 'success' && 'Check your email'}
             </h1>
             <p
               className="text-sm mt-2"
               style={{ color: 'var(--color-textMuted)' }}
             >
               {step === 'request' &&
-                "No Worries, We'll Send You Reset Instructions"}
-              {step === 'reset' && 'Enter Your New Password Below'}
+                "No worries, we'll send you reset instructions"}
+              {step === 'reset' && 'Enter your new password below'}
               {step === 'success' &&
-                `We've Sent A Password Reset Link To ${email}`}
+                `We've sent a password reset link to ${email}`}
             </p>
           </div>
 
@@ -157,7 +157,7 @@ export function PasswordResetPage() {
               />
 
               <Button type="submit" fullWidth isLoading={isLoading}>
-                Send Reset Link
+                Send reset link
               </Button>
             </form>
           )}
@@ -166,11 +166,11 @@ export function PasswordResetPage() {
           {step === 'reset' && (
             <form onSubmit={handleUpdatePassword} className="space-y-4">
               <Input
-                label="New Password"
+                label="New password"
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder="At Least 8 Characters"
+                placeholder="At least 8 characters"
                 leftIcon={<Lock className="w-4 h-4" />}
                 rightIcon={
                   <button
@@ -190,18 +190,18 @@ export function PasswordResetPage() {
               />
 
               <Input
-                label="Confirm New Password"
+                label="Confirm new password"
                 type={showPassword ? 'text' : 'password'}
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
-                placeholder="Confirm Your Password"
+                placeholder="Confirm your password"
                 leftIcon={<Lock className="w-4 h-4" />}
                 error={errors.confirmPassword}
                 disabled={isLoading}
               />
 
               <Button type="submit" fullWidth isLoading={isLoading}>
-                Update Password
+                Update password
               </Button>
             </form>
           )}
@@ -213,13 +213,13 @@ export function PasswordResetPage() {
                 className="text-sm text-center"
                 style={{ color: 'var(--color-textSecondary)' }}
               >
-                Didn't Receive The Email? Check Your Spam Folder Or{' '}
+                Didn't get the email? Check your spam folder or{' '}
                 <button
                   onClick={() => setStep('request')}
                   className="font-medium"
                   style={{ color: 'var(--color-accent)' }}
                 >
-                  Try Another Email Address
+                  Try another email address
                 </button>
               </p>
 
@@ -228,7 +228,7 @@ export function PasswordResetPage() {
                 fullWidth
                 onClick={() => navigate('/auth/login')}
               >
-                Back to Sign In
+                Back to sign in
               </Button>
             </div>
           )}

@@ -426,7 +426,7 @@ export function Assessment() {
             className="text-3xl font-serif font-normal tracking-tight mb-4"
             style={{ color: 'var(--color-text)' }}
           >
-            Complete Your Profile First
+            Complete your profile first
           </h1>
           <p
             className="mb-6"
@@ -439,11 +439,11 @@ export function Assessment() {
               onClick={() => setShowSetupModal(true)}
               rightIcon={<ArrowRight className="w-4 h-4" />}
             >
-              Set Up Profile
+              Set up profile
             </Button>
             <Link to="/app/dashboard">
               <Button variant="ghost" className="w-full">
-                Back to Dashboard
+                Back to dashboard
               </Button>
             </Link>
           </div>
@@ -511,7 +511,7 @@ export function Assessment() {
             </div>
             <div>
               <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-                Personality Assessment
+                Personality assessment
               </p>
               <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
                 Question {state.currentIndex + 1} of {candidateQuestions.length}

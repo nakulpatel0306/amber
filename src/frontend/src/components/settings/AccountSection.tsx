@@ -140,9 +140,9 @@ export function AccountSection() {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      success('Data Exported', 'Your data has been downloaded as a JSON file.');
+      success('Data exported', 'Your data has been downloaded as a JSON file.');
     } catch {
-      showError('Export Failed', 'Could not export your data. Please try again.');
+      showError('Export failed', 'Could not export your data. Please try again.');
     }
   };
 
@@ -164,7 +164,7 @@ export function AccountSection() {
           </h2>
         </div>
         <p className="text-sm mt-1" style={{ color: 'var(--color-textMuted)' }}>
-          Manage Your Account Security & Settings
+          Manage your account security & settings
         </p>
       </div>
 
@@ -239,7 +239,7 @@ export function AccountSection() {
                     Cancel
                   </Button>
                   <Button type="submit" size="sm" isLoading={isUpdating}>
-                    Update Password
+                    Update password
                   </Button>
                 </div>
               </form>
@@ -251,7 +251,7 @@ export function AccountSection() {
                 onClick={() => setIsChangingPassword(true)}
                 disabled={user?.app_metadata?.provider !== 'email'}
               >
-                Change Password
+                Change password
               </Button>
             )}
           </div>
@@ -275,7 +275,7 @@ export function AccountSection() {
               className="text-sm font-medium"
               style={{ color: 'var(--color-text)' }}
             >
-              Sign Out
+              Sign out
             </p>
             <p
               className="text-xs mt-0.5"
@@ -289,7 +289,7 @@ export function AccountSection() {
               className="mt-3"
               onClick={handleSignOut}
             >
-              Sign Out
+              Sign out
             </Button>
           </div>
         </div>
@@ -312,7 +312,7 @@ export function AccountSection() {
               className="text-sm font-medium"
               style={{ color: 'var(--color-text)' }}
             >
-              Export Your Data
+              Export your data
             </p>
             <p
               className="text-xs mt-0.5"
@@ -327,7 +327,7 @@ export function AccountSection() {
               onClick={handleExportData}
               leftIcon={<Download className="w-3.5 h-3.5" />}
             >
-              Export Data
+              Export data
             </Button>
           </div>
         </div>
@@ -353,7 +353,7 @@ export function AccountSection() {
               className="text-sm font-medium"
               style={{ color: 'var(--color-error)' }}
             >
-              Delete Account
+              Delete account
             </p>
             <p
               className="text-xs mt-0.5"
@@ -367,7 +367,7 @@ export function AccountSection() {
               className="mt-3"
               onClick={() => setShowDeleteModal(true)}
             >
-              Delete Account
+              Delete account
             </Button>
           </div>
         </div>
@@ -377,7 +377,7 @@ export function AccountSection() {
       <Modal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
-        title="Delete Account"
+        title="Delete account"
         size="sm"
       >
         <div className="space-y-4">
@@ -425,7 +425,7 @@ export function AccountSection() {
             isLoading={isDeleting}
             disabled={deleteConfirmText !== 'delete'}
           >
-            Delete Account
+            Delete account
           </Button>
         </ModalFooter>
       </Modal>

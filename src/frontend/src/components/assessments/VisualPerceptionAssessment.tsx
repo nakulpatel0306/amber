@@ -28,7 +28,7 @@ interface VisualQuestion {
 const VISUAL_QUESTIONS: VisualQuestion[] = [
   {
     id: 'pattern-perception',
-    title: 'Pattern Recognition',
+    title: 'Pattern recognition',
     instruction: 'Look at this image. What do you notice first?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -58,25 +58,25 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
     options: [
       {
         id: 'order',
-        label: 'The Organized Pattern',
+        label: 'The organized pattern',
         description: 'The neat, aligned circles on the left caught my eye first',
         traits: { conscientiousness: 15, openness: -5 },
       },
       {
         id: 'chaos',
-        label: 'The Scattered Elements',
+        label: 'The scattered elements',
         description: 'The colorful, scattered dots on the right drew my attention',
         traits: { openness: 15, conscientiousness: -5 },
       },
       {
         id: 'contrast',
-        label: 'The Contrast Between Both',
+        label: 'The contrast between both',
         description: 'I immediately noticed the difference between the two halves',
         traits: { openness: 10, conscientiousness: 10 },
       },
       {
         id: 'whole',
-        label: 'The Overall Composition',
+        label: 'The overall composition',
         description: 'I saw it as one unified image before noticing the parts',
         traits: { agreeableness: 10, openness: 5 },
       },
@@ -84,7 +84,7 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
   },
   {
     id: 'depth-perception',
-    title: 'Depth & Focus',
+    title: 'Depth & focus',
     instruction: 'What stands out to you in this image?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -106,25 +106,25 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
     options: [
       {
         id: 'foreground',
-        label: 'The Small, Bright Shapes',
+        label: 'The small, bright shapes',
         description: 'The vivid, detailed elements in the foreground caught my eye',
         traits: { conscientiousness: 10, neuroticism_inv: 5 },
       },
       {
         id: 'background',
-        label: 'The Large, Soft Shapes',
+        label: 'The large, soft shapes',
         description: 'The big, subtle background shapes are what I noticed',
         traits: { openness: 10, extraversion: 5 },
       },
       {
         id: 'layers',
-        label: 'The Layering Effect',
+        label: 'The layering effect',
         description: 'I noticed how shapes overlap and create depth',
         traits: { openness: 12, conscientiousness: 8 },
       },
       {
         id: 'colors',
-        label: 'The Color Relationships',
+        label: 'The color relationships',
         description: 'The way different colors interact stood out most',
         traits: { openness: 15, agreeableness: 5 },
       },
@@ -132,7 +132,7 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
   },
   {
     id: 'social-scene',
-    title: 'Social Perception',
+    title: 'Social perception',
     instruction: 'Look at this scene. What draws your attention?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -174,25 +174,25 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
     options: [
       {
         id: 'people',
-        label: 'The People',
+        label: 'The people',
         description: 'The human figures and their postures caught my attention first',
         traits: { extraversion: 12, agreeableness: 10 },
       },
       {
         id: 'interaction',
-        label: 'The Connection Between Them',
+        label: 'The connection between them',
         description: 'I noticed the relationship and interaction between the figures',
         traits: { agreeableness: 15, extraversion: 5 },
       },
       {
         id: 'environment',
-        label: 'The Buildings & Setting',
+        label: 'The buildings & setting',
         description: 'The architectural elements and environment stood out',
         traits: { conscientiousness: 10, openness: 8 },
       },
       {
         id: 'objects',
-        label: 'The Small Details & Objects',
+        label: 'The small details & objects',
         description: 'I noticed the smaller objects and details in the scene',
         traits: { conscientiousness: 12, openness: 5 },
       },
@@ -200,7 +200,7 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
   },
   {
     id: 'completion-tendency',
-    title: 'Completion & Imagination',
+    title: 'Completion & imagination',
     instruction: 'What do you see in these incomplete shapes?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -247,25 +247,25 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
     options: [
       {
         id: 'complete',
-        label: 'Complete Shapes',
+        label: 'Complete shapes',
         description: 'I mentally completed the shapes - a circle, square, and triangle',
         traits: { conscientiousness: 12, openness: 5 },
       },
       {
         id: 'abstract',
-        label: 'Abstract Art',
+        label: 'Abstract art',
         description: 'I saw them as artistic, expressive lines - not trying to be shapes',
         traits: { openness: 15, agreeableness: 3 },
       },
       {
         id: 'story',
-        label: 'A Progression or Story',
+        label: 'A progression or story',
         description: 'I saw a sequence or narrative connecting the elements',
         traits: { openness: 12, extraversion: 8 },
       },
       {
         id: 'gaps',
-        label: 'The Missing Pieces',
+        label: 'The missing pieces',
         description: 'I focused on what\'s absent - the gaps and open ends',
         traits: { neuroticism_inv: 10, conscientiousness: 8 },
       },
@@ -273,7 +273,7 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
   },
   {
     id: 'movement-energy',
-    title: 'Energy & Movement',
+    title: 'Energy & movement',
     instruction: 'How does this image make you feel?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -334,13 +334,13 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
     options: [
       {
         id: 'energized',
-        label: 'Energized & Excited',
+        label: 'Energized & excited',
         description: 'The movement and dynamism makes me feel energized',
         traits: { extraversion: 15, openness: 5 },
       },
       {
         id: 'calm',
-        label: 'Calm & Flowing',
+        label: 'Calm & flowing',
         description: 'I see a peaceful, rhythmic flow that feels calming',
         traits: { agreeableness: 10, neuroticism_inv: 10 },
       },
@@ -360,7 +360,7 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
   },
   {
     id: 'color-emotion',
-    title: 'Color & Emotion',
+    title: 'Color & emotion',
     instruction: 'Which color arrangement feels most "right" to you?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -408,25 +408,25 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
     options: [
       {
         id: 'warm-ordered',
-        label: 'Warm & Organized',
+        label: 'Warm & organized',
         description: 'The structured warm gradient feels harmonious and intentional',
         traits: { conscientiousness: 12, agreeableness: 5 },
       },
       {
         id: 'cool-scattered',
-        label: 'Cool & Expressive',
+        label: 'Cool & expressive',
         description: 'The scattered cool tones feel creative and freeing',
         traits: { openness: 15, extraversion: 3 },
       },
       {
         id: 'complementary',
-        label: 'Bold Contrasts',
+        label: 'Bold contrasts',
         description: 'The complementary colors create exciting visual tension',
         traits: { extraversion: 10, openness: 8 },
       },
       {
         id: 'monochrome',
-        label: 'Subtle Depth',
+        label: 'Subtle depth',
         description: 'The monochrome layers feel sophisticated and calming',
         traits: { conscientiousness: 8, neuroticism_inv: 10 },
       },
@@ -434,7 +434,7 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
   },
   {
     id: 'spatial-orientation',
-    title: 'Spatial Orientation',
+    title: 'Spatial orientation',
     instruction: 'How do these shapes relate to each other?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -462,25 +462,25 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
     options: [
       {
         id: 'hierarchy',
-        label: 'A Hierarchy',
+        label: 'A hierarchy',
         description: 'The triangle leads, the circles support — there\'s a clear structure',
         traits: { conscientiousness: 12, extraversion: 5 },
       },
       {
         id: 'network',
-        label: 'A Connected Network',
+        label: 'A connected network',
         description: 'They\'re all linked together, forming a web of relationships',
         traits: { agreeableness: 12, extraversion: 8 },
       },
       {
         id: 'system',
-        label: 'A System in Motion',
+        label: 'A system in motion',
         description: 'The shapes are orbiting and interacting, like a living system',
         traits: { openness: 12, conscientiousness: 5 },
       },
       {
         id: 'independent',
-        label: 'Independent Elements',
+        label: 'Independent elements',
         description: 'Each shape exists on its own — the connections are incidental',
         traits: { openness: 8, neuroticism_inv: 8 },
       },
@@ -488,7 +488,7 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
   },
   {
     id: 'symmetry-balance',
-    title: 'Symmetry & Balance',
+    title: 'Symmetry & balance',
     instruction: 'Which composition do you prefer?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -514,25 +514,25 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
     options: [
       {
         id: 'symmetry',
-        label: 'Perfect Symmetry',
+        label: 'Perfect symmetry',
         description: 'The mirrored, balanced composition on the left feels more satisfying',
         traits: { conscientiousness: 15, neuroticism_inv: 5 },
       },
       {
         id: 'asymmetry',
-        label: 'Dynamic Asymmetry',
+        label: 'Dynamic asymmetry',
         description: 'The varied, asymmetric layout on the right feels more interesting',
         traits: { openness: 15, extraversion: 5 },
       },
       {
         id: 'both',
-        label: 'Both Are Appealing',
+        label: 'Both are appealing',
         description: 'I appreciate both — order and creative variety each have their place',
         traits: { agreeableness: 10, openness: 5, conscientiousness: 5 },
       },
       {
         id: 'neither',
-        label: 'Neither Stands Out',
+        label: 'Neither stands out',
         description: 'I don\'t feel strongly drawn to either arrangement',
         traits: { neuroticism_inv: 8, openness: 5 },
       },
@@ -655,7 +655,7 @@ export function VisualPerceptionAssessment() {
           })
           .eq('user_id', user.id);
 
-        showSuccess('Assessment Complete!', 'Your visual perception results have been added to your profile.');
+        showSuccess('Assessment complete!', 'Your visual perception results have been added to your profile.');
       } catch (err) {
         console.error('Error saving visual perception data:', err);
       }
@@ -691,12 +691,12 @@ export function VisualPerceptionAssessment() {
       { key: 'conscientiousness', label: 'Conscientiousness', value: Math.min(100, (traitScores.conscientiousness / maxPossible) * 100), color: '#10B981', progressColor: 'green' },
       { key: 'extraversion', label: 'Extraversion', value: Math.min(100, (traitScores.extraversion / maxPossible) * 100), color: '#F59E0B', progressColor: 'amber' },
       { key: 'agreeableness', label: 'Agreeableness', value: Math.min(100, (traitScores.agreeableness / maxPossible) * 100), color: '#EC4899', progressColor: 'pink' },
-      { key: 'neuroticism', label: 'Emotional Stability', value: Math.min(100, (traitScores.neuroticism_inv / maxPossible) * 100), color: '#06B6D4', progressColor: 'cyan' },
+      { key: 'neuroticism', label: 'Emotional stability', value: Math.min(100, (traitScores.neuroticism_inv / maxPossible) * 100), color: '#06B6D4', progressColor: 'cyan' },
     ];
 
     return (
       <AssessmentResultsTemplate
-        title="Visual Perception Results"
+        title="Visual perception results"
         subtitle="Here's what your visual perception style reveals about your personality"
         dimensions={dimensions}
         enhancedMessage="These visual perception modifiers have been applied to your personality profile, making your matches more accurate. The more assessments you complete, the better your results."
@@ -724,7 +724,7 @@ export function VisualPerceptionAssessment() {
             </div>
             <div>
               <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
-                Visual Perception Test
+                Visual perception test
               </h1>
               <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
                 Question {currentQuestion + 1} of {VISUAL_QUESTIONS.length}

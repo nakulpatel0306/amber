@@ -50,7 +50,7 @@ export function DashboardTopMatches({ topMatches, hasCompletedAssessment }: Dash
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
           <Heart className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-          Top Matches
+          Top matches
         </h2>
         <div className="flex items-center gap-2">
           {/* View toggle */}
@@ -80,7 +80,7 @@ export function DashboardTopMatches({ topMatches, hasCompletedAssessment }: Dash
             </button>
           </div>
           <Link to="/app/matches" className="text-xs font-medium" style={{ color: 'var(--color-accent)' }}>
-            View All
+            View all
           </Link>
         </div>
       </div>
@@ -164,7 +164,7 @@ export function DashboardTopMatches({ topMatches, hasCompletedAssessment }: Dash
                           </div>
                           <Link to="/app/matches">
                             <Button variant="ghost" size="sm" rightIcon={<ArrowRight className="w-3 h-3" />}>
-                              View Match
+                              View match
                             </Button>
                           </Link>
                         </div>

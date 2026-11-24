@@ -47,13 +47,13 @@ interface StatusConfig {
 function getStatusConfig(status: CandidateRow['chatStatus']): StatusConfig {
   switch (status) {
     case 'completed':
-      return { label: 'Chat Done', icon: CheckCircle2, color: '#22C55E', bg: 'rgba(34, 197, 94, 0.12)' };
+      return { label: 'Chat done', icon: CheckCircle2, color: '#22C55E', bg: 'rgba(34, 197, 94, 0.12)' };
     case 'accepted':
       return { label: 'Scheduled', icon: CalendarCheck, color: '#3B82F6', bg: 'rgba(59, 130, 246, 0.12)' };
     case 'pending':
-      return { label: 'Invite Sent', icon: Send, color: '#A855F7', bg: 'rgba(168, 85, 247, 0.12)' };
+      return { label: 'Invite sent', icon: Send, color: '#A855F7', bg: 'rgba(168, 85, 247, 0.12)' };
     default:
-      return { label: 'New Match', icon: Sparkles, color: 'var(--color-textMuted)', bg: 'rgba(120, 113, 108, 0.1)' };
+      return { label: 'New match', icon: Sparkles, color: 'var(--color-textMuted)', bg: 'rgba(120, 113, 108, 0.1)' };
   }
 }
 
@@ -68,13 +68,13 @@ export function EmployerCandidateTable({ candidates, hasCompletedCultureQuiz, on
     return (
       <div className="py-6">
         <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-          Top Culture Matches
+          Top culture matches
         </h3>
         <p
           className="font-mono text-[10px] uppercase tracking-[0.25em] mb-1"
           style={{ color: 'var(--color-textMuted)' }}
         >
-          Browse & Connect With Best-Fit Candidates
+          Browse & connect with best-fit candidates
         </p>
         <p className="text-sm py-8 text-center" style={{ color: 'var(--color-textMuted)' }}>
           Complete your culture assessment to see matched candidates
@@ -89,13 +89,13 @@ export function EmployerCandidateTable({ candidates, hasCompletedCultureQuiz, on
       <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <div>
           <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-            Top Culture Matches
+            Top culture matches
           </h3>
           <p
             className="font-mono text-[10px] uppercase tracking-[0.25em]"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            Browse & Connect With Best-Fit Candidates
+            Browse & connect with best-fit candidates
           </p>
         </div>
         {onRefresh && (
@@ -137,7 +137,7 @@ export function EmployerCandidateTable({ candidates, hasCompletedCultureQuiz, on
                 className="pb-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"
                 style={{ color: 'var(--color-textMuted)' }}
               >
-                Top Trait
+                Top trait
               </th>
               <th
                 className="pb-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"

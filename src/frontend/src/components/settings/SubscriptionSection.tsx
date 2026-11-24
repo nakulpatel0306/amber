@@ -29,7 +29,7 @@ const planToTier: Record<string, string> = {
 
 const statusLabels: Record<string, { text: string; color: string }> = {
   active: { text: 'Active', color: 'var(--color-success)' },
-  past_due: { text: 'Past Due', color: '#ef4444' },
+  past_due: { text: 'Past due', color: '#ef4444' },
   canceled: { text: 'Canceled', color: 'var(--color-textMuted)' },
   inactive: { text: 'No subscription', color: 'var(--color-textMuted)' },
 };
@@ -104,7 +104,7 @@ export function SubscriptionSection() {
           </h2>
         </div>
         <p className="text-sm mt-1" style={{ color: 'var(--color-textMuted)' }}>
-          Manage Your Plan & Billing
+          Manage your plan & billing
         </p>
       </div>
 
@@ -151,7 +151,7 @@ export function SubscriptionSection() {
 
         <div className="mt-4 pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
           <p className="text-xs font-medium mb-2" style={{ color: 'var(--color-textMuted)' }}>
-            Included In Your Plan:
+            Included in your plan
           </p>
           <ul className="space-y-1.5">
             {currentPlan.features.slice(0, 4).map(feature => (
@@ -170,7 +170,7 @@ export function SubscriptionSection() {
           onClick={() => navigate('/app/pricing')}
           leftIcon={<Crown className="w-4 h-4" />}
         >
-          {currentPlan.tier === 'free' ? 'Upgrade Plan' : 'Change Plan'}
+          {currentPlan.tier === 'free' ? 'Upgrade plan' : 'Change plan'}
         </Button>
         {subscription?.has_stripe_customer && (
           <Button
@@ -179,7 +179,7 @@ export function SubscriptionSection() {
             leftIcon={isLoadingPortal ? <Loader2 className="w-4 h-4 animate-spin" /> : <ExternalLink className="w-4 h-4" />}
             disabled={isLoadingPortal}
           >
-            Manage Billing
+            Manage billing
           </Button>
         )}
       </div>
@@ -194,7 +194,7 @@ export function SubscriptionSection() {
           }}
         >
           <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-text)' }}>
-            Unlock More With {isEmployer ? 'Barista' : 'Smooth Talker'}
+            Unlock more with {isEmployer ? 'Barista' : 'Smooth Talker'}
           </p>
           <p className="text-xs mb-3" style={{ color: 'var(--color-textMuted)' }}>
             {isEmployer
@@ -202,7 +202,7 @@ export function SubscriptionSection() {
               : 'Get unlimited match browsing, priority visibility to employers, and detailed OCEAN breakdowns.'}
           </p>
           <Button size="sm" onClick={() => navigate('/app/pricing')}>
-            See Plans
+            See plans
           </Button>
         </div>
       )}

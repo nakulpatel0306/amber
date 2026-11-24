@@ -85,7 +85,7 @@ export function BillingSuccessPage() {
             Your subscription will appear in settings shortly.
           </p>
           <Button onClick={() => navigate('/app/settings/subscription')}>
-            Go to Settings
+            Go to settings
           </Button>
         </div>
       </div>
@@ -110,10 +110,10 @@ export function BillingSuccessPage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button onClick={() => navigate('/app/dashboard')}>
-            Go to Dashboard
+            Go to dashboard
           </Button>
           <Button variant="outline" onClick={() => navigate('/app/settings/subscription')}>
-            View Subscription
+            View subscription
           </Button>
         </div>
       </div>

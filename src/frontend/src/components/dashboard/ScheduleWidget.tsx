@@ -129,11 +129,11 @@ export function ScheduleWidget({ upcomingChats, pendingChats: _pendingChats, acc
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
           <Coffee className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-          Meeting Calendar
+          Meeting calendar
         </h2>
         <Link to={chatsPath}>
           <span className="text-xs font-medium flex items-center gap-1" style={{ color: 'var(--color-accent)' }}>
-            View All <ArrowRight className="w-3 h-3" />
+            View all <ArrowRight className="w-3 h-3" />
           </span>
         </Link>
       </div>

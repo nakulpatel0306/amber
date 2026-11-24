@@ -107,7 +107,7 @@ export function DayDetailPopup({
                   {chat.scheduledAt && (
                     <p className="text-xs mt-0.5" style={{ color: 'var(--color-textSecondary)' }}>
                       {format(parseISO(chat.scheduledAt), 'h:mm a')}
-                      {chat.role && chat.role !== 'Coffee Chat' && (
+                      {chat.role && chat.role !== 'Coffee chat' && (
                         <span style={{ color: 'var(--color-textMuted)' }}> · {chat.role}</span>
                       )}
                     </p>
@@ -136,7 +136,7 @@ export function DayDetailPopup({
         {hasUnscheduled && (
           <div>
             <p className="text-[10px] font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--color-textMuted)' }}>
-              Ready to Schedule
+              Ready to schedule
             </p>
             <div className="space-y-2">
               {unscheduledChats.map((chat, i) => (

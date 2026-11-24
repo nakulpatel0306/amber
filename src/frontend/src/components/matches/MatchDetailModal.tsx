@@ -347,7 +347,7 @@ export function MatchDetailModal({
         {matchData.dimensionAnalysis && matchData.dimensionAnalysis.length > 0 && (
           <div className="px-6 py-5 border-b" style={{ borderColor: 'var(--color-border)' }}>
             <h3 className="text-sm font-semibold mb-1" style={{ color: 'var(--color-text)' }}>
-              OCEAN Personality Comparison
+              OCEAN personality comparison
             </h3>
             <div className="flex items-center gap-4 mb-3 text-xs" style={{ color: 'var(--color-textMuted)' }}>
               <span className="flex items-center gap-1">
@@ -356,7 +356,7 @@ export function MatchDetailModal({
               </span>
               <span className="flex items-center gap-1">
                 <span className="w-2.5 h-2.5 rounded-full opacity-40" style={{ backgroundColor: 'var(--color-warning)' }} />
-                {role === 'candidate' ? 'Ideal' : 'Your Preference'}
+                {role === 'candidate' ? 'Ideal' : 'Your preference'}
               </span>
             </div>
             <div className="space-y-3">
@@ -381,12 +381,12 @@ export function MatchDetailModal({
         {/* ---- Composite Scores ---- */}
         <div className="px-6 py-5 border-b" style={{ borderColor: 'var(--color-border)' }}>
           <h3 className="text-sm font-semibold mb-4" style={{ color: 'var(--color-text)' }}>
-            Compatibility Breakdown
+            Compatibility breakdown
           </h3>
           <div className="space-y-4">
-            <CompositeBar label="Trait Match" score={matchData.traitScore} icon={<Brain className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />} />
-            <CompositeBar label="Culture Fit" score={matchData.cultureScore} icon={<Heart className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />} />
-            <CompositeBar label="Work Style" score={matchData.workStyleScore} icon={<Briefcase className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />} />
+            <CompositeBar label="Trait match" score={matchData.traitScore} icon={<Brain className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />} />
+            <CompositeBar label="Culture fit" score={matchData.cultureScore} icon={<Heart className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />} />
+            <CompositeBar label="Work style" score={matchData.workStyleScore} icon={<Briefcase className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />} />
             <CompositeBar label="Communication" score={matchData.communicationScore} icon={<MessageSquare className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />} />
           </div>
         </div>
@@ -396,7 +396,7 @@ export function MatchDetailModal({
           <div className="flex items-center gap-2 mb-4">
             <EmberFirefly size="sm" mood={emberLoading ? 'thinking' : 'happy'} animated={emberLoading} />
             <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-              Ember's Analysis
+              Ember's analysis
             </h3>
           </div>
 
@@ -479,7 +479,7 @@ export function MatchDetailModal({
               if (onRequestChat) onRequestChat();
             }}
           >
-            {role === 'candidate' ? 'Request Coffee Chat' : 'Invite to Coffee Chat'}
+            {role === 'candidate' ? 'Request coffee chat' : 'Invite to coffee chat'}
           </Button>
 
           <Button
@@ -501,7 +501,7 @@ export function MatchDetailModal({
               backgroundColor: saved ? `var(--color-accent)` : 'transparent',
               color: saved ? 'white' : 'var(--color-textMuted)',
             }}
-            title={saved ? 'Saved' : 'Save for Later'}
+            title={saved ? 'Saved' : 'Save for later'}
           >
             {saved ? <BookmarkCheck className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
           </button>

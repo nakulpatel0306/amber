@@ -34,10 +34,6 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?:
   'The Challenger': Target,
 };
 
-function titleCase(str: string): string {
-  return str.replace(/\b\w/g, c => c.toUpperCase());
-}
-
 export function EmployerArchetypeStrip({ culturePreferences }: EmployerArchetypeStripProps) {
   const preferences = {
     openness: culturePreferences.openness,
@@ -69,10 +65,10 @@ export function EmployerArchetypeStrip({ culturePreferences }: EmployerArchetype
     ? (scores.agreeableness > 60 ? 'Warm Collaborator' : 'Direct Communicator')
     : (scores.agreeableness > 60 ? 'Thoughtful Listener' : 'Focused Contributor');
   const teamDynamic = scores.extraversion > 60
-    ? 'Collaborative-First'
+    ? 'Collaborative-first'
     : scores.conscientiousness > 60
-      ? 'Structured & Focused'
-      : 'Flexible Hybrid';
+      ? 'Structured & focused'
+      : 'Flexible hybrid';
 
   const ArchetypeIcon = ICON_MAP[primaryArchetype.name] || Lightbulb;
 
@@ -100,7 +96,7 @@ export function EmployerArchetypeStrip({ culturePreferences }: EmployerArchetype
         className="text-sm italic mb-3"
         style={{ color: 'var(--color-textSecondary)' }}
       >
-        {titleCase(primaryArchetype.description)}
+        {primaryArchetype.description}
       </p>
 
       {/* Divider */}
@@ -125,7 +121,7 @@ export function EmployerArchetypeStrip({ culturePreferences }: EmployerArchetype
         className="font-mono text-xs font-medium transition-opacity hover:opacity-70"
         style={{ color: 'var(--color-accent)' }}
       >
-        View Culture Insights →
+        View culture insights →
       </Link>
     </motion.div>
   );

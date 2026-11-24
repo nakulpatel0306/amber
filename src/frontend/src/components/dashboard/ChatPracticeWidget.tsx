@@ -20,7 +20,7 @@ export function ChatPracticeWidget() {
           <Coffee className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
         </div>
         <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-          Practice Coffee Chat
+          Practice coffee chat
         </h3>
       </div>
 
@@ -52,7 +52,7 @@ export function ChatPracticeWidget() {
           rightIcon={<ArrowRight className="w-3 h-3" />}
           className="w-full justify-center"
         >
-          Start Practicing
+          Start practicing
         </Button>
       </Link>
     </div>

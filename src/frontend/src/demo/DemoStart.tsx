@@ -16,7 +16,7 @@ const ROLES: {
 }[] = [
   {
     id: 'candidate',
-    label: 'Job Seeker',
+    label: 'Job seeker',
     icon: User,
     summary: 'Take the personality assessment, see your archetype and get ranked against six invented companies.',
     steps: ['Assessment', 'Archetype', 'Ranked matches', 'Coffee chat'],
@@ -31,7 +31,7 @@ const ROLES: {
 ];
 
 export function DemoStart() {
-  usePageTitle('Try the Demo');
+  usePageTitle('Try the demo');
   const navigate = useNavigate();
   const { user, profile, signUpWithEmail, signOut } = useAuth();
   const [busy, setBusy] = useState<string | null>(null);

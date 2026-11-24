@@ -34,7 +34,7 @@ function OverviewCarousel({ stats }: { stats: { totalMatches: number; strongMatc
   const slides: OverviewSlide[] = [
     { value: String(stats.totalMatches), label: 'Matches' },
     { value: String(stats.strongMatches), label: 'Strong (80+)' },
-    { value: `${stats.avgScore}%`, label: 'Avg Score' },
+    { value: `${stats.avgScore}%`, label: 'Avg score' },
   ];
 
   const [active, setActive] = useState(0);
@@ -388,12 +388,12 @@ export function EmberAgent() {
       <div className="ember-page min-h-screen flex items-center justify-center p-8" style={{ backgroundColor: 'var(--color-background)' }}>
         <div className="text-center max-w-md">
           <h2 className="text-2xl font-serif font-normal tracking-tight mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
-            Complete Your Assessment First
+            Complete your assessment first
           </h2>
           <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
             Take our personality assessment to unlock Ember insights, discover your archetype, and find your best matches.
           </p>
-          <Button onClick={() => navigate('/app/personality')}>Start Assessment</Button>
+          <Button onClick={() => navigate('/app/personality')}>Start assessment</Button>
         </div>
       </div>
     );
@@ -443,7 +443,7 @@ export function EmberAgent() {
                       {([
                         { label: 'Matches', value: dashboardStats.totalMatches, color: '#f59e0b', Icon: Users },
                         { label: 'Strong (80+)', value: dashboardStats.strongMatches, color: 'var(--color-trait-openness)', Icon: Zap },
-                        { label: 'Avg Score', value: `${dashboardStats.avgScore}%`, color: 'var(--color-trait-conscientiousness)', Icon: TrendingUp },
+                        { label: 'Avg score', value: `${dashboardStats.avgScore}%`, color: 'var(--color-trait-conscientiousness)', Icon: TrendingUp },
                       ] as const).map(stat => (
                         <span
                           key={stat.label}
@@ -628,12 +628,12 @@ export function EmberAgent() {
                     style={{ color: 'var(--color-textMuted)' }}
                   >
                     <Bookmark className="w-3 h-3 inline-block mr-1.5 -mt-px" />
-                    Saved Jobs //
+                    Saved jobs //
                   </p>
 
                   {bookmarkedEmployers.length === 0 ? (
                     <p className="text-xs py-3" style={{ color: 'var(--color-textMuted)' }}>
-                      Bookmark A Match To Save It Here.
+                      Bookmark a match to save it here.
                     </p>
                   ) : (
                     <div className="space-y-0">

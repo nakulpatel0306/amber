@@ -280,7 +280,7 @@ export function NetworkRoles({ isCandidate }: Props) {
     });
   };
 
-  if (showLoader) return <CoffeeBrewLoader variant="fullscreen" message="Loading Roles..." />;
+  if (showLoader) return <CoffeeBrewLoader variant="fullscreen" message="Loading roles..." />;
 
   // No longer gate on assessment — roles are shown regardless
 
@@ -304,7 +304,7 @@ export function NetworkRoles({ isCandidate }: Props) {
               Complete your assessment to see match scores for each role
             </p>
           </div>
-          <Button size="sm" onClick={() => navigate('/app/personality')}>Take Assessment</Button>
+          <Button size="sm" onClick={() => navigate('/app/personality')}>Take assessment</Button>
         </div>
       )}
       {/* Main Card */}
@@ -315,7 +315,7 @@ export function NetworkRoles({ isCandidate }: Props) {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold font-display flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Briefcase className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Open Roles
+            Open roles
           </h2>
           <div className="flex items-center gap-3 text-xs" style={{ color: 'var(--color-textMuted)' }}>
             <span>{matches.length} active</span>

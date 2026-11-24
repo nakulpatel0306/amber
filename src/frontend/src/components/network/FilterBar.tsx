@@ -11,8 +11,8 @@ interface FilterBarProps {
 }
 
 const FILTER_TABS: { value: FeedFilter; label: string }[] = [
-  { value: 'all', label: 'All Posts' },
-  { value: 'job_seekers', label: 'Job Seekers' },
+  { value: 'all', label: 'All posts' },
+  { value: 'job_seekers', label: 'Job seekers' },
   { value: 'employers', label: 'Employers' },
   { value: 'connections', label: 'Connections' },
 ];

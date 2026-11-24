@@ -18,7 +18,7 @@ export function TopMatchCard({ name, subtitle, score, avatarUrl, onDeepDive }: T
         className="text-xs font-medium uppercase tracking-wider mb-3"
         style={{ color: 'var(--color-textMuted)' }}
       >
-        Top Match
+        Top match
       </p>
 
       <div className="flex items-center gap-3 mb-4">
@@ -67,7 +67,7 @@ export function TopMatchCard({ name, subtitle, score, avatarUrl, onDeepDive }: T
         className="font-mono text-xs font-medium transition-opacity hover:opacity-70 flex items-center gap-1"
         style={{ color: 'var(--color-accent)' }}
       >
-        View Deep Dive <ArrowRight className="w-3 h-3" />
+        View deep dive <ArrowRight className="w-3 h-3" />
       </span>
     </div>
   );

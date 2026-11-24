@@ -80,7 +80,7 @@ export function ScheduleModal({ isOpen, onClose, onSchedule, initialDate }: Sche
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="Schedule Coffee Chat" size="lg">
+    <Modal isOpen={isOpen} onClose={handleClose} title="Schedule coffee chat" size="lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-2">
         {/* Left: Calendar */}
         <div>
@@ -219,7 +219,7 @@ export function ScheduleModal({ isOpen, onClose, onSchedule, initialDate }: Sche
           <div className="flex items-center justify-end gap-2 pt-3 border-t" style={{ borderColor: 'var(--color-border)' }}>
             <Button variant="outline" onClick={handleClose}>Cancel</Button>
             <Button onClick={handleSubmit} disabled={!selectedDate || !time}>
-              Schedule Chat
+              Schedule chat
             </Button>
           </div>
         </div>

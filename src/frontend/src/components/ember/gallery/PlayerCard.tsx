@@ -134,7 +134,7 @@ export function PlayerCard({
         style={{ borderTop: '1px solid var(--color-border)' }}
       >
         <Button size="xs" variant="ghost" className="flex-1" onClick={onDeepDive}>
-          <Eye className="w-3.5 h-3.5 mr-1" />Deep Dive
+          <Eye className="w-3.5 h-3.5 mr-1" />Deep dive
         </Button>
         {connectionStatus === 'accepted' ? (
           <Button size="xs" className="flex-1" onClick={(e) => { e.stopPropagation(); onBrew(); }}>

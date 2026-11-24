@@ -64,7 +64,7 @@ export class ErrorBoundary extends Component<Props, State> {
               className="text-xl font-semibold mb-2"
               style={{ color: 'var(--color-text)' }}
             >
-              Something Went Wrong
+              Something went wrong
             </h1>
 
             <p
@@ -87,7 +87,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   className="cursor-pointer text-sm font-medium"
                   style={{ color: 'var(--color-textSecondary)' }}
                 >
-                  Error Details
+                  Error details
                 </summary>
                 <pre
                   className="mt-2 text-xs overflow-auto"
@@ -104,13 +104,13 @@ export class ErrorBoundary extends Component<Props, State> {
                 onClick={this.handleGoHome}
                 leftIcon={<Home className="w-4 h-4" />}
               >
-                Go Home
+                Go home
               </Button>
               <Button
                 onClick={this.handleRetry}
                 leftIcon={<RefreshCw className="w-4 h-4" />}
               >
-                Try Again
+                Try again
               </Button>
             </div>
           </div>

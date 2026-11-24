@@ -72,7 +72,7 @@ export function PricingPage() {
     try {
       const error = await redirectToCheckout(priceId);
       if (error) {
-        showError('Checkout Error', error);
+        showError('Checkout error', error);
       }
     } catch {
       showError('Error', 'Something went wrong. Please try again.');
@@ -96,7 +96,7 @@ export function PricingPage() {
             style={{ color: 'var(--color-textMuted)' }}
           >
             <ArrowLeft className="w-4 h-4" />
-            Back To Home
+            Back to home
           </Link>
         )}
 
@@ -121,7 +121,7 @@ export function PricingPage() {
               onClick={handleSkip}
               rightIcon={<ArrowRight className="w-4 h-4" />}
             >
-              Skip for Now
+              Skip for now
             </Button>
           </div>
         )}
@@ -145,7 +145,7 @@ export function PricingPage() {
           className="text-4xl sm:text-5xl font-serif font-normal tracking-tight mb-4"
           style={{ color: 'var(--color-text)' }}
         >
-          Find Your Perfect Plan
+          Find your perfect plan
         </h1>
         <p
           className="text-sm sm:text-base max-w-2xl leading-relaxed"
@@ -180,7 +180,7 @@ export function PricingPage() {
                 color: activeTab === 'candidate' ? 'white' : 'var(--color-textSecondary)',
               }}
             >
-              Job Seekers
+              Job seekers
             </button>
             <button
               onClick={() => setActiveTab('employer')}
@@ -258,7 +258,7 @@ export function PricingPage() {
                     className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-bold"
                     style={{ backgroundColor: accent, color: 'white' }}
                   >
-                    Most Popular
+                    Most popular
                   </div>
                 )}
 
@@ -370,7 +370,7 @@ export function PricingPage() {
               className="mt-4"
               onClick={handleSkip}
             >
-              Continue with Free Plan
+              Continue with free plan
             </Button>
           )}
         </div>

@@ -86,7 +86,7 @@ export function EmployerAssessmentResults() {
 
   return (
     <AssessmentResultsTemplate
-      title="Culture Profile Complete!"
+      title="Culture profile complete!"
       subtitle="Your ideal candidate profile has been created"
       dimensions={dimensions}
       enhancedMessage="Your culture profile is now active. Start discovering candidates who match your ideal culture fit."
@@ -94,8 +94,8 @@ export function EmployerAssessmentResults() {
       accentColor="#8B5CF6"
       profileUrl="/app/employer/insights"
       matchesUrl="/app/employer/candidates"
-      profileLabel="View Insights"
-      matchesLabel="Browse Candidates"
+      profileLabel="View insights"
+      matchesLabel="Browse candidates"
     />
   );
 }

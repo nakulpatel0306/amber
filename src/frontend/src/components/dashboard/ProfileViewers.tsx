@@ -13,7 +13,7 @@ export function ProfileViewers() {
       <div className="flex items-center gap-2 mb-4">
         <Eye className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
         <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-          Profile Viewers
+          Profile viewers
         </h3>
         <span
           className="ml-auto text-[10px] font-medium px-2 py-0.5 rounded-full"

@@ -51,12 +51,12 @@ const COMPANY_SIZES = [
   { id: 'small', label: 'Small', description: '50-200 employees' },
   { id: 'medium', label: 'Medium', description: '200-1000 employees' },
   { id: 'large', label: 'Large', description: '1000+ employees' },
-  { id: 'any', label: 'Any Size', description: 'Open to all' },
+  { id: 'any', label: 'Any size', description: 'Open to all' },
 ];
 
 const STEPS = [
   { id: 'intro', title: 'Welcome', icon: Sparkles },
-  { id: 'basic', title: 'About You', icon: User },
+  { id: 'basic', title: 'About you', icon: User },
   { id: 'preferences', title: 'Preferences', icon: Briefcase },
   { id: 'links', title: 'Links', icon: LinkIcon },
 ];
@@ -267,7 +267,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
       // Refresh profile to update the onboarding_completed flag in context
       await refreshProfile();
 
-      success('Profile Setup Complete!', 'Your profile has been saved successfully.');
+      success('Profile setup complete!', 'Your profile has been saved successfully.');
       onComplete();
 
       // Redirect to assessment page after completing setup
@@ -391,7 +391,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                     className="text-xl font-bold mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Tell Us About Yourself
+                    Tell us about yourself
                   </h2>
                   <p
                     className="text-sm"
@@ -402,7 +402,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                 </div>
 
                 <Input
-                  label="Professional Headline *"
+                  label="Professional headline *"
                   type="text"
                   value={data.headline}
                   onChange={(e) => setData({ ...data, headline: e.target.value })}
@@ -439,7 +439,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                     placeholder="Select your location"
                   />
                   <Input
-                    label="Years of Experience *"
+                    label="Years of experience *"
                     type="number"
                     value={data.years_experience?.toString() || ''}
                     onChange={(e) => setData({ ...data, years_experience: e.target.value ? parseInt(e.target.value) : null })}
@@ -450,7 +450,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
 
                 {!canProceedToNext() && (
                   <p className="text-xs text-center" style={{ color: 'var(--color-textMuted)' }}>
-                    Please Fill In All Required Fields (*)
+                    Please fill in all required fields (*)
                   </p>
                 )}
               </div>
@@ -464,7 +464,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                     className="text-xl font-bold mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Your Work Preferences
+                    Your work preferences
                   </h2>
                   <p
                     className="text-sm"
@@ -479,7 +479,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                     className="block text-sm font-medium mb-3"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Preferred Work Style
+                    Preferred work style
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     {WORK_STYLES.map((style) => (
@@ -521,7 +521,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                     className="block text-sm font-medium mb-3"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Preferred Company Size
+                    Preferred company size
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {COMPANY_SIZES.map((size) => (
@@ -595,7 +595,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                     className="text-xl font-bold mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Share Your Work
+                    Share your work
                   </h2>
                   <p
                     className="text-sm"
@@ -606,7 +606,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                 </div>
 
                 <Input
-                  label="LinkedIn Profile"
+                  label="LinkedIn profile"
                   type="url"
                   value={data.linkedin_url}
                   onChange={(e) => setData({ ...data, linkedin_url: e.target.value })}
@@ -615,7 +615,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                 />
 
                 <Input
-                  label="GitHub Profile"
+                  label="GitHub profile"
                   type="url"
                   value={data.github_url}
                   onChange={(e) => setData({ ...data, github_url: e.target.value })}
@@ -651,7 +651,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                       className="text-xs mt-0.5"
                       style={{ color: 'var(--color-textMuted)' }}
                     >
-                      Click "Complete Setup" to save your profile and start the personality assessment. You can update these details anytime in settings.
+                      Click "Complete setup" to save your profile and start the personality assessment. You can update these details anytime in settings.
                     </p>
                   </div>
                 </div>
@@ -681,7 +681,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                   disabled={!canProceedToNext()}
                   rightIcon={<ArrowRight className="w-4 h-4" />}
                 >
-                  {currentStep === 0 ? 'Get Started' : 'Continue'}
+                  {currentStep === 0 ? 'Get started' : 'Continue'}
                 </Button>
               ) : (
                 <Button
@@ -689,7 +689,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                   isLoading={isSaving}
                   rightIcon={!isSaving ? <ArrowRight className="w-4 h-4" /> : undefined}
                 >
-                  {redirectToAssessment ? 'Complete & Take Assessment' : 'Complete Setup'}
+                  {redirectToAssessment ? 'Complete & take assessment' : 'Complete setup'}
                 </Button>
               )}
             </div>

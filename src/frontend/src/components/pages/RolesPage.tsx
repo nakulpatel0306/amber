@@ -43,16 +43,18 @@ interface RoleRow {
   _hiringName?: string;
 }
 
-function titleCase(str: string): string {
-  return str.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+// Enum values to labels: full_time -> Full time
+function enumLabel(str: string): string {
+  const s = str.replace(/[-_]/g, ' ');
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 const traitMeta: { minField: keyof RoleRow; maxField: keyof RoleRow; highLabel: string; lowLabel: string; color: string }[] = [
   { minField: 'required_openness_min', maxField: 'required_openness_max', highLabel: 'Creative', lowLabel: 'Practical', color: '#8b5cf6' },
-  { minField: 'required_conscientiousness_min', maxField: 'required_conscientiousness_max', highLabel: 'Detail-Oriented', lowLabel: 'Flexible', color: '#06b6d4' },
+  { minField: 'required_conscientiousness_min', maxField: 'required_conscientiousness_max', highLabel: 'Detail-oriented', lowLabel: 'Flexible', color: '#06b6d4' },
   { minField: 'required_extraversion_min', maxField: 'required_extraversion_max', highLabel: 'Collaborative', lowLabel: 'Independent', color: '#f59e0b' },
-  { minField: 'required_agreeableness_min', maxField: 'required_agreeableness_max', highLabel: 'Team Player', lowLabel: 'Assertive', color: '#10b981' },
-  { minField: 'required_neuroticism_min', maxField: 'required_neuroticism_max', highLabel: 'Passionate', lowLabel: 'Calm & Steady', color: '#ef4444' },
+  { minField: 'required_agreeableness_min', maxField: 'required_agreeableness_max', highLabel: 'Team player', lowLabel: 'Assertive', color: '#10b981' },
+  { minField: 'required_neuroticism_min', maxField: 'required_neuroticism_max', highLabel: 'Passionate', lowLabel: 'Calm & steady', color: '#ef4444' },
 ];
 
 function getTraitHighlights(role: RoleRow): { label: string; color: string }[] {
@@ -160,7 +162,7 @@ export function RolesPage() {
 
   const hasActiveFilters = !!(selectedIndustry || selectedWorkStyle || selectedCompanyId);
 
-  if (showLoader) return <CoffeeBrewLoader variant="fullscreen" message="Loading Roles..." />;
+  if (showLoader) return <CoffeeBrewLoader variant="fullscreen" message="Loading roles..." />;
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-6 space-y-5">
@@ -183,17 +185,17 @@ export function RolesPage() {
               className="text-2xl font-bold tracking-tight"
               style={{ color: 'var(--color-text)' }}
             >
-              Available Roles
+              Available roles
             </h1>
             <p
               className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              Browse All Open Positions //
+              Browse all open positions //
             </p>
             <div className="flex flex-wrap items-center gap-2.5 mt-3">
               {([
-                { label: 'Active Roles', value: roles.length, color: '#10B981', Icon: Briefcase },
+                { label: 'Active roles', value: roles.length, color: '#10B981', Icon: Briefcase },
                 { label: 'Companies', value: uniqueCompanies, color: '#8B5CF6', Icon: Building2 },
                 { label: 'Industries', value: industries.length, color: '#D97706', Icon: Globe },
               ] as const).map(stat => (
@@ -232,7 +234,7 @@ export function RolesPage() {
             type="text"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            placeholder="Search Roles, Companies, Locations..."
+            placeholder="Search roles, companies, locations..."
             className="w-full pl-10 pr-8 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30"
             style={{
               backgroundColor: 'var(--color-surface)',
@@ -257,7 +259,7 @@ export function RolesPage() {
               className="px-3 py-2.5 rounded-xl text-xs font-medium appearance-none cursor-pointer"
               style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textSecondary)', border: '1px solid var(--color-border)' }}
             >
-              <option value="">All Industries</option>
+              <option value="">All industries</option>
               {industries.map(i => <option key={i} value={i}>{i}</option>)}
             </select>
           )}
@@ -267,10 +269,10 @@ export function RolesPage() {
             className="px-3 py-2.5 rounded-xl text-xs font-medium appearance-none cursor-pointer"
             style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textSecondary)', border: '1px solid var(--color-border)' }}
           >
-            <option value="">All Work Styles</option>
+            <option value="">All work styles</option>
             <option value="remote">Remote</option>
             <option value="hybrid">Hybrid</option>
-            <option value="onsite">On-Site</option>
+            <option value="onsite">On-site</option>
           </select>
           {companies.length > 1 && (
             <select
@@ -279,7 +281,7 @@ export function RolesPage() {
               className="px-3 py-2.5 rounded-xl text-xs font-medium appearance-none cursor-pointer"
               style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textSecondary)', border: '1px solid var(--color-border)' }}
             >
-              <option value="">All Companies</option>
+              <option value="">All companies</option>
               {companies.map(([id, name]) => <option key={id} value={id}>{name}</option>)}
             </select>
           )}
@@ -297,7 +299,7 @@ export function RolesPage() {
             className="text-xs font-medium"
             style={{ color: 'var(--color-accent)' }}
           >
-            Clear Filters
+            Clear filters
           </button>
         )}
       </div>
@@ -310,7 +312,7 @@ export function RolesPage() {
         >
           <Briefcase className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--color-textMuted)' }} />
           <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-text)' }}>
-            {roles.length === 0 ? 'No Active Roles Yet' : 'No Roles Match Your Filters'}
+            {roles.length === 0 ? 'No active roles yet' : 'No roles match your filters'}
           </p>
           <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
             {roles.length === 0 ? 'Check back soon for new opportunities' : 'Try adjusting your filters'}
@@ -362,7 +364,7 @@ export function RolesPage() {
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>{emp.company_name}</p>
                         <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
-                          {role._hiringName ? `${role._hiringName} Is Hiring` : emp.industry || 'Hiring'}
+                          {role._hiringName ? `${role._hiringName} is hiring` : emp.industry || 'Hiring'}
                         </p>
                       </div>
                     </div>
@@ -473,7 +475,7 @@ export function RolesPage() {
                         {role.employment_type && (
                           <div className="flex items-center gap-1.5" style={{ color: 'var(--color-textMuted)' }}>
                             <Briefcase className="w-3.5 h-3.5 flex-shrink-0" />
-                            <span className="truncate" style={{ color: 'var(--color-text)' }}>{titleCase(role.employment_type)}</span>
+                            <span className="truncate" style={{ color: 'var(--color-text)' }}>{enumLabel(role.employment_type)}</span>
                           </div>
                         )}
                       </div>
@@ -482,7 +484,7 @@ export function RolesPage() {
                       {traits.length > 0 && (
                         <div>
                           <p className="text-[10px] font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--color-textMuted)' }}>
-                            Ideal Personality
+                            Ideal personality
                           </p>
                           <div className="flex flex-wrap gap-1.5">
                             {traits.map(t => (

@@ -96,7 +96,7 @@ export function NetworkCompanies() {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold font-display flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Building2 className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Company Directory
+            Company directory
           </h2>
           <div className="flex items-center gap-3 text-xs" style={{ color: 'var(--color-textMuted)' }}>
             <span>{companies.length} companies</span>
@@ -263,7 +263,7 @@ export function NetworkCompanies() {
 
             <div className="grid grid-cols-3 gap-3">
               {[
-                { icon: Briefcase, label: 'Open Roles', value: selectedCompany.activeRolesCount },
+                { icon: Briefcase, label: 'Open roles', value: selectedCompany.activeRolesCount },
                 { icon: Users, label: 'Size', value: selectedCompany.company_size || '—' },
                 { icon: Globe, label: 'Location', value: selectedCompany.location || '—' },
               ].map(s => (
@@ -297,7 +297,7 @@ export function NetworkCompanies() {
 
             {selectedCompany.roles.length > 0 && (
               <div>
-                <p className="text-xs font-medium mb-2" style={{ color: 'var(--color-textMuted)' }}>Open Roles</p>
+                <p className="text-xs font-medium mb-2" style={{ color: 'var(--color-textMuted)' }}>Open roles</p>
                 <div className="space-y-1.5">
                   {selectedCompany.roles.map(role => (
                     <div key={role.id} className="flex items-center justify-between p-3 rounded-xl" style={{ backgroundColor: 'var(--color-background)', border: '1px solid var(--color-border)' }}>

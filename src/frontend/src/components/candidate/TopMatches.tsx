@@ -184,7 +184,7 @@ export function TopMatches() {
             Complete your personality assessment to see your top role matches.
           </p>
           <Button onClick={() => navigate('/app/personality')}>
-            Start Assessment
+            Start assessment
           </Button>
         </div>
       </div>
@@ -203,7 +203,7 @@ export function TopMatches() {
         <div>
           <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight flex items-center gap-3" style={{ color: 'var(--color-text)' }}>
             <Trophy className="w-7 h-7" style={{ color: 'var(--color-accent)' }} />
-            Your Top Matches
+            Your top matches
           </h1>
           <div className="flex items-center gap-3 mt-1">
             <p style={{ color: 'var(--color-textSecondary)' }}>

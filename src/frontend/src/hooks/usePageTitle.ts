@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 
-const SUFFIX = 'Amber | Culture Match';
+const SUFFIX = 'Amber | Culture match';
 
 /**
- * Sets document.title to "Page · Prj Amber".
- * Pass an empty string to show just "Prj Amber".
+ * Sets document.title to "Page · Amber | Culture match".
+ * Pass an empty string to show just the suffix.
  */
 export function usePageTitle(page: string) {
   useEffect(() => {

@@ -468,13 +468,13 @@ export function NetworkHub() {
                 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
                 style={{ color: 'var(--color-text)' }}
               >
-                Your Local Café
+                Your local café
               </h1>
               <p
                 className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
                 style={{ color: 'var(--color-textMuted)' }}
               >
-                Discover People Through Hobbies, Interests & Personality
+                Discover people through hobbies, interests & personality
               </p>
 
               {/* Stat pills */}
@@ -517,7 +517,7 @@ export function NetworkHub() {
               leftIcon={<Plus className="w-3.5 h-3.5" />}
               onClick={() => setShowNewPost(true)}
             >
-              New Post
+              New post
             </Button>
             <Button
               variant="ghost"
@@ -605,7 +605,7 @@ export function NetworkHub() {
                 {EMPTY_MESSAGES[filter].sub}
               </p>
               <Button size="sm" leftIcon={<Plus className="w-4 h-4" />} onClick={() => setShowNewPost(true)}>
-                Create a Post
+                Create a post
               </Button>
             </motion.div>
           ) : (

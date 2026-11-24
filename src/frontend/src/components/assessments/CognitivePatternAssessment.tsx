@@ -90,7 +90,7 @@ export function CognitivePatternAssessment() {
           })
           .eq('user_id', user.id);
 
-        showSuccess('Assessment Complete!', 'Your cognitive patterns have been added to your profile.');
+        showSuccess('Assessment complete!', 'Your cognitive patterns have been added to your profile.');
       } catch (err) {
         console.error('Error saving cognitive patterns data:', err);
       }
@@ -106,12 +106,12 @@ export function CognitivePatternAssessment() {
       { key: 'conscientiousness', label: 'Conscientiousness', value: oceanScores.conscientiousness, color: '#10B981', progressColor: 'green' },
       { key: 'extraversion', label: 'Extraversion', value: oceanScores.extraversion, color: '#F59E0B', progressColor: 'amber' },
       { key: 'agreeableness', label: 'Agreeableness', value: oceanScores.agreeableness, color: '#EC4899', progressColor: 'pink' },
-      { key: 'neuroticism', label: 'Emotional Stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
+      { key: 'neuroticism', label: 'Emotional stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
     ];
 
     return (
       <AssessmentResultsTemplate
-        title="Cognitive Style Results"
+        title="Cognitive style results"
         subtitle="Here's what your thinking style reveals about your cognitive approach"
         dimensions={dimensions}
         enhancedMessage="Your cognitive patterns have been factored into your personality profile with a 10% weight, making your matches more nuanced."
@@ -138,7 +138,7 @@ export function CognitivePatternAssessment() {
               <GraduationCap className="w-5 h-5" style={{ color: ACCENT }} />
             </div>
             <div>
-              <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Cognitive Patterns Assessment</h1>
+              <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Cognitive patterns assessment</h1>
               <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
                 Question {currentQuestion + 1} of {cognitivePatternQuestions.length}
               </p>

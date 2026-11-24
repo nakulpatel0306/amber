@@ -115,7 +115,7 @@ export function CoffeeChatPrep({ chatId }: CoffeeChatPrepProps) {
         <div className="flex items-center gap-2">
           <EmberFirefly size="sm" mood="thinking" />
           <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-            AI Prep Brief
+            AI prep brief
           </span>
           {match_score > 0 && (
             <span
@@ -142,7 +142,7 @@ export function CoffeeChatPrep({ chatId }: CoffeeChatPrepProps) {
           {/* Personality Summary */}
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--color-textMuted)' }}>
-              Personality Summary
+              Personality summary
             </h4>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
               {prep.personality_summary}
@@ -153,7 +153,7 @@ export function CoffeeChatPrep({ chatId }: CoffeeChatPrepProps) {
           {prep.conversation_starters.length > 0 && (
             <div>
               <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--color-textMuted)' }}>
-                Conversation Starters
+                Conversation starters
               </h4>
               <ol className="space-y-2">
                 {prep.conversation_starters.map((starter, i) => (
@@ -199,7 +199,7 @@ export function CoffeeChatPrep({ chatId }: CoffeeChatPrepProps) {
           {prep.topics_to_explore.length > 0 && (
             <div>
               <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--color-textMuted)' }}>
-                Topics to Explore
+                Topics to explore
               </h4>
               <ul className="space-y-1.5">
                 {prep.topics_to_explore.map((topic, i) => (
@@ -219,7 +219,7 @@ export function CoffeeChatPrep({ chatId }: CoffeeChatPrepProps) {
           {prep.things_to_be_mindful_of.length > 0 && (
             <div>
               <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--color-textMuted)' }}>
-                Things to Be Mindful Of
+                Things to be mindful of
               </h4>
               <ul className="space-y-1.5">
                 {prep.things_to_be_mindful_of.map((item, i) => (
@@ -251,7 +251,7 @@ export function CoffeeChatPrep({ chatId }: CoffeeChatPrepProps) {
                 />
                 <div>
                   <h4 className="text-xs font-semibold mb-1" style={{ color: 'var(--color-accent)' }}>
-                    Archetype Tips
+                    Archetype tips
                   </h4>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
                     {prep.archetype_tips}

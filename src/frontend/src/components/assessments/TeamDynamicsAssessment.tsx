@@ -126,7 +126,7 @@ export function TeamDynamicsAssessment() {
           })
           .eq('user_id', user.id);
 
-        showSuccess('Assessment Complete!', 'Your team dynamics profile has been added.');
+        showSuccess('Assessment complete!', 'Your team dynamics profile has been added.');
       } catch (err) {
         console.error('Error saving team dynamics data:', err);
       }
@@ -141,12 +141,12 @@ export function TeamDynamicsAssessment() {
       { key: 'conscientiousness', label: 'Conscientiousness', value: oceanScores.conscientiousness, color: '#10B981', progressColor: 'green' },
       { key: 'extraversion', label: 'Extraversion', value: oceanScores.extraversion, color: '#F59E0B', progressColor: 'amber' },
       { key: 'agreeableness', label: 'Agreeableness', value: oceanScores.agreeableness, color: '#EC4899', progressColor: 'pink' },
-      { key: 'neuroticism', label: 'Emotional Stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
+      { key: 'neuroticism', label: 'Emotional stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
     ];
 
     return (
       <AssessmentResultsTemplate
-        title="Team Dynamics Results"
+        title="Team dynamics results"
         subtitle="Here's how your team collaboration and communication style shapes your culture"
         dimensions={dimensions}
         enhancedMessage="Your team dynamics have been factored into your culture profile with a 12% weight, making your candidate matches more accurate."
@@ -154,8 +154,8 @@ export function TeamDynamicsAssessment() {
         accentColor={ACCENT}
         profileUrl="/app/employer/insights"
         matchesUrl="/app/employer/candidates"
-        profileLabel="View Culture Profile"
-        matchesLabel="Browse Candidates"
+        profileLabel="View culture profile"
+        matchesLabel="Browse candidates"
       />
     );
   }
@@ -174,7 +174,7 @@ export function TeamDynamicsAssessment() {
               <Users className="w-5 h-5" style={{ color: ACCENT }} />
             </div>
             <div>
-              <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Team Dynamics Assessment</h1>
+              <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Team dynamics assessment</h1>
               <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
                 Question {currentQuestion + 1} of {teamDynamicsQuestions.length}
               </p>

@@ -45,20 +45,20 @@ const traitOptions = [
   { value: 'independent', label: 'Independent' },
   { value: 'creative', label: 'Creative' },
   { value: 'analytical', label: 'Analytical' },
-  { value: 'detail-oriented', label: 'Detail-Oriented' },
-  { value: 'big-picture', label: 'Big-Picture Thinker' },
-  { value: 'fast-paced', label: 'Thrives In Fast Pace' },
+  { value: 'detail-oriented', label: 'Detail-oriented' },
+  { value: 'big-picture', label: 'Big-picture thinker' },
+  { value: 'fast-paced', label: 'Thrives in fast pace' },
   { value: 'methodical', label: 'Methodical' },
   { value: 'empathetic', label: 'Empathetic' },
   { value: 'direct', label: 'Direct Communicator' },
   { value: 'adaptable', label: 'Adaptable' },
-  { value: 'structured', label: 'Prefers Structure' },
+  { value: 'structured', label: 'Prefers structure' },
 ];
 
 const STEPS = [
   { key: 'basics', label: 'Basics', icon: Briefcase },
   { key: 'details', label: 'Details', icon: FileText },
-  { key: 'culture', label: 'Culture Fit', icon: Heart },
+  { key: 'culture', label: 'Culture fit', icon: Heart },
   { key: 'review', label: 'Review', icon: Check },
 ] as const;
 
@@ -225,7 +225,7 @@ export function CreateRole() {
             className="text-3xl font-serif font-normal tracking-tight mb-3"
             style={{ color: 'var(--color-text)' }}
           >
-            Role Created
+            Role created
           </h2>
           <p
             className="text-sm mb-1"
@@ -245,13 +245,13 @@ export function CreateRole() {
               variant="outline"
               onClick={() => navigate('/app/employer/roles')}
             >
-              View All Roles
+              View all roles
             </Button>
             <Button
               onClick={() => navigate('/app/employer/candidates')}
               rightIcon={<ArrowRight className="w-4 h-4" />}
             >
-              Browse Candidates
+              Browse candidates
             </Button>
           </div>
         </motion.div>
@@ -282,7 +282,7 @@ export function CreateRole() {
                 className="text-2xl sm:text-3xl font-serif font-normal tracking-tight"
                 style={{ color: 'var(--color-text)' }}
               >
-                Create A New Role
+                Create a new role
               </h1>
               <p
                 className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
@@ -345,7 +345,7 @@ export function CreateRole() {
                     className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
-                    Job Title //
+                    Job title //
                   </label>
                   <input
                     type="text"
@@ -448,7 +448,7 @@ export function CreateRole() {
                       className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
                       style={{ color: 'var(--color-textMuted)' }}
                     >
-                      Employment Type //
+                      Employment type //
                     </label>
                     <div className="relative">
                       <select
@@ -461,8 +461,8 @@ export function CreateRole() {
                           color: 'var(--color-text)',
                         }}
                       >
-                        <option value="full_time">Full-Time</option>
-                        <option value="part_time">Part-Time</option>
+                        <option value="full_time">Full-time</option>
+                        <option value="part_time">Part-time</option>
                         <option value="contract">Contract</option>
                         <option value="internship">Internship</option>
                       </select>
@@ -475,7 +475,7 @@ export function CreateRole() {
                       className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
                       style={{ color: 'var(--color-textMuted)' }}
                     >
-                      Salary Range //
+                      Salary range //
                     </label>
                     <div className="flex items-center gap-2">
                       <input
@@ -516,7 +516,7 @@ export function CreateRole() {
                     className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
-                    Role Description //
+                    Role description //
                   </label>
                   <textarea
                     value={formData.description}
@@ -559,7 +559,7 @@ export function CreateRole() {
                       className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
                       style={{ color: 'var(--color-textMuted)' }}
                     >
-                      Team Size //
+                      Team size //
                     </label>
                     <input
                       type="text"
@@ -580,7 +580,7 @@ export function CreateRole() {
                       className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
                       style={{ color: 'var(--color-textMuted)' }}
                     >
-                      Reports To //
+                      Reports to //
                     </label>
                     <input
                       type="text"
@@ -614,7 +614,7 @@ export function CreateRole() {
                         className="text-base font-bold tracking-tight"
                         style={{ color: 'var(--color-text)' }}
                       >
-                        Ideal Candidate Traits
+                        Ideal candidate traits
                       </h3>
                       <p
                         className="font-mono text-[10px] uppercase tracking-[0.25em]"
@@ -787,7 +787,7 @@ export function CreateRole() {
                     className="text-base font-bold tracking-tight mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Ideal Candidate Traits
+                    Ideal candidate traits
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {formData.preferredTraits.map(trait => {
@@ -842,7 +842,7 @@ export function CreateRole() {
             }
             rightIcon={<ArrowRight className="w-4 h-4" />}
           >
-            {step === 'review' ? 'Publish Role' : 'Continue'}
+            {step === 'review' ? 'Publish role' : 'Continue'}
           </Button>
         </div>
       </div>

@@ -48,7 +48,7 @@ export function DashboardHeader({ greeting, firstName }: DashboardHeaderProps) {
               className="text-sm mt-1"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              {dateStr} &middot; Check &amp; Maintain Your Match Status
+              {dateStr}
             </p>
           </div>
         </div>

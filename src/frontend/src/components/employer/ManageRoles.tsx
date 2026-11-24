@@ -40,8 +40,10 @@ interface Role {
   applicant_count: number;
 }
 
-function titleCase(str: string): string {
-  return str.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+// Enum values to labels: full_time -> Full time
+function enumLabel(str: string): string {
+  const s = str.replace(/[-_]/g, ' ');
+  return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 export function ManageRoles() {
@@ -216,7 +218,7 @@ export function ManageRoles() {
                   className="text-2xl font-bold tracking-tight"
                   style={{ color: 'var(--color-text)' }}
                 >
-                  Manage Roles
+                  Manage roles
                 </h1>
                 <p
                   className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
@@ -255,7 +257,7 @@ export function ManageRoles() {
             </div>
             <Link to="/app/employer/roles/new" className="flex-shrink-0">
               <Button leftIcon={<Plus className="w-4 h-4" />}>
-                Create Role
+                Create role
               </Button>
             </Link>
           </div>
@@ -301,7 +303,7 @@ export function ManageRoles() {
                   color: statusFilter === status ? 'white' : 'var(--color-textSecondary)',
                 }}
               >
-                {status === 'all' ? 'All' : titleCase(status)}
+                {status === 'all' ? 'All' : enumLabel(status)}
               </button>
             ))}
           </div>
@@ -320,8 +322,8 @@ export function ManageRoles() {
                 style={{ color: 'var(--color-text)' }}
               >
                 {searchQuery || statusFilter !== 'all'
-                  ? 'No Roles Match Your Filters'
-                  : 'No Roles Yet'}
+                  ? 'No roles match your filters'
+                  : 'No roles yet'}
               </p>
               <p className="text-xs mb-4" style={{ color: 'var(--color-textMuted)' }}>
                 {searchQuery || statusFilter !== 'all'
@@ -330,7 +332,7 @@ export function ManageRoles() {
               </p>
               {!searchQuery && statusFilter === 'all' && (
                 <Link to="/app/employer/roles/new" className="inline-block">
-                  <Button size="sm" leftIcon={<Plus className="w-3.5 h-3.5" />}>Create Your First Role</Button>
+                  <Button size="sm" leftIcon={<Plus className="w-3.5 h-3.5" />}>Create your first role</Button>
                 </Link>
               )}
             </div>
@@ -362,7 +364,7 @@ export function ManageRoles() {
                             color: statusStyle.color,
                           }}
                         >
-                          {titleCase(role.status)}
+                          {enumLabel(role.status)}
                         </span>
                       </div>
 
@@ -374,7 +376,7 @@ export function ManageRoles() {
                             style={{ color: 'var(--color-textMuted)' }}
                           >
                             <MapPin className="w-3 h-3" />
-                            {role.work_style && `${titleCase(role.work_style)} · `}{role.location}
+                            {role.work_style && `${enumLabel(role.work_style)} · `}{role.location}
                           </span>
                         )}
                         {role.employment_type && (
@@ -383,7 +385,7 @@ export function ManageRoles() {
                             style={{ color: 'var(--color-textMuted)' }}
                           >
                             <Clock className="w-3 h-3" />
-                            {titleCase(role.employment_type)}
+                            {enumLabel(role.employment_type)}
                           </span>
                         )}
                         {role.salary_min && role.salary_max && (
@@ -417,7 +419,7 @@ export function ManageRoles() {
                     <div className="flex items-center gap-2 flex-shrink-0">
                       <Link to={`/app/employer/ember`}>
                         <Button variant="outline" size="sm">
-                          View Candidates
+                          View candidates
                         </Button>
                       </Link>
 
@@ -450,7 +452,7 @@ export function ManageRoles() {
                                   style={{ color: '#f59e0b' }}
                                 >
                                   <Pause className="w-3.5 h-3.5" />
-                                  Pause Role
+                                  Pause role
                                 </button>
                               ) : role.status === 'paused' ? (
                                 <button
@@ -459,7 +461,7 @@ export function ManageRoles() {
                                   style={{ color: '#10B981' }}
                                 >
                                   <Play className="w-3.5 h-3.5" />
-                                  Activate Role
+                                  Activate role
                                 </button>
                               ) : null}
                               {role.status !== 'closed' && (
@@ -469,7 +471,7 @@ export function ManageRoles() {
                                   style={{ color: 'var(--color-textMuted)' }}
                                 >
                                   <Pause className="w-3.5 h-3.5" />
-                                  Close Role
+                                  Close role
                                 </button>
                               )}
                               <button
@@ -478,7 +480,7 @@ export function ManageRoles() {
                                 style={{ color: '#ef4444' }}
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
-                                Delete Role
+                                Delete role
                               </button>
                             </div>
                           </>
@@ -503,7 +505,7 @@ export function ManageRoles() {
             }}
           >
             <Plus className="w-4 h-4" />
-            <span className="text-xs font-medium">Create Another Role</span>
+            <span className="text-xs font-medium">Create another role</span>
           </Link>
         )}
       </div>

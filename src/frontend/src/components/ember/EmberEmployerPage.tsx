@@ -38,7 +38,7 @@ function OverviewCarousel({ stats }: { stats: { totalCandidates: number; strongC
   const slides: OverviewSlide[] = [
     { value: String(stats.totalCandidates), label: 'Candidates' },
     { value: String(stats.strongCandidates), label: 'Strong (80+)' },
-    { value: `${stats.avgScore}%`, label: 'Avg Score' },
+    { value: `${stats.avgScore}%`, label: 'Avg score' },
   ];
 
   const [active, setActive] = useState(0);
@@ -382,12 +382,12 @@ export function EmberEmployerPage() {
         <div className="text-center max-w-md">
           <EmberFirefly size="xl" mood="neutral" />
           <h2 className="text-2xl font-bold mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
-            Complete Your Setup
+            Complete your setup
           </h2>
           <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
             Set up your employer profile and take the culture quiz to unlock Ember insights.
           </p>
-          <Button onClick={() => navigate('/app/employer/culture')}>Take Culture Quiz</Button>
+          <Button onClick={() => navigate('/app/employer/culture')}>Take culture quiz</Button>
         </div>
       </div>
     );
@@ -437,7 +437,7 @@ export function EmberEmployerPage() {
                       {([
                         { label: 'Candidates', value: dashboardStats.totalCandidates, color: '#f59e0b', Icon: Users },
                         { label: 'Strong (80+)', value: dashboardStats.strongCandidates, color: 'var(--color-trait-openness)', Icon: Zap },
-                        { label: 'Avg Score', value: `${dashboardStats.avgScore}%`, color: 'var(--color-trait-conscientiousness)', Icon: TrendingUp },
+                        { label: 'Avg score', value: `${dashboardStats.avgScore}%`, color: 'var(--color-trait-conscientiousness)', Icon: TrendingUp },
                       ] as const).map(stat => (
                         <span
                           key={stat.label}
@@ -648,12 +648,12 @@ export function EmberEmployerPage() {
                     style={{ color: 'var(--color-textMuted)' }}
                   >
                     <Bookmark className="w-3 h-3 inline-block mr-1.5 -mt-px" />
-                    Shortlisted Candidates //
+                    Shortlisted candidates //
                   </p>
 
                   {shortlistedCandidates.length === 0 ? (
                     <p className="text-xs py-3" style={{ color: 'var(--color-textMuted)' }}>
-                      Bookmark A Candidate To Save Them Here.
+                      Bookmark a candidate to save them here.
                     </p>
                   ) : (
                     <div className="space-y-0">

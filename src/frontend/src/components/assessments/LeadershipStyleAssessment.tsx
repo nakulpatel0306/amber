@@ -126,7 +126,7 @@ export function LeadershipStyleAssessment() {
           })
           .eq('user_id', user.id);
 
-        showSuccess('Assessment Complete!', 'Your leadership style profile has been added.');
+        showSuccess('Assessment complete!', 'Your leadership style profile has been added.');
       } catch (err) {
         console.error('Error saving leadership style data:', err);
       }
@@ -141,12 +141,12 @@ export function LeadershipStyleAssessment() {
       { key: 'conscientiousness', label: 'Conscientiousness', value: oceanScores.conscientiousness, color: '#10B981', progressColor: 'green' },
       { key: 'extraversion', label: 'Extraversion', value: oceanScores.extraversion, color: '#F59E0B', progressColor: 'amber' },
       { key: 'agreeableness', label: 'Agreeableness', value: oceanScores.agreeableness, color: '#EC4899', progressColor: 'pink' },
-      { key: 'neuroticism', label: 'Emotional Stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
+      { key: 'neuroticism', label: 'Emotional stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
     ];
 
     return (
       <AssessmentResultsTemplate
-        title="Leadership & Management Results"
+        title="Leadership & management results"
         subtitle="Here's how your management philosophy shapes the candidates you attract"
         dimensions={dimensions}
         enhancedMessage="Your leadership style has been factored into your culture profile with a 12% weight, making your candidate matches more accurate."
@@ -154,8 +154,8 @@ export function LeadershipStyleAssessment() {
         accentColor={ACCENT}
         profileUrl="/app/employer/insights"
         matchesUrl="/app/employer/candidates"
-        profileLabel="View Culture Profile"
-        matchesLabel="Browse Candidates"
+        profileLabel="View culture profile"
+        matchesLabel="Browse candidates"
       />
     );
   }

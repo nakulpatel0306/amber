@@ -37,7 +37,7 @@ export function EmberIdentityCard({ archetype, ocean }: EmberIdentityCardProps) 
         className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3"
         style={{ color: 'var(--color-textMuted)' }}
       >
-        Your Archetype //
+        Your archetype //
       </p>
 
       {/* Archetype */}
@@ -70,13 +70,13 @@ export function EmberIdentityCard({ archetype, ocean }: EmberIdentityCardProps) 
             className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            Operating Style
+            Operating style
           </p>
           <div className="space-y-3">
             {[
               { icon: Brain, label: 'Decision', value: styles.decision },
               { icon: MessageCircle, label: 'Communication', value: styles.communication },
-              { icon: Lightbulb, label: 'Problem-Solving', value: styles.problemSolving },
+              { icon: Lightbulb, label: 'Problem-solving', value: styles.problemSolving },
             ].map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-center gap-2.5">
                 <div

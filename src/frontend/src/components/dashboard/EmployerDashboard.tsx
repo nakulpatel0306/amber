@@ -85,10 +85,10 @@ export function EmployerDashboard() {
 
   useEffect(() => {
     const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) setGreeting('Good Morning');
-    else if (hour >= 12 && hour < 17) setGreeting('Good Afternoon');
-    else if (hour >= 17 && hour < 21) setGreeting('Good Evening');
-    else setGreeting('Hey There');
+    if (hour >= 5 && hour < 12) setGreeting('Good morning');
+    else if (hour >= 12 && hour < 17) setGreeting('Good afternoon');
+    else if (hour >= 17 && hour < 21) setGreeting('Good evening');
+    else setGreeting('Hey there');
   }, []);
 
   // Check profile and culture assessment completion status
@@ -196,7 +196,7 @@ export function EmployerDashboard() {
                 id: c.id,
                 company: c.candidate_name || 'Unknown',
                 person: c.candidate_name || 'Unknown',
-                role: c.role_title || 'Coffee Chat',
+                role: c.role_title || 'Coffee chat',
                 time: c.scheduled_at ? new Date(c.scheduled_at).toLocaleDateString() : 'TBD',
                 scheduledAt: c.scheduled_at || null,
                 meetingLink: c.meeting_link || null,
@@ -403,7 +403,7 @@ export function EmployerDashboard() {
       {/* Key Metrics Row — 3 bento cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <BentoMetricCard
-          title="Culture Match Index"
+          title="Culture match index"
           loading={!statsLoaded}
           value={avgMatchScore > 0 ? `${avgMatchScore}%` : hasCompletedCultureQuiz ? '0%' : 'N/A'}
           subtitle={
@@ -419,15 +419,15 @@ export function EmployerDashboard() {
             { label: `${uniqueCandidates} Candidates Analyzed`, shade: 'medium' as const },
             { label: `${activeRolesCount} ${activeRolesCount === 1 ? 'Role' : 'Roles'}`, shade: 'dark' as const },
           ] : hasCompletedCultureQuiz ? [
-            { label: 'Culture Defined', shade: 'light' as const },
-            { label: 'Awaiting Candidates', shade: 'medium' as const },
+            { label: 'Culture defined', shade: 'light' as const },
+            { label: 'Awaiting candidates', shade: 'medium' as const },
           ] : [
-            { label: 'Not Started', shade: 'dark' as const },
+            { label: 'Not started', shade: 'dark' as const },
           ]}
           onClick={() => navigate(hasCompletedCultureQuiz ? '/app/employer/ember' : '/app/employer/culture-assessment')}
         />
         <BentoMetricCard
-          title="Active Roles"
+          title="Active roles"
           loading={!statsLoaded}
           value={String(activeRolesCount)}
           subtitle={
@@ -441,12 +441,12 @@ export function EmployerDashboard() {
             { label: `${totalApplicants} Applied`, shade: 'medium' as const },
             { label: 'Manage', shade: 'dark' as const },
           ] : [
-            { label: 'Create a Role', shade: 'light' as const },
+            { label: 'Create a role', shade: 'light' as const },
           ]}
           onClick={() => navigate('/app/employer/roles')}
         />
         <BentoMetricCard
-          title="Coffee Chats"
+          title="Coffee chats"
           loading={!statsLoaded}
           value={String(pendingChats + acceptedChats + completedChats)}
           subtitle={
@@ -460,7 +460,7 @@ export function EmployerDashboard() {
             ...(acceptedChats > 0 ? [{ label: `${acceptedChats} Scheduled`, shade: 'medium' as const }] : []),
             ...(completedChats > 0 ? [{ label: `${completedChats} Completed`, shade: 'dark' as const }] : []),
           ] : [
-            { label: 'Get Started', shade: 'light' as const },
+            { label: 'Get started', shade: 'light' as const },
           ]}
           onClick={() => navigate('/app/employer/chats')}
         />
@@ -497,7 +497,7 @@ export function EmployerDashboard() {
                 style={{ color: 'var(--color-text)' }}
               >
                 <TrendingUp className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                Get Started With Hiring
+                Get started with hiring
               </h2>
               <p className="text-xs mb-3" style={{ color: 'var(--color-textSecondary)' }}>
                 {!hasCompletedProfile
@@ -533,7 +533,7 @@ export function EmployerDashboard() {
             {hasCompletedProfile ? (
               <Link to="/app/employer/culture-assessment">
                 <Button size="sm" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
-                  Define Culture
+                  Define culture
                 </Button>
               </Link>
             ) : (
@@ -542,7 +542,7 @@ export function EmployerDashboard() {
                 rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
                 onClick={() => setShowSetupModal(true)}
               >
-                Set Up Company
+                Set up company
               </Button>
             )}
           </div>

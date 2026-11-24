@@ -208,12 +208,12 @@ export function DashboardCalendar({
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
           <Calendar className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-          Upcoming Chats
+          Upcoming chats
         </h2>
         {showViewAll && (
           <Link to={viewAllPath}>
             <span className="text-xs font-medium flex items-center gap-1" style={{ color: 'var(--color-accent)' }}>
-              View All <ArrowRight className="w-3 h-3" />
+              View all <ArrowRight className="w-3 h-3" />
             </span>
           </Link>
         )}
@@ -386,7 +386,7 @@ export function DashboardCalendar({
           {sortedDates.map((dateKey) => (
             <div key={dateKey}>
               <p className="text-xs font-medium mb-2" style={{ color: 'var(--color-textMuted)' }}>
-                {dateKey === 'tbd' ? 'To Be Scheduled' : getDateLabel(grouped[dateKey][0].scheduledAt!)}
+                {dateKey === 'tbd' ? 'To be scheduled' : getDateLabel(grouped[dateKey][0].scheduledAt!)}
               </p>
               <div className="space-y-2">
                 {grouped[dateKey].map((chat, i) => (

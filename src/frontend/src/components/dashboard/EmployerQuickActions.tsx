@@ -10,12 +10,12 @@ export function EmployerQuickActions({ hasCompletedCultureQuiz }: EmployerQuickA
 
   const actions = [
     ...(hasCompletedCultureQuiz
-      ? [{ icon: Search, label: 'Browse Candidates', onClick: () => navigate('/app/employer/candidates') }]
-      : [{ icon: Pencil, label: 'Define Culture', onClick: () => navigate('/app/employer/culture-assessment') }]),
-    { icon: Plus, label: 'Create Role', onClick: () => navigate('/app/employer/roles/new') },
-    { icon: MessageCircle, label: 'Coffee Chats', onClick: () => navigate('/app/employer/chats') },
-    { icon: Briefcase, label: 'Manage Roles', onClick: () => navigate('/app/employer/roles') },
-    { icon: BarChart3, label: 'Culture Insights', onClick: () => navigate('/app/employer/insights') },
+      ? [{ icon: Search, label: 'Browse candidates', onClick: () => navigate('/app/employer/candidates') }]
+      : [{ icon: Pencil, label: 'Define culture', onClick: () => navigate('/app/employer/culture-assessment') }]),
+    { icon: Plus, label: 'Create role', onClick: () => navigate('/app/employer/roles/new') },
+    { icon: MessageCircle, label: 'Coffee chats', onClick: () => navigate('/app/employer/chats') },
+    { icon: Briefcase, label: 'Manage roles', onClick: () => navigate('/app/employer/roles') },
+    { icon: BarChart3, label: 'Culture insights', onClick: () => navigate('/app/employer/insights') },
     { icon: User, label: 'Settings', onClick: () => navigate('/app/settings') },
   ];
 

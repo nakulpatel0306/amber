@@ -92,10 +92,10 @@ export function JobSeekerDashboard() {
 
   useEffect(() => {
     const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) setGreeting('Good Morning');
-    else if (hour >= 12 && hour < 17) setGreeting('Good Afternoon');
-    else if (hour >= 17 && hour < 21) setGreeting('Good Evening');
-    else setGreeting('Hey There');
+    if (hour >= 5 && hour < 12) setGreeting('Good morning');
+    else if (hour >= 12 && hour < 17) setGreeting('Good afternoon');
+    else if (hour >= 17 && hour < 21) setGreeting('Good evening');
+    else setGreeting('Hey there');
   }, []);
 
   // Check profile and assessment completion status from candidates table
@@ -213,7 +213,7 @@ export function JobSeekerDashboard() {
                 id: c.id,
                 company: c.company_name || 'Unknown',
                 person: c.candidate_name || c.company_name || 'Unknown',
-                role: c.role_title || 'Coffee Chat',
+                role: c.role_title || 'Coffee chat',
                 time: c.scheduled_at ? new Date(c.scheduled_at).toLocaleDateString() : 'TBD',
                 scheduledAt: c.scheduled_at || null,
                 meetingLink: c.meeting_link || null,
@@ -477,7 +477,7 @@ export function JobSeekerDashboard() {
       {/* Key Metrics Row — 3 bento cards */}
       <motion.div variants={dashboardItem} className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <BentoMetricCard
-          title="Match Index Score"
+          title="Match index score"
           loading={!matchesLoaded}
           value={avgMatchScore > 0 ? `${avgMatchScore}%` : hasCompletedAssessment ? '0%' : 'N/A'}
           subtitle={
@@ -493,15 +493,15 @@ export function JobSeekerDashboard() {
             { label: `${matchesAvailable} Roles Analyzed`, shade: 'medium' as const },
             { label: `${uniqueCompanies} ${uniqueCompanies === 1 ? 'Company' : 'Companies'}`, shade: 'dark' as const },
           ] : hasCompletedAssessment ? [
-            { label: 'Assessment Complete', shade: 'light' as const },
-            { label: 'Awaiting Roles', shade: 'medium' as const },
+            { label: 'Assessment complete', shade: 'light' as const },
+            { label: 'Awaiting roles', shade: 'medium' as const },
           ] : [
-            { label: 'Not Started', shade: 'dark' as const },
+            { label: 'Not started', shade: 'dark' as const },
           ]}
           onClick={() => navigate(hasCompletedAssessment ? '/app/ember' : '/app/personality')}
         />
         <BentoMetricCard
-          title="Available Roles"
+          title="Available roles"
           loading={!matchesLoaded}
           value={String(matchesAvailable)}
           subtitle={
@@ -518,7 +518,7 @@ export function JobSeekerDashboard() {
           onClick={() => navigate('/app/roles')}
         />
         <BentoMetricCard
-          title="Coffee Chats"
+          title="Coffee chats"
           loading={!chatsLoaded}
           value={String(pendingChats + acceptedChats + completedChats)}
           subtitle={
@@ -532,7 +532,7 @@ export function JobSeekerDashboard() {
             ...(acceptedChats > 0 ? [{ label: `${acceptedChats} Scheduled`, shade: 'medium' as const }] : []),
             ...(completedChats > 0 ? [{ label: `${completedChats} Completed`, shade: 'dark' as const }] : []),
           ] : [
-            { label: 'Get Started', shade: 'light' as const },
+            { label: 'Get started', shade: 'light' as const },
           ]}
           onClick={() => navigate('/app/chats')}
         />
@@ -570,7 +570,7 @@ export function JobSeekerDashboard() {
                 style={{ color: 'var(--color-text)' }}
               >
                 <TrendingUp className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                Complete Your Setup
+                Complete your setup
               </h2>
               <p className="text-xs mb-3" style={{ color: 'var(--color-textSecondary)' }}>
                 {!hasCompletedProfile
@@ -606,7 +606,7 @@ export function JobSeekerDashboard() {
             {hasCompletedProfile ? (
               <Link to="/app/personality">
                 <Button size="sm" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
-                  Take Assessment
+                  Take assessment
                 </Button>
               </Link>
             ) : (
@@ -615,7 +615,7 @@ export function JobSeekerDashboard() {
                 rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
                 onClick={() => setShowSetupModal(true)}
               >
-                Set Up Profile
+                Set up profile
               </Button>
             )}
           </div>

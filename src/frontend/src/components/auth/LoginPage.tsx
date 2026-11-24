@@ -28,13 +28,13 @@ export function LoginPage() {
     const newErrors: { email?: string; password?: string } = {};
 
     if (!email) {
-      newErrors.email = 'Email Is Required';
+      newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'Please Enter A Valid Email';
+      newErrors.email = 'Please enter a valid email';
     }
 
     if (!password) {
-      newErrors.password = 'Password Is Required';
+      newErrors.password = 'Password is required';
     }
 
     setErrors(newErrors);
@@ -106,7 +106,7 @@ export function LoginPage() {
           style={{ color: 'var(--color-textSecondary)' }}
         >
           <ArrowLeft className="w-4 h-4" />
-          Back To Home
+          Back to home
         </Link>
       </header>
 
@@ -132,13 +132,13 @@ export function LoginPage() {
               className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
               style={{ color: 'var(--color-text)' }}
             >
-              Welcome Back
+              Welcome back
             </h1>
             <p
               className="text-sm mt-2"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              Sign In To Your {APP_NAME} Account
+              Sign in to your {APP_NAME} account
             </p>
           </div>
 
@@ -158,7 +158,7 @@ export function LoginPage() {
                 disabled={isLoading}
                 className="hover:!border-blue-400 hover:!bg-blue-50 dark:hover:!bg-blue-950/20"
               >
-                Continue With Google
+                Continue with Google
               </Button>
             </motion.div>
             <motion.div variants={formItem}>
@@ -170,7 +170,7 @@ export function LoginPage() {
                 disabled={isLoading}
                 className="hover:!border-gray-500 hover:!bg-gray-50 dark:hover:!bg-gray-900/20"
               >
-                Continue With GitHub
+                Continue with GitHub
               </Button>
             </motion.div>
           </motion.div>
@@ -200,7 +200,7 @@ export function LoginPage() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.4, delay: 0.5 }}
               >
-                Or Continue With Email
+                Or continue with email
               </motion.span>
             </div>
           </div>
@@ -232,7 +232,7 @@ export function LoginPage() {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder="Enter Your Password"
+                placeholder="Enter your password"
                 leftIcon={<Lock className="w-4 h-4" />}
                 rightIcon={
                   <button
@@ -256,14 +256,14 @@ export function LoginPage() {
                   className="text-xs transition-colors"
                   style={{ color: 'var(--color-accent)' }}
                 >
-                  Forgot Password?
+                  Forgot password?
                 </Link>
               </div>
             </motion.div>
 
             <motion.div variants={formItem}>
               <Button type="submit" fullWidth isLoading={isLoading || isCheckingEmail}>
-                Sign In
+                Sign in
               </Button>
             </motion.div>
           </motion.form>
@@ -276,13 +276,13 @@ export function LoginPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
           >
-            Don't Have An Account?{' '}
+            Don't have an account?{' '}
             <Link
               to="/auth/signup"
               className="font-medium transition-colors"
               style={{ color: 'var(--color-accent)' }}
             >
-              Sign Up
+              Sign up
             </Link>
           </motion.p>
         </motion.div>
