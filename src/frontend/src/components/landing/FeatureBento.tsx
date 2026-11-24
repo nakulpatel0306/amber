@@ -420,7 +420,7 @@ function SceneAssessmentScene({ pickedIndex, hoverIndex }: { pickedIndex: number
               animate={{ opacity: [0.4, 1, 0.4] }}
               transition={{ duration: 1.8, repeat: Infinity }}
             />
-            <span className="hidden sm:inline">Auto-Saved</span>
+            <span className="hidden sm:inline">Auto-saved</span>
           </motion.div>
           <span
             className="text-[9px] font-semibold px-2 py-0.5 rounded"

@@ -38,9 +38,9 @@ function daysBetween(a: string, b: string) {
 const WEEK_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 const GOAL_LABELS: Record<StreakGoal, string> = {
-  7: '7-Day streak',
-  14: '14-Day streak',
-  30: '30-Day streak',
+  7: '7-day streak',
+  14: '14-day streak',
+  30: '30-day streak',
 };
 
 const CELEBRATION_MSG: Record<StreakGoal, string> = {

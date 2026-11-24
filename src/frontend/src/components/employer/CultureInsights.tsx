@@ -882,7 +882,7 @@ export function CultureInsights() {
               },
               {
                 icon: preferences.extraversion > 60 ? Users : Focus,
-                label: preferences.extraversion > 60 ? 'Team-centric' : 'Focus-Centric',
+                label: preferences.extraversion > 60 ? 'Team-centric' : 'Focus-centric',
                 desc: preferences.extraversion > 60 ? 'Collaborative work' : 'Independent work',
                 color: 'var(--color-trait-extraversion)',
               },
