@@ -431,14 +431,16 @@ export function EmployerDashboard() {
           loading={!statsLoaded}
           value={String(activeRolesCount)}
           subtitle={
-            activeRolesCount > 0
+            activeRolesCount === 0
+              ? 'No open positions right now'
+              : totalApplicants > 0
               ? `${totalApplicants} ${totalApplicants === 1 ? 'applicant' : 'applicants'} across all roles`
-              : 'No open positions right now'
+              : `Each ranked against ${uniqueCandidates} ${uniqueCandidates === 1 ? 'candidate' : 'candidates'}`
           }
           accentBorder
           tags={activeRolesCount > 0 ? [
             { label: `${activeRolesCount} active`, shade: 'light' as const },
-            { label: `${totalApplicants} applied`, shade: 'medium' as const },
+            ...(totalApplicants > 0 ? [{ label: `${totalApplicants} applied`, shade: 'medium' as const }] : []),
             { label: 'Manage', shade: 'dark' as const },
           ] : [
             { label: 'Create a role', shade: 'light' as const },
