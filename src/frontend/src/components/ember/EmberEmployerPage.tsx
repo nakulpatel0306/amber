@@ -27,7 +27,7 @@ type EmployerView = PageView | 'compare';
 
 export function EmberEmployerPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { success: showSuccess, error: showError } = useToast();
   const { profile } = useAuth();
   const { getConnectionStatus, sendConnectionRequest } = useConnections();
@@ -164,7 +164,12 @@ export function EmberEmployerPage() {
     setSelectedCandidate(null);
     setCompareIds(new Set());
     setView('gallery');
-  }, []);
+    // Clear deepdive param so the useEffect doesn't re-open it
+    if (searchParams.has('deepdive')) {
+      searchParams.delete('deepdive');
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const handleToggleSave = useCallback(async (c: CandidateResult) => {
     try {
