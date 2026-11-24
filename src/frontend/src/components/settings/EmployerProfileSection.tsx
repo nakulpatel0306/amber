@@ -165,7 +165,7 @@ export function EmployerProfileSection() {
             className="w-8 h-8 rounded-lg flex items-center justify-center"
             style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}
           >
-            <Building2 className="w-4 h-4" style={{ color: '#f59e0b' }} />
+            <Building2 className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
           </div>
           <h2
             className="text-base font-semibold"
@@ -185,7 +185,7 @@ export function EmployerProfileSection() {
           className="text-xs font-medium flex items-center gap-2"
           style={{ color: 'var(--color-textMuted)' }}
         >
-          <Building2 className="w-3.5 h-3.5" style={{ color: '#d97706' }} />
+          <Building2 className="w-3.5 h-3.5" style={{ color: 'var(--color-accent)' }} />
           Company information
         </h3>
 
@@ -293,7 +293,7 @@ export function EmployerProfileSection() {
           className="text-xs font-medium flex items-center gap-2"
           style={{ color: 'var(--color-textMuted)' }}
         >
-          <Users className="w-3.5 h-3.5" style={{ color: '#d97706' }} />
+          <Users className="w-3.5 h-3.5" style={{ color: 'var(--color-accent)' }} />
           Company size
         </h3>
 
@@ -325,7 +325,7 @@ export function EmployerProfileSection() {
           className="text-xs font-medium flex items-center gap-2"
           style={{ color: 'var(--color-textMuted)' }}
         >
-          <LinkIcon className="w-3.5 h-3.5" style={{ color: '#d97706' }} />
+          <LinkIcon className="w-3.5 h-3.5" style={{ color: 'var(--color-accent)' }} />
           Links
         </h3>
 

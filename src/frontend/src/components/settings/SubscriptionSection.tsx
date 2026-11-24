@@ -94,7 +94,7 @@ export function SubscriptionSection() {
             className="w-8 h-8 rounded-lg flex items-center justify-center"
             style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}
           >
-            <Crown className="w-4 h-4" style={{ color: '#f59e0b' }} />
+            <Crown className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
           </div>
           <h2
             className="text-base font-semibold"
@@ -119,7 +119,7 @@ export function SubscriptionSection() {
               className="w-10 h-10 rounded-xl flex items-center justify-center"
               style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}
             >
-              <Icon className="w-5 h-5" style={{ color: '#f59e0b' }} />
+              <Icon className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
             </div>
             <div>
               <h3 className="font-semibold" style={{ color: 'var(--color-text)' }}>
@@ -189,7 +189,7 @@ export function SubscriptionSection() {
         <div
           className="p-4 rounded-xl"
           style={{
-            backgroundColor: 'rgba(217, 119, 6, 0.08)',
+            backgroundColor: 'color-mix(in srgb, var(--color-accent) 8%, transparent)',
             border: '1px solid var(--color-border)',
           }}
         >

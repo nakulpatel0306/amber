@@ -12,7 +12,7 @@ export function AppearanceSection() {
             className="w-8 h-8 rounded-lg flex items-center justify-center"
             style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}
           >
-            <Palette className="w-4 h-4" style={{ color: '#f59e0b' }} />
+            <Palette className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
           </div>
           <h2
             className="text-base font-semibold"

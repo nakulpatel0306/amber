@@ -95,7 +95,7 @@ export function PrivacySection() {
             className="w-8 h-8 rounded-lg flex items-center justify-center"
             style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}
           >
-            <Eye className="w-4 h-4" style={{ color: '#f59e0b' }} />
+            <Eye className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
           </div>
           <h2
             className="text-base font-semibold"
@@ -121,7 +121,7 @@ export function PrivacySection() {
               style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}
             >
               {settings.profile_visible ? (
-                <Eye className="w-5 h-5" style={{ color: '#f59e0b' }} />
+                <Eye className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
               ) : (
                 <EyeOff className="w-5 h-5" style={{ color: 'var(--color-textMuted)' }} />
               )}

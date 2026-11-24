@@ -154,7 +154,7 @@ export function AccountSection() {
             className="w-8 h-8 rounded-lg flex items-center justify-center"
             style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}
           >
-            <Lock className="w-4 h-4" style={{ color: '#f59e0b' }} />
+            <Lock className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
           </div>
           <h2
             className="text-base font-semibold"
@@ -178,7 +178,7 @@ export function AccountSection() {
             className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}
           >
-            <Lock className="w-5 h-5" style={{ color: '#f59e0b' }} />
+            <Lock className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
           </div>
           <div className="flex-1">
             <p
@@ -268,7 +268,7 @@ export function AccountSection() {
             className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
             style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}
           >
-            <LogOut className="w-5 h-5" style={{ color: '#d97706' }} />
+            <LogOut className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
           </div>
           <div className="flex-1">
             <p
