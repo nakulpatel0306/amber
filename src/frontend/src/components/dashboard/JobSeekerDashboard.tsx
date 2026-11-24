@@ -3,9 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowRight,
-  CheckCircle2,
-  TrendingUp,
-} from 'lucide-react';
+  } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { dashboardStagger, dashboardItem } from '../../utils/motion';
 import { Button } from '../ui/Button';
@@ -15,15 +13,11 @@ import { supabase } from '../../lib/supabase';
 import { calculateCompatibility } from '../../lib/compatibilityScoring';
 
 import { DashboardHeader } from './DashboardHeader';
-import { BentoMetricCard } from './BentoMetricCard';
+import { SummaryCard } from './SummaryCard';
 import { MatchingTable } from './MatchingTable';
-import { QuickActions } from './QuickActions';
-import { StreakTracker } from './StreakTracker';
-import { CompatibilityInsights } from './CompatibilityInsights';
-import { ScheduleWidget } from './ScheduleWidget';
 import { ArchetypeStrip } from './ArchetypeStrip';
 
-import type { UpcomingChat } from './DashboardCalendar';
+import { chatSummary, type UpcomingChat } from './chatSummary';
 
 interface PersonalityScores {
   openness: number;
@@ -458,173 +452,68 @@ export function JobSeekerDashboard() {
     return <CoffeeBrewLoader variant="fullscreen" />;
   }
 
+  const totalChats = pendingChats + acceptedChats + completedChats;
+
   return (
     <motion.div
-      className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-5"
+      className="max-w-6xl mx-auto px-4 sm:px-6 py-8"
       variants={dashboardStagger}
       initial="hidden"
       animate="show"
     >
-      {/* Dashboard Header — search + date + notifications */}
-      <motion.div variants={dashboardItem}>
-        <DashboardHeader greeting={greeting} firstName={firstName} />
-      </motion.div>
+      <DashboardHeader greeting={greeting} firstName={firstName} />
 
-      {/* Archetype Strip — editorial personality display */}
-      {hasCompletedAssessment === true && personalityScores && topTraits.length > 0 && (
-        <ArchetypeStrip personalityScores={personalityScores} topTraits={topTraits} />
-      )}
-
-      {/* Key Metrics Row — 3 bento cards */}
-      <motion.div variants={dashboardItem} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <BentoMetricCard
-          title="Match index score"
-          loading={!matchesLoaded}
-          value={avgMatchScore > 0 ? `${avgMatchScore}%` : hasCompletedAssessment ? '0%' : 'N/A'}
-          subtitle={
-            avgMatchScore > 0
-              ? `Average compatibility across ${matchesAvailable} ${matchesAvailable === 1 ? 'role' : 'roles'}`
-              : hasCompletedAssessment
-              ? 'No roles available yet'
-              : 'Complete assessment to unlock'
-          }
-          accentBorder
-          tags={avgMatchScore > 0 ? [
-            { label: `Best ${bestMatchScore}%`, shade: 'light' as const },
-            { label: `${matchesAvailable} roles analyzed`, shade: 'medium' as const },
-            { label: `${uniqueCompanies} ${uniqueCompanies === 1 ? 'company' : 'companies'}`, shade: 'dark' as const },
-          ] : hasCompletedAssessment ? [
-            { label: 'Assessment complete', shade: 'light' as const },
-            { label: 'Awaiting roles', shade: 'medium' as const },
-          ] : [
-            { label: 'Not started', shade: 'dark' as const },
-          ]}
-          onClick={() => navigate(hasCompletedAssessment ? '/app/ember' : '/app/personality')}
-        />
-        <BentoMetricCard
-          title="Available roles"
-          loading={!matchesLoaded}
-          value={String(matchesAvailable)}
-          subtitle={
-            matchesAvailable > 0
-              ? `Open positions across ${uniqueCompanies} ${uniqueCompanies === 1 ? 'company' : 'companies'}`
-              : 'No open positions right now'
-          }
-          accentBorder
-          tags={matchesAvailable > 0 ? [
-            { label: `${matchesAvailable} active`, shade: 'light' as const },
-            { label: `${uniqueCompanies} ${uniqueCompanies === 1 ? 'company' : 'companies'}`, shade: 'medium' as const },
-            { label: 'Explore', shade: 'dark' as const },
-          ] : []}
-          onClick={() => navigate('/app/roles')}
-        />
-        <BentoMetricCard
-          title="Coffee chats"
-          loading={!chatsLoaded}
-          value={String(pendingChats + acceptedChats + completedChats)}
-          subtitle={
-            (pendingChats + acceptedChats + completedChats) > 0
-              ? 'Your conversation activity'
-              : 'Start connecting with employers'
-          }
-          accentBorder
-          tags={(pendingChats + acceptedChats + completedChats) > 0 ? [
-            ...(pendingChats > 0 ? [{ label: `${pendingChats} pending`, shade: 'light' as const }] : []),
-            ...(acceptedChats > 0 ? [{ label: `${acceptedChats} scheduled`, shade: 'medium' as const }] : []),
-            ...(completedChats > 0 ? [{ label: `${completedChats} completed`, shade: 'dark' as const }] : []),
-          ] : [
-            { label: 'Get started', shade: 'light' as const },
-          ]}
-          onClick={() => navigate('/app/chats')}
-        />
-      </motion.div>
-
-      {/* Quick Actions */}
-      <motion.div variants={dashboardItem}>
-        <QuickActions hasCompletedAssessment={hasCompletedAssessment === true} />
-      </motion.div>
-
-      {/* Widgets row: Streak + Insights + Schedule (2-col) */}
-      <motion.div variants={dashboardItem} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StreakTracker />
-        <CompatibilityInsights />
-        <div className="md:col-span-2">
-          <ScheduleWidget
-            upcomingChats={upcomingChats}
-            pendingChats={pendingChats}
-            acceptedChats={acceptedChats}
-            allAcceptedChats={upcomingChats.filter(c => c.status === 'accepted' && !c.scheduledAt)}
-          />
-        </div>
-      </motion.div>
-
-      {/* Setup Banner (if not complete) */}
       {(!hasCompletedProfile || hasCompletedAssessment === false) && (
-        <div
-          className="bento-card"
-          style={{ borderColor: 'var(--color-accent)' }}
-        >
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h2
-                className="text-sm font-semibold mb-2 flex items-center gap-2"
-                style={{ color: 'var(--color-text)' }}
-              >
-                <TrendingUp className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                Complete your setup
-              </h2>
-              <p className="text-xs mb-3" style={{ color: 'var(--color-textSecondary)' }}>
-                {!hasCompletedProfile
-                  ? 'Set up your profile, then take the personality assessment to get matched.'
-                  : 'Take the personality assessment to start getting matched with jobs.'}
-              </p>
-              <div className="flex items-center gap-3">
-                {[
-                  { label: 'Profile', done: hasCompletedProfile },
-                  { label: 'Assessment', done: hasCompletedAssessment === true },
-                  { label: 'Matches', done: false },
-                ].map((step, i) => (
-                  <div key={step.label} className="flex items-center gap-2">
-                    {i > 0 && (
-                      <div className="w-6 h-px" style={{ backgroundColor: 'var(--color-border)' }} />
-                    )}
-                    <div
-                      className={`w-4 h-4 rounded-full flex items-center justify-center ${step.done ? '' : 'border'}`}
-                      style={{
-                        backgroundColor: step.done ? 'var(--color-success)' : 'transparent',
-                        borderColor: step.done ? 'transparent' : 'var(--color-border)',
-                      }}
-                    >
-                      {step.done && <CheckCircle2 className="w-2.5 h-2.5 text-white" />}
-                    </div>
-                    <span className="text-xs" style={{ color: 'var(--color-textSecondary)' }}>
-                      {step.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {hasCompletedProfile ? (
-              <Link to="/app/personality">
-                <Button size="sm" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
-                  Take assessment
-                </Button>
-              </Link>
-            ) : (
-              <Button
-                size="sm"
-                rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
-                onClick={() => setShowSetupModal(true)}
-              >
-                Set up profile
-              </Button>
-            )}
+        <motion.div variants={dashboardItem} className="bento-card mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>
+              Finish setting up
+            </h2>
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+              {!hasCompletedProfile
+                ? 'Set up your profile, then take the personality assessment to get matched.'
+                : 'Take the personality assessment to start getting matched with roles.'}
+            </p>
           </div>
-        </div>
+          {hasCompletedProfile ? (
+            <Link to="/app/personality" className="flex-shrink-0">
+              <Button rightIcon={<ArrowRight className="w-4 h-4" />}>Take the assessment</Button>
+            </Link>
+          ) : (
+            <Button className="flex-shrink-0" rightIcon={<ArrowRight className="w-4 h-4" />} onClick={() => setShowSetupModal(true)}>
+              Set up profile
+            </Button>
+          )}
+        </motion.div>
       )}
 
-      {/* Top Personality Matches — clean status table, no card wrapper */}
-      <motion.div variants={dashboardItem}>
+      <motion.div variants={dashboardItem} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {hasCompletedAssessment === true && topTraits.length > 0 && <ArchetypeStrip topTraits={topTraits} />}
+        <SummaryCard
+          label="Average match"
+          loading={!matchesLoaded}
+          value={avgMatchScore > 0 ? `${avgMatchScore}%` : '–'}
+          detail={
+            avgMatchScore > 0
+              ? `Best ${bestMatchScore}% across ${matchesAvailable} ${matchesAvailable === 1 ? 'role' : 'roles'} at ${uniqueCompanies} ${uniqueCompanies === 1 ? 'company' : 'companies'}`
+              : hasCompletedAssessment
+              ? 'No open roles yet'
+              : 'Unlocks after the assessment'
+          }
+          action={hasCompletedAssessment ? 'See matches' : 'Take the assessment'}
+          to={hasCompletedAssessment ? '/app/ember' : '/app/personality'}
+        />
+        <SummaryCard
+          label="Coffee chats"
+          loading={!chatsLoaded}
+          value={totalChats}
+          detail={chatSummary(upcomingChats, pendingChats, acceptedChats, completedChats)}
+          action="Open coffee chats"
+          to="/app/chats"
+        />
+      </motion.div>
+
+      <motion.div variants={dashboardItem} className="mt-10">
         <MatchingTable
           matches={topMatches}
           hasCompletedAssessment={hasCompletedAssessment === true}
@@ -633,7 +522,6 @@ export function JobSeekerDashboard() {
         />
       </motion.div>
 
-      {/* Candidate Setup Modal */}
       <CandidateSetupModal
         isOpen={showSetupModal}
         onClose={handleSetupSkip}

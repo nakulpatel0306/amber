@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
   Lightbulb,
   Layers,
@@ -11,18 +9,9 @@ import {
   Brain,
 } from 'lucide-react';
 import { getArchetypeByName } from '../../lib/archetypes';
-import { fadeUp } from '../../utils/motion';
-
-interface PersonalityScores {
-  openness: number;
-  conscientiousness: number;
-  extraversion: number;
-  agreeableness: number;
-  neuroticism: number;
-}
+import { SummaryCard } from './SummaryCard';
 
 interface ArchetypeStripProps {
-  personalityScores: PersonalityScores;
   topTraits: string[];
 }
 
@@ -37,82 +26,24 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string; style?:
   brain: Brain,
 };
 
-export function ArchetypeStrip({ personalityScores, topTraits }: ArchetypeStripProps) {
+export function ArchetypeStrip({ topTraits }: ArchetypeStripProps) {
   const primaryArchetype = topTraits[0] ? getArchetypeByName(topTraits[0]) : null;
   if (!primaryArchetype) return null;
-
-  const scores = {
-    openness: personalityScores.openness,
-    conscientiousness: personalityScores.conscientiousness,
-    extraversion: personalityScores.extraversion,
-    agreeableness: personalityScores.agreeableness,
-    neuroticism: 100 - personalityScores.neuroticism,
-  };
-
-  // Operating style derivations (from PersonalityPlayerCard)
-  const decisionStyle = scores.conscientiousness > 65
-    ? (scores.openness > 60 ? 'Strategic Analyzer' : 'Methodical Planner')
-    : (scores.openness > 60 ? 'Intuitive Explorer' : 'Adaptive Pragmatist');
-  const communicationStyle = scores.extraversion > 65
-    ? (scores.agreeableness > 60 ? 'Warm Collaborator' : 'Direct Communicator')
-    : (scores.agreeableness > 60 ? 'Thoughtful Listener' : 'Focused Contributor');
-  const problemSolvingStyle = scores.openness > 65
-    ? (scores.conscientiousness > 60 ? 'Creative Systematizer' : 'Divergent Thinker')
-    : (scores.conscientiousness > 60 ? 'Structured Problem-Solver' : 'Practical Troubleshooter');
 
   const ArchetypeIcon = ICON_MAP[primaryArchetype.emoji] || Lightbulb;
 
   return (
-    <motion.div variants={fadeUp} initial="hidden" animate="show" className="py-2">
-      {/* Label */}
-      <p
-        className="text-label mb-1"
-        style={{ color: 'var(--color-textMuted)' }}
-      >
-        Archetype
-      </p>
-
-      {/* Archetype name */}
-      <h2
-        className="text-title mb-1 flex items-center gap-2"
-        style={{ color: 'var(--color-text)' }}
-      >
-        <ArchetypeIcon className="w-6 h-6" style={{ color: 'var(--color-accent)' }} />
-        {primaryArchetype.name}
-      </h2>
-
-      {/* Description */}
-      <p
-        className="text-sm mb-3"
-        style={{ color: 'var(--color-textSecondary)' }}
-      >
-        {primaryArchetype.description}
-      </p>
-
-      {/* Divider */}
-      <div className="h-px mb-3" style={{ backgroundColor: 'var(--color-border)' }} />
-
-      {/* Operating styles — single monospace line */}
-      <p
-        className="font-mono text-[11px] mb-3 leading-relaxed"
-        style={{ color: 'var(--color-textSecondary)' }}
-      >
-        <span style={{ color: 'var(--color-textMuted)' }}>DECISION:</span>{' '}
-        {decisionStyle}
-        <span style={{ color: 'var(--color-textMuted)' }}> · COMMUNICATION:</span>{' '}
-        {communicationStyle}
-        <span style={{ color: 'var(--color-textMuted)' }}> · PROBLEM-SOLVING:</span>{' '}
-        {problemSolvingStyle}
-      </p>
-
-      {/* CTA */}
-      <Link
-        to="/app/insights"
-        className="font-mono text-xs font-medium transition-opacity hover:opacity-70"
-        style={{ color: 'var(--color-accent)' }}
-      >
-        View insights →
-      </Link>
-    </motion.div>
+    <SummaryCard
+      label="Your archetype"
+      value={
+        <span className="flex items-center gap-2">
+          <ArchetypeIcon className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--color-accent)' }} />
+          {primaryArchetype.name}
+        </span>
+      }
+      detail={primaryArchetype.description}
+      action="View insights"
+      to="/app/insights"
+    />
   );
 }

@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRight,
-  CheckCircle2,
-  TrendingUp,
-} from 'lucide-react';
+  } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../ui/Button';
 import { EmployerSetupModal } from '../employer/EmployerSetupModal';
@@ -13,15 +11,11 @@ import { calculateCompatibility } from '../../lib/compatibilityScoring';
 import { CoffeeBrewLoader, useMinLoader } from '../ui/CoffeeBrewLoader';
 
 import { DashboardHeader } from './DashboardHeader';
-import { BentoMetricCard } from './BentoMetricCard';
+import { SummaryCard } from './SummaryCard';
 import { EmployerArchetypeStrip } from './EmployerArchetypeStrip';
-import { EmployerQuickActions } from './EmployerQuickActions';
 import { EmployerCandidateTable } from './EmployerCandidateTable';
-import { StreakTracker } from './StreakTracker';
-import { CompatibilityInsights } from './CompatibilityInsights';
-import { ScheduleWidget } from './ScheduleWidget';
 
-import type { UpcomingChat } from './DashboardCalendar';
+import { chatSummary, type UpcomingChat } from './chatSummary';
 
 interface CulturePreferences {
   openness: number;
@@ -66,7 +60,6 @@ export function EmployerDashboard() {
 
   // Stats
   const [activeRolesCount, setActiveRolesCount] = useState(0);
-  const [totalApplicants, setTotalApplicants] = useState(0);
   const [pendingChats, setPendingChats] = useState(0);
   const [acceptedChats, setAcceptedChats] = useState(0);
   const [completedChats, setCompletedChats] = useState(0);
@@ -244,17 +237,6 @@ export function EmployerDashboard() {
         const activeRolesList = (roles || []).filter(r => r.status === 'active');
         setActiveRolesCount(activeRolesList.length);
 
-        // Get application count
-        if (roles && roles.length > 0) {
-          const { data: apps } = await supabase
-            .from('applications')
-            .select('id, roles!inner(employer_id)')
-            .eq('roles.employer_id', employer.id);
-          setTotalApplicants(apps?.length || 0);
-        } else {
-          setTotalApplicants(0);
-        }
-
         // Fetch ALL candidates via RPC (bypasses RLS)
         const { data: candidatesRaw, error: candidatesErr } = await supabase
           .rpc('get_candidates_for_employer', { employer_user_id: user.id });
@@ -385,181 +367,76 @@ export function EmployerDashboard() {
     return <CoffeeBrewLoader variant="fullscreen" />;
   }
 
+  const totalChats = pendingChats + acceptedChats + completedChats;
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-5">
-      {/* Dashboard Header */}
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
       <DashboardHeader
         greeting={hasCompletedCultureQuiz ? greeting : `${firstName}, ready to define your culture?`}
         firstName={hasCompletedCultureQuiz ? firstName : ''}
       />
 
-      {/* Culture Archetype Strip */}
-      {hasCompletedCultureQuiz && culturePreferences && (
-        <EmployerArchetypeStrip
-          culturePreferences={culturePreferences}
-        />
-      )}
-
-      {/* Key Metrics Row — 3 bento cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <BentoMetricCard
-          title="Culture match index"
-          loading={!statsLoaded}
-          value={avgMatchScore > 0 ? `${avgMatchScore}%` : hasCompletedCultureQuiz ? '0%' : 'N/A'}
-          subtitle={
-            avgMatchScore > 0
-              ? `Average compatibility across ${uniqueCandidates} ${uniqueCandidates === 1 ? 'candidate' : 'candidates'}`
-              : hasCompletedCultureQuiz
-              ? 'No candidates available yet'
-              : 'Complete culture quiz to unlock'
-          }
-          accentBorder
-          tags={avgMatchScore > 0 ? [
-            { label: `Best ${bestMatchScore}%`, shade: 'light' as const },
-            { label: `${uniqueCandidates} candidates analyzed`, shade: 'medium' as const },
-            { label: `${activeRolesCount} ${activeRolesCount === 1 ? 'role' : 'roles'}`, shade: 'dark' as const },
-          ] : hasCompletedCultureQuiz ? [
-            { label: 'Culture defined', shade: 'light' as const },
-            { label: 'Awaiting candidates', shade: 'medium' as const },
-          ] : [
-            { label: 'Not started', shade: 'dark' as const },
-          ]}
-          onClick={() => navigate(hasCompletedCultureQuiz ? '/app/employer/ember' : '/app/employer/culture-assessment')}
-        />
-        <BentoMetricCard
-          title="Active roles"
-          loading={!statsLoaded}
-          value={String(activeRolesCount)}
-          subtitle={
-            activeRolesCount === 0
-              ? 'No open positions right now'
-              : totalApplicants > 0
-              ? `${totalApplicants} ${totalApplicants === 1 ? 'applicant' : 'applicants'} across all roles`
-              : `Each ranked against ${uniqueCandidates} ${uniqueCandidates === 1 ? 'candidate' : 'candidates'}`
-          }
-          accentBorder
-          tags={activeRolesCount > 0 ? [
-            { label: `${activeRolesCount} active`, shade: 'light' as const },
-            ...(totalApplicants > 0 ? [{ label: `${totalApplicants} applied`, shade: 'medium' as const }] : []),
-            { label: 'Manage', shade: 'dark' as const },
-          ] : [
-            { label: 'Create a role', shade: 'light' as const },
-          ]}
-          onClick={() => navigate('/app/employer/roles')}
-        />
-        <BentoMetricCard
-          title="Coffee chats"
-          loading={!statsLoaded}
-          value={String(pendingChats + acceptedChats + completedChats)}
-          subtitle={
-            (pendingChats + acceptedChats + completedChats) > 0
-              ? 'Your conversation activity'
-              : 'Start connecting with candidates'
-          }
-          accentBorder
-          tags={(pendingChats + acceptedChats + completedChats) > 0 ? [
-            ...(pendingChats > 0 ? [{ label: `${pendingChats} pending`, shade: 'light' as const }] : []),
-            ...(acceptedChats > 0 ? [{ label: `${acceptedChats} scheduled`, shade: 'medium' as const }] : []),
-            ...(completedChats > 0 ? [{ label: `${completedChats} completed`, shade: 'dark' as const }] : []),
-          ] : [
-            { label: 'Get started', shade: 'light' as const },
-          ]}
-          onClick={() => navigate('/app/employer/chats')}
-        />
-      </div>
-
-      {/* Quick Actions */}
-      <EmployerQuickActions hasCompletedCultureQuiz={hasCompletedCultureQuiz === true} />
-
-      {/* Widgets row: Streak + Insights + Schedule (2-col) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StreakTracker />
-        <CompatibilityInsights viewerRole="employer" />
-        <div className="md:col-span-2">
-          <ScheduleWidget
-            upcomingChats={upcomingChats}
-            pendingChats={pendingChats}
-            acceptedChats={acceptedChats}
-            allAcceptedChats={upcomingChats.filter(c => c.status === 'accepted' && !c.scheduledAt)}
-            viewerRole="employer"
-          />
-        </div>
-      </div>
-
-      {/* Setup Banner (if not complete) */}
       {(!hasCompletedProfile || hasCompletedCultureQuiz === false) && (
-        <div
-          className="bento-card"
-          style={{ borderColor: 'var(--color-accent)' }}
-        >
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h2
-                className="text-sm font-semibold mb-2 flex items-center gap-2"
-                style={{ color: 'var(--color-text)' }}
-              >
-                <TrendingUp className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                Get started with hiring
-              </h2>
-              <p className="text-xs mb-3" style={{ color: 'var(--color-textSecondary)' }}>
-                {!hasCompletedProfile
-                  ? 'Set up your company profile, then define your culture to match with candidates.'
-                  : 'Define your company culture to start matching with candidates who fit your team.'}
-              </p>
-              <div className="flex items-center gap-3">
-                {[
-                  { label: 'Profile', done: hasCompletedProfile },
-                  { label: 'Culture', done: hasCompletedCultureQuiz },
-                  { label: 'Candidates', done: false },
-                ].map((step, i) => (
-                  <div key={step.label} className="flex items-center gap-2">
-                    {i > 0 && (
-                      <div className="w-6 h-px" style={{ backgroundColor: 'var(--color-border)' }} />
-                    )}
-                    <div
-                      className={`w-4 h-4 rounded-full flex items-center justify-center ${step.done ? '' : 'border'}`}
-                      style={{
-                        backgroundColor: step.done ? 'var(--color-success)' : 'transparent',
-                        borderColor: step.done ? 'transparent' : 'var(--color-border)',
-                      }}
-                    >
-                      {step.done && <CheckCircle2 className="w-2.5 h-2.5 text-white" />}
-                    </div>
-                    <span className="text-xs" style={{ color: 'var(--color-textSecondary)' }}>
-                      {step.label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {hasCompletedProfile ? (
-              <Link to="/app/employer/culture-assessment">
-                <Button size="sm" rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
-                  Define culture
-                </Button>
-              </Link>
-            ) : (
-              <Button
-                size="sm"
-                rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
-                onClick={() => setShowSetupModal(true)}
-              >
-                Set up company
-              </Button>
-            )}
+        <div className="bento-card mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>
+              Get started with hiring
+            </h2>
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+              {!hasCompletedProfile
+                ? 'Set up your company profile, then define your culture to match with candidates.'
+                : 'Define your company culture to start matching with candidates who fit your team.'}
+            </p>
           </div>
+          {hasCompletedProfile ? (
+            <Link to="/app/employer/culture-assessment" className="flex-shrink-0">
+              <Button rightIcon={<ArrowRight className="w-4 h-4" />}>Define your culture</Button>
+            </Link>
+          ) : (
+            <Button className="flex-shrink-0" rightIcon={<ArrowRight className="w-4 h-4" />} onClick={() => setShowSetupModal(true)}>
+              Set up company
+            </Button>
+          )}
         </div>
       )}
 
-      {/* Top Culture Matches — clean status table */}
-      <EmployerCandidateTable
-        candidates={topCandidates}
-        hasCompletedCultureQuiz={hasCompletedCultureQuiz === true}
-        onRowClick={(candidate) => navigate(`/app/employer/ember?deepdive=${candidate.candidateId}`)}
-        onRefresh={handleRefreshCandidates}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {hasCompletedCultureQuiz && culturePreferences && (
+          <EmployerArchetypeStrip culturePreferences={culturePreferences} />
+        )}
+        <SummaryCard
+          label="Average culture match"
+          loading={!statsLoaded}
+          value={avgMatchScore > 0 ? `${avgMatchScore}%` : '–'}
+          detail={
+            avgMatchScore > 0
+              ? `Best ${bestMatchScore}% across ${uniqueCandidates} ${uniqueCandidates === 1 ? 'candidate' : 'candidates'} for ${activeRolesCount} ${activeRolesCount === 1 ? 'role' : 'roles'}`
+              : hasCompletedCultureQuiz
+              ? 'No candidates yet'
+              : 'Unlocks after the culture quiz'
+          }
+          action={hasCompletedCultureQuiz ? 'See top candidates' : 'Take the culture quiz'}
+          to={hasCompletedCultureQuiz ? '/app/employer/top-candidates' : '/app/employer/culture-assessment'}
+        />
+        <SummaryCard
+          label="Coffee chats"
+          loading={!statsLoaded}
+          value={totalChats}
+          detail={chatSummary(upcomingChats, pendingChats, acceptedChats, completedChats)}
+          action="Open coffee chats"
+          to="/app/employer/chats"
+        />
+      </div>
 
-      {/* Employer Setup Modal */}
+      <div className="mt-10">
+        <EmployerCandidateTable
+          candidates={topCandidates}
+          hasCompletedCultureQuiz={hasCompletedCultureQuiz === true}
+          onRowClick={(candidate) => navigate(`/app/employer/ember?deepdive=${candidate.candidateId}`)}
+          onRefresh={handleRefreshCandidates}
+        />
+      </div>
+
       <EmployerSetupModal
         isOpen={showSetupModal}
         onClose={handleSetupSkip}

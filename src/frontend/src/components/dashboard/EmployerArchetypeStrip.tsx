@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
   Lightbulb,
   Layers,
@@ -11,7 +9,7 @@ import {
   Shield,
 } from 'lucide-react';
 import { determineEmployerArchetype } from '../../data/employerArchetypes';
-import { fadeUp } from '../../utils/motion';
+import { SummaryCard } from './SummaryCard';
 
 interface EmployerArchetypeStripProps {
   culturePreferences: {
@@ -55,74 +53,21 @@ export function EmployerArchetypeStrip({ culturePreferences }: EmployerArchetype
   const archetypes = determineEmployerArchetype(archetypeScores);
   const primaryArchetype = archetypes.primary;
 
-  const scores = preferences;
-
-  // Operating style derivations
-  const decisionStyle = scores.conscientiousness > 65
-    ? (scores.openness > 60 ? 'Strategic Analyzer' : 'Methodical Planner')
-    : (scores.openness > 60 ? 'Intuitive Explorer' : 'Adaptive Pragmatist');
-  const communicationStyle = scores.extraversion > 65
-    ? (scores.agreeableness > 60 ? 'Warm Collaborator' : 'Direct Communicator')
-    : (scores.agreeableness > 60 ? 'Thoughtful Listener' : 'Focused Contributor');
-  const teamDynamic = scores.extraversion > 60
-    ? 'Collaborative-first'
-    : scores.conscientiousness > 60
-      ? 'Structured & focused'
-      : 'Flexible hybrid';
 
   const ArchetypeIcon = ICON_MAP[primaryArchetype.name] || Lightbulb;
 
   return (
-    <motion.div variants={fadeUp} initial="hidden" animate="show" className="py-2">
-      {/* Label */}
-      <p
-        className="text-label mb-1"
-        style={{ color: 'var(--color-textMuted)' }}
-      >
-        Culture archetype
-      </p>
-
-      {/* Archetype name */}
-      <h2
-        className="text-title mb-1 flex items-center gap-2"
-        style={{ color: 'var(--color-text)' }}
-      >
-        <ArchetypeIcon className="w-6 h-6" style={{ color: 'var(--color-accent)' }} />
-        {primaryArchetype.name}
-      </h2>
-
-      {/* Description */}
-      <p
-        className="text-sm mb-3"
-        style={{ color: 'var(--color-textSecondary)' }}
-      >
-        {primaryArchetype.description}
-      </p>
-
-      {/* Divider */}
-      <div className="h-px mb-3" style={{ backgroundColor: 'var(--color-border)' }} />
-
-      {/* Operating styles — single monospace line */}
-      <p
-        className="font-mono text-[11px] mb-3 leading-relaxed"
-        style={{ color: 'var(--color-textSecondary)' }}
-      >
-        <span style={{ color: 'var(--color-textMuted)' }}>DECISION:</span>{' '}
-        {decisionStyle}
-        <span style={{ color: 'var(--color-textMuted)' }}> · COMMUNICATION:</span>{' '}
-        {communicationStyle}
-        <span style={{ color: 'var(--color-textMuted)' }}> · TEAM DYNAMIC:</span>{' '}
-        {teamDynamic}
-      </p>
-
-      {/* CTA */}
-      <Link
-        to="/app/employer/insights"
-        className="font-mono text-xs font-medium transition-opacity hover:opacity-70"
-        style={{ color: 'var(--color-accent)' }}
-      >
-        View culture insights →
-      </Link>
-    </motion.div>
+    <SummaryCard
+      label="Culture archetype"
+      value={
+        <span className="flex items-center gap-2">
+          <ArchetypeIcon className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--color-accent)' }} />
+          {primaryArchetype.name}
+        </span>
+      }
+      detail={primaryArchetype.description}
+      action="View culture insights"
+      to="/app/employer/insights"
+    />
   );
 }
