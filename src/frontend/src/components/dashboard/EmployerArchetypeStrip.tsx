@@ -76,15 +76,15 @@ export function EmployerArchetypeStrip({ culturePreferences }: EmployerArchetype
     <motion.div variants={fadeUp} initial="hidden" animate="show" className="py-2">
       {/* Label */}
       <p
-        className="font-mono text-[10px] uppercase tracking-[0.25em] mb-1"
+        className="text-label mb-1"
         style={{ color: 'var(--color-textMuted)' }}
       >
-        CULTURE ARCHETYPE //
+        Culture archetype
       </p>
 
       {/* Archetype name */}
       <h2
-        className="font-serif text-3xl font-normal tracking-tight mb-1 flex items-center gap-2"
+        className="text-title mb-1 flex items-center gap-2"
         style={{ color: 'var(--color-text)' }}
       >
         <ArchetypeIcon className="w-6 h-6" style={{ color: 'var(--color-accent)' }} />
@@ -93,7 +93,7 @@ export function EmployerArchetypeStrip({ culturePreferences }: EmployerArchetype
 
       {/* Description */}
       <p
-        className="text-sm italic mb-3"
+        className="text-sm mb-3"
         style={{ color: 'var(--color-textSecondary)' }}
       >
         {primaryArchetype.description}

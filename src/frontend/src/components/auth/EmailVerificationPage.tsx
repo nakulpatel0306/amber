@@ -66,7 +66,7 @@ export function EmailVerificationPage() {
               <Mail className="w-8 h-8 text-white" />
             </div>
             <h1
-              className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
+              className="text-title"
               style={{ color: 'var(--color-text)' }}
             >
               Check your email

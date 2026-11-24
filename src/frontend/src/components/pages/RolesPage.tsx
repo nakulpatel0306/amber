@@ -182,16 +182,16 @@ export function RolesPage() {
           </div>
           <div className="min-w-0">
             <h1
-              className="text-2xl font-bold tracking-tight"
+              className="text-2xl font-semibold tracking-tight"
               style={{ color: 'var(--color-text)' }}
             >
               Available roles
             </h1>
             <p
-              className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
+              className="text-label mt-1"
               style={{ color: 'var(--color-textMuted)' }}
             >
-              Browse all open positions //
+              Browse all open positions
             </p>
             <div className="flex flex-wrap items-center gap-2.5 mt-3">
               {([
@@ -214,7 +214,7 @@ export function RolesPage() {
                   >
                     <stat.Icon className="w-3 h-3" style={{ color: stat.color }} />
                   </span>
-                  <span className="font-extrabold tabular-nums" style={{ color: stat.color }}>{stat.value}</span>
+                  <span className="font-semibold tabular-nums" style={{ color: stat.color }}>{stat.value}</span>
                   <span style={{ color: 'var(--color-textSecondary)' }}>{stat.label}</span>
                 </span>
               ))}
@@ -358,7 +358,7 @@ export function RolesPage() {
                         {emp.company_logo_url ? (
                           <img src={emp.company_logo_url} alt={emp.company_name} className="w-full h-full rounded-xl object-contain" style={{ backgroundColor: 'white' }} />
                         ) : (
-                          <span className="text-base font-bold text-white">{emp.company_name.charAt(0)}</span>
+                          <span className="text-base font-semibold text-white">{emp.company_name.charAt(0)}</span>
                         )}
                       </div>
                       <div className="min-w-0 flex-1">
@@ -370,7 +370,7 @@ export function RolesPage() {
                     </div>
 
                     {/* Role title — big */}
-                    <h3 className="font-bold text-lg leading-snug mb-1.5" style={{ color: 'var(--color-text)' }}>{role.title}</h3>
+                    <h3 className="font-semibold text-lg leading-snug mb-1.5" style={{ color: 'var(--color-text)' }}>{role.title}</h3>
 
                     {/* Description */}
                     {role.description && (
@@ -380,7 +380,7 @@ export function RolesPage() {
                     )}
 
                     {/* Meta row */}
-                    <div className="flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-wider font-medium mt-3 mb-3" style={{ color: 'var(--color-textMuted)' }}>
+                    <div className="flex flex-wrap items-center gap-3 text-caption font-medium mt-3 mb-3" style={{ color: 'var(--color-textMuted)' }}>
                       {salary !== 'Not specified' && (
                         <span className="flex items-center gap-1 font-semibold" style={{ color: 'var(--color-text)' }}>
                           <DollarSign className="w-3.5 h-3.5" style={{ color: 'var(--color-accent)' }} />
@@ -441,11 +441,11 @@ export function RolesPage() {
                           {emp.company_logo_url ? (
                             <img src={emp.company_logo_url} alt={emp.company_name} className="w-full h-full rounded-xl object-contain" style={{ backgroundColor: 'white' }} />
                           ) : (
-                            <span className="text-sm font-bold text-white">{emp.company_name.charAt(0)}</span>
+                            <span className="text-sm font-semibold text-white">{emp.company_name.charAt(0)}</span>
                           )}
                         </div>
                         <div className="min-w-0">
-                          <h3 className="font-bold text-base line-clamp-1" style={{ color: 'var(--color-text)' }}>{role.title}</h3>
+                          <h3 className="font-semibold text-base line-clamp-1" style={{ color: 'var(--color-text)' }}>{role.title}</h3>
                           <p className="text-xs" style={{ color: 'var(--color-textSecondary)' }}>
                             {role._hiringName ? `${role._hiringName} at ${emp.company_name}` : `Hiring at ${emp.company_name}`}
                           </p>
@@ -453,7 +453,7 @@ export function RolesPage() {
                       </div>
 
                       {/* Details grid */}
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-2.5 text-[11px] uppercase tracking-wider font-medium mb-4">
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-2.5 text-caption font-medium mb-4">
                         {role.location && (
                           <div className="flex items-center gap-1.5" style={{ color: 'var(--color-textMuted)' }}>
                             <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
@@ -483,7 +483,7 @@ export function RolesPage() {
                       {/* Personality fit */}
                       {traits.length > 0 && (
                         <div>
-                          <p className="text-[10px] font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--color-textMuted)' }}>
+                          <p className="text-caption font-medium mb-2" style={{ color: 'var(--color-textMuted)' }}>
                             Ideal personality
                           </p>
                           <div className="flex flex-wrap gap-1.5">

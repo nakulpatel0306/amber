@@ -23,7 +23,7 @@ function Box({ title, lines, accent = false }: { title: string; lines: string[];
 
 function Arrow({ label }: { label: ReactNode }) {
   return (
-    <div className="flex items-center justify-center gap-2 py-1 text-[10px] font-mono uppercase tracking-[0.2em]" style={{ color: 'var(--color-textMuted)' }}>
+    <div className="flex items-center justify-center gap-2 py-1 text-label" style={{ color: 'var(--color-textMuted)' }}>
       <span aria-hidden>↓</span>
       {label}
     </div>
@@ -35,7 +35,7 @@ export function ArchitectureDiagram() {
   return (
     <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
       <div>
-        <p className="mb-3 text-[10px] font-mono uppercase tracking-[0.25em]" style={{ color: 'var(--color-textMuted)' }}>
+        <p className="mb-3 text-label" style={{ color: 'var(--color-textMuted)' }}>
           The real product
         </p>
         <Box
@@ -61,7 +61,7 @@ export function ArchitectureDiagram() {
       </div>
 
       <div>
-        <p className="mb-3 text-[10px] font-mono uppercase tracking-[0.25em]" style={{ color: 'var(--color-textMuted)' }}>
+        <p className="mb-3 text-label" style={{ color: 'var(--color-textMuted)' }}>
           This demo
         </p>
         <Box

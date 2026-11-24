@@ -396,7 +396,7 @@ export function DashboardCalendar({
                     style={{ backgroundColor: 'var(--color-background)' }}
                   >
                     <div
-                      className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold"
+                      className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-semibold"
                       style={{
                         backgroundColor: 'rgba(217, 119, 6, 0.1)',
                         color: 'var(--color-accent)',

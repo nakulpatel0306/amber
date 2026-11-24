@@ -65,7 +65,7 @@ export function MatchingExplainer() {
   return (
     <div className="grid gap-6 lg:grid-cols-[1.1fr_1fr]">
       <div className="rounded-2xl border p-5 sm:p-6" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
-        <p className="text-[10px] font-mono uppercase tracking-[0.25em]" style={{ color: 'var(--color-textMuted)' }}>
+        <p className="text-label" style={{ color: 'var(--color-textMuted)' }}>
           Candidate (drag the sliders)
         </p>
         <div className="mt-4 space-y-4">
@@ -109,7 +109,7 @@ export function MatchingExplainer() {
       <div className="rounded-2xl border p-5 sm:p-6 flex flex-col" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="text-[10px] font-mono uppercase tracking-[0.25em]" style={{ color: 'var(--color-textMuted)' }}>
+            <p className="text-label" style={{ color: 'var(--color-textMuted)' }}>
               Archetype
             </p>
             <p className="mt-1 text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
@@ -117,10 +117,10 @@ export function MatchingExplainer() {
             </p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] font-mono uppercase tracking-[0.25em]" style={{ color: 'var(--color-textMuted)' }}>
+            <p className="text-label" style={{ color: 'var(--color-textMuted)' }}>
               Ember score
             </p>
-            <p className="text-4xl font-serif tabular-nums" style={{ color: 'var(--color-accent)' }}>
+            <p className="text-title tabular-nums" style={{ color: 'var(--color-accent)' }}>
               {result.ember}
             </p>
           </div>

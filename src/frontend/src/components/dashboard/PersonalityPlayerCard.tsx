@@ -108,7 +108,7 @@ export function PersonalityPlayerCard({ personalityScores, topTraits }: Personal
               <ArchetypeIcon className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
             </div>
             <div>
-              <h3 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
+              <h3 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
                 {primaryArchetype?.name || 'Your archetype'}
               </h3>
               {primaryArchetype && (
@@ -160,7 +160,7 @@ export function PersonalityPlayerCard({ personalityScores, topTraits }: Personal
                   >
                     <style.icon className="w-3 h-3" style={{ color: style.color }} />
                   </div>
-                  <span className="text-[10px] uppercase tracking-wide font-medium" style={{ color: 'var(--color-textMuted)' }}>
+                  <span className="text-caption font-medium" style={{ color: 'var(--color-textMuted)' }}>
                     {style.label}
                   </span>
                 </div>

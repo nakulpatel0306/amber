@@ -186,16 +186,16 @@ export function CreateRole() {
             style={{ color: 'var(--color-accent)' }}
           />
           <h2
-            className="text-3xl font-serif font-normal tracking-tight mb-3"
+            className="text-title mb-3"
             style={{ color: 'var(--color-text)' }}
           >
             Creating your role...
           </h2>
           <p
-            className="font-mono text-[10px] uppercase tracking-[0.25em]"
+            className="text-label"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            Setting up candidate matching //
+            Setting up candidate matching
           </p>
         </motion.div>
       </div>
@@ -222,7 +222,7 @@ export function CreateRole() {
           </div>
 
           <h2
-            className="text-3xl font-serif font-normal tracking-tight mb-3"
+            className="text-title mb-3"
             style={{ color: 'var(--color-text)' }}
           >
             Role created
@@ -234,10 +234,10 @@ export function CreateRole() {
             {formData.title} is now live
           </p>
           <p
-            className="font-mono text-[10px] uppercase tracking-[0.25em] mb-8"
+            className="text-label mb-8"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            Matching candidates to your culture preferences //
+            Matching candidates to your culture preferences
           </p>
 
           <div className="flex gap-3 justify-center">
@@ -279,16 +279,16 @@ export function CreateRole() {
             </div>
             <div className="flex-1 min-w-0">
               <h1
-                className="text-2xl sm:text-3xl font-serif font-normal tracking-tight"
+                className="text-title text-2xl"
                 style={{ color: 'var(--color-text)' }}
               >
                 Create a new role
               </h1>
               <p
-                className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
+                className="text-label mt-1"
                 style={{ color: 'var(--color-textMuted)' }}
               >
-                Define the position and ideal candidate //
+                Define the position and ideal candidate
               </p>
               <div className="flex flex-wrap items-center gap-2.5 mt-3">
                 {STEPS.map((s, i) => {
@@ -311,7 +311,7 @@ export function CreateRole() {
                         <Check className="w-3 h-3" />
                       ) : (
                         <span
-                          className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold"
+                          className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-semibold"
                           style={{
                             backgroundColor: color ? `${color}20` : 'var(--color-border)',
                             color: color || 'var(--color-textMuted)',
@@ -342,10 +342,10 @@ export function CreateRole() {
               <div className="space-y-5">
                 <div>
                   <label
-                    className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
+                    className="text-label block mb-2"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
-                    Job title //
+                    Job title
                   </label>
                   <input
                     type="text"
@@ -363,10 +363,10 @@ export function CreateRole() {
 
                 <div>
                   <label
-                    className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-3"
+                    className="text-label block mb-3"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
-                    Sector / Department //
+                    Sector or department
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {JOB_SECTORS.map(sector => {
@@ -397,10 +397,10 @@ export function CreateRole() {
 
                 <div>
                   <label
-                    className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-3"
+                    className="text-label block mb-3"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
-                    Location //
+                    Location
                   </label>
                   <div className="flex gap-2 mb-3">
                     {(['remote', 'hybrid', 'onsite'] as const).map(type => (
@@ -445,10 +445,10 @@ export function CreateRole() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label
-                      className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
+                      className="text-label block mb-2"
                       style={{ color: 'var(--color-textMuted)' }}
                     >
-                      Employment type //
+                      Employment type
                     </label>
                     <div className="relative">
                       <select
@@ -472,10 +472,10 @@ export function CreateRole() {
 
                   <div>
                     <label
-                      className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
+                      className="text-label block mb-2"
                       style={{ color: 'var(--color-textMuted)' }}
                     >
-                      Salary range //
+                      Salary range
                     </label>
                     <div className="flex items-center gap-2">
                       <input
@@ -513,10 +513,10 @@ export function CreateRole() {
               <div className="space-y-5">
                 <div>
                   <label
-                    className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
+                    className="text-label block mb-2"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
-                    Role description //
+                    Role description
                   </label>
                   <textarea
                     value={formData.description}
@@ -534,10 +534,10 @@ export function CreateRole() {
 
                 <div>
                   <label
-                    className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
+                    className="text-label block mb-2"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
-                    Requirements (one per line) //
+                    Requirements (one per line)
                   </label>
                   <textarea
                     value={formData.requirements}
@@ -556,10 +556,10 @@ export function CreateRole() {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label
-                      className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
+                      className="text-label block mb-2"
                       style={{ color: 'var(--color-textMuted)' }}
                     >
-                      Team size //
+                      Team size
                     </label>
                     <input
                       type="text"
@@ -577,10 +577,10 @@ export function CreateRole() {
 
                   <div>
                     <label
-                      className="font-mono text-[10px] uppercase tracking-[0.25em] block mb-2"
+                      className="text-label block mb-2"
                       style={{ color: 'var(--color-textMuted)' }}
                     >
-                      Reports to //
+                      Reports to
                     </label>
                     <input
                       type="text"
@@ -611,16 +611,16 @@ export function CreateRole() {
                     </div>
                     <div>
                       <h3
-                        className="text-base font-bold tracking-tight"
+                        className="text-base font-semibold tracking-tight"
                         style={{ color: 'var(--color-text)' }}
                       >
                         Ideal candidate traits
                       </h3>
                       <p
-                        className="font-mono text-[10px] uppercase tracking-[0.25em]"
+                        className="text-label"
                         style={{ color: 'var(--color-textMuted)' }}
                       >
-                        Select at least 2 traits //
+                        Select at least 2 traits
                       </p>
                     </div>
                   </div>
@@ -680,16 +680,16 @@ export function CreateRole() {
                 {/* Role title header */}
                 <div>
                   <h3
-                    className="text-lg font-bold tracking-tight"
+                    className="text-lg font-semibold tracking-tight"
                     style={{ color: 'var(--color-text)' }}
                   >
                     {formData.title}
                   </h3>
                   <p
-                    className="font-mono text-[10px] uppercase tracking-[0.25em] mt-0.5"
+                    className="text-label mt-0.5"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
-                    {sectorLabel} //
+                    {sectorLabel}
                   </p>
                 </div>
 
@@ -750,7 +750,7 @@ export function CreateRole() {
                 {/* Description */}
                 <div>
                   <h4
-                    className="text-base font-bold tracking-tight mb-2"
+                    className="text-base font-semibold tracking-tight mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
                     Description
@@ -766,7 +766,7 @@ export function CreateRole() {
                 {/* Requirements */}
                 <div>
                   <h4
-                    className="text-base font-bold tracking-tight mb-2"
+                    className="text-base font-semibold tracking-tight mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
                     Requirements
@@ -784,7 +784,7 @@ export function CreateRole() {
                 {/* Traits */}
                 <div>
                   <h4
-                    className="text-base font-bold tracking-tight mb-2"
+                    className="text-base font-semibold tracking-tight mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
                     Ideal candidate traits

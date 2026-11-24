@@ -363,7 +363,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                   <Sparkles className="w-10 h-10 text-white" />
                 </div>
                 <h2
-                  className="text-3xl font-serif font-normal tracking-tight mb-4"
+                  className="text-title mb-4"
                   style={{ color: 'var(--color-text)' }}
                 >
                   Welcome, {firstName}!
@@ -388,7 +388,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
               <div className="space-y-6">
                 <div className="text-center mb-8">
                   <h2
-                    className="text-xl font-bold mb-2"
+                    className="text-xl font-semibold mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
                     Tell us about yourself
@@ -461,7 +461,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
               <div className="space-y-6">
                 <div className="text-center mb-8">
                   <h2
-                    className="text-xl font-bold mb-2"
+                    className="text-xl font-semibold mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
                     Your work preferences
@@ -592,7 +592,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
               <div className="space-y-6">
                 <div className="text-center mb-8">
                   <h2
-                    className="text-xl font-bold mb-2"
+                    className="text-xl font-semibold mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
                     Share your work

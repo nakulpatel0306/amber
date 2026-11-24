@@ -37,7 +37,7 @@ export function ScoreRing({ score, size = 52, strokeWidth = 3, label, fontSize =
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className={`${fontSize} font-bold`} style={{ color }}>{score}</span>
+          <span className={`${fontSize} font-semibold`} style={{ color }}>{score}</span>
         </div>
       </div>
       {label && (

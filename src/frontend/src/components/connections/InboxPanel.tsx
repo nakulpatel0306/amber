@@ -125,7 +125,7 @@ export function InboxPanel({ isOpen, onClose }: InboxPanelProps) {
             </h2>
             {pendingReceived.length > 0 && (
               <span
-                className="flex items-center justify-center rounded-full text-[10px] font-bold text-white"
+                className="flex items-center justify-center rounded-full text-[10px] font-semibold text-white"
                 style={{
                   backgroundColor: 'var(--color-accent)',
                   minWidth: '20px',
@@ -173,7 +173,7 @@ export function InboxPanel({ isOpen, onClose }: InboxPanelProps) {
                         className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
                         style={{ background: avatarGradient(senderName) }}
                       >
-                        <span className="text-sm font-bold text-white">{initial}</span>
+                        <span className="text-sm font-semibold text-white">{initial}</span>
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">

@@ -152,7 +152,7 @@ export function DropdownDivider() {
 export function DropdownLabel({ children }: { children: ReactNode }) {
   return (
     <div
-      className="px-3 py-1.5 text-xs font-medium uppercase tracking-wider"
+      className="px-3 py-1.5 text-xs font-medium"
       style={{ color: 'var(--color-textMuted)' }}
     >
       {children}

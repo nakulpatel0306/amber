@@ -94,7 +94,7 @@ export function CoffeeChatCard({
             backgroundColor: 'var(--color-accent)',
           }}
         >
-          <span className="text-sm font-bold text-white">
+          <span className="text-sm font-semibold text-white">
             {chat.partner_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
           </span>
         </button>
@@ -226,7 +226,7 @@ export function CoffeeChatCard({
         {chat.match_score && chat.match_score > 0 && (
           <div className="text-right flex-shrink-0 hidden sm:block">
             <div
-              className="text-2xl font-extrabold"
+              className="text-2xl font-semibold"
               style={{
                 color: chat.match_score >= 80
                   ? 'var(--color-success)'
@@ -237,7 +237,7 @@ export function CoffeeChatCard({
             >
               {chat.match_score}%
             </div>
-            <p className="text-[10px] uppercase tracking-wider font-medium" style={{ color: 'var(--color-textMuted)' }}>match</p>
+            <p className="text-caption font-medium" style={{ color: 'var(--color-textMuted)' }}>match</p>
           </div>
         )}
       </div>

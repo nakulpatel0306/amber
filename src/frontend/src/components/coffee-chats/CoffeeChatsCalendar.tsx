@@ -260,7 +260,7 @@ function NextUpCard({
 
       <div className="flex items-start gap-3">
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xs font-bold"
+          className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-xs font-semibold"
           style={{ backgroundColor: 'rgba(217,119,6,0.1)', color: 'var(--color-accent)' }}
         >
           <Building2 className="w-5 h-5" />

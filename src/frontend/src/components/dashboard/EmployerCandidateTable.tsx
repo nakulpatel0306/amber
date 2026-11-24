@@ -71,7 +71,7 @@ export function EmployerCandidateTable({ candidates, hasCompletedCultureQuiz, on
           Top culture matches
         </h3>
         <p
-          className="font-mono text-[10px] uppercase tracking-[0.25em] mb-1"
+          className="text-label mb-1"
           style={{ color: 'var(--color-textMuted)' }}
         >
           Browse & connect with best-fit candidates
@@ -92,7 +92,7 @@ export function EmployerCandidateTable({ candidates, hasCompletedCultureQuiz, on
             Top culture matches
           </h3>
           <p
-            className="font-mono text-[10px] uppercase tracking-[0.25em]"
+            className="text-label"
             style={{ color: 'var(--color-textMuted)' }}
           >
             Browse & connect with best-fit candidates
@@ -116,31 +116,31 @@ export function EmployerCandidateTable({ candidates, hasCompletedCultureQuiz, on
           <thead>
             <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
               <th
-                className="pb-2.5 pl-1 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"
+                className="pb-2.5 pl-1 text-left text-caption font-medium"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 Candidate
               </th>
               <th
-                className="pb-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"
+                className="pb-2.5 text-left text-caption font-medium"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 Location
               </th>
               <th
-                className="pb-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"
+                className="pb-2.5 text-left text-caption font-medium"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 Match
               </th>
               <th
-                className="pb-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"
+                className="pb-2.5 text-left text-caption font-medium"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 Top trait
               </th>
               <th
-                className="pb-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"
+                className="pb-2.5 text-left text-caption font-medium"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 Status
@@ -179,7 +179,7 @@ export function EmployerCandidateTable({ candidates, hasCompletedCultureQuiz, on
                       <div className="flex items-center gap-3">
                         {/* Avatar initial */}
                         <div
-                          className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-bold"
+                          className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-semibold"
                           style={{
                             backgroundColor: 'var(--color-accent)',
                             color: 'white',
@@ -224,7 +224,7 @@ export function EmployerCandidateTable({ candidates, hasCompletedCultureQuiz, on
                     <td className="py-3.5 pr-5">
                       <div className="flex items-center gap-2">
                         <span
-                          className="text-sm font-bold tabular-nums"
+                          className="text-sm font-semibold tabular-nums"
                           style={{ color: getScoreColor(candidate.matchScore) }}
                         >
                           {candidate.matchScore}%

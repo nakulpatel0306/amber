@@ -129,7 +129,7 @@ export function LoginPage() {
               <AmberLogo size="xl" />
             </motion.div>
             <h1
-              className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
+              className="text-title"
               style={{ color: 'var(--color-text)' }}
             >
               Welcome back
@@ -189,7 +189,7 @@ export function LoginPage() {
                 transition={{ duration: 0.6, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
               />
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
+            <div className="relative flex justify-center text-xs">
               <motion.span
                 className="px-2"
                 style={{

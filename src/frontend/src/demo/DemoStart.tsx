@@ -68,7 +68,7 @@ export function DemoStart() {
 
       <main className="flex-1 px-4 sm:px-6 pb-24 max-w-5xl w-full mx-auto">
         <div className="text-center mt-6 sm:mt-12 mb-10">
-          <h1 className="text-4xl sm:text-5xl font-serif tracking-tight" style={{ color: 'var(--color-text)' }}>
+          <h1 className="text-title" style={{ color: 'var(--color-text)' }}>
             Try Amber
           </h1>
           <p className="mt-3 text-sm sm:text-base max-w-xl mx-auto" style={{ color: 'var(--color-textSecondary)' }}>

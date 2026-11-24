@@ -211,7 +211,7 @@ export function StreakTracker() {
             </motion.div>
 
             <motion.p
-              className="text-base font-bold tracking-tight"
+              className="text-base font-semibold tracking-tight"
               style={{ color: 'var(--color-text)' }}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -254,13 +254,13 @@ export function StreakTracker() {
               </motion.div>
             ) : (
               <motion.p
-                className="font-mono text-[10px] uppercase tracking-[0.25em]"
+                className="text-label"
                 style={{ color: '#10B981' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7 }}
               >
-                All challenges complete //
+                All challenges complete
               </motion.p>
             )}
           </motion.div>
@@ -334,7 +334,7 @@ export function StreakTracker() {
 
       {/* Streak count */}
       <p
-        className="text-2xl font-bold leading-none mt-3"
+        className="text-2xl font-semibold leading-none mt-3"
         style={{ color: 'var(--color-text)' }}
       >
         {streak} day{streak !== 1 ? 's' : ''}
@@ -389,7 +389,7 @@ export function StreakTracker() {
       {/* Weekly streak */}
       <div className="w-full">
         <p
-          className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1.5"
+          className="text-caption mb-1.5"
           style={{ color: 'var(--color-textMuted)' }}
         >
           This week

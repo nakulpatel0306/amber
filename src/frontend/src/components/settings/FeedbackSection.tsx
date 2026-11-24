@@ -319,7 +319,7 @@ export function FeedbackSection() {
                     }}
                   >
                     <ChevronUp className="w-4 h-4" />
-                    <span className="text-xs font-bold">{feature.votes}</span>
+                    <span className="text-xs font-semibold">{feature.votes}</span>
                   </button>
 
                   {/* Content */}

@@ -60,10 +60,10 @@ function OverviewCarousel({ stats }: { stats: { totalCandidates: number; strongC
   return (
     <div className="bento-card overflow-hidden" style={{ padding: '20px 16px 16px' }}>
       <p
-        className="font-mono text-[10px] uppercase tracking-[0.25em] mb-1"
+        className="text-label mb-1"
         style={{ color: 'var(--color-textMuted)' }}
       >
-        Overview //
+        Overview
       </p>
 
       <AnimatePresence mode="wait">
@@ -77,7 +77,7 @@ function OverviewCarousel({ stats }: { stats: { totalCandidates: number; strongC
           style={{ minHeight: 120 }}
         >
           <span
-            className="font-extrabold tracking-tighter leading-none"
+            className="font-semibold tracking-tighter leading-none"
             style={{
               fontSize: '4.5rem',
               color: 'var(--color-accent)',
@@ -86,7 +86,7 @@ function OverviewCarousel({ stats }: { stats: { totalCandidates: number; strongC
             {slide.value}
           </span>
           <span
-            className="text-sm font-semibold mt-1 uppercase tracking-widest"
+            className="text-sm font-medium mt-1"
             style={{ color: 'var(--color-textSecondary)' }}
           >
             {slide.label}
@@ -381,7 +381,7 @@ export function EmberEmployerPage() {
       <div className="ember-page min-h-screen flex items-center justify-center p-8" style={{ backgroundColor: 'var(--color-background)' }}>
         <div className="text-center max-w-md">
           <EmberFirefly size="xl" mood="neutral" />
-          <h2 className="text-2xl font-bold mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-2xl font-semibold mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
             Complete your setup
           </h2>
           <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
@@ -420,13 +420,13 @@ export function EmberEmployerPage() {
                 </div>
                 <div className="min-w-0">
                   <h1
-                    className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
+                    className="text-title"
                     style={{ color: 'var(--color-text)' }}
                   >
                     Ember
                   </h1>
                   <p
-                    className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
+                    className="text-label mt-1"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
                     {archetype ? `${archetype.name} culture` : 'Your personalized candidate gallery'}
@@ -454,7 +454,7 @@ export function EmberEmployerPage() {
                           >
                             <stat.Icon className="w-3 h-3" style={{ color: stat.color }} />
                           </span>
-                          <span className="font-extrabold tabular-nums" style={{ color: stat.color }}>{stat.value}</span>
+                          <span className="font-semibold tabular-nums" style={{ color: stat.color }}>{stat.value}</span>
                           <span style={{ color: 'var(--color-textSecondary)' }}>{stat.label}</span>
                         </span>
                       ))}
@@ -644,11 +644,11 @@ export function EmberEmployerPage() {
                 {/* Shortlisted Candidates */}
                 <motion.div variants={emberFadeUp}>
                   <p
-                    className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3 mt-1"
+                    className="text-label mb-3 mt-1"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
                     <Bookmark className="w-3 h-3 inline-block mr-1.5 -mt-px" />
-                    Shortlisted candidates //
+                    Shortlisted candidates
                   </p>
 
                   {shortlistedCandidates.length === 0 ? (
@@ -669,7 +669,7 @@ export function EmberEmployerPage() {
                         >
                           {/* Avatar */}
                           <div
-                            className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 text-[10px] font-bold"
+                            className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 text-[10px] font-semibold"
                             style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-accent)' }}
                           >
                             {c.name.charAt(0)}

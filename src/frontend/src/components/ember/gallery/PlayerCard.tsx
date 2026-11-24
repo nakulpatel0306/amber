@@ -48,7 +48,7 @@ export function PlayerCard({
             backgroundColor: isSelected ? 'var(--color-accent)' : 'transparent',
           }}
         >
-          {isSelected && <span className="text-white text-xs font-bold">&#10003;</span>}
+          {isSelected && <span className="text-white text-xs font-semibold">&#10003;</span>}
         </button>
       )}
 
@@ -65,11 +65,11 @@ export function PlayerCard({
             {avatarUrl ? (
               <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
             ) : (
-              <span className="text-sm font-bold" style={{ color: 'var(--color-accent)' }}>{initial}</span>
+              <span className="text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>{initial}</span>
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>
+            <h3 className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
               {name}
             </h3>
             <p className="text-xs mt-0.5" style={{ color: 'var(--color-textMuted)' }}>
@@ -121,7 +121,7 @@ export function PlayerCard({
         {/* Score divider */}
         <div className="flex items-center gap-3 mb-0">
           <div className="flex-1 h-px" style={{ backgroundColor: 'var(--color-border)' }} />
-          <span className="font-mono text-lg font-bold tabular-nums" style={{ color: 'var(--color-accent)' }}>
+          <span className="font-mono text-lg font-semibold tabular-nums" style={{ color: 'var(--color-accent)' }}>
             {overallScore}
           </span>
           <div className="flex-1 h-px" style={{ backgroundColor: 'var(--color-border)' }} />

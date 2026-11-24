@@ -131,7 +131,7 @@ export function MessagePanel({
         <span className="text-sm font-medium max-w-[120px] truncate">{partner.name}</span>
         {unreadCount > 0 && (
           <span
-            className="w-5 h-5 flex items-center justify-center rounded-full text-[10px] font-bold"
+            className="w-5 h-5 flex items-center justify-center rounded-full text-[10px] font-semibold"
             style={{ backgroundColor: 'var(--color-error)', color: 'white' }}
           >
             {unreadCount}

@@ -99,13 +99,13 @@ export function ConnectModal({
               {avatarUrl ? (
                 <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
               ) : (
-                <span className="text-sm font-bold" style={{ color: 'var(--color-accent)' }}>{initial}</span>
+                <span className="text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>{initial}</span>
               )}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>{name}</h3>
-                <span className="text-sm font-bold tabular-nums" style={{ color: 'var(--color-accent)' }}>
+                <span className="text-sm font-semibold tabular-nums" style={{ color: 'var(--color-accent)' }}>
                   {overallScore}%
                 </span>
               </div>

@@ -29,7 +29,7 @@ export function DemoBanner() {
       }}
     >
       <span
-        className="font-semibold uppercase tracking-wider text-[10px] px-1.5 py-0.5 rounded"
+        className="font-medium text-caption px-1.5 py-0.5 rounded"
         style={{ backgroundColor: 'color-mix(in srgb, var(--color-accent) 15%, transparent)', color: 'var(--color-accent)' }}
       >
         Demo

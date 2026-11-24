@@ -227,7 +227,7 @@ export function MatchActivityFeed({ mode = 'candidate', matches = [], candidateM
   return (
     <div className="bento-card">
       <p
-        className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3"
+        className="text-label mb-3"
         style={{ color: 'var(--color-textMuted)' }}
       >
         Recent activity

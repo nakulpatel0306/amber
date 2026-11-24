@@ -92,7 +92,7 @@ export function DidYouKnowCard({
           </p>
           {currentFact.source && (
             <p
-              className="text-xs mt-2 italic"
+              className="text-xs mt-2"
               style={{ color: 'var(--color-textMuted)' }}
             >
               — {currentFact.source}

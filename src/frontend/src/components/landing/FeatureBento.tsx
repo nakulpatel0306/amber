@@ -77,7 +77,7 @@ function AnimatedScoreNumber({ value, suffix = '', delay = 0 }: { value: number;
 function CompanyLogoTile({ fallback, size = 20 }: { domain?: string; fallback: string; size?: number }) {
   return (
     <div
-      className="rounded flex items-center justify-center flex-shrink-0 font-bold"
+      className="rounded flex items-center justify-center flex-shrink-0 font-semibold"
       style={{
         width: size,
         height: size,
@@ -134,7 +134,7 @@ function SceneDashboard() {
             style={{ color: 'var(--color-text)' }}
           >
             Good evening,{' '}
-            <span className="italic" style={{ color: 'var(--color-accent)' }}>
+            <span className="" style={{ color: 'var(--color-accent)' }}>
               Alex
             </span>
           </p>
@@ -161,7 +161,7 @@ function SceneDashboard() {
           transition={{ delay: 0.3 }}
         >
           <Brain className="w-2.5 h-2.5" style={{ color: 'var(--color-accent)' }} />
-          <span className="text-[9px] font-serif italic" style={{ color: 'var(--color-accent)' }}>
+          <span className="text-[9px] font-serif" style={{ color: 'var(--color-accent)' }}>
             The Strategist
           </span>
         </motion.div>
@@ -190,7 +190,7 @@ function SceneDashboard() {
             />
             <div className="flex items-start justify-between">
               <p
-                className="text-[8px] font-mono uppercase tracking-[0.2em]"
+                className="text-[8px]"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 {m.label}
@@ -243,7 +243,7 @@ function SceneDashboard() {
             </p>
           </div>
           <span
-            className="text-[8px] font-mono uppercase tracking-[0.2em]"
+            className="text-[8px]"
             style={{ color: 'var(--color-textMuted)' }}
           >
             This week
@@ -398,7 +398,7 @@ function SceneAssessmentScene({ pickedIndex, hoverIndex }: { pickedIndex: number
               style={{ backgroundColor: 'var(--color-border)' }}
             />
             <p
-              className="text-[8.5px] leading-none font-mono uppercase tracking-wider"
+              className="text-[8.5px] leading-none"
               style={{ color: 'var(--color-textMuted)' }}
             >
               Scenario
@@ -446,7 +446,7 @@ function SceneAssessmentScene({ pickedIndex, hoverIndex }: { pickedIndex: number
           text="You're offered a role in a completely new field. More money, but you'd be starting from scratch. Your current role has a "
           delay={0.2}
         />
-        <span className="italic" style={{ color: 'var(--color-accent)' }}>
+        <span className="" style={{ color: 'var(--color-accent)' }}>
           <TypedText text="clear promotion path." delay={2.4} />
         </span>
       </motion.div>
@@ -636,7 +636,7 @@ function SceneInsights() {
           </div>
           <div className="flex items-center gap-1.5 mt-1">
             <p
-              className="text-[8.5px] leading-none font-mono uppercase tracking-wider"
+              className="text-[8.5px] leading-none"
               style={{ color: 'var(--color-textMuted)' }}
             >
               Ember › deep dive
@@ -687,13 +687,13 @@ function SceneInsights() {
       >
         <div className="flex items-center justify-between mb-1.5">
           <p
-            className="text-[8px] font-mono uppercase tracking-[0.25em]"
+            className="text-[8px]"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            Score breakdown //
+            Score breakdown
           </p>
           <p
-            className="text-[8px] font-mono uppercase tracking-[0.2em]"
+            className="text-[8px]"
             style={{ color: 'var(--color-textMuted)' }}
           >
             4 Dimensions
@@ -718,7 +718,7 @@ function SceneInsights() {
                 style={{ backgroundColor: s.color }}
               />
               <p
-                className="text-[8.5px] font-mono uppercase tracking-[0.2em] pl-1.5 mb-1"
+                className="text-[8.5px] pl-1.5 mb-1"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 {s.label}
@@ -761,10 +761,10 @@ function SceneInsights() {
       >
         <div className="flex items-center justify-between mb-1.5">
           <p
-            className="text-[7.5px] font-mono uppercase tracking-[0.25em]"
+            className="text-[7.5px]"
             style={{ color: 'var(--color-textMuted)' }}
           >
-            Flavor profile //
+            Flavor profile
           </p>
           <div className="flex items-center gap-2 text-[7px] font-mono" style={{ color: 'var(--color-textMuted)' }}>
             <span className="flex items-center gap-0.5">
@@ -799,7 +799,7 @@ function SceneInsights() {
                 transition={{ delay: 0.4 + i * 0.06 }}
               >
                 <div
-                  className="w-4 h-4 rounded flex items-center justify-center text-[8px] font-mono font-bold flex-shrink-0"
+                  className="w-4 h-4 rounded flex items-center justify-center text-[8px] font-mono font-semibold flex-shrink-0"
                   style={{
                     backgroundColor: `color-mix(in srgb, ${dim.color} 15%, transparent)`,
                     color: dim.color,
@@ -877,7 +877,7 @@ function SceneInsights() {
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-0.5">
             <p
-              className="text-[7.5px] font-mono uppercase tracking-[0.2em]"
+              className="text-[7.5px]"
               style={{ color: 'var(--color-accent)' }}
             >
               Ember's take
@@ -1011,7 +1011,7 @@ function SceneConnect({ stage }: { stage: number }) {
         transition={{ delay: 0.15 }}
       >
         <div
-          className="flex items-center gap-1 text-[8px] font-mono uppercase tracking-[0.2em] mb-1"
+          className="flex items-center gap-1 text-[8px] mb-1"
           style={{ color: 'var(--color-textMuted)' }}
         >
           <Coffee className="w-2.5 h-2.5" />
@@ -1069,7 +1069,7 @@ function SceneConnect({ stage }: { stage: number }) {
           {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
             <div
               key={i}
-              className="text-[8px] font-mono uppercase text-center"
+              className="text-[8px] text-center"
               style={{ color: 'var(--color-textMuted)' }}
             >
               {d}
@@ -1136,7 +1136,7 @@ function SceneConnect({ stage }: { stage: number }) {
         transition={{ delay: 0.3 }}
       >
         <div
-          className="flex items-center gap-1 text-[8px] font-mono uppercase tracking-[0.2em] mb-1"
+          className="flex items-center gap-1 text-[8px] mb-1"
           style={{ color: 'var(--color-textMuted)' }}
         >
           <Calendar className="w-2.5 h-2.5" />
@@ -1176,7 +1176,7 @@ function SceneConnect({ stage }: { stage: number }) {
         transition={{ delay: 0.35 }}
       >
         <span
-          className="text-[7.5px] font-mono uppercase tracking-[0.2em] flex-shrink-0"
+          className="text-[7.5px] flex-shrink-0"
           style={{ color: 'var(--color-textMuted)' }}
         >
           Message
@@ -1316,7 +1316,7 @@ function ProcessCard() {
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           />
           <span
-            className="text-[10px] font-mono uppercase tracking-[0.3em] font-semibold"
+            className="text-[10px] font-medium"
             style={{ color: 'var(--color-accent)' }}
           >
             The 4-step journey
@@ -1328,7 +1328,7 @@ function ProcessCard() {
           style={{ color: 'var(--color-text)' }}
         >
           From dashboard to offer.{' '}
-          <span className="italic" style={{ color: 'var(--color-accent)' }}>
+          <span className="" style={{ color: 'var(--color-accent)' }}>
             Effortlessly.
           </span>
         </h3>
@@ -1407,7 +1407,7 @@ function ProcessCard() {
             return (
               <div key={s.number} className="flex items-center gap-2 flex-1 min-w-0">
                 <div
-                  className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[9px] font-mono font-bold transition-all"
+                  className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[9px] font-mono font-semibold transition-all"
                   style={{
                     backgroundColor:
                       isActive || isDone ? 'var(--color-accent)' : 'transparent',
@@ -1423,7 +1423,7 @@ function ProcessCard() {
                   {isDone ? <Check className="w-2.5 h-2.5" /> : s.number}
                 </div>
                 <span
-                  className="text-[10px] font-semibold uppercase tracking-[0.15em] truncate hidden sm:inline"
+                  className="text-[10px] font-medium truncate hidden sm:inline"
                   style={{
                     color: isActive ? 'var(--color-text)' : 'var(--color-textMuted)',
                     opacity: isActive ? 1 : 0.5,
@@ -1476,7 +1476,7 @@ function ScienceCard() {
         <div className="flex items-center gap-2 mb-4">
           <Brain className="w-3 h-3" style={{ color: 'var(--color-accent)' }} />
           <span
-            className="text-[10px] font-mono uppercase tracking-[0.25em]"
+            className="text-[10px]"
             style={{ color: 'var(--color-textMuted)' }}
           >
             Big Five · OCEAN
@@ -1488,7 +1488,7 @@ function ScienceCard() {
           style={{ color: 'var(--color-text)' }}
         >
           Decades of research,{' '}
-          <span className="italic" style={{ color: 'var(--color-accent)' }}>
+          <span className="" style={{ color: 'var(--color-accent)' }}>
             in 15 minutes.
           </span>
         </h3>
@@ -1572,7 +1572,7 @@ function SpeedCard() {
       <div className="flex items-center gap-2 mb-4">
         <Zap className="w-3 h-3" style={{ color: 'var(--color-accent)' }} />
         <span
-          className="text-[10px] font-mono uppercase tracking-[0.25em]"
+          className="text-[10px]"
           style={{ color: 'var(--color-textMuted)' }}
         >
           Assessment · Timer
@@ -1584,7 +1584,7 @@ function SpeedCard() {
         style={{ color: 'var(--color-text)' }}
       >
         No resume.{' '}
-        <span className="italic" style={{ color: 'var(--color-accent)' }}>
+        <span className="" style={{ color: 'var(--color-accent)' }}>
           No cover letter.
         </span>
       </h3>
@@ -1604,7 +1604,7 @@ function SpeedCard() {
         >
           <div>
             <p
-              className="text-[10px] uppercase tracking-[0.25em] font-mono font-medium mb-1"
+              className="text-[10px] font-medium mb-1"
               style={{ color: 'var(--color-textMuted)' }}
             >
               Time remaining
@@ -1671,7 +1671,7 @@ function CoffeeChatCard() {
       <div className="flex items-center gap-2 mb-4">
         <Coffee className="w-3 h-3" style={{ color: 'var(--color-accent)' }} />
         <span
-          className="text-[10px] font-mono uppercase tracking-[0.25em]"
+          className="text-[10px]"
           style={{ color: 'var(--color-textMuted)' }}
         >
           15 Min · Video
@@ -1683,7 +1683,7 @@ function CoffeeChatCard() {
         style={{ color: 'var(--color-text)' }}
       >
         Book a coffee. Skip the{' '}
-        <span className="italic" style={{ color: 'var(--color-accent)' }}>
+        <span className="" style={{ color: 'var(--color-accent)' }}>
           cold apply.
         </span>
       </h3>
@@ -1715,13 +1715,13 @@ function CoffeeChatCard() {
         </div>
         <div className="flex justify-between mt-2 px-0.5">
           <span
-            className="text-[9px] font-mono uppercase tracking-[0.2em]"
+            className="text-[9px]"
             style={{ color: 'var(--color-textMuted)' }}
           >
             Mon
           </span>
           <span
-            className="text-[9px] font-mono uppercase tracking-[0.2em]"
+            className="text-[9px]"
             style={{ color: 'var(--color-textMuted)' }}
           >
             Sat
@@ -1748,7 +1748,7 @@ function TwoSidedCard() {
       <div className="flex items-center gap-2 mb-4">
         <Users className="w-3 h-3" style={{ color: 'var(--color-accent)' }} />
         <span
-          className="text-[10px] font-mono uppercase tracking-[0.25em]"
+          className="text-[10px]"
           style={{ color: 'var(--color-textMuted)' }}
         >
           Two-way matching
@@ -1760,7 +1760,7 @@ function TwoSidedCard() {
         style={{ color: 'var(--color-text)' }}
       >
         Made for both{' '}
-        <span className="italic" style={{ color: 'var(--color-accent)' }}>
+        <span className="" style={{ color: 'var(--color-accent)' }}>
           sides.
         </span>
       </h3>
@@ -1795,7 +1795,7 @@ function TwoSidedCard() {
           <div className="w-16 h-16" />
         </div>
         <div
-          className="absolute text-[10px] font-mono uppercase tracking-[0.2em] font-semibold"
+          className="absolute text-[10px] font-medium"
           style={{ color: 'var(--color-text)' }}
         >
           FIT
@@ -1821,7 +1821,7 @@ function PrivacyCard() {
       <div className="flex items-center gap-2 mb-4">
         <Lock className="w-3 h-3" style={{ color: 'var(--color-accent)' }} />
         <span
-          className="text-[10px] font-mono uppercase tracking-[0.25em]"
+          className="text-[10px]"
           style={{ color: 'var(--color-textMuted)' }}
         >
           Postgres · RLS
@@ -1833,7 +1833,7 @@ function PrivacyCard() {
         style={{ color: 'var(--color-text)' }}
       >
         Scoped by{' '}
-        <span className="italic" style={{ color: 'var(--color-accent)' }}>
+        <span className="" style={{ color: 'var(--color-accent)' }}>
           design.
         </span>
       </h3>
@@ -1862,7 +1862,7 @@ function PrivacyCard() {
               auth.uid() = user_id
             </motion.div>
             <p
-              className="text-[9px] uppercase tracking-[0.25em] mt-0.5"
+              className="text-[9px] mt-0.5"
               style={{ color: 'var(--color-textMuted)' }}
             >
               Policy · per row
@@ -1899,7 +1899,7 @@ export function FeatureBento() {
               style={{ backgroundColor: 'var(--color-accent)' }}
             />
             <span
-              className="text-[10px] font-mono uppercase tracking-[0.3em] font-semibold"
+              className="text-[10px] font-medium"
               style={{ color: 'var(--color-accent)' }}
             >
               Features / How It Works
@@ -1911,7 +1911,7 @@ export function FeatureBento() {
             style={{ color: 'var(--color-text)' }}
           >
             The whole job search,{' '}
-            <span className="italic" style={{ color: 'var(--color-accent)' }}>
+            <span className="" style={{ color: 'var(--color-accent)' }}>
               rethought.
             </span>
           </h2>

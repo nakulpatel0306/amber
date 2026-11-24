@@ -318,7 +318,7 @@ export function NotificationSection() {
       {/* Email Preferences */}
       <div>
         <h3
-          className="text-xs font-semibold uppercase tracking-widest mb-3 flex items-center gap-2"
+          className="text-xs font-medium mb-3 flex items-center gap-2"
           style={{ color: 'var(--color-textMuted)' }}
         >
           Email preferences

@@ -141,7 +141,7 @@ export function CoffeeChatPrep({ chatId }: CoffeeChatPrepProps) {
         <div className="px-4 pb-4 space-y-5">
           {/* Personality Summary */}
           <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--color-textMuted)' }}>
+            <h4 className="text-xs font-medium mb-2" style={{ color: 'var(--color-textMuted)' }}>
               Personality summary
             </h4>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
@@ -152,7 +152,7 @@ export function CoffeeChatPrep({ chatId }: CoffeeChatPrepProps) {
           {/* Conversation Starters */}
           {prep.conversation_starters.length > 0 && (
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--color-textMuted)' }}>
+              <h4 className="text-xs font-medium mb-2" style={{ color: 'var(--color-textMuted)' }}>
                 Conversation starters
               </h4>
               <ol className="space-y-2">
@@ -198,7 +198,7 @@ export function CoffeeChatPrep({ chatId }: CoffeeChatPrepProps) {
           {/* Topics to Explore */}
           {prep.topics_to_explore.length > 0 && (
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--color-textMuted)' }}>
+              <h4 className="text-xs font-medium mb-2" style={{ color: 'var(--color-textMuted)' }}>
                 Topics to explore
               </h4>
               <ul className="space-y-1.5">
@@ -218,7 +218,7 @@ export function CoffeeChatPrep({ chatId }: CoffeeChatPrepProps) {
           {/* Things to Be Mindful Of */}
           {prep.things_to_be_mindful_of.length > 0 && (
             <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--color-textMuted)' }}>
+              <h4 className="text-xs font-medium mb-2" style={{ color: 'var(--color-textMuted)' }}>
                 Things to be mindful of
               </h4>
               <ul className="space-y-1.5">

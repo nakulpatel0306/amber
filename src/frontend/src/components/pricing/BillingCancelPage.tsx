@@ -15,7 +15,7 @@ export function BillingCancelPage() {
           className="w-16 h-16 mx-auto mb-6"
           style={{ color: 'var(--color-textMuted)' }}
         />
-        <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
+        <h1 className="text-2xl font-semibold mb-2" style={{ color: 'var(--color-text)' }}>
           Checkout canceled
         </h1>
         <p className="text-sm mb-8" style={{ color: 'var(--color-textMuted)' }}>

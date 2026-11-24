@@ -369,10 +369,10 @@ export function DeepDive({
             style={{ color: 'var(--color-accent)' }}
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.25em]">Ember</span>
+            <span className="text-label">Ember</span>
           </button>
           <ChevronRight className="w-3 h-3" style={{ color: 'var(--color-textMuted)' }} />
-          <span className="font-mono text-[10px] uppercase tracking-[0.25em]" style={{ color: 'var(--color-textSecondary)' }}>
+          <span className="text-label" style={{ color: 'var(--color-textSecondary)' }}>
             {name}
           </span>
         </div>
@@ -395,7 +395,7 @@ export function DeepDive({
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3">
               <h1
-                className="text-xl font-bold tracking-tight truncate"
+                className="text-xl font-semibold tracking-tight truncate"
                 style={{ color: 'var(--color-text)' }}
               >
                 {name}
@@ -412,7 +412,7 @@ export function DeepDive({
                     className="transition-all duration-1000 ease-out"
                   />
                 </svg>
-                <span className="absolute text-[11px] font-extrabold" style={{ color: 'var(--color-accent)' }}>
+                <span className="absolute text-[11px] font-semibold" style={{ color: 'var(--color-accent)' }}>
                   {overallScore}
                 </span>
               </div>
@@ -428,7 +428,7 @@ export function DeepDive({
             {/* Available roles */}
             {employerRoles.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 mt-2 relative">
-                <span className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: 'var(--color-textMuted)' }}>Roles</span>
+                <span className="text-caption" style={{ color: 'var(--color-textMuted)' }}>Roles</span>
                 {employerRoles.map(role => (
                   <button
                     key={role.id}
@@ -508,7 +508,7 @@ export function DeepDive({
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'color-mix(in srgb, var(--color-accent) 12%, transparent)' }}>
                   <Briefcase className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
                 </div>
-                <h3 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
+                <h3 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
                   {selectedRole.title}
                 </h3>
               </div>
@@ -548,7 +548,7 @@ export function DeepDive({
               {/* Description */}
               {selectedRole.description && (
                 <div className="mt-4 pt-3" style={{ borderTop: '1px solid var(--color-border)' }}>
-                  <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1.5" style={{ color: 'var(--color-textMuted)' }}>About this role</p>
+                  <p className="text-caption mb-1.5" style={{ color: 'var(--color-textMuted)' }}>About this role</p>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
                     {selectedRole.description}
                   </p>
@@ -559,7 +559,7 @@ export function DeepDive({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 {selectedRole.requirements && selectedRole.requirements.length > 0 && (
                   <div className="rounded-xl p-3" style={{ backgroundColor: 'var(--color-surfaceHover)' }}>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-2" style={{ color: 'var(--color-textMuted)' }}>Requirements</p>
+                    <p className="text-caption mb-2" style={{ color: 'var(--color-textMuted)' }}>Requirements</p>
                     <ul className="space-y-1.5">
                       {selectedRole.requirements.map((req, i) => (
                         <li key={i} className="flex items-start gap-2 text-xs" style={{ color: 'var(--color-text)' }}>
@@ -573,7 +573,7 @@ export function DeepDive({
 
                 {selectedRole.nice_to_have && selectedRole.nice_to_have.length > 0 && (
                   <div className="rounded-xl p-3" style={{ backgroundColor: 'var(--color-surfaceHover)' }}>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-2" style={{ color: 'var(--color-textMuted)' }}>Nice to have</p>
+                    <p className="text-caption mb-2" style={{ color: 'var(--color-textMuted)' }}>Nice to have</p>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedRole.nice_to_have.map((trait, i) => (
                         <span
@@ -595,8 +595,8 @@ export function DeepDive({
 
       {/* ═══ 2. Composite Score Cards ═══ */}
       <div>
-        <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3" style={{ color: 'var(--color-textMuted)' }}>
-          Score breakdown //
+        <p className="text-label mb-3" style={{ color: 'var(--color-textMuted)' }}>
+          Score breakdown
         </p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {compositeScores.map(({ label, score, icon: Icon }) => {
@@ -612,11 +612,11 @@ export function DeepDive({
                 onClick={() => setCompositeModal(label)}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-[10px] font-medium uppercase tracking-wider" style={{ color }}>{label}</p>
+                  <p className="text-caption font-medium" style={{ color }}>{label}</p>
                   <ArrowUpRight className="w-3.5 h-3.5" style={{ color, opacity: 0.4 }} />
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-3xl font-extrabold tracking-tight" style={{ color: 'var(--color-text)' }}>
+                  <span className="text-3xl font-semibold tracking-tight" style={{ color: 'var(--color-text)' }}>
                     {score}
                   </span>
                   <span className="text-xs" style={{ color: 'var(--color-textMuted)' }}>%</span>
@@ -638,12 +638,12 @@ export function DeepDive({
         {activeComposite && activeCompositeMeta && (
           <div className="space-y-5">
             <div className="flex items-center gap-4">
-              <span className="text-5xl font-extrabold" style={{ color: activeCompositeMeta.color }}>
+              <span className="text-5xl font-semibold" style={{ color: activeCompositeMeta.color }}>
                 {activeComposite.score}
               </span>
               <div>
                 <span className="text-sm" style={{ color: 'var(--color-textMuted)' }}>%</span>
-                <p className="text-xs font-bold uppercase tracking-wider mt-0.5" style={{ color: activeCompositeMeta.color }}>
+                <p className="text-xs font-medium mt-0.5" style={{ color: activeCompositeMeta.color }}>
                   {getBrewLabel(activeComposite.score)}
                 </p>
               </div>
@@ -666,8 +666,8 @@ export function DeepDive({
 
       {/* ═══ 3. Flavor Profile (interactive donut with breakdown) ═══ */}
       <div className="bento-card">
-        <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4" style={{ color: 'var(--color-textMuted)' }}>
-          Flavor profile //
+        <p className="text-label mb-4" style={{ color: 'var(--color-textMuted)' }}>
+          Flavor profile
         </p>
 
         <div className="flex flex-col md:flex-row items-center gap-6">
@@ -704,12 +704,12 @@ export function DeepDive({
             {/* Center score */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span
-                className="text-4xl font-extrabold tracking-tighter"
+                className="text-4xl font-semibold tracking-tighter"
                 style={{ color: 'var(--color-text)' }}
               >
                 {overallScore}
               </span>
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em]" style={{ color: 'var(--color-textMuted)' }}>
+              <span className="text-label" style={{ color: 'var(--color-textMuted)' }}>
                 Match score
               </span>
             </div>
@@ -734,7 +734,7 @@ export function DeepDive({
                   <span className="text-sm font-medium flex-1" style={{ color: isSelected ? 'var(--color-text)' : 'var(--color-textSecondary)' }}>
                     {dim.name}
                   </span>
-                  <span className="text-sm font-bold" style={{ color }}>{dim.candidateScore}</span>
+                  <span className="text-sm font-semibold" style={{ color }}>{dim.candidateScore}</span>
                   <span className="text-xs" style={{ color: 'var(--color-textMuted)' }}>/ {dim.employerPreference}</span>
                   <ChevronRight
                     className="w-3.5 h-3.5 transition-transform"
@@ -767,7 +767,7 @@ export function DeepDive({
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-2">
                       <div className="w-3 h-3 rounded-full" style={{ backgroundColor: dimColor }} />
-                      <span className="text-base font-bold" style={{ color: 'var(--color-text)' }}>{selectedDimData.name}</span>
+                      <span className="text-base font-semibold" style={{ color: 'var(--color-text)' }}>{selectedDimData.name}</span>
                     </div>
                     <span
                       className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
@@ -781,7 +781,7 @@ export function DeepDive({
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                       <div className="flex items-center gap-2 mb-1.5">
-                        <span className="font-mono text-[9px] uppercase tracking-[0.15em] w-14 flex-shrink-0" style={{ color: 'var(--color-textMuted)' }}>
+                        <span className="text-caption w-14 flex-shrink-0" style={{ color: 'var(--color-textMuted)' }}>
                           {mode === 'candidate' ? 'You' : 'Cand.'}
                         </span>
                         <div className="flex-1 h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-border)' }}>
@@ -793,12 +793,12 @@ export function DeepDive({
                             transition={{ duration: 0.5 }}
                           />
                         </div>
-                        <span className="text-lg font-extrabold w-10 text-right" style={{ color: dimColor }}>
+                        <span className="text-lg font-semibold w-10 text-right" style={{ color: dimColor }}>
                           {selectedDimData.candidateScore}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-[9px] uppercase tracking-[0.15em] w-14 flex-shrink-0" style={{ color: 'var(--color-textMuted)' }}>
+                        <span className="text-caption w-14 flex-shrink-0" style={{ color: 'var(--color-textMuted)' }}>
                           {mode === 'candidate' ? 'Empl.' : 'Pref.'}
                         </span>
                         <div className="flex-1 h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-border)' }}>
@@ -845,9 +845,9 @@ export function DeepDive({
           >
             <div className="flex items-center gap-2 mb-2">
               <Icon className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em]" style={{ color: 'var(--color-textMuted)' }}>{label}</p>
+              <p className="text-caption" style={{ color: 'var(--color-textMuted)' }}>{label}</p>
             </div>
-            <span className="text-2xl font-extrabold tracking-tight block" style={{ color: 'var(--color-accent)' }}>
+            <span className="text-2xl font-semibold tracking-tight block" style={{ color: 'var(--color-accent)' }}>
               {value}
             </span>
             {sub && (
@@ -874,7 +874,7 @@ export function DeepDive({
           <div className="bento-card">
             <div className="flex items-center gap-2 mb-5">
               <BarChart3 className="w-5 h-5" style={{ color: INSIGHT_COLORS[0] }} />
-              <h2 className="text-base font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>
+              <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--color-text)' }}>
                 Compatibility deep dive
               </h2>
             </div>
@@ -915,7 +915,7 @@ export function DeepDive({
                 <div className="flex items-start gap-5 mb-5">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>{dim.name}</h3>
+                      <h3 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>{dim.name}</h3>
                       <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: `${color}18`, color }}>
                         {levelLabel}
                       </span>
@@ -927,7 +927,7 @@ export function DeepDive({
                     )}
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <span className="text-3xl font-extrabold tracking-tight" style={{ color }}>
+                    <span className="text-3xl font-semibold tracking-tight" style={{ color }}>
                       {dim.fitScore}%
                     </span>
                     <p className="text-[10px] font-semibold mt-0.5" style={{ color: getAlignmentColor(dim.fitScore) }}>
@@ -940,22 +940,22 @@ export function DeepDive({
                 <div className="p-4 rounded-xl mb-5" style={{ backgroundColor: 'var(--color-background)' }}>
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <p className="font-mono text-[9px] uppercase tracking-[0.15em]" style={{ color: 'var(--color-textMuted)' }}>
+                      <p className="text-caption" style={{ color: 'var(--color-textMuted)' }}>
                         {mode === 'candidate' ? 'You' : 'Candidate'}
                       </p>
-                      <span className="text-2xl font-extrabold" style={{ color }}>{dim.candidateScore}</span>
+                      <span className="text-2xl font-semibold" style={{ color }}>{dim.candidateScore}</span>
                     </div>
                     <div className="text-center px-4">
-                      <p className="font-mono text-[9px] uppercase tracking-[0.15em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Gap</p>
-                      <span className="text-lg font-bold" style={{ color: getAlignmentColor(dim.fitScore) }}>
+                      <p className="text-caption mb-1" style={{ color: 'var(--color-textMuted)' }}>Gap</p>
+                      <span className="text-lg font-semibold" style={{ color: getAlignmentColor(dim.fitScore) }}>
                         {Math.abs(dim.candidateScore - dim.employerPreference)}
                       </span>
                     </div>
                     <div className="text-right">
-                      <p className="font-mono text-[9px] uppercase tracking-[0.15em]" style={{ color: 'var(--color-textMuted)' }}>
+                      <p className="text-caption" style={{ color: 'var(--color-textMuted)' }}>
                         {mode === 'candidate' ? 'Employer' : 'Your pref'}
                       </p>
-                      <span className="text-2xl font-extrabold" style={{ color: 'var(--color-textSecondary)' }}>{dim.employerPreference}</span>
+                      <span className="text-2xl font-semibold" style={{ color: 'var(--color-textSecondary)' }}>{dim.employerPreference}</span>
                     </div>
                   </div>
                   {/* Overlapping comparison bar */}
@@ -968,11 +968,11 @@ export function DeepDive({
                 {/* Two-column: Workplace + Alignment */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   <div>
-                    <p className="text-xs font-bold mb-2" style={{ color: 'var(--color-text)' }}>In the Workplace</p>
+                    <p className="text-xs font-semibold mb-2" style={{ color: 'var(--color-text)' }}>In the Workplace</p>
                     <div className="space-y-2">
                       {workItems.map((w, wi) => (
                         <div key={wi} className="flex items-start gap-2.5">
-                          <div className="w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 text-[9px] font-bold" style={{ backgroundColor: `${color}15`, color }}>
+                          <div className="w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 text-[9px] font-semibold" style={{ backgroundColor: `${color}15`, color }}>
                             {wi + 1}
                           </div>
                           <span className="text-xs leading-relaxed pt-0.5" style={{ color: 'var(--color-textSecondary)' }}>{w}</span>
@@ -982,13 +982,13 @@ export function DeepDive({
                   </div>
 
                   <div>
-                    <p className="text-xs font-bold mb-2" style={{ color: 'var(--color-text)' }}>Alignment analysis</p>
+                    <p className="text-xs font-semibold mb-2" style={{ color: 'var(--color-text)' }}>Alignment analysis</p>
                     <p className="text-xs leading-relaxed mb-3" style={{ color: 'var(--color-textSecondary)' }}>
                       {getGapAnalysis(dim.candidateScore, dim.employerPreference, dim.name)}
                     </p>
                     {traitData && empLevel !== level && traitData[empLevel] && (
                       <div className="pl-3" style={{ borderLeft: `2px solid ${color}40` }}>
-                        <p className="font-mono text-[9px] uppercase tracking-[0.15em] mb-1" style={{ color: 'var(--color-textMuted)' }}>What they expect</p>
+                        <p className="text-caption mb-1" style={{ color: 'var(--color-textMuted)' }}>What they expect</p>
                         <p className="text-xs leading-relaxed" style={{ color: 'var(--color-textMuted)' }}>
                           {traitData[empLevel]}
                         </p>
@@ -1006,11 +1006,11 @@ export function DeepDive({
       <div className="bento-card">
         <div className="flex items-center gap-2 mb-5">
           <EmberFirefly size="sm" mood="happy" />
-          <h2 className="text-base font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--color-text)' }}>
             Ember's analysis
           </h2>
-          <span className="font-mono text-[10px] uppercase tracking-[0.25em] ml-auto" style={{ color: 'var(--color-textMuted)' }}>
-            AI Insights //
+          <span className="text-label ml-auto" style={{ color: 'var(--color-textMuted)' }}>
+            AI Insights
           </span>
         </div>
 
@@ -1021,7 +1021,7 @@ export function DeepDive({
             {/* Summary */}
             {narrative.ember_summary && (
               <div className="pl-4 py-3 mb-6" style={{ borderLeft: '3px solid var(--color-accent)' }}>
-                <p className="text-sm leading-relaxed italic" style={{ color: 'var(--color-textSecondary)' }}>
+                <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
                   &ldquo;{narrative.ember_summary}&rdquo;
                 </p>
               </div>
@@ -1033,13 +1033,13 @@ export function DeepDive({
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <CheckCircle2 className="w-4 h-4" style={{ color: 'var(--color-trait-conscientiousness)' }} />
-                    <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-trait-conscientiousness)' }}>
+                    <h4 className="text-xs font-medium" style={{ color: 'var(--color-trait-conscientiousness)' }}>
                       {mode === 'candidate' ? 'Why this works' : 'What they bring'}
                     </h4>
                   </div>
                   {narrative.ember_strengths.map((s, i) => (
                     <div key={i} className="flex items-start gap-3 mb-3">
-                      <span className="text-[10px] font-bold mt-0.5 flex-shrink-0" style={{ color: 'var(--color-trait-conscientiousness)' }}>{i + 1}.</span>
+                      <span className="text-[10px] font-semibold mt-0.5 flex-shrink-0" style={{ color: 'var(--color-trait-conscientiousness)' }}>{i + 1}.</span>
                       <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>{s}</p>
                     </div>
                   ))}
@@ -1050,13 +1050,13 @@ export function DeepDive({
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <AlertTriangle className="w-4 h-4" style={{ color: 'var(--color-trait-extraversion)' }} />
-                    <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-trait-extraversion)' }}>
+                    <h4 className="text-xs font-medium" style={{ color: 'var(--color-trait-extraversion)' }}>
                       {mode === 'candidate' ? 'Watch out for' : 'Potential friction'}
                     </h4>
                   </div>
                   {narrative.ember_friction.map((f, i) => (
                     <div key={i} className="flex items-start gap-3 mb-3">
-                      <span className="text-[10px] font-bold mt-0.5 flex-shrink-0" style={{ color: 'var(--color-trait-extraversion)' }}>{i + 1}.</span>
+                      <span className="text-[10px] font-semibold mt-0.5 flex-shrink-0" style={{ color: 'var(--color-trait-extraversion)' }}>{i + 1}.</span>
                       <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>{f}</p>
                     </div>
                   ))}
@@ -1073,7 +1073,7 @@ export function DeepDive({
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <Lightbulb className="w-4 h-4" style={{ color: 'var(--color-trait-openness)' }} />
-                    <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-trait-openness)' }}>Your playbook</h4>
+                    <h4 className="text-xs font-medium" style={{ color: 'var(--color-trait-openness)' }}>Your playbook</h4>
                   </div>
                   <div className="relative pl-6">
                     <div className="absolute left-[7px] top-1 bottom-1 w-px" style={{ backgroundColor: '#8B5CF640' }} />
@@ -1091,7 +1091,7 @@ export function DeepDive({
                 <div>
                   <div className="flex items-center gap-2 mb-3">
                     <HelpCircle className="w-4 h-4" style={{ color: 'var(--color-trait-stability)' }} />
-                    <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-trait-stability)' }}>Questions to Explore</h4>
+                    <h4 className="text-xs font-medium" style={{ color: 'var(--color-trait-stability)' }}>Questions to Explore</h4>
                   </div>
                   {narrative.ember_questions.map((q, i) => (
                     <div
@@ -1146,12 +1146,12 @@ export function DeepDive({
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
                     <Shield className="w-4 h-4" style={{ color: INSIGHT_COLORS[4] }} />
-                    <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: INSIGHT_COLORS[4] }}>How your traits align</h4>
+                    <h4 className="text-xs font-medium" style={{ color: INSIGHT_COLORS[4] }}>How your traits align</h4>
                   </div>
                   <div className="space-y-3">
                     {traitInsights.map((insight, ii) => (
                       <div key={ii} className="pl-4" style={{ borderLeft: `2px solid ${INSIGHT_COLORS[ii % INSIGHT_COLORS.length]}30` }}>
-                        <p className="text-xs font-bold mb-0.5" style={{ color: INSIGHT_COLORS[ii % INSIGHT_COLORS.length] }}>{insight.title}</p>
+                        <p className="text-xs font-semibold mb-0.5" style={{ color: INSIGHT_COLORS[ii % INSIGHT_COLORS.length] }}>{insight.title}</p>
                         <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>{insight.description}</p>
                       </div>
                     ))}
@@ -1167,7 +1167,7 @@ export function DeepDive({
                 <div className="flex items-start gap-3">
                   <Sparkles className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-accent)' }} />
                   <div>
-                    <p className="text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--color-accent)' }}>Ember's Recommendation</p>
+                    <p className="text-xs font-medium mb-1.5" style={{ color: 'var(--color-accent)' }}>Ember's Recommendation</p>
                     <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text)' }}>{narrative.ember_recommendation}</p>
                   </div>
                 </div>
@@ -1187,11 +1187,11 @@ export function DeepDive({
       <div className="bento-card">
         <div className="flex items-center gap-2 mb-4">
           <Users className="w-5 h-5" style={{ color: INSIGHT_COLORS[0] }} />
-          <h2 className="text-base font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--color-text)' }}>
             Personality snapshot
           </h2>
-          <span className="font-mono text-[10px] uppercase tracking-[0.25em] ml-auto" style={{ color: 'var(--color-textMuted)' }}>
-            OCEAN Profile //
+          <span className="text-label ml-auto" style={{ color: 'var(--color-textMuted)' }}>
+            OCEAN Profile
           </span>
         </div>
 
@@ -1201,7 +1201,7 @@ export function DeepDive({
             <div className="flex items-center gap-3 mb-2">
               <EmberFirefly size="sm" mood="happy" />
               <span
-                className="px-3 py-1.5 rounded-full text-sm font-bold"
+                className="px-3 py-1.5 rounded-full text-sm font-semibold"
                 style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-accent)', border: '1px solid var(--color-accent)' }}
               >
                 {archetype.name}
@@ -1222,8 +1222,8 @@ export function DeepDive({
               { heading: 'Growth edge', dim: sortedDims[sortedDims.length - 1], color: INSIGHT_COLORS[2] },
             ].map(({ heading, dim, color }) => (
               <div key={heading} className="p-3 rounded-xl text-center" style={{ backgroundColor: 'var(--color-background)' }}>
-                <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color }}>{heading}</p>
-                <span className="text-2xl font-extrabold block" style={{ color: 'var(--color-text)' }}>{dim.fitScore}</span>
+                <p className="text-caption mb-1" style={{ color }}>{heading}</p>
+                <span className="text-2xl font-semibold block" style={{ color: 'var(--color-text)' }}>{dim.fitScore}</span>
                 <p className="text-xs font-medium mt-0.5" style={{ color: 'var(--color-textSecondary)' }}>{dim.name}</p>
               </div>
             ))}
@@ -1232,8 +1232,8 @@ export function DeepDive({
 
         {/* Full OCEAN dimension profiles */}
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3" style={{ color: 'var(--color-textMuted)' }}>
-            Trait profiles //
+          <p className="text-label mb-3" style={{ color: 'var(--color-textMuted)' }}>
+            Trait profiles
           </p>
           <div className="space-y-0">
             {dimensions.map((dim, i) => {
@@ -1251,13 +1251,13 @@ export function DeepDive({
                 >
                   <div className="flex items-center gap-3 mb-2">
                     <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
-                    <span className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>{dim.name}</span>
+                    <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>{dim.name}</span>
                     <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ backgroundColor: `${color}18`, color }}>
                       {levelLabel} · {dim.candidateScore}
                     </span>
                     <div className="flex-1" />
                     <span className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
-                      Fit: <span className="font-bold" style={{ color: getAlignmentColor(dim.fitScore) }}>{dim.fitScore}%</span>
+                      Fit: <span className="font-semibold" style={{ color: getAlignmentColor(dim.fitScore) }}>{dim.fitScore}%</span>
                     </span>
                   </div>
 
@@ -1299,8 +1299,8 @@ export function DeepDive({
       <div className="bento-card" style={{ borderLeft: '3px solid var(--color-accent)' }}>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="flex-1">
-            <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-0.5" style={{ color: 'var(--color-textMuted)' }}>
-              Next steps //
+            <p className="text-label mb-0.5" style={{ color: 'var(--color-textMuted)' }}>
+              Next steps
             </p>
             <p className="text-sm font-medium" style={{ color: 'var(--color-textSecondary)' }}>
               Take this match further

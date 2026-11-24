@@ -120,7 +120,7 @@ export function RoleSelectionPage() {
               <AmberLogo size="md" />
             </div>
             <h1
-              className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
+              className="text-title"
               style={{ color: 'var(--color-text)' }}
             >
               One more step

@@ -146,7 +146,7 @@ function ScoreRing({
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-bold" style={{ color }}>{score}</span>
+        <span className="text-2xl font-semibold" style={{ color }}>{score}</span>
         <span className="text-[10px] font-medium" style={{ color: 'var(--color-textMuted)' }}>match</span>
       </div>
     </div>
@@ -166,7 +166,7 @@ function CompositeBar({ label, score, icon }: { label: string; score: number; ic
           {icon}
           {label}
         </span>
-        <span className="text-sm font-bold" style={{ color }}>{score}%</span>
+        <span className="text-sm font-semibold" style={{ color }}>{score}%</span>
       </div>
       <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-background)' }}>
         <div
@@ -320,7 +320,7 @@ export function MatchDetailModal({
 
         {/* ---- Hero Section ---- */}
         <div className="pt-8 pb-6 px-6 text-center border-b" style={{ borderColor: 'var(--color-border)' }}>
-          <h2 className="text-xl font-bold mb-1" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-xl font-semibold mb-1" style={{ color: 'var(--color-text)' }}>
             {matchData.name}
           </h2>
           {matchData.subtitle && (
@@ -410,7 +410,7 @@ export function MatchDetailModal({
             <>
               {summary && (
                 <div className="mb-4">
-                  <h4 className="text-xs font-semibold uppercase tracking-wide mb-2" style={{ color: 'var(--color-accent)' }}>
+                  <h4 className="text-xs font-medium mb-2" style={{ color: 'var(--color-accent)' }}>
                     Why this could work
                   </h4>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
@@ -443,7 +443,7 @@ export function MatchDetailModal({
                         {categoryIcon(insight.category)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <span className="text-xs font-medium uppercase tracking-wide" style={{ color: 'var(--color-textMuted)' }}>
+                        <span className="text-xs font-medium" style={{ color: 'var(--color-textMuted)' }}>
                           {insight.category}
                         </span>
                         <p className="text-sm mt-0.5" style={{ color: 'var(--color-textSecondary)' }}>

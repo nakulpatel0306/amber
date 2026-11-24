@@ -56,10 +56,10 @@ function OverviewCarousel({ stats }: { stats: { totalMatches: number; strongMatc
   return (
     <div className="bento-card overflow-hidden" style={{ padding: '20px 16px 16px' }}>
       <p
-        className="font-mono text-[10px] uppercase tracking-[0.25em] mb-1"
+        className="text-label mb-1"
         style={{ color: 'var(--color-textMuted)' }}
       >
-        Overview //
+        Overview
       </p>
 
       <AnimatePresence mode="wait">
@@ -73,7 +73,7 @@ function OverviewCarousel({ stats }: { stats: { totalMatches: number; strongMatc
           style={{ minHeight: 120 }}
         >
           <span
-            className="font-extrabold tracking-tighter leading-none"
+            className="font-semibold tracking-tighter leading-none"
             style={{
               fontSize: '4.5rem',
               color: 'var(--color-accent)',
@@ -82,7 +82,7 @@ function OverviewCarousel({ stats }: { stats: { totalMatches: number; strongMatc
             {slide.value}
           </span>
           <span
-            className="text-sm font-semibold mt-1 uppercase tracking-widest"
+            className="text-sm font-medium mt-1"
             style={{ color: 'var(--color-textSecondary)' }}
           >
             {slide.label}
@@ -370,7 +370,7 @@ export function EmberAgent() {
     return (
       <div className="ember-page min-h-screen flex items-center justify-center p-8" style={{ backgroundColor: 'var(--color-background)' }}>
         <div className="text-center max-w-md">
-          <h2 className="text-2xl font-serif font-normal tracking-tight mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-2xl mt-6 mb-3 font-semibold" style={{ color: 'var(--color-text)' }}>
             Something went wrong
           </h2>
           <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
@@ -387,7 +387,7 @@ export function EmberAgent() {
     return (
       <div className="ember-page min-h-screen flex items-center justify-center p-8" style={{ backgroundColor: 'var(--color-background)' }}>
         <div className="text-center max-w-md">
-          <h2 className="text-2xl font-serif font-normal tracking-tight mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-2xl mt-6 mb-3 font-semibold" style={{ color: 'var(--color-text)' }}>
             Complete your assessment first
           </h2>
           <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
@@ -426,13 +426,13 @@ export function EmberAgent() {
                 </div>
                 <div className="min-w-0">
                   <h1
-                    className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
+                    className="text-title"
                     style={{ color: 'var(--color-text)' }}
                   >
                     Ember
                   </h1>
                   <p
-                    className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
+                    className="text-label mt-1"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
                     {archetype ? `${archetype.name} archetype` : 'Your personalized match gallery'}
@@ -460,7 +460,7 @@ export function EmberAgent() {
                           >
                             <stat.Icon className="w-3 h-3" style={{ color: stat.color }} />
                           </span>
-                          <span className="font-extrabold tabular-nums" style={{ color: stat.color }}>{stat.value}</span>
+                          <span className="font-semibold tabular-nums" style={{ color: stat.color }}>{stat.value}</span>
                           <span style={{ color: 'var(--color-textSecondary)' }}>{stat.label}</span>
                         </span>
                       ))}
@@ -624,11 +624,11 @@ export function EmberAgent() {
                 {/* Bookmarked Jobs — not in a card, raw section */}
                 <motion.div variants={emberFadeUp}>
                   <p
-                    className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3 mt-1"
+                    className="text-label mb-3 mt-1"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
                     <Bookmark className="w-3 h-3 inline-block mr-1.5 -mt-px" />
-                    Saved jobs //
+                    Saved jobs
                   </p>
 
                   {bookmarkedEmployers.length === 0 ? (
@@ -649,7 +649,7 @@ export function EmberAgent() {
                         >
                           {/* Avatar */}
                           <div
-                            className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 text-[10px] font-bold"
+                            className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 text-[10px] font-semibold"
                             style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-accent)' }}
                           >
                             {emp.companyName.charAt(0)}

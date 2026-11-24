@@ -257,7 +257,7 @@ export function EmberBrain({ className, employers = [], candidates = [] }: Ember
           style={{ backgroundColor: 'var(--color-accent)' }}
         />
         <span
-          className="font-mono text-[10px] uppercase tracking-[0.25em]"
+          className="text-label"
           style={{ color: 'var(--color-textMuted)' }}
         >
           Ember neural core

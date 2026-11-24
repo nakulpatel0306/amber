@@ -288,7 +288,7 @@ export function CultureAssessment() {
             <Building2 className="w-8 h-8" style={{ color: 'var(--color-accent)' }} />
           </div>
           <h1
-            className="text-3xl font-serif font-normal tracking-tight mb-4"
+            className="text-title mb-4"
             style={{ color: 'var(--color-text)' }}
           >
             Set up your company first
@@ -345,7 +345,7 @@ export function CultureAssessment() {
             <Clock className="w-8 h-8" style={{ color: 'var(--color-accent)' }} />
           </div>
           <h1
-            className="text-3xl font-serif font-normal tracking-tight mb-4"
+            className="text-title mb-4"
             style={{ color: 'var(--color-text)' }}
           >
             Assessment cooldown
@@ -363,7 +363,7 @@ export function CultureAssessment() {
               className="p-4 rounded-xl min-w-[80px]"
               style={{ backgroundColor: 'var(--color-background)' }}
             >
-              <div className="text-3xl font-bold" style={{ color: 'var(--color-accent)' }}>
+              <div className="text-3xl font-semibold" style={{ color: 'var(--color-accent)' }}>
                 {hours.toString().padStart(2, '0')}
               </div>
               <div className="text-xs mt-1" style={{ color: 'var(--color-textMuted)' }}>
@@ -374,7 +374,7 @@ export function CultureAssessment() {
               className="p-4 rounded-xl min-w-[80px]"
               style={{ backgroundColor: 'var(--color-background)' }}
             >
-              <div className="text-3xl font-bold" style={{ color: 'var(--color-accent)' }}>
+              <div className="text-3xl font-semibold" style={{ color: 'var(--color-accent)' }}>
                 {minutes.toString().padStart(2, '0')}
               </div>
               <div className="text-xs mt-1" style={{ color: 'var(--color-textMuted)' }}>
@@ -385,7 +385,7 @@ export function CultureAssessment() {
               className="p-4 rounded-xl min-w-[80px]"
               style={{ backgroundColor: 'var(--color-background)' }}
             >
-              <div className="text-3xl font-bold" style={{ color: 'var(--color-accent)' }}>
+              <div className="text-3xl font-semibold" style={{ color: 'var(--color-accent)' }}>
                 {seconds.toString().padStart(2, '0')}
               </div>
               <div className="text-xs mt-1" style={{ color: 'var(--color-textMuted)' }}>
@@ -479,7 +479,7 @@ export function CultureAssessment() {
         {/* Question */}
         <div className="mb-8">
           <h1
-            className="text-3xl md:text-4xl font-serif font-normal tracking-tight mb-4"
+            className="text-title mb-4"
             style={{ color: 'var(--color-text)' }}
           >
             {currentQuestion.question}
@@ -648,7 +648,7 @@ function SliderQuestion({
       >
         {/* Value indicator that moves with slider */}
         <div
-          className="absolute -top-1 px-4 py-2 rounded-full font-bold text-lg transform -translate-x-1/2 transition-all duration-100"
+          className="absolute -top-1 px-4 py-2 rounded-full font-semibold text-lg transform -translate-x-1/2 transition-all duration-100"
           style={{
             backgroundColor: 'var(--color-accent)',
             color: 'white',
@@ -728,7 +728,7 @@ function RankingQuestion({
           >
             <GripVertical className="w-5 h-5" style={{ color: 'var(--color-textMuted)' }} />
             <div
-              className="w-8 h-8 rounded-full flex items-center justify-center font-bold"
+              className="w-8 h-8 rounded-full flex items-center justify-center font-semibold"
               style={{
                 backgroundColor: index === 0 ? 'var(--color-accent)' : 'var(--color-background)',
                 color: index === 0 ? 'white' : 'var(--color-textSecondary)',

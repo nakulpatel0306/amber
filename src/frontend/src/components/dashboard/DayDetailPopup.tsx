@@ -135,7 +135,7 @@ export function DayDetailPopup({
         {/* Unscheduled / Ready to Schedule section */}
         {hasUnscheduled && (
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--color-textMuted)' }}>
+            <p className="text-caption font-medium mb-2" style={{ color: 'var(--color-textMuted)' }}>
               Ready to schedule
             </p>
             <div className="space-y-2">
@@ -146,7 +146,7 @@ export function DayDetailPopup({
                   style={{ backgroundColor: 'var(--color-surface)' }}
                 >
                   <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-bold"
+                    className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-semibold"
                     style={{
                       backgroundColor: 'rgba(217, 119, 6, 0.1)',
                       color: 'var(--color-accent)',

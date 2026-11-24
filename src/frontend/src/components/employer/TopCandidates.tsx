@@ -111,7 +111,7 @@ function ScoreRing({ score, size = 52 }: { score: number; size?: number }) {
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-xs font-bold" style={{ color }}>{score}</span>
+        <span className="text-xs font-semibold" style={{ color }}>{score}</span>
       </div>
     </div>
   );
@@ -529,7 +529,7 @@ export function TopCandidates() {
       <div className="min-h-[60vh] flex items-center justify-center p-8">
         <div className="text-center max-w-md">
           <EmberFirefly size="xl" mood="neutral" />
-          <h2 className="text-xl font-bold mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-xl font-semibold mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
             Complete your setup
           </h2>
           <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
@@ -545,7 +545,7 @@ export function TopCandidates() {
       <div className="min-h-[60vh] flex items-center justify-center p-8">
         <div className="text-center max-w-md">
           <EmberFirefly size="xl" mood="neutral" />
-          <h2 className="text-xl font-bold mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-xl font-semibold mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
             No candidates yet
           </h2>
           <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
@@ -585,7 +585,7 @@ export function TopCandidates() {
             >
               Pipeline
               {(pipelineCounts.saved + pipelineCounts.pending + pipelineCounts.connected) > 0 && (
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: activeView === 'pipeline' ? 'color-mix(in srgb, var(--color-accentText) 20%, transparent)' : 'var(--color-surfaceHover)' }}>
+                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: activeView === 'pipeline' ? 'color-mix(in srgb, var(--color-accentText) 20%, transparent)' : 'var(--color-surfaceHover)' }}>
                   {pipelineCounts.saved + pipelineCounts.pending + pipelineCounts.connected}
                 </span>
               )}
@@ -594,7 +594,7 @@ export function TopCandidates() {
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
             <div className="min-w-0">
-              <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight leading-none mb-2" style={{ color: 'var(--color-text)' }}>
+              <h1 className="text-title leading-none mb-2" style={{ color: 'var(--color-text)' }}>
                 {activeView === 'browse' ? 'Top candidates' : 'Your pipeline'}
               </h1>
               <p className="text-sm" style={{ color: 'var(--color-textMuted)' }}>

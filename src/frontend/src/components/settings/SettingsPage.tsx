@@ -130,13 +130,13 @@ export function SettingsPage() {
           </div>
           <div className="flex-1">
             <h1
-              className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
+              className="text-title"
               style={{ color: 'var(--color-text)' }}
             >
               Settings
             </h1>
             <p
-              className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
+              className="text-label mt-1"
               style={{ color: 'var(--color-textMuted)' }}
             >
               Manage your account & preferences

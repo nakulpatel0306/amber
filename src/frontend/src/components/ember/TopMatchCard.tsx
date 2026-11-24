@@ -15,7 +15,7 @@ export function TopMatchCard({ name, subtitle, score, avatarUrl, onDeepDive }: T
     <div className="bento-card bento-card-accent cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.99]" onClick={onDeepDive}>
       {/* Section label */}
       <p
-        className="text-xs font-medium uppercase tracking-wider mb-3"
+        className="text-xs font-medium mb-3"
         style={{ color: 'var(--color-textMuted)' }}
       >
         Top match
@@ -32,12 +32,12 @@ export function TopMatchCard({ name, subtitle, score, avatarUrl, onDeepDive }: T
           {avatarUrl ? (
             <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
           ) : (
-            <span className="text-sm font-bold" style={{ color: 'var(--color-accent)' }}>{initial}</span>
+            <span className="text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>{initial}</span>
           )}
         </div>
 
         <div className="flex-1 min-w-0">
-          <h4 className="text-sm font-bold truncate" style={{ color: 'var(--color-text)' }}>
+          <h4 className="text-sm font-semibold truncate" style={{ color: 'var(--color-text)' }}>
             {name}
           </h4>
           <p className="text-xs truncate" style={{ color: 'var(--color-textMuted)' }}>
@@ -49,7 +49,7 @@ export function TopMatchCard({ name, subtitle, score, avatarUrl, onDeepDive }: T
       {/* Score — large number like BentoMetricCard */}
       <div className="mb-3">
         <span
-          className="text-4xl font-extrabold tracking-tight leading-none"
+          className="text-4xl font-semibold tracking-tight leading-none"
           style={{ color: 'var(--color-text)' }}
         >
           {score}

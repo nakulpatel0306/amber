@@ -131,7 +131,7 @@ export function SubscriptionSection() {
             </div>
           </div>
           <div className="text-right">
-            <p className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
+            <p className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
               {currentPlan.price === 0 ? 'Free' : `$${currentPlan.price}/mo`}
             </p>
             {subscription?.status && subscription.status !== 'inactive' && (

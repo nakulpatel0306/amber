@@ -164,7 +164,7 @@ export function SignupPage() {
               <AmberLogo size="xl" />
             </motion.div>
             <h1
-              className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
+              className="text-title"
               style={{ color: 'var(--color-text)' }}
             >
               {step === 'role' ? 'Join Amber' : 'Create your account'}
@@ -279,7 +279,7 @@ export function SignupPage() {
                     style={{ borderColor: 'var(--color-border)' }}
                   />
                 </div>
-                <div className="relative flex justify-center text-xs uppercase">
+                <div className="relative flex justify-center text-xs">
                   <span
                     className="px-2"
                     style={{

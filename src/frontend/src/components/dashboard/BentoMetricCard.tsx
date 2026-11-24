@@ -65,7 +65,7 @@ export function BentoMetricCard({
     >
       <div className="flex items-start justify-between mb-3">
         <p
-          className="text-xs font-medium uppercase tracking-wider"
+          className="text-xs font-medium"
           style={{ color: 'var(--color-textMuted)' }}
         >
           {title}
@@ -88,7 +88,7 @@ export function BentoMetricCard({
       ) : (
         <div>
           <p
-            className="text-4xl font-extrabold tracking-tight leading-none mb-1"
+            className="text-4xl font-semibold tracking-tight leading-none mb-1"
             style={{ color: 'var(--color-text)' }}
           >
             {displayValue}

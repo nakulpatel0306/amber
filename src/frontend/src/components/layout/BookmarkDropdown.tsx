@@ -73,7 +73,7 @@ export function BookmarkDropdown() {
         <Bookmark className="w-5 h-5" />
         {savedCandidates.length > 0 && (
           <span
-            className="absolute -top-0.5 -right-0.5 flex items-center justify-center rounded-full text-[10px] font-bold text-white"
+            className="absolute -top-0.5 -right-0.5 flex items-center justify-center rounded-full text-[10px] font-semibold text-white"
             style={{
               backgroundColor: 'var(--color-accent)',
               minWidth: '18px',

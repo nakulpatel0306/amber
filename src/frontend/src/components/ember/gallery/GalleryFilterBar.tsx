@@ -168,7 +168,7 @@ export function GalleryFilterBar({
         >
           <SlidersHorizontal className="w-3.5 h-3.5" />
           {activeFilterCount > 0 && (
-            <span className="ml-1 w-4 h-4 rounded-full text-[10px] font-bold flex items-center justify-center bg-white/20">
+            <span className="ml-1 w-4 h-4 rounded-full text-[10px] font-semibold flex items-center justify-center bg-white/20">
               {activeFilterCount}
             </span>
           )}

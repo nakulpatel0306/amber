@@ -63,7 +63,7 @@ export function CoffeeBrewModal({
             {avatarUrl ? (
               <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
             ) : (
-              <span className="text-lg font-bold text-white">{initial}</span>
+              <span className="text-lg font-semibold text-white">{initial}</span>
             )}
           </div>
           <div className="text-left">

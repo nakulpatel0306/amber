@@ -215,13 +215,13 @@ export function ManageRoles() {
               </div>
               <div className="min-w-0">
                 <h1
-                  className="text-3xl sm:text-4xl font-serif font-normal tracking-tight leading-none"
+                  className="text-title leading-none"
                   style={{ color: 'var(--color-text)' }}
                 >
                   Manage roles
                 </h1>
                 <p
-                  className="font-mono text-[10px] uppercase tracking-[0.25em] mt-2"
+                  className="text-label mt-2"
                   style={{ color: 'var(--color-textMuted)' }}
                 >
                   Each role sets its own trait ranges
@@ -248,7 +248,7 @@ export function ManageRoles() {
                       >
                         <stat.Icon className="w-3 h-3" style={{ color: stat.color }} />
                       </span>
-                      <span className="font-extrabold tabular-nums" style={{ color: stat.color }}>{stat.value}</span>
+                      <span className="font-semibold tabular-nums" style={{ color: stat.color }}>{stat.value}</span>
                       <span style={{ color: 'var(--color-textSecondary)' }}>{stat.label}</span>
                     </span>
                   ))}
@@ -318,7 +318,7 @@ export function ManageRoles() {
                 style={{ color: 'var(--color-textMuted)' }}
               />
               <p
-                className="text-base font-bold tracking-tight mb-1"
+                className="text-base font-semibold tracking-tight mb-1"
                 style={{ color: 'var(--color-text)' }}
               >
                 {searchQuery || statusFilter !== 'all'
@@ -351,7 +351,7 @@ export function ManageRoles() {
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-1.5">
                         <h3
-                          className="text-base font-bold tracking-tight"
+                          className="text-base font-semibold tracking-tight"
                           style={{ color: 'var(--color-text)' }}
                         >
                           {role.title}

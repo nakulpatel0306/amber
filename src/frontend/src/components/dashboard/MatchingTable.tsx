@@ -99,7 +99,7 @@ export function MatchingTable({ matches, hasCompletedAssessment, onRowClick, onR
           Top personality matches
         </h3>
         <p
-          className="font-mono text-[10px] uppercase tracking-[0.25em] mb-1"
+          className="text-label mb-1"
           style={{ color: 'var(--color-textMuted)' }}
         >
           Check & maintain your match status
@@ -120,7 +120,7 @@ export function MatchingTable({ matches, hasCompletedAssessment, onRowClick, onR
             Top personality matches
           </h3>
           <p
-            className="font-mono text-[10px] uppercase tracking-[0.25em]"
+            className="text-label"
             style={{ color: 'var(--color-textMuted)' }}
           >
             Check & maintain your match status
@@ -144,37 +144,37 @@ export function MatchingTable({ matches, hasCompletedAssessment, onRowClick, onR
           <thead>
             <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
               <th
-                className="pb-2.5 pl-1 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"
+                className="pb-2.5 pl-1 text-left text-caption font-medium"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 Company
               </th>
               <th
-                className="pb-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"
+                className="pb-2.5 text-left text-caption font-medium"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 Name
               </th>
               <th
-                className="pb-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"
+                className="pb-2.5 text-left text-caption font-medium"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 Role
               </th>
               <th
-                className="pb-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"
+                className="pb-2.5 text-left text-caption font-medium"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 Match
               </th>
               <th
-                className="pb-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"
+                className="pb-2.5 text-left text-caption font-medium"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 Work style
               </th>
               <th
-                className="pb-2.5 text-left text-[10px] font-semibold uppercase tracking-[0.08em]"
+                className="pb-2.5 text-left text-caption font-medium"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 Status
@@ -223,7 +223,7 @@ export function MatchingTable({ matches, hasCompletedAssessment, onRowClick, onR
                           />
                         ) : (
                           <div
-                            className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-bold"
+                            className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-semibold"
                             style={{
                               backgroundColor: 'var(--color-accent)',
                               color: 'white',
@@ -280,7 +280,7 @@ export function MatchingTable({ matches, hasCompletedAssessment, onRowClick, onR
                     <td className="py-3.5 pr-5">
                       <div className="flex items-center gap-2">
                         <span
-                          className="text-sm font-bold tabular-nums"
+                          className="text-sm font-semibold tabular-nums"
                           style={{ color: getScoreColor(match.matchScore) }}
                         >
                           {match.matchScore}%

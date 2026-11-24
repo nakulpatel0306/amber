@@ -58,7 +58,7 @@ export function BillingSuccessPage() {
             className="w-12 h-12 animate-spin mx-auto mb-6"
             style={{ color: 'var(--color-accent)' }}
           />
-          <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
+          <h1 className="text-2xl font-semibold mb-2" style={{ color: 'var(--color-text)' }}>
             Processing your subscription...
           </h1>
           <p className="text-sm" style={{ color: 'var(--color-textMuted)' }}>
@@ -77,7 +77,7 @@ export function BillingSuccessPage() {
             className="w-12 h-12 mx-auto mb-6"
             style={{ color: 'var(--color-textMuted)' }}
           />
-          <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
+          <h1 className="text-2xl font-semibold mb-2" style={{ color: 'var(--color-text)' }}>
             Still processing...
           </h1>
           <p className="text-sm mb-6" style={{ color: 'var(--color-textMuted)' }}>
@@ -99,7 +99,7 @@ export function BillingSuccessPage() {
           className="w-16 h-16 mx-auto mb-6"
           style={{ color: 'var(--color-success)' }}
         />
-        <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
+        <h1 className="text-2xl font-semibold mb-2" style={{ color: 'var(--color-text)' }}>
           You're all set!
         </h1>
         <p className="text-sm mb-8" style={{ color: 'var(--color-textMuted)' }}>

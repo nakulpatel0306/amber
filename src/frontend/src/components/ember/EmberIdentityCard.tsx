@@ -34,24 +34,24 @@ export function EmberIdentityCard({ archetype, ocean }: EmberIdentityCardProps) 
     <div className="bento-card">
       {/* Section label */}
       <p
-        className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3"
+        className="text-label mb-3"
         style={{ color: 'var(--color-textMuted)' }}
       >
-        Your archetype //
+        Your archetype
       </p>
 
       {/* Archetype */}
       {archetype && (
         <div className="mb-4">
           <h3
-            className="text-lg font-bold"
+            className="text-lg font-semibold"
             style={{ color: 'var(--color-text)' }}
           >
             {archetype.name}
           </h3>
           {archetype.description && (
             <p
-              className="text-xs mt-1 leading-relaxed italic"
+              className="text-xs mt-1 leading-relaxed"
               style={{ color: 'var(--color-textMuted)' }}
             >
               {archetype.description}
@@ -67,7 +67,7 @@ export function EmberIdentityCard({ archetype, ocean }: EmberIdentityCardProps) 
       {styles && (
         <div>
           <p
-            className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3"
+            className="text-label mb-3"
             style={{ color: 'var(--color-textMuted)' }}
           >
             Operating style
@@ -87,7 +87,7 @@ export function EmberIdentityCard({ archetype, ocean }: EmberIdentityCardProps) 
                 </div>
                 <div>
                   <span
-                    className="text-[10px] uppercase tracking-wide font-medium block"
+                    className="text-caption font-medium block"
                     style={{ color: 'var(--color-textMuted)' }}
                   >
                     {label}

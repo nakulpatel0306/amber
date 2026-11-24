@@ -61,7 +61,7 @@ export function ArchetypeCard({
           </span>
         )}
         <h3
-          className="font-bold text-lg"
+          className="font-semibold text-lg"
           style={{ color: 'var(--color-text)' }}
         >
           {name}
@@ -82,7 +82,7 @@ export function ArchetypeCard({
           <div className="flex items-center gap-1.5 mb-2">
             <Sparkles className="w-3.5 h-3.5" style={{ color: '#10B981' }} />
             <span
-              className="text-xs font-semibold uppercase tracking-wide"
+              className="text-xs font-medium"
               style={{ color: 'var(--color-textMuted)' }}
             >
               Strengths
@@ -111,7 +111,7 @@ export function ArchetypeCard({
           <div className="flex items-center gap-1.5 mb-2">
             <Target className="w-3.5 h-3.5" style={{ color: '#8B5CF6' }} />
             <span
-              className="text-xs font-semibold uppercase tracking-wide"
+              className="text-xs font-medium"
               style={{ color: 'var(--color-textMuted)' }}
             >
               {idealCandidates ? 'Ideal candidates' : 'Ideal for'}
@@ -140,7 +140,7 @@ export function ArchetypeCard({
           <div className="flex items-center gap-1.5 mb-2">
             <AlertTriangle className="w-3.5 h-3.5" style={{ color: '#F59E0B' }} />
             <span
-              className="text-xs font-semibold uppercase tracking-wide"
+              className="text-xs font-medium"
               style={{ color: 'var(--color-textMuted)' }}
             >
               Watch for

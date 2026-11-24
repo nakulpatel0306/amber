@@ -42,7 +42,7 @@ export function CompareView({ candidates, employerOcean, onBack }: CompareViewPr
         Back to gallery
       </button>
 
-      <h1 className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
+      <h1 className="text-2xl font-semibold" style={{ color: 'var(--color-text)' }}>
         Compare Candidates ({candidates.length})
       </h1>
 
@@ -55,9 +55,9 @@ export function CompareView({ candidates, employerOcean, onBack }: CompareViewPr
                 className="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-2"
                 style={{ background: avatarGradient(c.name) }}
               >
-                <span className="text-xl font-bold text-white">{c.name.charAt(0)}</span>
+                <span className="text-xl font-semibold text-white">{c.name.charAt(0)}</span>
               </div>
-              <h3 className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>{c.name}</h3>
+              <h3 className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>{c.name}</h3>
               <p className="text-xs mb-1" style={{ color: 'var(--color-textSecondary)' }}>{c.headline}</p>
               <span
                 className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium mb-2"
@@ -77,7 +77,7 @@ export function CompareView({ candidates, employerOcean, onBack }: CompareViewPr
       {/* Score comparison */}
       <div className="bento-card">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-bold" style={{ color: 'var(--color-text)' }}>Score comparison</h2>
+          <h2 className="text-base font-semibold" style={{ color: 'var(--color-text)' }}>Score comparison</h2>
           <ArrowUpRight className="w-4 h-4" style={{ color: 'var(--color-textMuted)', opacity: 0.3 }} />
         </div>
         <div className="space-y-4">
@@ -108,7 +108,7 @@ export function CompareView({ candidates, employerOcean, onBack }: CompareViewPr
                         }}
                       />
                     </div>
-                    <span className="text-xs font-bold w-10 text-right" style={{ color: getMatchColor(c[key]) }}>
+                    <span className="text-xs font-semibold w-10 text-right" style={{ color: getMatchColor(c[key]) }}>
                       {c[key]}%
                     </span>
                   </div>
@@ -121,11 +121,11 @@ export function CompareView({ candidates, employerOcean, onBack }: CompareViewPr
 
       {/* OCEAN Dimension Comparison */}
       <div className="bento-card">
-        <h2 className="text-base font-bold mb-4" style={{ color: 'var(--color-text)' }}>OCEAN profile comparison</h2>
+        <h2 className="text-base font-semibold mb-4" style={{ color: 'var(--color-text)' }}>OCEAN profile comparison</h2>
         <div className="space-y-4">
           {dimensions.map(dim => (
             <div key={dim}>
-              <span className="text-xs font-bold mb-1.5 block uppercase tracking-wider" style={{ color: 'var(--color-textMuted)' }}>
+              <span className="text-xs font-medium mb-1.5 block" style={{ color: 'var(--color-textMuted)' }}>
                 {dimensionLabels[dim]}
               </span>
               <div className="space-y-1">

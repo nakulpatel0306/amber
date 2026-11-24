@@ -109,7 +109,7 @@ export function PricingPage() {
               borderColor: 'var(--color-accent)',
             }}
           >
-            <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--color-text)' }}>
+            <h2 className="text-xl font-semibold mb-2" style={{ color: 'var(--color-text)' }}>
               Welcome to Amber!
             </h2>
             <p className="text-sm mb-4" style={{ color: 'var(--color-textSecondary)' }}>
@@ -134,7 +134,7 @@ export function PricingPage() {
             <CreditCard className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
           </div>
           <span
-            className="text-xs font-semibold uppercase tracking-widest"
+            className="text-xs font-medium"
             style={{ color: 'var(--color-accent)' }}
           >
             Pricing
@@ -142,7 +142,7 @@ export function PricingPage() {
         </div>
 
         <h1
-          className="text-4xl sm:text-5xl font-serif font-normal tracking-tight mb-4"
+          className="text-title mb-4"
           style={{ color: 'var(--color-text)' }}
         >
           Find your perfect plan
@@ -255,7 +255,7 @@ export function PricingPage() {
               >
                 {plan.popular && (
                   <div
-                    className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-bold"
+                    className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-semibold"
                     style={{ backgroundColor: accent, color: 'white' }}
                   >
                     Most popular
@@ -270,7 +270,7 @@ export function PricingPage() {
                   >
                     <Icon className="w-4 h-4" style={{ color: accent }} />
                   </div>
-                  <h3 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
+                  <h3 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
                     {plan.name}
                   </h3>
                   <p className="text-xs mt-0.5" style={{ color: 'var(--color-textMuted)' }}>
@@ -281,12 +281,12 @@ export function PricingPage() {
                 {/* Price */}
                 <div className="mb-4">
                   {price === 0 ? (
-                    <div className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
+                    <div className="text-2xl font-semibold" style={{ color: 'var(--color-text)' }}>
                       Free
                     </div>
                   ) : (
                     <div className="flex items-baseline gap-1">
-                      <span className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>
+                      <span className="text-2xl font-semibold" style={{ color: 'var(--color-text)' }}>
                         ${price}
                       </span>
                       <span className="text-xs" style={{ color: 'var(--color-textMuted)' }}>

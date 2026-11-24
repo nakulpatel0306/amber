@@ -96,7 +96,7 @@ export function AcceptWithDateModal({
                   </span>
                   {isCustom && !isSelected && (
                     <span
-                      className="text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded"
+                      className="text-caption font-medium px-1.5 py-0.5 rounded"
                       style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textMuted)' }}
                     >
                       New

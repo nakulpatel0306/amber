@@ -55,7 +55,7 @@ function Eyebrow({ children }: { children: ReactNode }) {
   return (
     <div className="flex items-center gap-2 mb-4">
       <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }} />
-      <span className="text-[10px] font-mono uppercase tracking-[0.3em] font-semibold" style={{ color: 'var(--color-accent)' }}>
+      <span className="text-[10px] font-medium" style={{ color: 'var(--color-accent)' }}>
         {children}
       </span>
     </div>
@@ -125,7 +125,7 @@ export function CaseStudy() {
             style={{ color: 'var(--color-text)' }}
           >
             Hiring that starts with{' '}
-            <span className="italic" style={{ color: 'var(--color-accent)' }}>
+            <span className="" style={{ color: 'var(--color-accent)' }}>
               how you work
             </span>
           </h1>
@@ -166,7 +166,7 @@ export function CaseStudy() {
         eyebrow="Status"
         title={
           <>
-            Why it's on the <span className="italic" style={{ color: 'var(--color-accent)' }}>shelf</span>
+            Why it's on the <span className="" style={{ color: 'var(--color-accent)' }}>shelf</span>
           </>
         }
       >
@@ -204,7 +204,7 @@ export function CaseStudy() {
         eyebrow="How matching works"
         title={
           <>
-            Five traits, eight archetypes, <span className="italic" style={{ color: 'var(--color-accent)' }}>one score you can read</span>
+            Five traits, eight archetypes, <span className="" style={{ color: 'var(--color-accent)' }}>one score you can read</span>
           </>
         }
         intro={
@@ -268,7 +268,7 @@ export function CaseStudy() {
         eyebrow="The flow"
         title={
           <>
-            Coffee first, <span className="italic" style={{ color: 'var(--color-accent)' }}>application later</span>
+            Coffee first, <span className="" style={{ color: 'var(--color-accent)' }}>application later</span>
           </>
         }
       >
@@ -293,7 +293,7 @@ export function CaseStudy() {
         eyebrow="Architecture"
         title={
           <>
-            React, FastAPI, <span className="italic" style={{ color: 'var(--color-accent)' }}>Supabase, Stripe</span>
+            React, FastAPI, <span className="" style={{ color: 'var(--color-accent)' }}>Supabase, Stripe</span>
           </>
         }
         intro="The app reads and writes Postgres directly through supabase-js, with Row Level Security deciding who sees what and Realtime pushing messages and requests. FastAPI handles the things a browser shouldn't: the Ember agent, connection side effects, and Stripe."
@@ -307,7 +307,7 @@ export function CaseStudy() {
         eyebrow="Decisions and lessons"
         title={
           <>
-            What we'd <span className="italic" style={{ color: 'var(--color-accent)' }}>keep, and change</span>
+            What we'd <span className="" style={{ color: 'var(--color-accent)' }}>keep, and change</span>
           </>
         }
       >

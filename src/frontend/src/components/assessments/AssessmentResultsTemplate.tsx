@@ -85,7 +85,7 @@ export function AssessmentResultsTemplate({
             {icon}
           </motion.div>
           <motion.h1
-            className="text-3xl font-serif font-normal tracking-tight mb-3"
+            className="text-title mb-3"
             style={{ color: 'var(--color-text)' }}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -115,7 +115,7 @@ export function AssessmentResultsTemplate({
             <p className="text-xs font-medium mb-1" style={{ color: 'var(--color-textMuted)' }}>
               Strongest signal
             </p>
-            <p className="text-xl font-bold" style={{ color: topDimension.color }}>
+            <p className="text-xl font-semibold" style={{ color: topDimension.color }}>
               {topDimension.label}
             </p>
             <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>

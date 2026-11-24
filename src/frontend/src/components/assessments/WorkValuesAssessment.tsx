@@ -138,7 +138,7 @@ export function WorkValuesAssessment() {
               <Scale className="w-5 h-5" style={{ color: ACCENT }} />
             </div>
             <div>
-              <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>Work values assessment</h1>
+              <h1 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>Work values assessment</h1>
               <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
                 Question {currentQuestion + 1} of {workValuesQuestions.length}
               </p>
@@ -154,7 +154,7 @@ export function WorkValuesAssessment() {
 
         {/* Question card */}
         <div className="p-6 rounded-2xl border mb-6" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
-          <p className="text-xs font-medium mb-2 uppercase tracking-wider" style={{ color: ACCENT }}>{question.category}</p>
+          <p className="text-xs font-medium mb-2" style={{ color: ACCENT }}>{question.category}</p>
           <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--color-text)' }}>{question.question}</h2>
           {question.description && (
             <p className="text-sm mb-6" style={{ color: 'var(--color-textMuted)' }}>{question.description}</p>
@@ -168,7 +168,7 @@ export function WorkValuesAssessment() {
                 style={{ backgroundColor: 'var(--color-background)', '--slider-color': ACCENT } as React.CSSProperties}
               >
                 <div
-                  className="absolute top-2 px-3.5 py-1.5 rounded-xl font-bold text-base transform -translate-x-1/2 transition-all duration-150 shadow-md"
+                  className="absolute top-2 px-3.5 py-1.5 rounded-xl font-semibold text-base transform -translate-x-1/2 transition-all duration-150 shadow-md"
                   style={{
                     backgroundColor: ACCENT,
                     color: 'white',

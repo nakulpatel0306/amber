@@ -723,7 +723,7 @@ export function VisualPerceptionAssessment() {
               <Eye className="w-5 h-5" style={{ color: '#8B5CF6' }} />
             </div>
             <div>
-              <h1 className="text-lg font-bold" style={{ color: 'var(--color-text)' }}>
+              <h1 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
                 Visual perception test
               </h1>
               <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>

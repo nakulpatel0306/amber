@@ -295,7 +295,7 @@ export function ScheduleWidget({ upcomingChats, pendingChats: _pendingChats, acc
 
         {/* Right panel: Compact upcoming summary */}
         <div className="flex-1 min-w-0 flex flex-col">
-          <p className="text-[10px] font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--color-textMuted)' }}>
+          <p className="text-caption font-medium mb-2" style={{ color: 'var(--color-textMuted)' }}>
             Upcoming
           </p>
           {upcomingList.length > 0 ? (

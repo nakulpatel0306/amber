@@ -72,7 +72,7 @@ export function ProfileCompleteness({
               />
             ) : (
               <span
-                className={`font-bold ${config.fontSize}`}
+                className={`font-semibold ${config.fontSize}`}
                 style={{ color: 'var(--color-text)' }}
               >
                 {completedCount}

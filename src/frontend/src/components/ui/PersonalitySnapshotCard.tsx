@@ -44,10 +44,10 @@ export function PersonalitySnapshotCard({
 
       <div className="flex items-start justify-between mb-4">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wide mb-1" style={{ color: 'var(--color-textMuted)' }}>
+          <p className="text-xs font-medium mb-1" style={{ color: 'var(--color-textMuted)' }}>
             Your personality snapshot
           </p>
-          <h3 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
+          <h3 className="text-xl font-semibold" style={{ color: 'var(--color-text)' }}>
             {archetypeName}
           </h3>
           {tagline && (

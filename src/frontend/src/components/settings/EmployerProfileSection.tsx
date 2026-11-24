@@ -182,7 +182,7 @@ export function EmployerProfileSection() {
       {/* Company Info */}
       <div className="space-y-4">
         <h3
-          className="text-xs font-semibold uppercase tracking-widest flex items-center gap-2"
+          className="text-xs font-medium flex items-center gap-2"
           style={{ color: 'var(--color-textMuted)' }}
         >
           <Building2 className="w-3.5 h-3.5" style={{ color: '#d97706' }} />
@@ -290,7 +290,7 @@ export function EmployerProfileSection() {
       {/* Company Size */}
       <div className="space-y-4">
         <h3
-          className="text-xs font-semibold uppercase tracking-widest flex items-center gap-2"
+          className="text-xs font-medium flex items-center gap-2"
           style={{ color: 'var(--color-textMuted)' }}
         >
           <Users className="w-3.5 h-3.5" style={{ color: '#d97706' }} />
@@ -322,7 +322,7 @@ export function EmployerProfileSection() {
       {/* Links */}
       <div className="space-y-4">
         <h3
-          className="text-xs font-semibold uppercase tracking-widest flex items-center gap-2"
+          className="text-xs font-medium flex items-center gap-2"
           style={{ color: 'var(--color-textMuted)' }}
         >
           <LinkIcon className="w-3.5 h-3.5" style={{ color: '#d97706' }} />

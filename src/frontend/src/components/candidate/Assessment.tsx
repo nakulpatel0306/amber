@@ -422,7 +422,7 @@ export function Assessment() {
             <User className="w-8 h-8" style={{ color: 'var(--color-accent)' }} />
           </div>
           <h1
-            className="text-3xl font-serif font-normal tracking-tight mb-4"
+            className="text-title mb-4"
             style={{ color: 'var(--color-text)' }}
           >
             Complete your profile first
@@ -536,7 +536,7 @@ export function Assessment() {
           >
             <div className="mb-8">
               <h1
-                className="text-3xl md:text-4xl font-serif font-normal tracking-tight mb-4"
+                className="text-title mb-4"
                 style={{ color: 'var(--color-text)' }}
               >
                 {currentQuestion.question}
@@ -714,7 +714,7 @@ function SliderQuestion({
       >
         {/* Floating value indicator */}
         <div
-          className="absolute top-2 px-3.5 py-1.5 rounded-xl font-bold text-base transform -translate-x-1/2 transition-all duration-150 shadow-md"
+          className="absolute top-2 px-3.5 py-1.5 rounded-xl font-semibold text-base transform -translate-x-1/2 transition-all duration-150 shadow-md"
           style={{
             backgroundColor: accentColor,
             color: 'white',
@@ -816,7 +816,7 @@ function RankingQuestion({
           >
             <GripVertical className="w-5 h-5" style={{ color: 'var(--color-textMuted)' }} />
             <div
-              className="w-8 h-8 rounded-full flex items-center justify-center font-bold"
+              className="w-8 h-8 rounded-full flex items-center justify-center font-semibold"
               style={{
                 backgroundColor: index === 0 ? 'var(--color-accent)' : 'var(--color-background)',
                 color: index === 0 ? 'white' : 'var(--color-textSecondary)',

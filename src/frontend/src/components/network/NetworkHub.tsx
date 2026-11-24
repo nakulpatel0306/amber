@@ -465,13 +465,13 @@ export function NetworkHub() {
             />
             <div className="min-w-0">
               <h1
-                className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
+                className="text-title"
                 style={{ color: 'var(--color-text)' }}
               >
                 Network
               </h1>
               <p
-                className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
+                className="text-label mt-1"
                 style={{ color: 'var(--color-textMuted)' }}
               >
                 What people do outside work, from both sides of the table
@@ -500,7 +500,7 @@ export function NetworkHub() {
                     >
                       <stat.Icon className="w-3 h-3" style={{ color: stat.color }} />
                     </span>
-                    <span className="font-extrabold tabular-nums" style={{ color: stat.color }}>
+                    <span className="font-semibold tabular-nums" style={{ color: stat.color }}>
                       {stat.value}
                     </span>
                     <span style={{ color: 'var(--color-textSecondary)' }}>{stat.label}</span>

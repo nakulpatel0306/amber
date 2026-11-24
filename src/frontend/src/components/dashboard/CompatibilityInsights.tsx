@@ -238,7 +238,7 @@ export function CompatibilityInsights({ viewerRole = 'candidate' }: Compatibilit
         {/* Top row */}
         <div className="flex items-start justify-between">
           <span
-            className="text-[10px] font-semibold uppercase tracking-widest"
+            className="text-caption font-medium"
             style={{ color: 'var(--color-textMuted)' }}
           >
             Your daily reading
@@ -249,7 +249,7 @@ export function CompatibilityInsights({ viewerRole = 'candidate' }: Compatibilit
         {/* Short headline */}
         <div className="flex-1 flex items-center py-1">
           <p
-            className="text-base sm:text-lg font-bold leading-snug transition-opacity duration-400"
+            className="text-base sm:text-lg font-semibold leading-snug transition-opacity duration-400"
             style={{
               color: 'var(--color-text)',
               opacity: isTransitioning ? 0 : 1,
@@ -342,7 +342,7 @@ export function CompatibilityInsights({ viewerRole = 'candidate' }: Compatibilit
                   <Sparkles className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
                 </div>
                 <span
-                  className="text-[10px] font-semibold uppercase tracking-widest"
+                  className="text-caption font-medium"
                   style={{ color: 'var(--color-textMuted)' }}
                 >
                   {viewerRole === 'employer' ? 'Daily culture reading' : 'Daily personality reading'}
@@ -350,7 +350,7 @@ export function CompatibilityInsights({ viewerRole = 'candidate' }: Compatibilit
               </div>
 
               <h2
-                className="text-2xl font-bold mb-3 leading-tight transition-opacity duration-400"
+                className="text-2xl font-semibold mb-3 leading-tight transition-opacity duration-400"
                 style={{
                   color: 'var(--color-text)',
                   opacity: isTransitioning ? 0 : 1,
@@ -373,7 +373,7 @@ export function CompatibilityInsights({ viewerRole = 'candidate' }: Compatibilit
 
               <div className="flex items-center justify-between mb-3">
                 <p
-                  className="text-[10px] font-semibold uppercase tracking-widest"
+                  className="text-caption font-medium"
                   style={{ color: 'var(--color-textMuted)' }}
                 >
                   Your readings
