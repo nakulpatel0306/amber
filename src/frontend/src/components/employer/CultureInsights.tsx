@@ -42,7 +42,7 @@ const EMPLOYER_ADDITIONAL_ASSESSMENTS = [
   },
   {
     id: 'leadership-style',
-    name: 'Leadership & management',
+    name: 'Leadership and management',
     description: 'Management philosophy, feedback culture, and decision authority.',
     duration: '~5 min',
     dataField: 'leadership_style_data',
@@ -51,7 +51,7 @@ const EMPLOYER_ADDITIONAL_ASSESSMENTS = [
   },
   {
     id: 'growth-philosophy',
-    name: 'Growth & development',
+    name: 'Growth and development',
     description: 'Learning culture, mentorship, and career path philosophy.',
     duration: '~5 min',
     dataField: 'growth_philosophy_data',
@@ -60,7 +60,7 @@ const EMPLOYER_ADDITIONAL_ASSESSMENTS = [
   },
   {
     id: 'work-environment',
-    name: 'Work environment & pace',
+    name: 'Work environment and pace',
     description: 'Remote/hybrid preferences, work-life balance, and urgency culture.',
     duration: '~5 min',
     dataField: 'work_environment_data',
@@ -84,7 +84,7 @@ const DIMENSION_INFO: Record<string, {
   openness: {
     label: 'Openness',
     fullLabel: 'Openness to experience',
-    shortDesc: 'Creativity & curiosity',
+    shortDesc: 'Creativity and curiosity',
     description: 'Your preference for candidates who are intellectually curious, creative, and open to new ideas. High scores attract innovative thinkers who thrive with ambiguity.',
     workplaceImpact: 'Candidates strong in openness excel in roles requiring creative problem-solving, innovation, and adapting to change.',
     highCandidates: [
@@ -106,7 +106,7 @@ const DIMENSION_INFO: Record<string, {
   conscientiousness: {
     label: 'Conscientiousness',
     fullLabel: 'Conscientiousness',
-    shortDesc: 'Organization & discipline',
+    shortDesc: 'Organization and discipline',
     description: 'Your preference for organized, dependable, and goal-directed candidates. High scores attract disciplined achievers who deliver consistent results.',
     workplaceImpact: 'Conscientiousness is the strongest predictor of job performance in most roles, especially those requiring reliability and attention to detail.',
     highCandidates: [
@@ -128,7 +128,7 @@ const DIMENSION_INFO: Record<string, {
   extraversion: {
     label: 'Extraversion',
     fullLabel: 'Extraversion',
-    shortDesc: 'Social energy & assertiveness',
+    shortDesc: 'Social energy and assertiveness',
     description: 'Your preference for socially energetic and outgoing candidates. High scores attract dynamic team players who thrive in collaborative environments.',
     workplaceImpact: 'Extraversion influences team dynamics, communication style, and how candidates engage with colleagues and clients.',
     highCandidates: [
@@ -150,7 +150,7 @@ const DIMENSION_INFO: Record<string, {
   agreeableness: {
     label: 'Agreeableness',
     fullLabel: 'Agreeableness',
-    shortDesc: 'Cooperation & empathy',
+    shortDesc: 'Cooperation and empathy',
     description: 'Your preference for cooperative, empathetic candidates. High scores attract team players who prioritize harmony and support colleagues.',
     workplaceImpact: 'Agreeableness affects team cohesion, conflict resolution, and how candidates handle stakeholder relationships.',
     highCandidates: [
@@ -172,7 +172,7 @@ const DIMENSION_INFO: Record<string, {
   neuroticism: {
     label: 'Stability',
     fullLabel: 'Emotional stability',
-    shortDesc: 'Resilience & composure',
+    shortDesc: 'Resilience and composure',
     description: 'Your preference for emotionally stable, resilient candidates. High stability scores attract calm performers who handle pressure well.',
     workplaceImpact: 'Emotional stability influences how candidates handle stress, criticism, and high-pressure situations.',
     highCandidates: [
@@ -447,31 +447,31 @@ export function CultureInsights() {
     : 'Balanced analysis';
 
   const communicationStyle = preferences.extraversion > 60 && preferences.agreeableness > 60
-    ? 'Open & supportive'
+    ? 'Open and supportive'
     : preferences.extraversion > 60
-    ? 'Direct & energetic'
+    ? 'Direct and energetic'
     : preferences.agreeableness > 60
-    ? 'Thoughtful & caring'
+    ? 'Thoughtful and caring'
     : 'Balanced dialogue';
 
   const teamDynamic = preferences.extraversion > 60
     ? 'Collaborative-first'
     : preferences.conscientiousness > 60
-    ? 'Structured & focused'
+    ? 'Structured and focused'
     : 'Flexible hybrid';
 
   // Energy map: what attracts vs repels talent
   const attractors: string[] = [];
   const repellers: string[] = [];
 
-  if (preferences.openness > 60) { attractors.push('Creative freedom & innovation time'); repellers.push('Rigid, top-down processes'); }
-  else { attractors.push('Clear, proven methodologies'); repellers.push('Constant experimentation & pivots'); }
+  if (preferences.openness > 60) { attractors.push('Creative freedom and innovation time'); repellers.push('Rigid, top-down processes'); }
+  else { attractors.push('Clear, proven methodologies'); repellers.push('Constant experimentation and pivots'); }
   if (preferences.extraversion > 60) { attractors.push('Collaborative team culture'); repellers.push('Isolated, siloed workflows'); }
-  else { attractors.push('Deep work & focused time'); repellers.push('Constant meetings & interruptions'); }
+  else { attractors.push('Deep work and focused time'); repellers.push('Constant meetings and interruptions'); }
   if (preferences.agreeableness > 60) { attractors.push('Supportive, people-first values'); repellers.push('Cutthroat competitive dynamics'); }
-  else { attractors.push('Healthy competition & meritocracy'); repellers.push('Excessive consensus-seeking'); }
-  if (preferences.conscientiousness > 60) { attractors.push('Clear goals & accountability'); repellers.push('Ambiguous expectations'); }
-  else { attractors.push('Flexible deadlines & autonomy'); repellers.push('Micromanagement & rigid timelines'); }
+  else { attractors.push('Healthy competition and meritocracy'); repellers.push('Excessive consensus-seeking'); }
+  if (preferences.conscientiousness > 60) { attractors.push('Clear goals and accountability'); repellers.push('Ambiguous expectations'); }
+  else { attractors.push('Flexible deadlines and autonomy'); repellers.push('Micromanagement and rigid timelines'); }
 
   // Top 2 preferences are culture strengths, bottom 2 are growth areas
   const dimensionMeta = [
@@ -487,22 +487,22 @@ export function CultureInsights() {
 
   // Compatibility signals
   const hiringPace = preferences.extraversion > 60 && preferences.conscientiousness > 60
-    ? 'Rapid & structured'
+    ? 'Rapid and structured'
     : preferences.extraversion > 60
-    ? 'Fast & dynamic'
+    ? 'Fast and dynamic'
     : preferences.conscientiousness > 60
-    ? 'Methodical & steady'
-    : 'Flexible & adaptive';
+    ? 'Methodical and steady'
+    : 'Flexible and adaptive';
 
   const idealCandidateType = sortedPrefs[0][0] === 'openness'
-    ? 'Creative visionaries & problem-solvers'
+    ? 'Creative visionaries and problem-solvers'
     : sortedPrefs[0][0] === 'conscientiousness'
-    ? 'Disciplined achievers & organizers'
+    ? 'Disciplined achievers and organizers'
     : sortedPrefs[0][0] === 'extraversion'
-    ? 'Energetic collaborators & communicators'
+    ? 'Energetic collaborators and communicators'
     : sortedPrefs[0][0] === 'agreeableness'
-    ? 'Empathetic team players & mediators'
-    : 'Steady performers & resilient anchors';
+    ? 'Empathetic team players and mediators'
+    : 'Steady performers and resilient anchors';
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">

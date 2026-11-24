@@ -137,7 +137,7 @@ export function WorkEnvironmentAssessment() {
 
     return (
       <AssessmentResultsTemplate
-        title="Work environment & pace results"
+        title="Work environment and pace results"
         subtitle="Here's how your work environment and pace preferences shape your culture"
         dimensions={dimensions}
         enhancedMessage="Your work environment preferences have been factored into your culture profile with a 10% weight, making your candidate matches more accurate."

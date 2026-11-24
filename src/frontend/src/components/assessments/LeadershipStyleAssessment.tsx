@@ -137,7 +137,7 @@ export function LeadershipStyleAssessment() {
 
     return (
       <AssessmentResultsTemplate
-        title="Leadership & management results"
+        title="Leadership and management results"
         subtitle="Here's how your management philosophy shapes the candidates you attract"
         dimensions={dimensions}
         enhancedMessage="Your leadership style has been factored into your culture profile with a 12% weight, making your candidate matches more accurate."

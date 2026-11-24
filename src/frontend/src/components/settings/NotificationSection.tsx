@@ -238,8 +238,8 @@ export function NotificationSection() {
         </div>
         <p className="text-sm mt-1" style={{ color: 'var(--color-textMuted)' }}>
           {isEmployer
-            ? 'Choose how you want to be notified about candidates & hiring activity'
-            : 'Choose how you want to be notified about jobs & opportunities'}
+            ? 'Choose how you want to be notified about candidates and hiring activity'
+            : 'Choose how you want to be notified about jobs and opportunities'}
         </p>
       </div>
 

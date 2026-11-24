@@ -493,7 +493,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                 isLoading={isSaving}
                 rightIcon={<ArrowRight className="w-4 h-4" />}
               >
-                {redirectToAssessment ? 'Complete & take assessment' : 'Complete setup'}
+                {redirectToAssessment ? 'Complete and take assessment' : 'Complete setup'}
               </Button>
             )}
           </div>

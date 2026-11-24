@@ -102,7 +102,7 @@ export function WorkValuesAssessment() {
 
     return (
       <AssessmentResultsTemplate
-        title="Drive & motivation results"
+        title="Drive and motivation results"
         subtitle="Here's what your work values reveal about your motivational drivers"
         dimensions={dimensions}
         enhancedMessage="Your work values have been factored into your personality profile with a 12% weight, making your culture matches more accurate."

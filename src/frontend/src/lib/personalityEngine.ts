@@ -989,7 +989,7 @@ export class CultureEngine {
       teamDynamics: scores.collaboration > 70 ? 'Highly Collaborative' :
                     scores.collaboration < 40 ? 'Independent Contributors' : 'Balanced',
       decisionCulture: scores.consensus > 70 ? 'Consensus-Driven' :
-                       scores.speed > 70 ? 'Fast & Decisive' : 'Balanced',
+                       scores.speed > 70 ? 'Fast and decisive' : 'Balanced',
       innovationLevel: scores.innovation || 50,
       workIntensity: scores.intensity || 50,
       hierarchyLevel: scores.hierarchy || 50,

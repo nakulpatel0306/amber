@@ -21,10 +21,10 @@ const quizQuestions: QuizQuestion[] = [
     category: 'Work style',
     question: 'How would you describe your team\'s work style?',
     options: [
-      { value: 'structured', label: 'Structured & planned', description: 'Clear processes, defined roles, predictable schedules' },
-      { value: 'flexible', label: 'Flexible & adaptive', description: 'Agile approach, shifting priorities, autonomy in methods' },
+      { value: 'structured', label: 'Structured and planned', description: 'Clear processes, defined roles, predictable schedules' },
+      { value: 'flexible', label: 'Flexible and adaptive', description: 'Agile approach, shifting priorities, autonomy in methods' },
       { value: 'collaborative', label: 'Highly collaborative', description: 'Lots of meetings, pair work, group decisions' },
-      { value: 'independent', label: 'Independent & focused', description: 'Deep work time, minimal meetings, async communication' },
+      { value: 'independent', label: 'Independent and focused', description: 'Deep work time, minimal meetings, async communication' },
     ],
   },
   {
@@ -32,10 +32,10 @@ const quizQuestions: QuizQuestion[] = [
     category: 'Communication',
     question: 'What\'s your preferred communication style?',
     options: [
-      { value: 'sync', label: 'Real-time & synchronous', description: 'Quick calls, instant messaging, immediate responses' },
+      { value: 'sync', label: 'Real-time and synchronous', description: 'Quick calls, instant messaging, immediate responses' },
       { value: 'async', label: 'Asynchronous first', description: 'Thoughtful docs, scheduled meetings, flexible response times' },
-      { value: 'formal', label: 'Formal & documented', description: 'Written records, clear chains, structured updates' },
-      { value: 'casual', label: 'Casual & open', description: 'Informal chats, open door policy, spontaneous discussions' },
+      { value: 'formal', label: 'Formal and documented', description: 'Written records, clear chains, structured updates' },
+      { value: 'casual', label: 'Casual and open', description: 'Informal chats, open door policy, spontaneous discussions' },
     ],
   },
   {
@@ -51,7 +51,7 @@ const quizQuestions: QuizQuestion[] = [
   },
   {
     id: 'growth',
-    category: 'Growth & learning',
+    category: 'Growth and learning',
     question: 'How do you support employee growth?',
     options: [
       { value: 'mentorship', label: 'Mentorship focused', description: 'Senior guidance, 1:1 coaching, shadowing' },
@@ -65,7 +65,7 @@ const quizQuestions: QuizQuestion[] = [
     category: 'Feedback culture',
     question: 'How does feedback flow in your organization?',
     options: [
-      { value: 'continuous', label: 'Continuous & informal', description: 'Real-time feedback, casual check-ins' },
+      { value: 'continuous', label: 'Continuous and informal', description: 'Real-time feedback, casual check-ins' },
       { value: 'scheduled', label: 'Scheduled reviews', description: 'Quarterly or annual formal reviews' },
       { value: 'peer', label: 'Peer-driven', description: '360 feedback, team retrospectives' },
       { value: 'metrics', label: 'Metrics based', description: 'OKRs, KPIs, performance dashboards' },
@@ -76,10 +76,10 @@ const quizQuestions: QuizQuestion[] = [
     category: 'Core values',
     question: 'Which value resonates most with your culture?',
     options: [
-      { value: 'innovation', label: 'Innovation & creativity', description: 'Pushing boundaries, trying new things' },
-      { value: 'reliability', label: 'Reliability & trust', description: 'Consistency, dependability, keeping promises' },
-      { value: 'speed', label: 'Speed & agility', description: 'Moving fast, iterating quickly, bias for action' },
-      { value: 'quality', label: 'Quality & excellence', description: 'High standards, attention to detail, craftsmanship' },
+      { value: 'innovation', label: 'Innovation and creativity', description: 'Pushing boundaries, trying new things' },
+      { value: 'reliability', label: 'Reliability and trust', description: 'Consistency, dependability, keeping promises' },
+      { value: 'speed', label: 'Speed and agility', description: 'Moving fast, iterating quickly, bias for action' },
+      { value: 'quality', label: 'Quality and excellence', description: 'High standards, attention to detail, craftsmanship' },
     ],
   },
   {

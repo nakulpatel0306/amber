@@ -78,7 +78,7 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
   },
   {
     id: 'depth-perception',
-    title: 'Depth & focus',
+    title: 'Depth and focus',
     instruction: 'What stands out to you in this image?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -180,13 +180,13 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
       },
       {
         id: 'environment',
-        label: 'The buildings & setting',
+        label: 'The buildings and setting',
         description: 'The architectural elements and environment stood out',
         traits: { conscientiousness: 10, openness: 8 },
       },
       {
         id: 'objects',
-        label: 'The small details & objects',
+        label: 'The small details and objects',
         description: 'I noticed the smaller objects and details in the scene',
         traits: { conscientiousness: 12, openness: 5 },
       },
@@ -194,7 +194,7 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
   },
   {
     id: 'completion-tendency',
-    title: 'Completion & imagination',
+    title: 'Completion and imagination',
     instruction: 'What do you see in these incomplete shapes?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -267,7 +267,7 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
   },
   {
     id: 'movement-energy',
-    title: 'Energy & movement',
+    title: 'Energy and movement',
     instruction: 'How does this image make you feel?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -328,19 +328,19 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
     options: [
       {
         id: 'energized',
-        label: 'Energized & excited',
+        label: 'Energized and excited',
         description: 'The movement and dynamism makes me feel energized',
         traits: { extraversion: 15, openness: 5 },
       },
       {
         id: 'calm',
-        label: 'Calm & flowing',
+        label: 'Calm and flowing',
         description: 'I see a peaceful, rhythmic flow that feels calming',
         traits: { agreeableness: 10, neuroticism_inv: 10 },
       },
       {
         id: 'curious',
-        label: 'Curious & Intrigued',
+        label: 'Curious and intrigued',
         description: 'I want to understand the pattern and where it leads',
         traits: { openness: 15, conscientiousness: 5 },
       },
@@ -354,7 +354,7 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
   },
   {
     id: 'color-emotion',
-    title: 'Color & emotion',
+    title: 'Color and emotion',
     instruction: 'Which color arrangement feels most "right" to you?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">
@@ -402,13 +402,13 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
     options: [
       {
         id: 'warm-ordered',
-        label: 'Warm & organized',
+        label: 'Warm and organized',
         description: 'The structured warm gradient feels harmonious and intentional',
         traits: { conscientiousness: 12, agreeableness: 5 },
       },
       {
         id: 'cool-scattered',
-        label: 'Cool & expressive',
+        label: 'Cool and expressive',
         description: 'The scattered cool tones feel creative and freeing',
         traits: { openness: 15, extraversion: 3 },
       },
@@ -482,7 +482,7 @@ const VISUAL_QUESTIONS: VisualQuestion[] = [
   },
   {
     id: 'symmetry-balance',
-    title: 'Symmetry & balance',
+    title: 'Symmetry and balance',
     instruction: 'Which composition do you prefer?',
     svg: (
       <svg viewBox="0 0 400 300" className="w-full h-full">

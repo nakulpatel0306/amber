@@ -52,7 +52,7 @@ const traitMeta: { minField: keyof RoleRow; maxField: keyof RoleRow; highLabel: 
   { minField: 'required_conscientiousness_min', maxField: 'required_conscientiousness_max', highLabel: 'Detail-oriented', lowLabel: 'Flexible' },
   { minField: 'required_extraversion_min', maxField: 'required_extraversion_max', highLabel: 'Collaborative', lowLabel: 'Independent' },
   { minField: 'required_agreeableness_min', maxField: 'required_agreeableness_max', highLabel: 'Team player', lowLabel: 'Assertive' },
-  { minField: 'required_neuroticism_min', maxField: 'required_neuroticism_max', highLabel: 'Passionate', lowLabel: 'Calm & steady' },
+  { minField: 'required_neuroticism_min', maxField: 'required_neuroticism_max', highLabel: 'Passionate', lowLabel: 'Calm and steady' },
 ];
 
 function getTraitHighlights(role: RoleRow): { label: string }[] {

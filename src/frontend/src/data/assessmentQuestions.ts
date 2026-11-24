@@ -523,7 +523,7 @@ export const workValuesQuestions: AssessmentQuestion[] = [
       },
       {
         id: 'wv2d',
-        text: 'Mentoring & leading',
+        text: 'Mentoring and leading',
         description: 'Coaching others, setting strategy, and seeing your team grow.',
         traitScores: { leadership: 90, empathy: 80, impact: 85 }
       }
@@ -2146,7 +2146,7 @@ export const growthPhilosophyQuestions: AssessmentQuestion[] = [
     id: 'gd4',
     type: 'slider',
     category: 'Investment',
-    question: 'How much does your company invest in learning & development?',
+    question: 'How much does your company invest in learning and development?',
     sliderConfig: {
       min: 0,
       max: 100,

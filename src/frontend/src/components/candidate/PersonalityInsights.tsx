@@ -33,7 +33,7 @@ const OCEAN_INFO = {
   openness: {
     label: 'Openness',
     fullLabel: 'Openness to experience',
-    shortDesc: 'Creativity & curiosity',
+    shortDesc: 'Creativity and curiosity',
     description: 'Measures your intellectual curiosity, creativity, and preference for novelty and variety.',
     workplaceImpact: 'Influences how you approach problem-solving, adapt to change, and engage with innovative ideas.',
     highTraits: ['Creative and imaginative thinking', 'Intellectual curiosity and love of learning', 'Comfort with ambiguity', 'Willingness to try new approaches'],
@@ -45,7 +45,7 @@ const OCEAN_INFO = {
   conscientiousness: {
     label: 'Conscientiousness',
     fullLabel: 'Conscientiousness',
-    shortDesc: 'Organization & discipline',
+    shortDesc: 'Organization and discipline',
     description: 'Reflects your tendency to be organized, dependable, and goal-directed.',
     workplaceImpact: 'The strongest personality predictor of job performance across most occupations.',
     highTraits: ['Strong organizational skills', 'Reliable and meets deadlines', 'Attention to detail and quality', 'Self-disciplined and motivated'],
@@ -57,7 +57,7 @@ const OCEAN_INFO = {
   extraversion: {
     label: 'Extraversion',
     fullLabel: 'Extraversion',
-    shortDesc: 'Social energy & assertiveness',
+    shortDesc: 'Social energy and assertiveness',
     description: 'Indicates how much you are energized by social interaction and external stimulation.',
     workplaceImpact: 'Influences your collaboration style, leadership approach, and professional relationships.',
     highTraits: ['Energized by teamwork', 'Natural communicator', 'Builds rapport easily', 'Thrives in fast-paced environments'],
@@ -69,7 +69,7 @@ const OCEAN_INFO = {
   agreeableness: {
     label: 'Agreeableness',
     fullLabel: 'Agreeableness',
-    shortDesc: 'Cooperation & empathy',
+    shortDesc: 'Cooperation and empathy',
     description: 'Measures your tendency toward cooperation, trust, and consideration for others.',
     workplaceImpact: 'Affects team dynamics, conflict resolution, and stakeholder management.',
     highTraits: ['Builds harmonious relationships', 'Empathetic and understanding', 'Skilled at conflict resolution', 'Customer and people-focused'],
@@ -81,7 +81,7 @@ const OCEAN_INFO = {
   neuroticism: {
     label: 'Stability',
     fullLabel: 'Emotional stability',
-    shortDesc: 'Resilience & composure',
+    shortDesc: 'Resilience and composure',
     description: 'Reflects your emotional resilience and ability to remain calm under pressure.',
     workplaceImpact: 'Influences how you handle pressure, respond to criticism, and maintain performance.',
     highTraits: ['Calm under pressure', 'Resilient when facing setbacks', 'Consistent performance', 'Steady emotional presence'],
@@ -105,7 +105,7 @@ const ADDITIONAL_ASSESSMENTS = [
   },
   {
     id: 'work-values',
-    name: 'Drive & motivation',
+    name: 'Drive and motivation',
     description: 'Explore what drives you at work — purpose, growth, recognition, and more.',
     duration: '~5 min',
     status: 'available' as const,
@@ -349,13 +349,13 @@ export function PersonalityInsights() {
   const energizers: string[] = [];
   const drainers: string[] = [];
 
-  if (scores.openness > 60) { energizers.push('New challenges & ideas'); drainers.push('Repetitive routine tasks'); }
-  else { energizers.push('Mastering proven methods'); drainers.push('Constant change & ambiguity'); }
+  if (scores.openness > 60) { energizers.push('New challenges and ideas'); drainers.push('Repetitive routine tasks'); }
+  else { energizers.push('Mastering proven methods'); drainers.push('Constant change and ambiguity'); }
   if (scores.extraversion > 60) { energizers.push('Team brainstorming'); drainers.push('Extended solo work'); }
   else { energizers.push('Deep focused work'); drainers.push('Back-to-back meetings'); }
   if (scores.agreeableness > 60) { energizers.push('Helping others succeed'); drainers.push('Competitive environments'); }
   else { energizers.push('Healthy competition'); drainers.push('Too much consensus-building'); }
-  if (scores.conscientiousness > 60) { energizers.push('Clear goals & progress'); drainers.push('Unclear expectations'); }
+  if (scores.conscientiousness > 60) { energizers.push('Clear goals and progress'); drainers.push('Unclear expectations'); }
   else { energizers.push('Flexible schedules'); drainers.push('Rigid processes'); }
 
   // Archetype name for header

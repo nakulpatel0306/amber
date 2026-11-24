@@ -137,7 +137,7 @@ export function GrowthPhilosophyAssessment() {
 
     return (
       <AssessmentResultsTemplate
-        title="Growth & development results"
+        title="Growth and development results"
         subtitle="Here's how your learning culture and development philosophy shape your profile"
         dimensions={dimensions}
         enhancedMessage="Your growth philosophy has been factored into your culture profile with an 11% weight, making your candidate matches more accurate."

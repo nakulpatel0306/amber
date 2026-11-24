@@ -38,14 +38,14 @@ interface SectionConfig {
 
 const allSections: SectionConfig[] = [
   { id: 'profile', label: 'Profile', icon: User, description: 'Your personal information' },
-  { id: 'work-profile', label: 'Work profile', icon: Briefcase, description: 'Job preferences & experience', candidateOnly: true },
+  { id: 'work-profile', label: 'Work profile', icon: Briefcase, description: 'Job preferences and experience', candidateOnly: true },
   { id: 'company-profile', label: 'Company profile', icon: Building2, description: 'Company information', employerOnly: true },
-  { id: 'subscription', label: 'Subscription', icon: Crown, description: 'Plan & billing' },
-  { id: 'notifications', label: 'Notifications', icon: Bell, description: 'Email & push preferences' },
+  { id: 'subscription', label: 'Subscription', icon: Crown, description: 'Plan and billing' },
+  { id: 'notifications', label: 'Notifications', icon: Bell, description: 'Email and push preferences' },
   { id: 'privacy', label: 'Privacy', icon: Shield, description: 'Control your visibility' },
-  { id: 'appearance', label: 'Appearance', icon: Palette, description: 'Theme & display' },
+  { id: 'appearance', label: 'Appearance', icon: Palette, description: 'Theme and display' },
   { id: 'feedback', label: 'Feedback', icon: MessageSquare, description: 'Report bugs or suggest' },
-  { id: 'account', label: 'Account', icon: Settings, description: 'Password & security' },
+  { id: 'account', label: 'Account', icon: Settings, description: 'Password and security' },
 ];
 
 export function SettingsPage() {
