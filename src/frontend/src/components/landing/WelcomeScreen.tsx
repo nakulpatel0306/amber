@@ -16,7 +16,13 @@ import {
 } from 'lucide-react';
 import { motion, Variants, useScroll, useTransform } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { WaitlistModal } from './WaitlistModal';
+import { supabase, isSupabaseConfigured } from '../../lib/supabase';
+import {
+  WAITLIST_BASELINE_CANDIDATES,
+  WAITLIST_BASELINE_EMPLOYERS,
+  WAITLIST_BASELINE_TOTAL,
+} from '../../utils/constants';
 import {
   AnimatedBlobs,
   CursorSpotlight,
@@ -98,16 +104,16 @@ const COMPANIES_ROW2 = [
   { name: 'Datadog', domain: 'datadoghq.com' },
 ];
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-
 function CompanyLogo({ name, domain }: { name: string; domain: string }) {
   const [imgError, setImgError] = useState(false);
+  // Extract company name from domain (e.g., "google.com" -> "google")
+  const logoName = domain.split('.')[0];
 
   return (
     <div className="flex items-center justify-center">
       {!imgError ? (
         <img
-          src={`${API_BASE}/api/logo?domain=${domain}`}
+          src={`/logos/${logoName}.png`}
           alt={name}
           className="h-8 w-auto max-w-[140px] rounded-lg object-contain opacity-70 hover:opacity-100 transition-opacity duration-300"
           loading="lazy"
@@ -794,7 +800,54 @@ function ValuesSection() {
 }
 
 export function WelcomeScreen() {
+  const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
+  // null = not yet loaded — modal falls back to 0 (which it gracefully hides)
+  const [waitlistCounts, setWaitlistCounts] = useState<{
+    total: number;
+    candidates: number;
+    employers: number;
+  } | null>(null);
   const heroRef = useRef<HTMLElement>(null);
+
+  const fetchWaitlistCounts = useCallback(async () => {
+    const baseline = {
+      total: WAITLIST_BASELINE_TOTAL,
+      candidates: WAITLIST_BASELINE_CANDIDATES,
+      employers: WAITLIST_BASELINE_EMPLOYERS,
+    };
+    if (!isSupabaseConfigured) {
+      setWaitlistCounts(baseline);
+      return;
+    }
+    try {
+      const { data, error } = await supabase.rpc('get_waitlist_count');
+      if (error) {
+        setWaitlistCounts(baseline);
+        return;
+      }
+      if (data && Array.isArray(data) && data[0]) {
+        const row = data[0] as {
+          total: number | string;
+          candidates: number | string;
+          employers: number | string;
+        };
+        setWaitlistCounts({
+          total: (Number(row.total) || 0) + WAITLIST_BASELINE_TOTAL,
+          candidates: (Number(row.candidates) || 0) + WAITLIST_BASELINE_CANDIDATES,
+          employers: (Number(row.employers) || 0) + WAITLIST_BASELINE_EMPLOYERS,
+        });
+      } else {
+        setWaitlistCounts(baseline);
+      }
+    } catch {
+      setWaitlistCounts(baseline);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchWaitlistCounts();
+  }, [fetchWaitlistCounts]);
+
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
@@ -861,33 +914,31 @@ export function WelcomeScreen() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <Link to="/auth/signup">
-              <MagneticButton
-                className="px-8 py-4 rounded-2xl text-base font-semibold flex items-center gap-3 animate-glow-pulse"
-                style={{
-                  backgroundColor: 'var(--color-accent)',
-                  color: 'var(--color-accentText)',
-                }}
-                strength={0.08}
-              >
-                Start Free Assessment
-                <ArrowRight className="w-5 h-5" />
-              </MagneticButton>
-            </Link>
-            <Link to="/auth/signup?role=employer">
-              <MagneticButton
-                className="px-8 py-4 rounded-2xl text-base font-semibold flex items-center gap-3 border-2"
-                style={{
-                  borderColor: 'var(--color-border)',
-                  color: 'var(--color-text)',
-                  backgroundColor: 'var(--color-surface)',
-                }}
-                strength={0.08}
-              >
-                <Briefcase className="w-5 h-5" />
-                I'm Hiring
-              </MagneticButton>
-            </Link>
+            <MagneticButton
+              className="px-8 py-4 rounded-2xl text-base font-semibold flex items-center gap-3 animate-glow-pulse cursor-pointer"
+              style={{
+                backgroundColor: 'var(--color-accent)',
+                color: 'var(--color-accentText)',
+              }}
+              strength={0.08}
+              onClick={() => setIsComingSoonOpen(true)}
+            >
+              Start Free Assessment
+              <ArrowRight className="w-5 h-5" />
+            </MagneticButton>
+            <MagneticButton
+              className="px-8 py-4 rounded-2xl text-base font-semibold flex items-center gap-3 border-2 cursor-pointer"
+              style={{
+                borderColor: 'var(--color-border)',
+                color: 'var(--color-text)',
+                backgroundColor: 'var(--color-surface)',
+              }}
+              strength={0.08}
+              onClick={() => setIsComingSoonOpen(true)}
+            >
+              <Briefcase className="w-5 h-5" />
+              I'm Hiring
+            </MagneticButton>
           </motion.div>
 
         </motion.div>
@@ -1066,18 +1117,17 @@ export function WelcomeScreen() {
                       </li>
                     ))}
                   </ul>
-                  <Link to="/auth/signup">
-                    <MagneticButton
-                      className="w-full py-3.5 rounded-xl text-sm font-semibold transition-all"
-                      style={{
-                        backgroundColor: 'var(--color-accent)',
-                        color: 'var(--color-accentText)',
-                      }}
-                      strength={0.04}
-                    >
-                      Find Your Match
-                    </MagneticButton>
-                  </Link>
+                  <MagneticButton
+                    className="w-full py-3.5 rounded-xl text-sm font-semibold transition-all cursor-pointer"
+                    style={{
+                      backgroundColor: 'var(--color-accent)',
+                      color: 'var(--color-accentText)',
+                    }}
+                    strength={0.04}
+                    onClick={() => setIsComingSoonOpen(true)}
+                  >
+                    Find Your Match
+                  </MagneticButton>
                 </div>
               </TiltCard>
               </motion.div>
@@ -1120,19 +1170,18 @@ export function WelcomeScreen() {
                       </li>
                     ))}
                   </ul>
-                  <Link to="/auth/signup?role=employer">
-                    <MagneticButton
-                      className="w-full py-3.5 rounded-xl text-sm font-semibold border-2 transition-all"
-                      style={{
-                        borderColor: 'var(--color-border)',
-                        color: 'var(--color-text)',
-                        backgroundColor: 'transparent',
-                      }}
-                      strength={0.04}
-                    >
-                      Start Hiring Smarter
-                    </MagneticButton>
-                  </Link>
+                  <MagneticButton
+                    className="w-full py-3.5 rounded-xl text-sm font-semibold border-2 transition-all cursor-pointer"
+                    style={{
+                      borderColor: 'var(--color-border)',
+                      color: 'var(--color-text)',
+                      backgroundColor: 'transparent',
+                    }}
+                    strength={0.04}
+                    onClick={() => setIsComingSoonOpen(true)}
+                  >
+                    Start Hiring Smarter
+                  </MagneticButton>
                 </div>
               </TiltCard>
               </motion.div>
@@ -1240,19 +1289,18 @@ export function WelcomeScreen() {
 
             {/* CTA */}
             <div className="text-center">
-              <Link to="/auth/signup">
-                <MagneticButton
-                  className="px-8 py-4 rounded-2xl text-base font-semibold inline-flex items-center gap-3 animate-glow-pulse"
-                  style={{
-                    backgroundColor: 'var(--color-accent)',
-                    color: 'var(--color-accentText)',
-                  }}
-                  strength={0.08}
-                >
-                  Try Ember Free
-                  <ArrowRight className="w-5 h-5" />
-                </MagneticButton>
-              </Link>
+              <MagneticButton
+                className="px-8 py-4 rounded-2xl text-base font-semibold inline-flex items-center gap-3 animate-glow-pulse cursor-pointer"
+                style={{
+                  backgroundColor: 'var(--color-accent)',
+                  color: 'var(--color-accentText)',
+                }}
+                strength={0.08}
+                onClick={() => setIsComingSoonOpen(true)}
+              >
+                Try Ember Free
+                <ArrowRight className="w-5 h-5" />
+              </MagneticButton>
             </div>
           </div>
         </section>
@@ -1356,38 +1404,36 @@ export function WelcomeScreen() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/auth/signup">
-                <MagneticButton
-                  className="px-8 py-4 rounded-2xl text-base font-semibold flex items-center gap-3 animate-glow-pulse"
-                  style={{
-                    backgroundColor: 'var(--color-accent)',
-                    color: 'var(--color-accentText)',
-                  }}
-                  strength={0.08}
+              <MagneticButton
+                className="px-8 py-4 rounded-2xl text-base font-semibold flex items-center gap-3 animate-glow-pulse cursor-pointer"
+                style={{
+                  backgroundColor: 'var(--color-accent)',
+                  color: 'var(--color-accentText)',
+                }}
+                strength={0.08}
+                onClick={() => setIsComingSoonOpen(true)}
+              >
+                Get Started Free
+                <motion.div
+                  animate={{ x: [0, 4, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
                 >
-                  Get Started Free
-                  <motion.div
-                    animate={{ x: [0, 4, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-                  >
-                    <ArrowRight className="w-5 h-5" />
-                  </motion.div>
-                </MagneticButton>
-              </Link>
-              <Link to="/auth/signup?role=employer">
-                <MagneticButton
-                  className="px-8 py-4 rounded-2xl text-base font-semibold flex items-center gap-3 border-2"
-                  style={{
-                    borderColor: 'var(--color-border)',
-                    color: 'var(--color-text)',
-                    backgroundColor: 'var(--color-surface)',
-                  }}
-                  strength={0.08}
-                >
-                  <Briefcase className="w-5 h-5" />
-                  I'm Hiring
-                </MagneticButton>
-              </Link>
+                  <ArrowRight className="w-5 h-5" />
+                </motion.div>
+              </MagneticButton>
+              <MagneticButton
+                className="px-8 py-4 rounded-2xl text-base font-semibold flex items-center gap-3 border-2 cursor-pointer"
+                style={{
+                  borderColor: 'var(--color-border)',
+                  color: 'var(--color-text)',
+                  backgroundColor: 'var(--color-surface)',
+                }}
+                strength={0.08}
+                onClick={() => setIsComingSoonOpen(true)}
+              >
+                <Briefcase className="w-5 h-5" />
+                I'm Hiring
+              </MagneticButton>
             </div>
 
             {/* Trust line */}
@@ -1436,6 +1482,16 @@ export function WelcomeScreen() {
 
       {/* Footer */}
       <LandingFooter />
+
+      {/* Coming Soon + Waitlist signup */}
+      <WaitlistModal
+        isOpen={isComingSoonOpen}
+        onClose={() => setIsComingSoonOpen(false)}
+        onSuccess={fetchWaitlistCounts}
+        total={waitlistCounts?.total ?? 0}
+        candidates={waitlistCounts?.candidates ?? 0}
+        employers={waitlistCounts?.employers ?? 0}
+      />
     </div>
   );
 }

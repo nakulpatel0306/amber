@@ -2,10 +2,10 @@ import { Link } from 'react-router-dom';
 import {
   Mail,
   MapPin,
-  Linkedin,
-  Instagram,
   Sun,
   Moon,
+  Instagram,
+  Linkedin,
 } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { AmberLogo } from '../ui/AmberLogo';
@@ -85,19 +85,28 @@ export function LandingFooter() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                { label: 'Personality Assessment', href: '/science' },
-                { label: 'Culture Matching', href: '/science' },
-                { label: 'Coffee Chats', href: '/auth/signup' },
-                { label: 'Pricing', href: '/pricing' },
+                { label: 'Personality Assessment', href: '/science', enabled: true },
+                { label: 'Culture Matching', href: '/science', enabled: false },
+                { label: 'Coffee Chats', href: '/auth/signup', enabled: false },
+                { label: 'Pricing', href: '/pricing', enabled: true },
               ].map(item => (
                 <li key={item.label}>
-                  <Link
-                    to={item.href}
-                    className="text-sm transition-colors hover:underline"
-                    style={{ color: 'var(--color-textSecondary)' }}
-                  >
-                    {item.label}
-                  </Link>
+                  {item.enabled ? (
+                    <Link
+                      to={item.href}
+                      className="text-sm transition-colors hover:underline"
+                      style={{ color: 'var(--color-textSecondary)' }}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <span
+                      className="text-sm cursor-default"
+                      style={{ color: 'var(--color-textMuted)' }}
+                    >
+                      {item.label}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
@@ -113,19 +122,18 @@ export function LandingFooter() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                { label: 'Post a Role', href: '/auth/signup?role=employer' },
-                { label: 'Browse Candidates', href: '/auth/signup?role=employer' },
-                { label: 'Culture Matching', href: '/auth/signup?role=employer' },
-                { label: 'Culture Assessment', href: '/auth/signup?role=employer' },
+                { label: 'Post a Role' },
+                { label: 'Browse Candidates' },
+                { label: 'Culture Matching' },
+                { label: 'Culture Assessment' },
               ].map(item => (
                 <li key={item.label}>
-                  <Link
-                    to={item.href}
-                    className="text-sm transition-colors hover:underline"
-                    style={{ color: 'var(--color-textSecondary)' }}
+                  <span
+                    className="text-sm cursor-default"
+                    style={{ color: 'var(--color-textMuted)' }}
                   >
                     {item.label}
-                  </Link>
+                  </span>
                 </li>
               ))}
             </ul>
