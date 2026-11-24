@@ -275,7 +275,7 @@ function artwork(hue: number, label: string): string {
 <rect width="600" height="600" fill="url(#g)"/>
 <circle cx="420" cy="190" r="120" fill="hsl(${hue} 90% 92% / 0.35)"/>
 <circle cx="170" cy="430" r="170" fill="hsl(${(hue + 20) % 360} 80% 30% / 0.25)"/>
-<text x="40" y="560" font-family="Georgia, serif" font-size="44" fill="white" fill-opacity="0.9">${label}</text>
+<text x="40" y="560" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="40" font-weight="600" letter-spacing="-0.5" fill="white" fill-opacity="0.9">${label}</text>
 </svg>`;
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
