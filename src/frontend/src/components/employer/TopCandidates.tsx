@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Trophy,
   MapPin,
   Coffee,
   Search,
@@ -562,8 +561,8 @@ export function TopCandidates() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
       {/* Header */}
-      <div className="border-b px-4 sm:px-6 py-4" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
-        <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
+        <div className="bento-card rounded-2xl p-5 sm:p-6">
           {/* View tabs */}
           <div className="flex items-center gap-1 mb-4 p-1 rounded-xl w-fit" style={{ backgroundColor: 'var(--color-background)', border: '1px solid var(--color-border)' }}>
             <button
@@ -595,8 +594,7 @@ export function TopCandidates() {
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
             <div className="min-w-0">
-              <h1 className="text-xl font-bold flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                <Trophy className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
+              <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight leading-none mb-2" style={{ color: 'var(--color-text)' }}>
                 {activeView === 'browse' ? 'Top candidates' : 'Your pipeline'}
               </h1>
               <p className="text-sm" style={{ color: 'var(--color-textMuted)' }}>
@@ -779,7 +777,7 @@ export function TopCandidates() {
 
       {/* Pipeline View */}
       {activeView === 'pipeline' && (
-        <div className="max-w-7xl mx-auto p-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
           <MatchPipeline
             savedMatches={savedMatches}
             activeTab={pipelineTab}
@@ -801,7 +799,7 @@ export function TopCandidates() {
       )}
 
       {/* Results Grid */}
-      {activeView === 'browse' && <div className="max-w-7xl mx-auto p-6">
+      {activeView === 'browse' && <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         {filteredCandidates.length === 0 ? (
           <div className="bento-card text-center py-12">
             <Users className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--color-textMuted)' }} />
