@@ -1,27 +1,10 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  MapPin,
-  Coffee,
-  Search,
-  SlidersHorizontal,
-  X,
-  ChevronDown,
-  ArrowUpDown,
-  Eye,
-  Brain,
-  Heart,
-  Briefcase,
-  Zap,
-  Target,
-  Star,
-  Users,
-  Check,
-} from 'lucide-react';
+import { Search, SlidersHorizontal, X, ChevronDown, Star, Check } from 'lucide-react';
 import { Button } from '../ui/Button';
-// ScoreRing is defined locally in this component
+import { PageBanner } from '../ui/PageBanner';
+import { Facts } from '../ui/Facts';
 import { CoffeeBrewLoader, useMinLoader } from '../ui/CoffeeBrewLoader';
-import { EmberFirefly } from '../ember/EmberFirefly';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { supabase } from '../../lib/supabase';
@@ -88,60 +71,6 @@ interface CandidateResult {
 }
 
 type SortOption = 'overall' | 'culture' | 'trait' | 'archetype';
-
-/* ------------------------------------------------------------------ */
-/*  ScoreRing                                                          */
-/* ------------------------------------------------------------------ */
-
-function ScoreRing({ score, size = 52 }: { score: number; size?: number }) {
-  const strokeWidth = 3;
-  const radius = (size - strokeWidth * 2) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (score / 100) * circumference;
-  const color = scoreColor(score);
-
-  return (
-    <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="var(--color-border)" strokeWidth={strokeWidth} />
-        <circle
-          cx={size / 2} cy={size / 2} r={radius} fill="none" stroke={color} strokeWidth={strokeWidth}
-          strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round"
-          className="transition-all duration-1000 ease-out"
-        />
-      </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-xs font-semibold" style={{ color }}>{score}</span>
-      </div>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Helpers                                                            */
-/* ------------------------------------------------------------------ */
-
-function scoreColor(score: number): string {
-  if (score >= 85) return 'var(--color-success)';
-  if (score >= 70) return 'var(--color-accent)';
-  if (score >= 55) return 'var(--color-warning)';
-  return 'var(--color-textMuted)';
-}
-
-const AVATAR_COLORS = [
-  '#6366f1',
-  '#f43f5e',
-  '#14b8a6',
-  '#f59e0b',
-  '#8b5cf6',
-  '#10b981',
-];
-
-function avatarColor(name: string): string {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
-}
 
 /* ------------------------------------------------------------------ */
 /*  Main Component                                                     */
@@ -520,36 +449,21 @@ export function TopCandidates() {
 
   if (showLoader) {
     return (
-      <CoffeeBrewLoader variant="fullscreen" message="Ranking candidates by culture fit..." />
+      <CoffeeBrewLoader variant="fullscreen" message="Ranking candidates by culture fit…" />
     );
   }
 
-  if (!employer) {
+  if (!employer || candidates.length === 0) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center p-8">
         <div className="text-center max-w-md">
-          <EmberFirefly size="xl" mood="neutral" />
-          <h2 className="text-xl font-semibold mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
-            Complete your setup
+          <h2 className="text-heading mb-2" style={{ color: 'var(--color-text)' }}>
+            {!employer ? 'Complete your setup' : 'No candidates yet'}
           </h2>
-          <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
-            Set up your employer profile to start finding candidates.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  if (candidates.length === 0) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center p-8">
-        <div className="text-center max-w-md">
-          <EmberFirefly size="xl" mood="neutral" />
-          <h2 className="text-xl font-semibold mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
-            No candidates yet
-          </h2>
-          <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
-            No candidates have completed their assessments yet. Check back soon!
+          <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+            {!employer
+              ? 'Set up your employer profile to start finding candidates.'
+              : 'No candidates have completed their assessments yet. Check back soon.'}
           </p>
         </div>
       </div>
@@ -558,145 +472,142 @@ export function TopCandidates() {
 
   /* ---- Main Render ---- */
 
-  return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
-      {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
-        <div className="bento-card rounded-2xl p-5 sm:p-6">
-          {/* View tabs */}
-          <div className="flex items-center gap-1 mb-4 p-1 rounded-xl w-fit" style={{ backgroundColor: 'var(--color-background)', border: '1px solid var(--color-border)' }}>
-            <button
-              onClick={() => setActiveView('browse')}
-              className="px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
-              style={{
-                backgroundColor: activeView === 'browse' ? 'var(--color-accent)' : 'transparent',
-                color: activeView === 'browse' ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
-              }}
-            >
-              Browse all
-            </button>
-            <button
-              onClick={() => setActiveView('pipeline')}
-              className="px-4 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5"
-              style={{
-                backgroundColor: activeView === 'pipeline' ? 'var(--color-accent)' : 'transparent',
-                color: activeView === 'pipeline' ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
-              }}
-            >
-              Pipeline
-              {(pipelineCounts.saved + pipelineCounts.pending + pipelineCounts.connected) > 0 && (
-                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: activeView === 'pipeline' ? 'color-mix(in srgb, var(--color-accentText) 20%, transparent)' : 'var(--color-surfaceHover)' }}>
-                  {pipelineCounts.saved + pipelineCounts.pending + pipelineCounts.connected}
-                </span>
-              )}
-            </button>
-          </div>
+  const pipelineTotal = pipelineCounts.saved + pipelineCounts.pending + pipelineCounts.connected;
+  const controlClass = 'appearance-none w-full pl-3 pr-8 py-2 rounded-lg text-sm cursor-pointer border border-[var(--color-border)] focus:outline-none focus:border-[var(--color-accent)]';
+  const controlStyle = { backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' };
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-            <div className="min-w-0">
-              <h1 className="text-title leading-none mb-2" style={{ color: 'var(--color-text)' }}>
-                {activeView === 'browse' ? 'Top candidates' : 'Your pipeline'}
-              </h1>
-              <p className="text-sm" style={{ color: 'var(--color-textMuted)' }}>
-                {activeView === 'browse'
-                  ? <>
-                      {filteredCandidates.length} candidate{filteredCandidates.length !== 1 ? 's' : ''} found
-                      {shortlisted.size > 0 && (
-                        <span style={{ color: 'var(--color-accent)' }}> &middot; {shortlisted.size} shortlisted</span>
-                      )}
-                    </>
-                  : 'Track your shortlisted and pending candidates'
-                }
-              </p>
+  return (
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <PageBanner
+        title={activeView === 'browse' ? 'Top candidates' : 'Your pipeline'}
+        subtitle={activeView === 'browse'
+          ? 'Every candidate with a finished assessment, ranked by fit'
+          : 'Track your shortlisted and pending candidates'}
+        belowSubtitle={
+          <Facts
+            items={[
+              { label: 'Found', value: filteredCandidates.length },
+              { label: 'Shortlisted', value: shortlisted.size },
+              { label: 'In pipeline', value: pipelineTotal },
+            ]}
+          />
+        }
+        rightContent={
+          <div className="flex items-center gap-1 p-1 rounded-lg border" style={{ borderColor: 'var(--color-border)' }}>
+            {(['browse', 'pipeline'] as const).map(view => {
+              const isActive = activeView === view;
+              return (
+                <button
+                  key={view}
+                  onClick={() => setActiveView(view)}
+                  aria-pressed={isActive}
+                  className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+                  style={{
+                    backgroundColor: isActive ? 'var(--color-surfaceHover)' : 'transparent',
+                    color: isActive ? 'var(--color-text)' : 'var(--color-textSecondary)',
+                  }}
+                >
+                  {view === 'browse' ? 'Browse all' : 'Pipeline'}
+                </button>
+              );
+            })}
+          </div>
+        }
+      />
+
+      {activeView === 'pipeline' && (
+        <MatchPipeline
+          savedMatches={savedMatches}
+          activeTab={pipelineTab}
+          onTabChange={setPipelineTab}
+          counts={pipelineCounts}
+          mode="employer"
+          onViewInEmber={(matchId) => navigate(`/app/employer/ember?deepdive=${matchId}`)}
+          onRemove={async (id) => {
+            try {
+              await unsaveMatch(id);
+              showSuccess('Removed', 'Candidate removed');
+            } catch {
+              showError('Error', 'Failed to remove');
+            }
+          }}
+          onCoffeeChat={() => {}}
+        />
+      )}
+
+      {activeView === 'browse' && (
+        <>
+          {/* Toolbar: search, role, sort, filters */}
+          <div className="flex flex-col lg:flex-row gap-2">
+            <div className="relative flex-1 min-w-0">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
+              <input
+                type="text"
+                placeholder="Search by name, headline, archetype, or location…"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-9 py-2 rounded-lg text-sm border border-[var(--color-border)] focus:outline-none focus:border-[var(--color-accent)]"
+                style={controlStyle}
+              />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery('')} aria-label="Clear search" className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <X className="w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
+                </button>
+              )}
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              {/* Role dropdown */}
+            <div className="flex flex-wrap gap-2">
               {roles.length > 0 && (
-                <div className="relative basis-full sm:basis-auto min-w-0">
+                <div className="relative basis-full sm:basis-auto sm:w-56 min-w-0">
                   <select
                     value={selectedRoleId || ''}
                     onChange={e => handleRoleChange(e.target.value || null)}
-                    className="appearance-none w-full sm:w-auto sm:max-w-[16rem] truncate pl-8 pr-8 py-2 rounded-xl text-sm font-medium cursor-pointer"
-                    style={{
-                      backgroundColor: 'var(--color-surface)',
-                      color: 'var(--color-textSecondary)',
-                      border: '1px solid var(--color-border)',
-                    }}
+                    aria-label="Rank for role"
+                    className={`${controlClass} truncate`}
+                    style={controlStyle}
                   >
                     <option value="">All roles</option>
                     {roles.map(r => <option key={r.id} value={r.id}>{r.title}</option>)}
                   </select>
-                  <Briefcase className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: 'var(--color-textMuted)' }} />
-                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: 'var(--color-textMuted)' }} />
+                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: 'var(--color-textMuted)' }} />
                 </div>
               )}
 
-              {/* Sort */}
-              <div className="relative flex-1 sm:flex-none">
+              <div className="relative flex-1 sm:flex-none sm:w-44">
                 <select
                   value={sortBy}
                   onChange={e => setSortBy(e.target.value as SortOption)}
-                  className="appearance-none w-full pl-8 pr-8 py-2 rounded-xl text-sm font-medium cursor-pointer"
-                  style={{
-                    backgroundColor: 'var(--color-surface)',
-                    color: 'var(--color-textSecondary)',
-                    border: '1px solid var(--color-border)',
-                  }}
+                  aria-label="Sort by"
+                  className={controlClass}
+                  style={controlStyle}
                 >
                   <option value="overall">Overall match</option>
                   <option value="culture">Culture fit</option>
                   <option value="trait">Trait match</option>
                   <option value="archetype">Archetype</option>
                 </select>
-                <ArrowUpDown className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: 'var(--color-textMuted)' }} />
-                <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: 'var(--color-textMuted)' }} />
+                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: 'var(--color-textMuted)' }} />
               </div>
 
-              {/* Filter toggle */}
-              <button
+              <Button
+                variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all"
-                style={{
-                  backgroundColor: showFilters || activeFilterCount > 0 ? 'var(--color-accent)' : 'var(--color-surface)',
-                  color: showFilters || activeFilterCount > 0 ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
-                  border: showFilters || activeFilterCount > 0 ? 'none' : '1px solid var(--color-border)',
-                }}
+                aria-expanded={showFilters}
+                leftIcon={<SlidersHorizontal className="w-4 h-4" />}
+                className="!min-h-9 !py-1.5"
               >
-                <SlidersHorizontal className="w-4 h-4" />
-                Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ''}
-              </button>
+                Filters
+                {activeFilterCount > 0 && (
+                  <span className="tabular-nums" style={{ color: 'var(--color-accent)' }}>{activeFilterCount}</span>
+                )}
+              </Button>
             </div>
           </div>
 
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
-            <input
-              type="text"
-              placeholder="Search by name, headline, archetype, or location..."
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none"
-              style={{
-                backgroundColor: 'var(--color-background)',
-                color: 'var(--color-text)',
-                border: '1px solid var(--color-border)',
-              }}
-            />
-            {searchQuery && (
-              <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2">
-                <X className="w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
-              </button>
-            )}
-          </div>
-
-          {/* Filter panel */}
           {showFilters && (
-            <div className="mt-4 p-4 rounded-xl space-y-4" style={{ backgroundColor: 'var(--color-background)', border: '1px solid var(--color-border)' }}>
-              {/* Match score range */}
+            <div className="bento-card mt-3 grid grid-cols-1 md:grid-cols-[auto_minmax(0,1fr)_auto] gap-5 animate-fade-in">
               <div>
-                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Match score range</label>
+                <label className="text-label mb-1.5 block" style={{ color: 'var(--color-text)' }}>Match score</label>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
@@ -704,8 +615,9 @@ export function TopCandidates() {
                     max={100}
                     value={minScore}
                     onChange={e => setMinScore(Math.max(0, Math.min(100, parseInt(e.target.value) || 0)))}
-                    className="w-20 px-3 py-2 rounded-lg text-sm text-center"
-                    style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
+                    aria-label="Minimum match score"
+                    className="w-20 px-3 py-2 rounded-lg text-sm text-center tabular-nums border border-[var(--color-border)]"
+                    style={controlStyle}
                     placeholder="0"
                   />
                   <span className="text-sm" style={{ color: 'var(--color-textMuted)' }}>to</span>
@@ -715,242 +627,180 @@ export function TopCandidates() {
                     max={100}
                     value={maxScore}
                     onChange={e => setMaxScore(Math.max(0, Math.min(100, parseInt(e.target.value) || 100)))}
-                    className="w-20 px-3 py-2 rounded-lg text-sm text-center"
-                    style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
+                    aria-label="Maximum match score"
+                    className="w-20 px-3 py-2 rounded-lg text-sm text-center tabular-nums border border-[var(--color-border)]"
+                    style={controlStyle}
                     placeholder="100"
                   />
-                  <span className="text-xs" style={{ color: 'var(--color-textMuted)' }}>%</span>
+                  <span className="text-sm" style={{ color: 'var(--color-textMuted)' }}>%</span>
                 </div>
               </div>
 
-              {/* Archetype checkboxes */}
               {uniqueArchetypes.length > 0 && (
-                <div>
-                  <label className="text-xs font-medium mb-2 block" style={{ color: 'var(--color-textMuted)' }}>Archetype</label>
-                  <div className="flex flex-wrap gap-2">
-                    {uniqueArchetypes.map(arch => (
-                      <button
-                        key={arch}
-                        onClick={() => toggleArchetypeFilter(arch)}
-                        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all"
-                        style={{
-                          backgroundColor: selectedArchetypes.has(arch) ? 'var(--color-accent)' : 'var(--color-surface)',
-                          color: selectedArchetypes.has(arch) ? 'white' : 'var(--color-textSecondary)',
-                          border: selectedArchetypes.has(arch) ? 'none' : '1px solid var(--color-border)',
-                        }}
-                      >
-                        {selectedArchetypes.has(arch) && <Check className="w-3 h-3" />}
-                        {arch}
-                      </button>
-                    ))}
+                <div className="min-w-0">
+                  <label className="text-label mb-1.5 block" style={{ color: 'var(--color-text)' }}>Archetype</label>
+                  <div className="flex flex-wrap gap-1.5">
+                    {uniqueArchetypes.map(arch => {
+                      const on = selectedArchetypes.has(arch);
+                      return (
+                        <button
+                          key={arch}
+                          onClick={() => toggleArchetypeFilter(arch)}
+                          aria-pressed={on}
+                          className="flex items-center gap-1 px-2.5 py-1 rounded-full text-caption font-medium transition-colors"
+                          style={{
+                            color: on ? 'var(--color-accent)' : 'var(--color-textSecondary)',
+                            border: `1px solid ${on ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                          }}
+                        >
+                          {on && <Check className="w-3 h-3" />}
+                          {arch}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
-              {/* Work style preference */}
               <div>
-                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Work style preference</label>
-                <select
-                  value={selectedWorkStyleFilter || ''}
-                  onChange={e => setSelectedWorkStyleFilter(e.target.value || null)}
-                  className="w-full max-w-xs px-3 py-2 rounded-lg text-sm"
-                  style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
-                >
-                  <option value="">All</option>
-                  <option value="remote">Remote</option>
-                  <option value="hybrid">Hybrid</option>
-                  <option value="onsite">Onsite</option>
-                </select>
+                <label className="text-label mb-1.5 block" style={{ color: 'var(--color-text)' }}>Work style</label>
+                <div className="relative w-full md:w-40">
+                  <select
+                    value={selectedWorkStyleFilter || ''}
+                    onChange={e => setSelectedWorkStyleFilter(e.target.value || null)}
+                    className={controlClass}
+                    style={controlStyle}
+                  >
+                    <option value="">All</option>
+                    <option value="remote">Remote</option>
+                    <option value="hybrid">Hybrid</option>
+                    <option value="onsite">Onsite</option>
+                  </select>
+                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 pointer-events-none" style={{ color: 'var(--color-textMuted)' }} />
+                </div>
               </div>
 
               {activeFilterCount > 0 && (
-                <div className="flex justify-end">
-                  <button onClick={clearFilters} className="text-xs font-medium" style={{ color: 'var(--color-accent)' }}>
+                <div className="md:col-span-3 -mt-2 flex justify-end">
+                  <Button variant="ghost" size="sm" onClick={clearFilters}>
                     Clear all filters
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
           )}
-        </div>
-      </div>
 
-      {/* Pipeline View */}
-      {activeView === 'pipeline' && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-          <MatchPipeline
-            savedMatches={savedMatches}
-            activeTab={pipelineTab}
-            onTabChange={setPipelineTab}
-            counts={pipelineCounts}
-            mode="employer"
-            onViewInEmber={(matchId) => navigate(`/app/employer/ember?deepdive=${matchId}`)}
-            onRemove={async (id) => {
-              try {
-                await unsaveMatch(id);
-                showSuccess('Removed', 'Candidate removed');
-              } catch {
-                showError('Error', 'Failed to remove');
-              }
-            }}
-            onCoffeeChat={() => {}}
-          />
-        </div>
-      )}
+          {/* Ranked list: one card, divided rows, score on the right */}
+          <section className="mt-8">
+            <div className="mb-3 flex items-baseline justify-between gap-2">
+              <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>
+                {selectedRoleId ? `Ranked for ${roles.find(r => r.id === selectedRoleId)?.title ?? 'this role'}` : 'Ranked for your company'}
+              </h2>
+              <span className="hidden lg:block text-caption" style={{ color: 'var(--color-textMuted)' }}>
+                Traits · culture · work style
+              </span>
+            </div>
 
-      {/* Results Grid */}
-      {activeView === 'browse' && <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-        {filteredCandidates.length === 0 ? (
-          <div className="bento-card text-center py-12">
-            <Users className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--color-textMuted)' }} />
-            <p className="font-medium mb-1" style={{ color: 'var(--color-text)' }}>No candidates match your filters</p>
-            <p className="text-sm" style={{ color: 'var(--color-textMuted)' }}>
-              Try adjusting your filters or search query.
-            </p>
-            {activeFilterCount > 0 && (
-              <button onClick={clearFilters} className="mt-4 text-sm font-medium" style={{ color: 'var(--color-accent)' }}>
-                Clear all filters
-              </button>
-            )}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredCandidates.map((c) => {
-              const isShortlisted = shortlisted.has(c.candidateId);
-              return (
-                <div
-                  key={c.candidateId}
-                  className="bento-card transition-all hover:shadow-md cursor-pointer group relative"
-                  style={isShortlisted ? { borderColor: 'var(--color-accent)' } : undefined}
-                  onClick={() => setModalCandidate(c)}
-                >
-                  {/* Shortlist indicator */}
-                  {isShortlisted && (
-                    <div
-                      className="absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: 'var(--color-accent)' }}
-                    >
-                      <Star className="w-3 h-3 text-white" />
-                    </div>
-                  )}
-
-                  {/* Top row: avatar + score ring */}
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      {/* Candidate initial avatar */}
-                      <div
-                        className="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0"
-                        style={{ backgroundColor: avatarColor(c.name) }}
-                      >
-                        <span className="text-lg font-semibold text-white">
-                          {c.name.charAt(0).toUpperCase()}
-                        </span>
-                      </div>
-                      <div className="min-w-0">
-                        <h3 className="font-semibold line-clamp-1" style={{ color: 'var(--color-text)' }}>
-                          {c.name}
-                        </h3>
-                        <p className="text-sm line-clamp-1" style={{ color: 'var(--color-textSecondary)' }}>
-                          {c.headline}
-                        </p>
-                      </div>
-                    </div>
-                    <ScoreRing score={c.overallScore} size={48} />
-                  </div>
-
-                  {/* Archetype badge */}
-                  <div className="mb-3">
-                    <span
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium"
-                      style={{ backgroundColor: `var(--color-accent)15`, color: 'var(--color-accent)' }}
-                    >
-                      <Target className="w-3 h-3" />
-                      {c.archetype.name}
-                    </span>
-                  </div>
-
-                  {/* Top trait pills (from archetype strengths) */}
-                  {c.archetype.strengths.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {c.archetype.strengths.slice(0, 3).map((strength, idx) => (
-                        <span
-                          key={idx}
-                          className="text-xs px-2 py-0.5 rounded-full"
-                          style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textMuted)' }}
-                        >
-                          {strength}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Location + work style */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {c.location && (
-                      <span className="flex items-center gap-1 text-xs px-2 py-1 rounded-md" style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textMuted)' }}>
-                        <MapPin className="w-3 h-3" />{c.location}
-                      </span>
-                    )}
-                    {c.workStyle && (
-                      <span className="text-xs px-2 py-1 rounded-md" style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textMuted)' }}>
-                        {c.workStyle.charAt(0).toUpperCase() + c.workStyle.slice(1)}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Score mini breakdown */}
-                  <div className="flex gap-3 mb-4 text-xs" style={{ color: 'var(--color-textMuted)' }}>
-                    <span className="flex items-center gap-1"><Brain className="w-3 h-3" style={{ color: 'var(--color-accent)' }} />{c.traitScore}%</span>
-                    <span className="flex items-center gap-1"><Heart className="w-3 h-3" style={{ color: 'var(--color-warning)' }} />{c.cultureScore}%</span>
-                    <span className="flex items-center gap-1"><Zap className="w-3 h-3" style={{ color: 'var(--color-success)' }} />{c.workStyleFit}%</span>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      className="flex-1"
-                      leftIcon={<Coffee className="w-3.5 h-3.5" />}
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        await handleInviteChat(c);
-                      }}
-                    >
-                      Invite to chat
+            <div className="bento-card !p-0 overflow-hidden">
+              {filteredCandidates.length === 0 ? (
+                <div className="px-5 py-12 text-center">
+                  <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-text)' }}>No candidates match your filters</p>
+                  <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+                    Try adjusting your filters or search query.
+                  </p>
+                  {activeFilterCount > 0 && (
+                    <Button variant="link" className="mt-4 text-sm" onClick={clearFilters}>
+                      Clear all filters
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      rightIcon={<Eye className="w-3.5 h-3.5" />}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setModalCandidate(c);
-                      }}
-                    >
-                      Details
-                    </Button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleShortlist(c.candidateId);
-                      }}
-                      className="p-2 rounded-lg border transition-all"
-                      style={{
-                        borderColor: isShortlisted ? 'var(--color-accent)' : 'var(--color-border)',
-                        backgroundColor: isShortlisted ? 'var(--color-accent)' : 'transparent',
-                        color: isShortlisted ? 'white' : 'var(--color-textMuted)',
-                      }}
-                      title={isShortlisted ? 'Remove from shortlist' : 'Add to shortlist'}
-                    >
-                      <Star className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+                  )}
                 </div>
-              );
-            })}
-          </div>
-        )}
-      </div>}
+              ) : (
+                <ul>
+                  {filteredCandidates.map((c, i) => {
+                    const isShortlisted = shortlisted.has(c.candidateId);
+                    const place = [c.location, c.workStyle && c.workStyle.charAt(0).toUpperCase() + c.workStyle.slice(1)].filter(Boolean).join(' · ');
+                    return (
+                      <li
+                        key={c.candidateId}
+                        className="flex flex-col sm:flex-row sm:items-center"
+                        style={{ borderTop: i > 0 ? '1px solid var(--color-border)' : undefined }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setModalCandidate(c)}
+                          className="flex-1 min-w-0 grid grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-[minmax(0,1fr)_11rem_3.5rem] lg:grid-cols-[minmax(0,1fr)_11rem_10rem_3.5rem] items-center gap-4 pl-4 sm:pl-5 pr-4 py-3.5 text-left transition-colors hover:bg-[var(--color-surfaceHover)]"
+                        >
+                          <span className="flex min-w-0 items-center gap-3">
+                            <span className="w-5 flex-shrink-0 text-right text-caption tabular-nums" style={{ color: 'var(--color-textMuted)' }}>
+                              {i + 1}
+                            </span>
+                            <span
+                              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-sm font-medium"
+                              style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-textSecondary)' }}
+                            >
+                              {c.name.charAt(0).toUpperCase()}
+                            </span>
+                            <span className="min-w-0">
+                              <span className="block truncate text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                                {c.name}
+                              </span>
+                              <span className="block truncate text-label font-normal" style={{ color: 'var(--color-textSecondary)' }}>
+                                {c.headline}
+                                <span className="sm:hidden"> · {c.archetype.name}</span>
+                              </span>
+                            </span>
+                          </span>
+                          <span className="hidden sm:block min-w-0">
+                            <span className="block truncate text-sm" style={{ color: 'var(--color-textSecondary)' }}>{c.archetype.name}</span>
+                            {place && (
+                              <span className="block truncate text-caption" style={{ color: 'var(--color-textMuted)' }}>{place}</span>
+                            )}
+                          </span>
+                          <span
+                            className="hidden lg:block text-label font-normal tabular-nums"
+                            style={{ color: 'var(--color-textSecondary)' }}
+                            title={`Trait match ${c.traitScore}%, culture fit ${c.cultureScore}%, work style ${c.workStyleFit}%`}
+                          >
+                            {c.traitScore} · {c.cultureScore} · {c.workStyleFit}
+                          </span>
+                          <span className="text-right text-sm font-semibold tabular-nums" style={{ color: 'var(--color-text)' }}>
+                            {c.overallScore}%
+                          </span>
+                        </button>
+
+                        <div className="flex items-center gap-1 pl-12 pr-4 pb-3 sm:p-0 sm:pr-4">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleInviteChat(c)}
+                          >
+                            Invite to chat
+                          </Button>
+                          <button
+                            onClick={() => toggleShortlist(c.candidateId)}
+                            aria-pressed={isShortlisted}
+                            aria-label={isShortlisted ? 'Remove from shortlist' : 'Add to shortlist'}
+                            title={isShortlisted ? 'Remove from shortlist' : 'Add to shortlist'}
+                            className="p-2 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)]"
+                          >
+                            <Star
+                              className="w-4 h-4"
+                              style={{
+                                color: isShortlisted ? 'var(--color-accent)' : 'var(--color-textMuted)',
+                                fill: isShortlisted ? 'var(--color-accent)' : 'none',
+                              }}
+                            />
+                          </button>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          </section>
+        </>
+      )}
 
       {/* Match Detail Modal */}
       {modalCandidate && (

@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { PipelineCard } from './PipelineCard';
-import { EmberFirefly } from '../ember/EmberFirefly';
 import type { SavedMatch, PipelineTab } from '../../types/matching.types';
 
 interface MatchPipelineProps {
@@ -29,15 +28,15 @@ const employerTabs: { value: PipelineTab; label: string }[] = [
 const emptyMessages: Record<PipelineTab, { title: string; message: string }> = {
   saved: {
     title: 'No saved matches',
-    message: 'Explore your Ember matches to start saving!',
+    message: 'Explore your Ember matches to start saving.',
   },
   pending: {
     title: 'No pending requests',
-    message: 'Send a coffee chat to get started!',
+    message: 'Send a coffee chat to get started.',
   },
   connected: {
     title: 'No connections yet',
-    message: 'Accept a pending request to connect!',
+    message: 'Accept a pending request to connect.',
   },
 };
 
@@ -60,61 +59,56 @@ export function MatchPipeline({
   const empty = emptyMessages[activeTab];
 
   return (
-    <div className="space-y-4">
-      {/* Tab bar */}
-      <div className="flex items-center gap-1 p-1 rounded-xl" style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-        {tabs.map(tab => (
-          <button
-            key={tab.value}
-            onClick={() => onTabChange(tab.value)}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all"
-            style={{
-              backgroundColor: activeTab === tab.value ? 'var(--color-accent)' : 'transparent',
-              color: activeTab === tab.value ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
-            }}
-          >
-            {tab.label}
-            <span
-              className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full min-w-[20px]"
+    <div>
+      <div className="flex items-center gap-1 mb-4 overflow-x-auto scrollbar-hidden border-b" style={{ borderColor: 'var(--color-border)' }}>
+        {tabs.map(tab => {
+          const isActive = activeTab === tab.value;
+          return (
+            <button
+              key={tab.value}
+              onClick={() => onTabChange(tab.value)}
+              aria-pressed={isActive}
+              className="flex-shrink-0 -mb-px flex items-center gap-1.5 px-3 py-2.5 text-sm font-medium border-b-2 transition-colors hover:text-[var(--color-text)]"
               style={{
-                backgroundColor: activeTab === tab.value ? 'color-mix(in srgb, var(--color-accentText) 20%, transparent)' : 'var(--color-background)',
-                color: activeTab === tab.value ? 'var(--color-accentText)' : 'var(--color-textMuted)',
+                borderColor: isActive ? 'var(--color-accent)' : 'transparent',
+                color: isActive ? 'var(--color-text)' : 'var(--color-textSecondary)',
               }}
             >
-              {counts[tab.value]}
-            </span>
-          </button>
-        ))}
+              {tab.label}
+              <span className="font-normal tabular-nums" style={{ color: 'var(--color-textMuted)' }}>
+                {counts[tab.value]}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
-      {/* Cards */}
-      {filteredMatches.length === 0 ? (
-        <div
-          className="text-center py-16 rounded-2xl border"
-          style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
-        >
-          <EmberFirefly size="lg" mood="happy" animated />
-          <h3 className="mt-6 text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
-            {empty.title}
-          </h3>
-          <p className="mt-2 text-sm max-w-sm mx-auto" style={{ color: 'var(--color-textMuted)' }}>
-            {empty.message}
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {filteredMatches.map(match => (
-            <PipelineCard
-              key={match.id}
-              match={match}
-              mode={mode}
-              onViewInEmber={() => onViewInEmber(match.role_id || match.candidate_id || '')}
-              onRemove={() => onRemove(match.id)}
-              onCoffeeChat={() => onCoffeeChat(match)}
-            />
-          ))}
-        </div>
-      )}
+      <div className="bento-card !p-0 overflow-hidden">
+        {filteredMatches.length === 0 ? (
+          <div className="px-5 py-12 text-center">
+            <h3 className="text-heading" style={{ color: 'var(--color-text)' }}>
+              {empty.title}
+            </h3>
+            <p className="mt-2 text-sm max-w-sm mx-auto" style={{ color: 'var(--color-textSecondary)' }}>
+              {empty.message}
+            </p>
+          </div>
+        ) : (
+          <ul>
+            {filteredMatches.map((match, i) => (
+              <li key={match.id} style={{ borderTop: i > 0 ? '1px solid var(--color-border)' : undefined }}>
+                <PipelineCard
+                  match={match}
+                  mode={mode}
+                  onViewInEmber={() => onViewInEmber(match.role_id || match.candidate_id || '')}
+                  onRemove={() => onRemove(match.id)}
+                  onCoffeeChat={() => onCoffeeChat(match)}
+                />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }

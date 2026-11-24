@@ -1,26 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import {
-  Briefcase,
-  Plus,
-  Search,
-  X,
-  MoreVertical,
-  Users,
-  Pause,
-  Play,
-  Trash2,
-  MapPin,
-  Clock,
-  DollarSign,
-} from 'lucide-react';
+import { Plus, Search, X, MoreVertical, Trash2 } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { PageBanner } from '../ui/PageBanner';
+import { Facts } from '../ui/Facts';
 import { CoffeeBrewLoader, useMinLoader } from '../ui/CoffeeBrewLoader';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { supabase } from '../../lib/supabase';
-import { emberFadeUp } from '../../utils/motion';
 
 type RoleStatus = 'active' | 'paused' | 'closed' | 'draft';
 
@@ -177,336 +164,227 @@ export function ManageRoles() {
     totalRoles: roles.length,
   };
 
-  const getStatusStyle = (status: RoleStatus) => {
-    switch (status) {
-      case 'active':
-        return { bg: '#10B98118', border: '#10B98130', color: '#10B981' };
-      case 'paused':
-        return { bg: '#f59e0b18', border: '#f59e0b30', color: '#f59e0b' };
-      case 'closed':
-        return { bg: '#6B728018', border: '#6B728030', color: '#6B7280' };
-      case 'draft':
-        return { bg: '#6B728018', border: '#6B728030', color: '#6B7280' };
-    }
+  // Status is a dot and a word; only the dot carries color
+  const statusDot: Record<RoleStatus, string> = {
+    active: 'var(--color-success)',
+    paused: 'var(--color-warning)',
+    closed: 'var(--color-textMuted)',
+    draft: 'var(--color-textMuted)',
   };
 
   if (showLoader) {
     return <CoffeeBrewLoader variant="fullscreen" />;
   }
 
+  const menuItemClass = 'w-full px-3 py-2 text-left text-sm flex items-center gap-2 hover:bg-[var(--color-surfaceHover)]';
+
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-5">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <PageBanner
+        title="Manage roles"
+        subtitle="Each role sets its own trait ranges"
+        belowSubtitle={
+          <Facts
+            items={[
+              { label: 'Active', value: stats.active },
+              { label: 'Paused', value: stats.paused },
+              { label: 'Applicants', value: stats.totalApplicants },
+              { label: 'Total', value: stats.totalRoles },
+            ]}
+          />
+        }
+        rightContent={
+          <Link to="/app/employer/roles/new">
+            <Button size="sm" leftIcon={<Plus className="w-4 h-4" />}>
+              Create role
+            </Button>
+          </Link>
+        }
+      />
 
-        {/* Header */}
-        <motion.div
-          className="bento-card p-5 sm:p-6"
-          variants={emberFadeUp}
-          initial="hidden"
-          animate="show"
-        >
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-5 flex-1 min-w-[min(100%,18rem)]">
-              <div
-                className="hidden sm:flex w-14 h-14 rounded-xl items-center justify-center flex-shrink-0"
-                style={{ background: 'linear-gradient(135deg, #b45309, #d97706, #f59e0b)' }}
-              >
-                <Briefcase className="w-7 h-7 text-white" />
-              </div>
-              <div className="min-w-0">
-                <h1
-                  className="text-title leading-none"
-                  style={{ color: 'var(--color-text)' }}
-                >
-                  Manage roles
-                </h1>
-                <p
-                  className="text-label mt-2"
-                  style={{ color: 'var(--color-textMuted)' }}
-                >
-                  Each role sets its own trait ranges
-                </p>
-                <div className="flex flex-wrap items-center gap-2.5 mt-3">
-                  {([
-                    { label: 'Active', value: stats.active, color: '#10B981', Icon: Play },
-                    { label: 'Paused', value: stats.paused, color: '#F59E0B', Icon: Pause },
-                    { label: 'Applicants', value: stats.totalApplicants, color: '#8B5CF6', Icon: Users },
-                    { label: 'Total', value: stats.totalRoles, color: '#D97706', Icon: Briefcase },
-                  ] as const).map(stat => (
-                    <span
-                      key={stat.label}
-                      className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full text-[11px] font-semibold"
-                      style={{
-                        background: `linear-gradient(135deg, ${stat.color}18, ${stat.color}08)`,
-                        border: `1px solid ${stat.color}30`,
-                        color: 'var(--color-text)',
-                      }}
-                    >
-                      <span
-                        className="w-6 h-6 rounded-full flex items-center justify-center"
-                        style={{ backgroundColor: `${stat.color}20` }}
-                      >
-                        <stat.Icon className="w-3 h-3" style={{ color: stat.color }} />
-                      </span>
-                      <span className="font-semibold tabular-nums" style={{ color: stat.color }}>{stat.value}</span>
-                      <span style={{ color: 'var(--color-textSecondary)' }}>{stat.label}</span>
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <Link to="/app/employer/roles/new" className="flex-shrink-0">
-              <Button leftIcon={<Plus className="w-4 h-4" />}>
-                Create role
-              </Button>
-            </Link>
-          </div>
-        </motion.div>
-
-        {/* Filters */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
-              style={{ color: 'var(--color-textMuted)' }}
-            />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Search roles..."
-              className="w-full pl-10 pr-8 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30"
-              style={{
-                backgroundColor: 'var(--color-surface)',
-                border: '1px solid var(--color-border)',
-                color: 'var(--color-text)',
-              }}
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2"
-              >
-                <X className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />
-              </button>
-            )}
-          </div>
-          <div className="flex gap-1.5">
-            {(['all', 'active', 'paused', 'closed'] as const).map(status => (
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
+        <div className="relative flex-1">
+          <Search
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4"
+            style={{ color: 'var(--color-textMuted)' }}
+          />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder="Search roles…"
+            className="w-full pl-10 pr-8 py-2 rounded-lg text-sm focus:outline-none focus:border-[var(--color-accent)] border border-[var(--color-border)]"
+            style={{
+              backgroundColor: 'var(--color-surface)',
+              color: 'var(--color-text)',
+            }}
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              aria-label="Clear search"
+              className="absolute right-3 top-1/2 -translate-y-1/2"
+            >
+              <X className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />
+            </button>
+          )}
+        </div>
+        <div className="flex gap-1 overflow-x-auto scrollbar-hidden">
+          {(['all', 'active', 'paused', 'closed'] as const).map(status => {
+            const isActive = statusFilter === status;
+            return (
               <button
                 key={status}
                 onClick={() => setStatusFilter(status)}
-                className="px-3 py-2 rounded-lg text-xs font-medium transition-all"
+                aria-pressed={isActive}
+                className="px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors hover:text-[var(--color-text)]"
                 style={{
-                  backgroundColor: statusFilter === status ? 'var(--color-accent)' : 'var(--color-surface)',
-                  border: `1px solid ${statusFilter === status ? 'var(--color-accent)' : 'var(--color-border)'}`,
-                  color: statusFilter === status ? 'white' : 'var(--color-textSecondary)',
+                  backgroundColor: isActive ? 'var(--color-surfaceHover)' : 'transparent',
+                  color: isActive ? 'var(--color-text)' : 'var(--color-textSecondary)',
                 }}
               >
                 {status === 'all' ? 'All' : enumLabel(status)}
               </button>
-            ))}
-          </div>
+            );
+          })}
         </div>
+      </div>
 
-        {/* Roles List */}
-        <div className="space-y-3">
-          {filteredRoles.length === 0 ? (
-            <div className="bento-card text-center py-12">
-              <Briefcase
-                className="w-12 h-12 mx-auto mb-4 opacity-40"
-                style={{ color: 'var(--color-textMuted)' }}
-              />
-              <p
-                className="text-base font-semibold tracking-tight mb-1"
-                style={{ color: 'var(--color-text)' }}
-              >
-                {searchQuery || statusFilter !== 'all'
-                  ? 'No roles match your filters'
-                  : 'No roles yet'}
-              </p>
-              <p className="text-xs mb-4" style={{ color: 'var(--color-textMuted)' }}>
-                {searchQuery || statusFilter !== 'all'
-                  ? 'Try adjusting your search or filter'
-                  : 'Create your first role to start matching candidates'}
-              </p>
-              {!searchQuery && statusFilter === 'all' && (
-                <Link to="/app/employer/roles/new" className="inline-block">
-                  <Button size="sm" leftIcon={<Plus className="w-3.5 h-3.5" />}>Create your first role</Button>
-                </Link>
-              )}
-            </div>
-          ) : (
-            filteredRoles.map((role, i) => {
-              const statusStyle = getStatusStyle(role.status);
+      {/* Roles: one card, divided rows */}
+      <div className="bento-card !p-0">
+        {filteredRoles.length === 0 ? (
+          <div className="px-5 py-12 text-center">
+            <p className="text-heading mb-1" style={{ color: 'var(--color-text)' }}>
+              {searchQuery || statusFilter !== 'all'
+                ? 'No roles match your filters'
+                : 'No roles yet'}
+            </p>
+            <p className="text-sm mb-4" style={{ color: 'var(--color-textSecondary)' }}>
+              {searchQuery || statusFilter !== 'all'
+                ? 'Try adjusting your search or filter'
+                : 'Create your first role to start matching candidates'}
+            </p>
+            {!searchQuery && statusFilter === 'all' && (
+              <Link to="/app/employer/roles/new" className="inline-block">
+                <Button size="sm" leftIcon={<Plus className="w-3.5 h-3.5" />}>Create your first role</Button>
+              </Link>
+            )}
+          </div>
+        ) : (
+          <ul>
+            {filteredRoles.map((role, i) => {
+              const meta = [
+                role.work_style && enumLabel(role.work_style),
+                role.location,
+                role.employment_type && enumLabel(role.employment_type),
+                role.salary_min && role.salary_max
+                  ? `$${(role.salary_min / 1000).toFixed(0)}k – $${(role.salary_max / 1000).toFixed(0)}k`
+                  : null,
+              ].filter(Boolean).join(' · ');
               return (
-                <motion.div
+                <li
                   key={role.id}
-                  className="bento-card transition-all hover:shadow-md"
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35, delay: Math.min(i * 0.04, 0.3) }}
+                  className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 px-4 sm:px-5 py-4"
+                  style={{ borderTop: i > 0 ? '1px solid var(--color-border)' : undefined }}
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-1.5">
-                        <h3
-                          className="text-base font-semibold tracking-tight"
-                          style={{ color: 'var(--color-text)' }}
-                        >
-                          {role.title}
-                        </h3>
-                        <span
-                          className="px-2 py-0.5 rounded-full text-[10px] font-semibold"
-                          style={{
-                            background: `linear-gradient(135deg, ${statusStyle.bg}, transparent)`,
-                            border: `1px solid ${statusStyle.border}`,
-                            color: statusStyle.color,
-                          }}
-                        >
-                          {enumLabel(role.status)}
-                        </span>
-                      </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+                      {role.title}
+                    </h3>
+                    {meta && (
+                      <p className="text-label font-normal mt-0.5" style={{ color: 'var(--color-textSecondary)' }}>
+                        {meta}
+                      </p>
+                    )}
+                    <p className="text-caption mt-1" style={{ color: 'var(--color-textMuted)' }}>
+                      Created {new Date(role.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </p>
+                  </div>
 
-                      {/* Meta pills */}
-                      <div className="flex flex-wrap items-center gap-2 mb-3">
-                        {role.location && (
-                          <span
-                            className="inline-flex items-center gap-1 text-[11px]"
-                            style={{ color: 'var(--color-textMuted)' }}
+                  <div className="flex items-center gap-4 sm:gap-5 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+                    <span className="flex items-center gap-2 sm:w-20">
+                      <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full" style={{ backgroundColor: statusDot[role.status] }} />
+                      {enumLabel(role.status)}
+                    </span>
+                    <span className="tabular-nums sm:w-24">
+                      {role.applicant_count} applicant{role.applicant_count !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <Link to="/app/employer/top-candidates">
+                      <Button variant="outline" size="sm">
+                        View candidates
+                      </Button>
+                    </Link>
+
+                    <div className="relative">
+                      <button
+                        onClick={() => setOpenMenu(openMenu === role.id ? null : role.id)}
+                        aria-label={`Options for ${role.title}`}
+                        className="p-2 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)]"
+                        style={{ color: 'var(--color-textMuted)' }}
+                      >
+                        <MoreVertical className="w-4 h-4" />
+                      </button>
+
+                      {openMenu === role.id && (
+                        <>
+                          <div
+                            className="fixed inset-0 z-10"
+                            onClick={() => setOpenMenu(null)}
+                          />
+                          <div
+                            className="absolute right-0 top-full mt-1 w-44 py-1 rounded-lg shadow-lg z-20"
+                            style={{
+                              backgroundColor: 'var(--color-surface)',
+                              border: '1px solid var(--color-border)',
+                            }}
                           >
-                            <MapPin className="w-3 h-3" />
-                            {role.work_style && `${enumLabel(role.work_style)} · `}{role.location}
-                          </span>
-                        )}
-                        {role.employment_type && (
-                          <span
-                            className="inline-flex items-center gap-1 text-[11px]"
-                            style={{ color: 'var(--color-textMuted)' }}
-                          >
-                            <Clock className="w-3 h-3" />
-                            {enumLabel(role.employment_type)}
-                          </span>
-                        )}
-                        {role.salary_min && role.salary_max && (
-                          <span
-                            className="inline-flex items-center gap-1 text-[11px]"
-                            style={{ color: 'var(--color-textMuted)' }}
-                          >
-                            <DollarSign className="w-3 h-3" />
-                            ${(role.salary_min / 1000).toFixed(0)}k – ${(role.salary_max / 1000).toFixed(0)}k
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                        <span
-                          className="inline-flex items-center gap-1.5 text-xs font-medium"
-                          style={{ color: 'var(--color-textSecondary)' }}
-                        >
-                          <Users className="w-3.5 h-3.5" style={{ color: 'var(--color-accent)' }} />
-                          {role.applicant_count} applicant{role.applicant_count !== 1 ? 's' : ''}
-                        </span>
-                        <span
-                          className="text-[10px]"
-                          style={{ color: 'var(--color-textMuted)' }}
-                        >
-                          Created {new Date(role.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 flex-shrink-0">
-                      <Link to="/app/employer/top-candidates">
-                        <Button variant="outline" size="sm">
-                          View candidates
-                        </Button>
-                      </Link>
-
-                      <div className="relative">
-                        <button
-                          onClick={() => setOpenMenu(openMenu === role.id ? null : role.id)}
-                          className="p-2 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)]"
-                          style={{ color: 'var(--color-textMuted)' }}
-                        >
-                          <MoreVertical className="w-4 h-4" />
-                        </button>
-
-                        {openMenu === role.id && (
-                          <>
-                            <div
-                              className="fixed inset-0 z-10"
-                              onClick={() => setOpenMenu(null)}
-                            />
-                            <div
-                              className="absolute right-0 top-full mt-1 w-44 py-1 rounded-xl shadow-lg z-20"
-                              style={{
-                                backgroundColor: 'var(--color-surface)',
-                                border: '1px solid var(--color-border)',
-                              }}
-                            >
-                              {role.status === 'active' ? (
-                                <button
-                                  onClick={() => handleStatusChange(role.id, 'paused')}
-                                  className="w-full px-3 py-2 text-left text-xs font-medium flex items-center gap-2 hover:bg-[var(--color-surfaceHover)]"
-                                  style={{ color: '#f59e0b' }}
-                                >
-                                  <Pause className="w-3.5 h-3.5" />
-                                  Pause role
-                                </button>
-                              ) : role.status === 'paused' ? (
-                                <button
-                                  onClick={() => handleStatusChange(role.id, 'active')}
-                                  className="w-full px-3 py-2 text-left text-xs font-medium flex items-center gap-2 hover:bg-[var(--color-surfaceHover)]"
-                                  style={{ color: '#10B981' }}
-                                >
-                                  <Play className="w-3.5 h-3.5" />
-                                  Activate role
-                                </button>
-                              ) : null}
-                              {role.status !== 'closed' && (
-                                <button
-                                  onClick={() => handleStatusChange(role.id, 'closed')}
-                                  className="w-full px-3 py-2 text-left text-xs font-medium flex items-center gap-2 hover:bg-[var(--color-surfaceHover)]"
-                                  style={{ color: 'var(--color-textMuted)' }}
-                                >
-                                  <Pause className="w-3.5 h-3.5" />
-                                  Close role
-                                </button>
-                              )}
+                            {role.status === 'active' ? (
                               <button
-                                onClick={() => handleDelete(role.id)}
-                                className="w-full px-3 py-2 text-left text-xs font-medium flex items-center gap-2 hover:bg-[var(--color-surfaceHover)]"
-                                style={{ color: '#ef4444' }}
+                                onClick={() => handleStatusChange(role.id, 'paused')}
+                                className={menuItemClass}
+                                style={{ color: 'var(--color-text)' }}
                               >
-                                <Trash2 className="w-3.5 h-3.5" />
-                                Delete role
+                                Pause role
                               </button>
-                            </div>
-                          </>
-                        )}
-                      </div>
+                            ) : role.status === 'paused' ? (
+                              <button
+                                onClick={() => handleStatusChange(role.id, 'active')}
+                                className={menuItemClass}
+                                style={{ color: 'var(--color-text)' }}
+                              >
+                                Activate role
+                              </button>
+                            ) : null}
+                            {role.status !== 'closed' && (
+                              <button
+                                onClick={() => handleStatusChange(role.id, 'closed')}
+                                className={menuItemClass}
+                                style={{ color: 'var(--color-text)' }}
+                              >
+                                Close role
+                              </button>
+                            )}
+                            <button
+                              onClick={() => handleDelete(role.id)}
+                              className={menuItemClass}
+                              style={{ color: 'var(--color-error)' }}
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              Delete role
+                            </button>
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
-                </motion.div>
+                </li>
               );
-            })
-          )}
-        </div>
-
-        {/* Create Role CTA */}
-        {filteredRoles.length > 0 && (
-          <Link
-            to="/app/employer/roles/new"
-            className="flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-dashed transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-surface)]"
-            style={{
-              borderColor: 'var(--color-border)',
-              color: 'var(--color-textMuted)',
-            }}
-          >
-            <Plus className="w-4 h-4" />
-            <span className="text-xs font-medium">Create another role</span>
-          </Link>
+            })}
+          </ul>
         )}
       </div>
     </div>

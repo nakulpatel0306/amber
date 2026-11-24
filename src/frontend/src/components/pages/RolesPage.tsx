@@ -1,14 +1,12 @@
 import { useState, useEffect, useMemo } from 'react';
-import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import {
-  Briefcase, Search, X, MapPin, DollarSign, Building2, Globe,
-  ExternalLink, Coffee, Sparkles,
-} from 'lucide-react';
+import { Search, X, ExternalLink } from 'lucide-react';
 import { CoffeeBrewLoader, useMinLoader } from '../ui/CoffeeBrewLoader';
+import { PageBanner } from '../ui/PageBanner';
+import { Facts } from '../ui/Facts';
+import { Button } from '../ui/Button';
 import { supabase } from '../../lib/supabase';
-import { emberFadeUp } from '../../utils/motion';
-import { avatarGradient, formatSalary } from '../../utils/matchHelpers';
+import { formatSalary } from '../../utils/matchHelpers';
 
 interface RoleRow {
   id: string;
@@ -49,23 +47,23 @@ function enumLabel(str: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
-const traitMeta: { minField: keyof RoleRow; maxField: keyof RoleRow; highLabel: string; lowLabel: string; color: string }[] = [
-  { minField: 'required_openness_min', maxField: 'required_openness_max', highLabel: 'Creative', lowLabel: 'Practical', color: '#8b5cf6' },
-  { minField: 'required_conscientiousness_min', maxField: 'required_conscientiousness_max', highLabel: 'Detail-oriented', lowLabel: 'Flexible', color: '#06b6d4' },
-  { minField: 'required_extraversion_min', maxField: 'required_extraversion_max', highLabel: 'Collaborative', lowLabel: 'Independent', color: '#f59e0b' },
-  { minField: 'required_agreeableness_min', maxField: 'required_agreeableness_max', highLabel: 'Team player', lowLabel: 'Assertive', color: '#10b981' },
-  { minField: 'required_neuroticism_min', maxField: 'required_neuroticism_max', highLabel: 'Passionate', lowLabel: 'Calm & steady', color: '#ef4444' },
+const traitMeta: { minField: keyof RoleRow; maxField: keyof RoleRow; highLabel: string; lowLabel: string }[] = [
+  { minField: 'required_openness_min', maxField: 'required_openness_max', highLabel: 'Creative', lowLabel: 'Practical' },
+  { minField: 'required_conscientiousness_min', maxField: 'required_conscientiousness_max', highLabel: 'Detail-oriented', lowLabel: 'Flexible' },
+  { minField: 'required_extraversion_min', maxField: 'required_extraversion_max', highLabel: 'Collaborative', lowLabel: 'Independent' },
+  { minField: 'required_agreeableness_min', maxField: 'required_agreeableness_max', highLabel: 'Team player', lowLabel: 'Assertive' },
+  { minField: 'required_neuroticism_min', maxField: 'required_neuroticism_max', highLabel: 'Passionate', lowLabel: 'Calm & steady' },
 ];
 
-function getTraitHighlights(role: RoleRow): { label: string; color: string }[] {
-  const highlights: { label: string; avg: number; color: string }[] = [];
+function getTraitHighlights(role: RoleRow): { label: string }[] {
+  const highlights: { label: string; avg: number }[] = [];
   for (const t of traitMeta) {
     const min = role[t.minField] as number | null;
     const max = role[t.maxField] as number | null;
     if (min == null || max == null) continue;
     const avg = (min + max) / 2;
-    if (avg >= 65) highlights.push({ label: t.highLabel, avg, color: t.color });
-    else if (avg <= 35) highlights.push({ label: t.lowLabel, avg, color: t.color });
+    if (avg >= 65) highlights.push({ label: t.highLabel, avg });
+    else if (avg <= 35) highlights.push({ label: t.lowLabel, avg });
   }
   highlights.sort((a, b) => Math.abs(b.avg - 50) - Math.abs(a.avg - 50));
   return highlights.slice(0, 2);
@@ -78,7 +76,7 @@ export function RolesPage() {
   const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null);
   const [selectedWorkStyle, setSelectedWorkStyle] = useState<string | null>(null);
   const [selectedCompanyId, setSelectedCompanyId] = useState<string | null>(null);
-  const [flippedCardId, setFlippedCardId] = useState<string | null>(null);
+  const [openRoleId, setOpenRoleId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const showLoader = useMinLoader(isLoading, 1500);
@@ -162,68 +160,28 @@ export function RolesPage() {
 
   const hasActiveFilters = !!(selectedIndustry || selectedWorkStyle || selectedCompanyId);
 
-  if (showLoader) return <CoffeeBrewLoader variant="fullscreen" message="Loading roles..." />;
+  if (showLoader) return <CoffeeBrewLoader variant="fullscreen" message="Loading roles…" />;
+
+  const selectClass = 'flex-1 sm:flex-none min-w-0 px-3 py-2 rounded-lg text-sm cursor-pointer border border-[var(--color-border)] focus:outline-none focus:border-[var(--color-accent)]';
+  const selectStyle = { backgroundColor: 'var(--color-surface)', color: 'var(--color-textSecondary)' };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-5">
-      {/* Header */}
-      <motion.div
-        className="bento-card p-6"
-        variants={emberFadeUp}
-        initial="hidden"
-        animate="show"
-      >
-        <div className="flex items-center gap-5">
-          <div
-            className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: 'linear-gradient(135deg, #b45309, #d97706, #f59e0b)' }}
-          >
-            <Briefcase className="w-5 h-5 text-white" />
-          </div>
-          <div className="min-w-0">
-            <h1
-              className="text-2xl font-semibold tracking-tight"
-              style={{ color: 'var(--color-text)' }}
-            >
-              Available roles
-            </h1>
-            <p
-              className="text-label mt-1"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Browse all open positions
-            </p>
-            <div className="flex flex-wrap items-center gap-2.5 mt-3">
-              {([
-                { label: 'Active roles', value: roles.length, color: '#10B981', Icon: Briefcase },
-                { label: 'Companies', value: uniqueCompanies, color: '#8B5CF6', Icon: Building2 },
-                { label: 'Industries', value: industries.length, color: '#D97706', Icon: Globe },
-              ] as const).map(stat => (
-                <span
-                  key={stat.label}
-                  className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full text-[11px] font-semibold"
-                  style={{
-                    background: `linear-gradient(135deg, ${stat.color}18, ${stat.color}08)`,
-                    border: `1px solid ${stat.color}30`,
-                    color: 'var(--color-text)',
-                  }}
-                >
-                  <span
-                    className="w-6 h-6 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: `${stat.color}20` }}
-                  >
-                    <stat.Icon className="w-3 h-3" style={{ color: stat.color }} />
-                  </span>
-                  <span className="font-semibold tabular-nums" style={{ color: stat.color }}>{stat.value}</span>
-                  <span style={{ color: 'var(--color-textSecondary)' }}>{stat.label}</span>
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </motion.div>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <PageBanner
+        title="Available roles"
+        subtitle="Browse all open positions"
+        belowSubtitle={
+          <Facts
+            items={[
+              { label: 'Active roles', value: roles.length },
+              { label: 'Companies', value: uniqueCompanies },
+              { label: 'Industries', value: industries.length },
+            ]}
+          />
+        }
+      />
 
-      {/* Search + Filters */}
+      {/* Search + filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search
@@ -234,17 +192,14 @@ export function RolesPage() {
             type="text"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            placeholder="Search roles, companies, locations..."
-            className="w-full pl-10 pr-8 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30"
-            style={{
-              backgroundColor: 'var(--color-surface)',
-              border: '1px solid var(--color-border)',
-              color: 'var(--color-text)',
-            }}
+            placeholder="Search roles, companies, locations…"
+            className="w-full pl-10 pr-8 py-2 rounded-lg text-sm border border-[var(--color-border)] focus:outline-none focus:border-[var(--color-accent)]"
+            style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
+              aria-label="Clear search"
               className="absolute right-3 top-1/2 -translate-y-1/2"
             >
               <X className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />
@@ -256,8 +211,9 @@ export function RolesPage() {
             <select
               value={selectedIndustry || ''}
               onChange={e => setSelectedIndustry(e.target.value || null)}
-              className="px-3 py-2.5 rounded-xl text-xs font-medium appearance-none cursor-pointer"
-              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textSecondary)', border: '1px solid var(--color-border)' }}
+              aria-label="Industry"
+              className={selectClass}
+              style={selectStyle}
             >
               <option value="">All industries</option>
               {industries.map(i => <option key={i} value={i}>{i}</option>)}
@@ -266,8 +222,9 @@ export function RolesPage() {
           <select
             value={selectedWorkStyle || ''}
             onChange={e => setSelectedWorkStyle(e.target.value || null)}
-            className="px-3 py-2.5 rounded-xl text-xs font-medium appearance-none cursor-pointer"
-            style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textSecondary)', border: '1px solid var(--color-border)' }}
+            aria-label="Work style"
+            className={selectClass}
+            style={selectStyle}
           >
             <option value="">All work styles</option>
             <option value="remote">Remote</option>
@@ -278,8 +235,9 @@ export function RolesPage() {
             <select
               value={selectedCompanyId || ''}
               onChange={e => setSelectedCompanyId(e.target.value || null)}
-              className="px-3 py-2.5 rounded-xl text-xs font-medium appearance-none cursor-pointer"
-              style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textSecondary)', border: '1px solid var(--color-border)' }}
+              aria-label="Company"
+              className={selectClass}
+              style={selectStyle}
             >
               <option value="">All companies</option>
               {companies.map(([id, name]) => <option key={id} value={id}>{name}</option>)}
@@ -289,250 +247,130 @@ export function RolesPage() {
       </div>
 
       {/* Results count + clear */}
-      <div className="flex items-center justify-between">
-        <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
-          {filteredRoles.length} Role{filteredRoles.length !== 1 ? 's' : ''}
-        </p>
+      <div className="mt-8 mb-3 flex items-center justify-between gap-2">
+        <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>
+          {filteredRoles.length} role{filteredRoles.length !== 1 ? 's' : ''}
+        </h2>
         {hasActiveFilters && (
-          <button
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => { setSelectedIndustry(null); setSelectedWorkStyle(null); setSelectedCompanyId(null); }}
-            className="text-xs font-medium"
-            style={{ color: 'var(--color-accent)' }}
           >
             Clear filters
-          </button>
+          </Button>
         )}
       </div>
 
-      {/* Role Cards */}
-      {filteredRoles.length === 0 ? (
-        <div
-          className="py-16 text-center rounded-xl border"
-          style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
-        >
-          <Briefcase className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--color-textMuted)' }} />
-          <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-text)' }}>
-            {roles.length === 0 ? 'No active roles yet' : 'No roles match your filters'}
-          </p>
-          <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
-            {roles.length === 0 ? 'Check back soon for new opportunities' : 'Try adjusting your filters'}
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredRoles.map((role, i) => {
-            const emp = role.employers;
-            const salary = formatSalary(role.salary_min, role.salary_max);
-            const traits = getTraitHighlights(role);
-            const isFlipped = flippedCardId === role.id;
-            return (
-              <motion.div
-                key={role.id}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: Math.min(i * 0.04, 0.3) }}
-                className="relative cursor-pointer"
-                style={{ perspective: '1000px', height: '280px' }}
-                onClick={() => setFlippedCardId(isFlipped ? null : role.id)}
-              >
-                <motion.div
-                  animate={{ rotateY: isFlipped ? 180 : 0 }}
-                  transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-                  style={{ transformStyle: 'preserve-3d', position: 'relative', width: '100%', height: '100%' }}
-                >
-                  {/* ====== FRONT ====== */}
-                  <div
-                    className="p-5 rounded-2xl border transition-all hover:border-[var(--color-borderHover)] hover:shadow-lg absolute inset-0 flex flex-col"
-                    style={{
-                      backgroundColor: 'var(--color-surface)',
-                      borderColor: 'var(--color-border)',
-                      backfaceVisibility: 'hidden',
-                    }}
+      {/* Roles: one card, divided rows; a row opens in place to show the details and actions */}
+      <div className="bento-card !p-0 overflow-hidden">
+        {filteredRoles.length === 0 ? (
+          <div className="px-5 py-12 text-center">
+            <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-text)' }}>
+              {roles.length === 0 ? 'No active roles yet' : 'No roles match your filters'}
+            </p>
+            <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+              {roles.length === 0 ? 'Check back soon for new opportunities' : 'Try adjusting your filters'}
+            </p>
+          </div>
+        ) : (
+          <ul>
+            {filteredRoles.map((role, i) => {
+              const emp = role.employers;
+              const salary = formatSalary(role.salary_min, role.salary_max);
+              const traits = getTraitHighlights(role);
+              const isOpen = openRoleId === role.id;
+              const place = [role.location, role.work_style && enumLabel(role.work_style)].filter(Boolean).join(' · ');
+              return (
+                <li key={role.id} style={{ borderTop: i > 0 ? '1px solid var(--color-border)' : undefined }}>
+                  <button
+                    type="button"
+                    onClick={() => setOpenRoleId(isOpen ? null : role.id)}
+                    aria-expanded={isOpen}
+                    className="grid w-full grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-[minmax(0,1fr)_12rem_8rem] items-center gap-4 px-4 sm:px-5 py-3.5 text-left transition-colors hover:bg-[var(--color-surfaceHover)]"
                   >
-                    {/* Company logo + name + hiring manager */}
-                    <div className="flex items-center gap-3 mb-3">
-                      <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                        style={{ background: emp.company_logo_url ? 'white' : avatarGradient(emp.company_name) }}
-                      >
-                        {emp.company_logo_url ? (
-                          <img src={emp.company_logo_url} alt={emp.company_name} className="w-full h-full rounded-xl object-contain" style={{ backgroundColor: 'white' }} />
-                        ) : (
-                          <span className="text-base font-semibold text-white">{emp.company_name.charAt(0)}</span>
-                        )}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>{emp.company_name}</p>
-                        <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
-                          {role._hiringName ? `${role._hiringName} is hiring` : emp.industry || 'Hiring'}
+                    <span className="flex min-w-0 items-center gap-3">
+                      {emp.company_logo_url ? (
+                        <img
+                          src={emp.company_logo_url}
+                          alt=""
+                          className="h-9 w-9 flex-shrink-0 rounded-lg object-contain"
+                          style={{ backgroundColor: '#fff' }}
+                        />
+                      ) : (
+                        <span
+                          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-sm font-medium"
+                          style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-textSecondary)' }}
+                        >
+                          {emp.company_name.charAt(0)}
+                        </span>
+                      )}
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                          {role.title}
+                        </span>
+                        <span className="block truncate text-label font-normal" style={{ color: 'var(--color-textSecondary)' }}>
+                          {emp.company_name}
+                          {role._hiringName ? ` · ${role._hiringName} is hiring` : emp.industry ? ` · ${emp.industry}` : ''}
+                        </span>
+                      </span>
+                    </span>
+                    <span className="hidden sm:block truncate text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+                      {place}
+                    </span>
+                    <span className="text-right text-sm font-medium tabular-nums" style={{ color: salary !== 'Not specified' ? 'var(--color-text)' : 'var(--color-textMuted)' }}>
+                      {salary !== 'Not specified' ? salary : '—'}
+                    </span>
+                  </button>
+
+                  {isOpen && (
+                    <div className="px-4 sm:px-5 pb-5 sm:pl-[4.25rem] animate-fade-in">
+                      {role.description && (
+                        <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+                          {role.description}
                         </p>
-                      </div>
-                    </div>
-
-                    {/* Role title — big */}
-                    <h3 className="font-semibold text-lg leading-snug mb-1.5" style={{ color: 'var(--color-text)' }}>{role.title}</h3>
-
-                    {/* Description */}
-                    {role.description && (
-                      <p className="text-xs line-clamp-2 leading-relaxed mb-auto" style={{ color: 'var(--color-textMuted)' }}>
-                        {role.description}
-                      </p>
-                    )}
-
-                    {/* Meta row */}
-                    <div className="flex flex-wrap items-center gap-3 text-caption font-medium mt-3 mb-3" style={{ color: 'var(--color-textMuted)' }}>
-                      {salary !== 'Not specified' && (
-                        <span className="flex items-center gap-1 font-semibold" style={{ color: 'var(--color-text)' }}>
-                          <DollarSign className="w-3.5 h-3.5" style={{ color: 'var(--color-accent)' }} />
-                          {salary}
-                        </span>
                       )}
-                      {role.location && (
-                        <span className="flex items-center gap-1">
-                          <MapPin className="w-3.5 h-3.5" />
-                          {role.location.toUpperCase()}
-                        </span>
-                      )}
-                      {role.work_style && (
-                        <span>{role.work_style.toUpperCase()}</span>
-                      )}
-                    </div>
-
-                    {/* Bottom: industry pill + trait pills */}
-                    <div className="pt-3 border-t flex flex-wrap items-center gap-2" style={{ borderColor: 'var(--color-border)' }}>
-                      {emp.industry && (
-                        <span
-                          className="text-xs px-2.5 py-1 rounded-full font-medium"
-                          style={{ backgroundColor: 'rgba(217, 119, 6, 0.08)', color: '#d97706' }}
-                        >
-                          {emp.industry}
-                        </span>
-                      )}
-                      {traits.map(t => (
-                        <span
-                          key={t.label}
-                          className="text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1"
-                          style={{ backgroundColor: `${t.color}12`, color: t.color }}
-                        >
-                          <Sparkles className="w-3 h-3" />
-                          {t.label}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* ====== BACK ====== */}
-                  <div
-                    className="p-5 rounded-2xl border absolute inset-0 flex flex-col justify-between"
-                    style={{
-                      backgroundColor: 'var(--color-surface)',
-                      borderColor: 'var(--color-accent)',
-                      backfaceVisibility: 'hidden',
-                      transform: 'rotateY(180deg)',
-                    }}
-                  >
-                    <div>
-                      {/* Header */}
-                      <div className="flex items-center gap-3 mb-4">
-                        <div
-                          className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-                          style={{ background: emp.company_logo_url ? 'white' : avatarGradient(emp.company_name) }}
-                        >
-                          {emp.company_logo_url ? (
-                            <img src={emp.company_logo_url} alt={emp.company_name} className="w-full h-full rounded-xl object-contain" style={{ backgroundColor: 'white' }} />
-                          ) : (
-                            <span className="text-sm font-semibold text-white">{emp.company_name.charAt(0)}</span>
-                          )}
-                        </div>
-                        <div className="min-w-0">
-                          <h3 className="font-semibold text-base line-clamp-1" style={{ color: 'var(--color-text)' }}>{role.title}</h3>
-                          <p className="text-xs" style={{ color: 'var(--color-textSecondary)' }}>
-                            {role._hiringName ? `${role._hiringName} at ${emp.company_name}` : `Hiring at ${emp.company_name}`}
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Details grid */}
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-2.5 text-caption font-medium mb-4">
-                        {role.location && (
-                          <div className="flex items-center gap-1.5" style={{ color: 'var(--color-textMuted)' }}>
-                            <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
-                            <span className="truncate" style={{ color: 'var(--color-text)' }}>{role.location.toUpperCase()}</span>
-                          </div>
-                        )}
-                        {salary !== 'Not specified' && (
-                          <div className="flex items-center gap-1.5" style={{ color: 'var(--color-textMuted)' }}>
-                            <DollarSign className="w-3.5 h-3.5 flex-shrink-0" />
-                            <span className="truncate" style={{ color: 'var(--color-text)' }}>{salary}</span>
-                          </div>
-                        )}
-                        {emp.company_size && (
-                          <div className="flex items-center gap-1.5" style={{ color: 'var(--color-textMuted)' }}>
-                            <Building2 className="w-3.5 h-3.5 flex-shrink-0" />
-                            <span className="truncate" style={{ color: 'var(--color-text)' }}>{emp.company_size} employees</span>
-                          </div>
-                        )}
-                        {role.employment_type && (
-                          <div className="flex items-center gap-1.5" style={{ color: 'var(--color-textMuted)' }}>
-                            <Briefcase className="w-3.5 h-3.5 flex-shrink-0" />
-                            <span className="truncate" style={{ color: 'var(--color-text)' }}>{enumLabel(role.employment_type)}</span>
-                          </div>
+                      <dl className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 text-sm">
+                        {place && <Detail label="Location" value={place} />}
+                        {role.employment_type && <Detail label="Type" value={enumLabel(role.employment_type)} />}
+                        {emp.company_size && <Detail label="Company size" value={`${emp.company_size} employees`} />}
+                        {emp.industry && <Detail label="Industry" value={emp.industry} />}
+                        {traits.length > 0 && <Detail label="Ideal personality" value={traits.map(t => t.label).join(', ')} />}
+                      </dl>
+                      <div className="mt-4 flex flex-wrap items-center gap-2">
+                        <Button size="sm" onClick={() => navigate(`/app/ember?deepdive=${emp.id}`)}>
+                          {role._hiringName ? `Connect with ${role._hiringName.split(' ')[0]}` : 'Connect'}
+                        </Button>
+                        {emp.company_website && (
+                          <a
+                            href={emp.company_website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 py-1 text-label transition-colors hover:bg-[var(--color-surfaceHover)]"
+                            style={{ color: 'var(--color-textSecondary)' }}
+                          >
+                            Company website
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
                         )}
                       </div>
-
-                      {/* Personality fit */}
-                      {traits.length > 0 && (
-                        <div>
-                          <p className="text-caption font-medium mb-2" style={{ color: 'var(--color-textMuted)' }}>
-                            Ideal personality
-                          </p>
-                          <div className="flex flex-wrap gap-1.5">
-                            {traits.map(t => (
-                              <span
-                                key={t.label}
-                                className="text-xs px-2.5 py-1 rounded-full font-medium flex items-center gap-1"
-                                style={{ backgroundColor: `${t.color}12`, color: t.color }}
-                              >
-                                <Sparkles className="w-3 h-3" />
-                                {t.label}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}
 
-                    {/* Actions */}
-                    <div className="flex gap-2.5 pt-3 border-t" style={{ borderColor: 'var(--color-border)' }}>
-                      <button
-                        onClick={e => { e.stopPropagation(); navigate(`/app/ember?deepdive=${emp.id}`); }}
-                        className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold transition-all hover:opacity-90"
-                        style={{ background: 'linear-gradient(135deg, #b45309, #d97706)', color: 'white' }}
-                      >
-                        <Coffee className="w-4 h-4" />
-                        {role._hiringName ? `Connect with ${role._hiringName.split(' ')[0]}` : 'Connect'}
-                      </button>
-                      {emp.company_website && (
-                        <a
-                          href={emp.company_website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={e => e.stopPropagation()}
-                          className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-medium transition-colors hover:opacity-80"
-                          style={{ backgroundColor: 'rgba(217, 119, 6, 0.08)', color: 'var(--color-accent)' }}
-                        >
-                          <Globe className="w-3.5 h-3.5" />
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              </motion.div>
-            );
-          })}
-        </div>
-      )}
+function Detail({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-baseline gap-2 min-w-0">
+      <dt className="flex-shrink-0" style={{ color: 'var(--color-textMuted)' }}>{label}</dt>
+      <dd className="min-w-0" style={{ color: 'var(--color-text)' }}>{value}</dd>
     </div>
   );
 }

@@ -1,26 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  X,
-  Coffee,
-  Sparkles,
-  Bookmark,
-  BookmarkCheck,
-  Brain,
-  Heart,
-  Briefcase,
-  MessageSquare,
-  TrendingUp,
-  TrendingDown,
-  Minus,
-  Shield,
-  Lightbulb,
-  Zap,
-  Target,
-} from 'lucide-react';
+import { X, Bookmark, BookmarkCheck, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { Button } from '../ui/Button';
-import { EmberFirefly } from '../ember/EmberFirefly';
-import { cn } from '../../utils/cn';
 import { apiFetch } from '../../utils/api';
 
 /* ------------------------------------------------------------------ */
@@ -47,7 +28,7 @@ export interface MatchDetailData {
   id: string;
   name: string;
   subtitle?: string;
-  archetype?: { name: string; key: string; description?: string };
+  archetype?: { name: string; key: string; description?: string; strengths?: string[] };
   overallScore: number;
   traitScore: number;
   cultureScore: number;
@@ -75,103 +56,28 @@ export interface MatchDetailModalProps {
 /*  Helpers                                                            */
 /* ------------------------------------------------------------------ */
 
-function scoreColor(score: number): string {
-  if (score >= 85) return 'var(--color-success)';
-  if (score >= 70) return 'var(--color-accent)';
-  if (score >= 55) return 'var(--color-warning)';
-  return 'var(--color-textMuted)';
-}
-
-function categoryIcon(category: string) {
-  const lower = category.toLowerCase();
-  if (lower.includes('trait') || lower.includes('personality')) return <Brain className="w-4 h-4" />;
-  if (lower.includes('culture') || lower.includes('value')) return <Heart className="w-4 h-4" />;
-  if (lower.includes('work') || lower.includes('style')) return <Briefcase className="w-4 h-4" />;
-  if (lower.includes('commun')) return <MessageSquare className="w-4 h-4" />;
-  if (lower.includes('strength')) return <Zap className="w-4 h-4" />;
-  if (lower.includes('growth') || lower.includes('develop')) return <TrendingUp className="w-4 h-4" />;
-  if (lower.includes('risk') || lower.includes('caution')) return <Shield className="w-4 h-4" />;
-  return <Lightbulb className="w-4 h-4" />;
-}
-
 function directionIcon(direction: string) {
-  if (direction === 'above') return <TrendingUp className="w-3.5 h-3.5" style={{ color: 'var(--color-success)' }} />;
-  if (direction === 'below') return <TrendingDown className="w-3.5 h-3.5" style={{ color: 'var(--color-warning)' }} />;
-  return <Minus className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />;
-}
-
-/* ------------------------------------------------------------------ */
-/*  ScoreRing (self-contained for the modal)                           */
-/* ------------------------------------------------------------------ */
-
-function ScoreRing({
-  score,
-  size = 96,
-  strokeWidth = 4,
-  animated = false,
-}: {
-  score: number;
-  size?: number;
-  strokeWidth?: number;
-  animated?: boolean;
-}) {
-  const radius = (size - strokeWidth * 2) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (score / 100) * circumference;
-  const color = scoreColor(score);
-
-  return (
-    <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
-      <svg width={size} height={size} className="-rotate-90">
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          fill="none"
-          stroke="var(--color-border)"
-          strokeWidth={strokeWidth}
-        />
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          fill="none"
-          stroke={color}
-          strokeWidth={strokeWidth}
-          strokeDasharray={circumference}
-          strokeDashoffset={animated ? circumference : offset}
-          strokeLinecap="round"
-          className="transition-all duration-1000 ease-out"
-          style={animated ? { strokeDashoffset: offset } : undefined}
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-semibold" style={{ color }}>{score}</span>
-        <span className="text-[10px] font-medium" style={{ color: 'var(--color-textMuted)' }}>match</span>
-      </div>
-    </div>
-  );
+  const style = { color: 'var(--color-textMuted)' };
+  if (direction === 'above') return <TrendingUp className="w-3.5 h-3.5" style={style} aria-label="Above" />;
+  if (direction === 'below') return <TrendingDown className="w-3.5 h-3.5" style={style} aria-label="Below" />;
+  return <Minus className="w-3.5 h-3.5" style={style} aria-label="Aligned" />;
 }
 
 /* ------------------------------------------------------------------ */
 /*  Composite score bar                                                */
 /* ------------------------------------------------------------------ */
 
-function CompositeBar({ label, score, icon }: { label: string; score: number; icon: React.ReactNode }) {
-  const color = scoreColor(score);
+function CompositeBar({ label, score }: { label: string; score: number }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-1.5">
-        <span className="flex items-center gap-1.5 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-          {icon}
-          {label}
-        </span>
-        <span className="text-sm font-semibold" style={{ color }}>{score}%</span>
+        <span className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>{label}</span>
+        <span className="text-sm font-medium tabular-nums" style={{ color: 'var(--color-text)' }}>{score}%</span>
       </div>
-      <div className="h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-background)' }}>
+      <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-surfaceHover)' }}>
         <div
-          className="h-full rounded-full transition-all duration-700 ease-out"
-          style={{ width: `${score}%`, backgroundColor: color }}
+          className="h-full rounded-full"
+          style={{ width: `${score}%`, backgroundColor: 'var(--color-accent)' }}
         />
       </div>
     </div>
@@ -194,23 +100,21 @@ function OceanComparisonBar({
   return (
     <div>
       <div className="flex items-center justify-between mb-1">
-        <span className="text-xs font-medium" style={{ color: 'var(--color-textMuted)' }}>{label}</span>
-        <div className="flex items-center gap-3 text-xs">
-          <span style={{ color: 'var(--color-accent)' }}>{candidateScore}</span>
-          <span style={{ color: 'var(--color-textMuted)' }}>vs</span>
-          <span style={{ color: 'var(--color-warning)' }}>{employerPreference}</span>
-        </div>
+        <span className="text-label font-normal" style={{ color: 'var(--color-textSecondary)' }}>{label}</span>
+        <span className="text-label font-normal tabular-nums">
+          <span style={{ color: 'var(--color-text)' }}>{candidateScore}</span>
+          <span style={{ color: 'var(--color-textMuted)' }}> vs {employerPreference}</span>
+        </span>
       </div>
-      <div className="relative h-2.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-background)' }}>
-        {/* Employer preference (background layer) */}
+      {/* Candidate as the filled bar, the preference as a tick on the same track */}
+      <div className="relative h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-surfaceHover)' }}>
         <div
-          className="absolute top-0 left-0 h-full rounded-full opacity-40"
-          style={{ width: `${employerPreference}%`, backgroundColor: 'var(--color-warning)' }}
-        />
-        {/* Candidate score (foreground layer) */}
-        <div
-          className="absolute top-0 left-0 h-full rounded-full transition-all duration-700"
+          className="absolute top-0 left-0 h-full rounded-full"
           style={{ width: `${candidateScore}%`, backgroundColor: 'var(--color-accent)' }}
+        />
+        <div
+          className="absolute -top-1 w-0.5 h-3.5 rounded-full"
+          style={{ left: `calc(${employerPreference}% - 1px)`, backgroundColor: 'var(--color-text)' }}
         />
       </div>
     </div>
@@ -289,6 +193,7 @@ export function MatchDetailModal({
   const summary = emberNarrative?.summary || matchData.emberSummary;
   const recommendation = emberNarrative?.recommendation || matchData.emberRecommendation;
   const allInsights = emberNarrative?.insights || matchData.insights || [];
+  const strengths = matchData.archetype?.strengths?.slice(0, 3) ?? [];
 
   const handleAskEmber = () => {
     if (onAskEmber) {
@@ -306,57 +211,63 @@ export function MatchDetailModal({
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div
-        className="relative w-full max-w-2xl rounded-2xl shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-label={matchData.name}
+        className="relative w-full max-w-2xl rounded-xl shadow-2xl animate-fade-in"
         style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
       >
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-1.5 rounded-lg transition-colors z-10 hover:bg-[var(--color-surfaceHover)]"
-          style={{ color: 'var(--color-textMuted)' }}
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        {/* ---- Hero Section ---- */}
-        <div className="pt-8 pb-6 px-6 text-center border-b" style={{ borderColor: 'var(--color-border)' }}>
-          <h2 className="text-xl font-semibold mb-1" style={{ color: 'var(--color-text)' }}>
-            {matchData.name}
-          </h2>
-          {matchData.subtitle && (
-            <p className="text-sm mb-3" style={{ color: 'var(--color-textSecondary)' }}>
-              {matchData.subtitle}
-            </p>
-          )}
-          {matchData.archetype && (
-            <span
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium mb-4"
-              style={{ backgroundColor: 'var(--color-accent)', color: 'white' }}
-            >
-              <Target className="w-3 h-3" />
-              {matchData.archetype.name}
-            </span>
-          )}
-          <div className="flex justify-center mt-3">
-            <ScoreRing score={matchData.overallScore} size={112} strokeWidth={5} animated />
+        {/* ---- Header ---- */}
+        <div className="flex items-start gap-4 px-6 pt-6 pb-5 border-b" style={{ borderColor: 'var(--color-border)' }}>
+          <div className="flex-1 min-w-0">
+            <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>
+              {matchData.name}
+            </h2>
+            {matchData.subtitle && (
+              <p className="text-sm mt-0.5" style={{ color: 'var(--color-textSecondary)' }}>
+                {matchData.subtitle}
+              </p>
+            )}
+            {matchData.archetype && (
+              <p className="text-label font-normal mt-2" style={{ color: 'var(--color-textMuted)' }}>
+                <span style={{ color: 'var(--color-text)' }}>{matchData.archetype.name}</span>
+                {strengths.length > 0 && <> · {strengths.join(', ')}</>}
+              </p>
+            )}
           </div>
+          <div className="text-right flex-shrink-0">
+            <p className="text-title tabular-nums" style={{ color: 'var(--color-text)' }}>
+              {matchData.overallScore}%
+            </p>
+            <p className="text-caption" style={{ color: 'var(--color-textMuted)' }}>match</p>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="-mr-2 -mt-1 p-1.5 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)] flex-shrink-0"
+            style={{ color: 'var(--color-textMuted)' }}
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
-        {/* ---- OCEAN Comparison ---- */}
+        {/* ---- OCEAN comparison ---- */}
         {matchData.dimensionAnalysis && matchData.dimensionAnalysis.length > 0 && (
           <div className="px-6 py-5 border-b" style={{ borderColor: 'var(--color-border)' }}>
-            <h3 className="text-sm font-semibold mb-1" style={{ color: 'var(--color-text)' }}>
-              OCEAN personality comparison
-            </h3>
-            <div className="flex items-center gap-4 mb-3 text-xs" style={{ color: 'var(--color-textMuted)' }}>
-              <span className="flex items-center gap-1">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }} />
-                {role === 'candidate' ? 'You' : 'Candidate'}
-              </span>
-              <span className="flex items-center gap-1">
-                <span className="w-2.5 h-2.5 rounded-full opacity-40" style={{ backgroundColor: 'var(--color-warning)' }} />
-                {role === 'candidate' ? 'Ideal' : 'Your preference'}
-              </span>
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 mb-3">
+              <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+                Personality comparison
+              </h3>
+              <div className="flex items-center gap-4 text-caption" style={{ color: 'var(--color-textMuted)' }}>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }} />
+                  {role === 'candidate' ? 'You' : 'Candidate'}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="w-0.5 h-3 rounded-full" style={{ backgroundColor: 'var(--color-text)' }} />
+                  {role === 'candidate' ? 'Ideal' : 'Your preference'}
+                </span>
+              </div>
             </div>
             <div className="space-y-3">
               {matchData.dimensionAnalysis.map((dim) => (
@@ -368,7 +279,7 @@ export function MatchDetailModal({
                       employerPreference={dim.employer_preference}
                     />
                   </div>
-                  <div className="flex-shrink-0 w-5">
+                  <div className="flex-shrink-0 w-5 pt-4">
                     {directionIcon(dim.direction)}
                   </div>
                 </div>
@@ -377,40 +288,35 @@ export function MatchDetailModal({
           </div>
         )}
 
-        {/* ---- Composite Scores ---- */}
+        {/* ---- Composite scores ---- */}
         <div className="px-6 py-5 border-b" style={{ borderColor: 'var(--color-border)' }}>
           <h3 className="text-sm font-semibold mb-4" style={{ color: 'var(--color-text)' }}>
             Compatibility breakdown
           </h3>
-          <div className="space-y-4">
-            <CompositeBar label="Trait match" score={matchData.traitScore} icon={<Brain className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />} />
-            <CompositeBar label="Culture fit" score={matchData.cultureScore} icon={<Heart className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />} />
-            <CompositeBar label="Work style" score={matchData.workStyleScore} icon={<Briefcase className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />} />
-            <CompositeBar label="Communication" score={matchData.communicationScore} icon={<MessageSquare className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+            <CompositeBar label="Trait match" score={matchData.traitScore} />
+            <CompositeBar label="Culture fit" score={matchData.cultureScore} />
+            <CompositeBar label="Work style" score={matchData.workStyleScore} />
+            <CompositeBar label="Communication" score={matchData.communicationScore} />
           </div>
         </div>
 
-        {/* ---- Ember Narrative ---- */}
+        {/* ---- Ember narrative ---- */}
         <div className="px-6 py-5 border-b" style={{ borderColor: 'var(--color-border)' }}>
-          <div className="flex items-center gap-2 mb-4">
-            <EmberFirefly size="sm" mood={emberLoading ? 'thinking' : 'happy'} animated={emberLoading} />
-            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-              Ember's analysis
-            </h3>
-          </div>
+          <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--color-text)' }}>
+            Ember's analysis
+          </h3>
 
           {emberLoading ? (
-            <div className="flex items-center gap-3 py-4">
-              <div className="w-4 h-4 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-accent)' }} />
-              <p className="text-sm" style={{ color: 'var(--color-textMuted)' }}>
-                Ember is analyzing this match...
-              </p>
+            <div className="space-y-2 animate-pulse">
+              <div className="h-3 w-full rounded" style={{ backgroundColor: 'var(--color-border)' }} />
+              <div className="h-3 w-4/5 rounded" style={{ backgroundColor: 'var(--color-border)' }} />
             </div>
           ) : (
-            <>
+            <div className="space-y-4">
               {summary && (
-                <div className="mb-4">
-                  <h4 className="text-xs font-medium mb-2" style={{ color: 'var(--color-accent)' }}>
+                <div>
+                  <h4 className="text-label mb-1" style={{ color: 'var(--color-text)' }}>
                     Why this could work
                   </h4>
                   <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
@@ -420,60 +326,52 @@ export function MatchDetailModal({
               )}
 
               {recommendation && (
-                <div
-                  className="p-3 rounded-xl mb-4"
-                  style={{ backgroundColor: `${scoreColor(matchData.overallScore)}10`, border: `1px solid ${scoreColor(matchData.overallScore)}25` }}
-                >
-                  <p className="text-sm" style={{ color: 'var(--color-text)' }}>
-                    <Sparkles className="w-3.5 h-3.5 inline-block mr-1.5" style={{ color: 'var(--color-accent)' }} />
+                <div>
+                  <h4 className="text-label mb-1" style={{ color: 'var(--color-text)' }}>
+                    Recommendation
+                  </h4>
+                  <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
                     {recommendation}
                   </p>
                 </div>
               )}
 
               {allInsights.length > 0 && (
-                <div className="space-y-2">
+                <ul>
                   {allInsights.map((insight, idx) => (
-                    <div
+                    <li
                       key={idx}
-                      className="flex items-start gap-2.5 p-2.5 rounded-lg"
-                      style={{ backgroundColor: 'var(--color-background)' }}
+                      className="py-2.5"
+                      style={{ borderTop: idx > 0 ? '1px solid var(--color-border)' : undefined }}
                     >
-                      <div className="flex-shrink-0 mt-0.5" style={{ color: 'var(--color-accent)' }}>
-                        {categoryIcon(insight.category)}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-xs font-medium" style={{ color: 'var(--color-textMuted)' }}>
-                          {insight.category}
-                        </span>
-                        <p className="text-sm mt-0.5" style={{ color: 'var(--color-textSecondary)' }}>
-                          {insight.message}
+                      <p className="text-label" style={{ color: 'var(--color-text)' }}>
+                        {insight.category}
+                      </p>
+                      <p className="text-sm mt-0.5" style={{ color: 'var(--color-textSecondary)' }}>
+                        {insight.message}
+                      </p>
+                      {insight.trait_related && (
+                        <p className="text-caption mt-1" style={{ color: 'var(--color-textMuted)' }}>
+                          Related: {insight.trait_related}
                         </p>
-                        {insight.trait_related && (
-                          <span className="text-xs mt-1 inline-block" style={{ color: 'var(--color-textMuted)' }}>
-                            Related: {insight.trait_related}
-                          </span>
-                        )}
-                      </div>
-                    </div>
+                      )}
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
 
               {!summary && !recommendation && allInsights.length === 0 && (
-                <p className="text-sm py-2" style={{ color: 'var(--color-textMuted)' }}>
-                  Ember analysis is not available for this match yet. Click "Ask Ember" below for detailed insights.
+                <p className="text-sm" style={{ color: 'var(--color-textMuted)' }}>
+                  Ember analysis is not available for this match yet. Use "Ask Ember" below for detailed insights.
                 </p>
               )}
-            </>
+            </div>
           )}
         </div>
 
-        {/* ---- Actions ---- */}
-        <div className="px-6 py-5 flex flex-wrap items-center gap-3">
+        {/* ---- Actions: one primary ---- */}
+        <div className="px-6 py-4 flex flex-wrap items-center gap-2">
           <Button
-            className="flex-1 min-w-[140px]"
-            leftIcon={<Coffee className="w-4 h-4" />}
             onClick={() => {
               if (onRequestChat) onRequestChat();
             }}
@@ -481,29 +379,21 @@ export function MatchDetailModal({
             {role === 'candidate' ? 'Request coffee chat' : 'Invite to coffee chat'}
           </Button>
 
-          <Button
-            variant="secondary"
-            className="flex-1 min-w-[120px]"
-            leftIcon={<Sparkles className="w-4 h-4" />}
-            onClick={handleAskEmber}
-          >
+          <Button variant="outline" onClick={handleAskEmber}>
             Ask Ember
           </Button>
 
-          <button
+          <Button
+            variant="ghost"
+            className="ml-auto"
             onClick={() => setSaved(!saved)}
-            className={cn(
-              'p-2.5 rounded-xl border transition-all',
-              saved ? 'border-[var(--color-accent)]' : 'border-[var(--color-border)]'
-            )}
-            style={{
-              backgroundColor: saved ? `var(--color-accent)` : 'transparent',
-              color: saved ? 'white' : 'var(--color-textMuted)',
-            }}
-            title={saved ? 'Saved' : 'Save for later'}
+            aria-pressed={saved}
+            leftIcon={saved
+              ? <BookmarkCheck className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
+              : <Bookmark className="w-4 h-4" />}
           >
-            {saved ? <BookmarkCheck className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
-          </button>
+            {saved ? 'Saved' : 'Save'}
+          </Button>
         </div>
       </div>
     </div>
