@@ -35,29 +35,22 @@ type PlayerCardGridProps = CandidateGridProps | EmployerGridProps;
 
 function SkeletonCard() {
   return (
-    <div
-      className="rounded-xl overflow-hidden animate-pulse"
-      style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
-    >
-      <div className="p-5 space-y-3">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg flex-shrink-0" style={{ backgroundColor: 'var(--color-border)' }} />
-          <div className="flex-1 space-y-1.5">
-            <div className="w-28 h-4 rounded" style={{ backgroundColor: 'var(--color-border)' }} />
-            <div className="w-20 h-3 rounded" style={{ backgroundColor: 'var(--color-border)' }} />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <div className="h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-border)' }} />
-          <div className="h-1.5 rounded-full w-3/4" style={{ backgroundColor: 'var(--color-border)' }} />
-          <div className="h-1.5 rounded-full w-5/6" style={{ backgroundColor: 'var(--color-border)' }} />
+    <div className="bento-card animate-pulse space-y-4">
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-lg flex-shrink-0" style={{ backgroundColor: 'var(--color-surfaceHover)' }} />
+        <div className="flex-1 space-y-1.5">
+          <div className="w-28 h-4 rounded" style={{ backgroundColor: 'var(--color-surfaceHover)' }} />
+          <div className="w-20 h-3 rounded" style={{ backgroundColor: 'var(--color-surfaceHover)' }} />
         </div>
       </div>
-      <div className="px-5 py-3" style={{ borderTop: '1px solid var(--color-border)' }}>
-        <div className="flex gap-2">
-          <div className="flex-1 h-7 rounded" style={{ backgroundColor: 'var(--color-border)' }} />
-          <div className="flex-1 h-7 rounded" style={{ backgroundColor: 'var(--color-border)' }} />
-        </div>
+      <div className="space-y-2">
+        <div className="h-1 rounded-full" style={{ backgroundColor: 'var(--color-surfaceHover)' }} />
+        <div className="h-1 rounded-full w-3/4" style={{ backgroundColor: 'var(--color-surfaceHover)' }} />
+        <div className="h-1 rounded-full w-5/6" style={{ backgroundColor: 'var(--color-surfaceHover)' }} />
+      </div>
+      <div className="flex gap-2 pt-1">
+        <div className="flex-1 h-8 rounded-lg" style={{ backgroundColor: 'var(--color-surfaceHover)' }} />
+        <div className="flex-1 h-8 rounded-lg" style={{ backgroundColor: 'var(--color-surfaceHover)' }} />
       </div>
     </div>
   );
@@ -68,7 +61,7 @@ export function PlayerCardGrid(props: PlayerCardGridProps) {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {Array.from({ length: 8 }).map((_, i) => <SkeletonCard key={i} />)}
       </div>
     );
@@ -93,7 +86,7 @@ export function PlayerCardGrid(props: PlayerCardGridProps) {
     return (
       <motion.div
         key={gridKey}
-        className="grid grid-cols-1 lg:grid-cols-2 gap-3"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-4"
         variants={cardGridContainer}
         initial="hidden"
         animate="show"
@@ -101,7 +94,7 @@ export function PlayerCardGrid(props: PlayerCardGridProps) {
           {employers.map((employer, i) => {
             const connStatus = getConnectionStatus?.(employer.userId) || 'none';
             return (
-              <motion.div key={employer.employerId} variants={cardItem}>
+              <motion.div key={employer.employerId} variants={cardItem} className="h-full">
                 <PlayerCard
                   id={employer.employerId}
                   name={employer.profileName}
@@ -146,7 +139,7 @@ export function PlayerCardGrid(props: PlayerCardGridProps) {
   return (
     <motion.div
       key={gridKey}
-      className="grid grid-cols-1 lg:grid-cols-2 gap-3"
+      className="grid grid-cols-1 sm:grid-cols-2 gap-4"
       variants={cardGridContainer}
       initial="hidden"
       animate="show"
@@ -154,7 +147,7 @@ export function PlayerCardGrid(props: PlayerCardGridProps) {
         {candidates.map((candidate, i) => {
           const connStatus = getConnectionStatus?.(candidate.userId) || 'none';
           return (
-            <motion.div key={candidate.candidateId} variants={cardItem}>
+            <motion.div key={candidate.candidateId} variants={cardItem} className="h-full">
               <PlayerCard
                 id={candidate.candidateId}
                 name={candidate.name}

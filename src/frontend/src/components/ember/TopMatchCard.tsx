@@ -12,63 +12,39 @@ export function TopMatchCard({ name, subtitle, score, avatarUrl, onDeepDive }: T
   const initial = name.charAt(0).toUpperCase();
 
   return (
-    <div className="bento-card bento-card-accent cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.99]" onClick={onDeepDive}>
-      {/* Section label */}
-      <p
-        className="text-xs font-medium mb-3"
-        style={{ color: 'var(--color-textMuted)' }}
-      >
+    <button type="button" className="bento-card group flex w-full flex-col text-left" onClick={onDeepDive}>
+      <span className="text-label" style={{ color: 'var(--color-textSecondary)' }}>
         Top match
-      </p>
-
-      <div className="flex items-center gap-3 mb-4">
-        {/* Avatar */}
-        <div
-          className="w-10 h-10 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0"
-          style={{
-            backgroundColor: avatarUrl ? undefined : 'var(--color-surfaceHover)',
-          }}
-        >
-          {avatarUrl ? (
-            <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>{initial}</span>
-          )}
-        </div>
-
-        <div className="flex-1 min-w-0">
-          <h4 className="text-sm font-semibold truncate" style={{ color: 'var(--color-text)' }}>
-            {name}
-          </h4>
-          <p className="text-xs truncate" style={{ color: 'var(--color-textMuted)' }}>
-            {subtitle}
-          </p>
-        </div>
-      </div>
-
-      {/* Score — large number like BentoMetricCard */}
-      <div className="mb-3">
-        <span
-          className="text-4xl font-semibold tracking-tight leading-none"
-          style={{ color: 'var(--color-text)' }}
-        >
-          {score}
-        </span>
-        <span className="text-sm ml-1" style={{ color: 'var(--color-textMuted)' }}>%</span>
-      </div>
-
-      {/* Score bar */}
-      <div className="metric-bar mb-4">
-        <div className="metric-bar-fill" style={{ width: `${score}%`, backgroundColor: 'var(--color-accent)' }} />
-      </div>
-
-      {/* CTA */}
-      <span
-        className="font-mono text-xs font-medium transition-opacity hover:opacity-70 flex items-center gap-1"
-        style={{ color: 'var(--color-accent)' }}
-      >
-        View deep dive <ArrowRight className="w-3 h-3" />
       </span>
-    </div>
+
+      <span className="mt-3 flex items-center gap-3">
+        {avatarUrl ? (
+          <img src={avatarUrl} alt="" className="h-9 w-9 flex-shrink-0 rounded-lg object-cover" />
+        ) : (
+          <span
+            className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-sm font-medium"
+            style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-textSecondary)' }}
+          >
+            {initial}
+          </span>
+        )}
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+            {name}
+          </span>
+          <span className="block truncate text-label font-normal" style={{ color: 'var(--color-textSecondary)' }}>
+            {subtitle}
+          </span>
+        </span>
+        <span className="text-heading tabular-nums" style={{ color: 'var(--color-text)' }}>
+          {score}%
+        </span>
+      </span>
+
+      <span className="mt-4 inline-flex items-center gap-1.5 text-label" style={{ color: 'var(--color-accent)' }}>
+        See full breakdown
+        <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+      </span>
+    </button>
   );
 }

@@ -1,7 +1,7 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Bookmark, X, Users, Zap, TrendingUp } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useToast } from '../../contexts/ToastContext';
 import { useConnections } from '../../contexts/ConnectionsContext';
 import { useAuth } from '../../contexts/AuthContext';
@@ -15,111 +15,18 @@ import { DeepDive } from './gallery/DeepDive';
 import { CoffeeBrewModal } from './gallery/CoffeeBrewModal';
 import { ConnectModal } from '../connections/ConnectModal';
 import { Button } from '../ui/Button';
-import { EmberBrain } from './EmberBrain';
-import { EmberFirefly } from './EmberFirefly';
-import { EmberIdentityCard } from './EmberIdentityCard';
+import { PageBanner } from '../ui/PageBanner';
+import { Facts } from '../ui/Facts';
 import { TopMatchCard } from './TopMatchCard';
-import { MatchActivityFeed } from './MatchActivityFeed';
-import { emberFadeUp, emberStagger } from '../../utils/motion';
 import type { EmployerResult, PageView, SortOption } from '../../types/matching.types';
 import type { OCEANScores } from '../../lib/compatibilityScoring';
-
-/* ── Overview Carousel ── */
-interface OverviewSlide {
-  value: string;
-  label: string;
-}
-
-function OverviewCarousel({ stats }: { stats: { totalMatches: number; strongMatches: number; avgScore: number } }) {
-  const slides: OverviewSlide[] = [
-    { value: String(stats.totalMatches), label: 'Matches' },
-    { value: String(stats.strongMatches), label: 'Strong (80+)' },
-    { value: `${stats.avgScore}%`, label: 'Avg score' },
-  ];
-
-  const [active, setActive] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setInterval>>(undefined);
-
-  useEffect(() => {
-    timerRef.current = setInterval(() => setActive(i => (i + 1) % slides.length), 4000);
-    return () => clearInterval(timerRef.current);
-  }, [slides.length]);
-
-  const go = (dir: -1 | 1) => {
-    setActive(i => (i + dir + slides.length) % slides.length);
-    clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => setActive(i => (i + 1) % slides.length), 4000);
-  };
-
-  const slide = slides[active];
-
-  return (
-    <div className="bento-card overflow-hidden" style={{ padding: '20px 16px 16px' }}>
-      <p
-        className="text-label mb-1"
-        style={{ color: 'var(--color-textMuted)' }}
-      >
-        Overview
-      </p>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={active}
-          initial={{ opacity: 0, x: 24 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -24 }}
-          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center justify-center text-center"
-          style={{ minHeight: 120 }}
-        >
-          <span
-            className="font-semibold tracking-tighter leading-none"
-            style={{
-              fontSize: '4.5rem',
-              color: 'var(--color-accent)',
-            }}
-          >
-            {slide.value}
-          </span>
-          <span
-            className="text-sm font-medium mt-1"
-            style={{ color: 'var(--color-textSecondary)' }}
-          >
-            {slide.label}
-          </span>
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Dots only — tap to navigate */}
-      <div className="flex items-center justify-center gap-2 mt-2">
-        <button onClick={() => go(-1)} className="p-0.5" style={{ color: 'var(--color-textMuted)' }}>
-          <ChevronLeft className="w-3 h-3" />
-        </button>
-        {slides.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => { setActive(i); clearInterval(timerRef.current); timerRef.current = setInterval(() => setActive(j => (j + 1) % slides.length), 4000); }}
-            className="w-1.5 h-1.5 rounded-full transition-all"
-            style={{
-              backgroundColor: i === active ? 'var(--color-accent)' : 'var(--color-border)',
-              transform: i === active ? 'scale(1.4)' : 'scale(1)',
-            }}
-          />
-        ))}
-        <button onClick={() => go(1)} className="p-0.5" style={{ color: 'var(--color-textMuted)' }}>
-          <ChevronRight className="w-3 h-3" />
-        </button>
-      </div>
-    </div>
-  );
-}
 
 export function EmberAgent() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { success: showSuccess, error: showError } = useToast();
   const { profile } = useAuth();
-  const { getConnectionStatus, sendConnectionRequest, pendingSent, accepted } = useConnections();
+  const { getConnectionStatus, sendConnectionRequest } = useConnections();
 
   // Data hooks
   const {
@@ -370,7 +277,7 @@ export function EmberAgent() {
     return (
       <div className="ember-page min-h-screen flex items-center justify-center p-8" style={{ backgroundColor: 'var(--color-background)' }}>
         <div className="text-center max-w-md">
-          <h2 className="text-2xl mt-6 mb-3 font-semibold" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-title mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
             Something went wrong
           </h2>
           <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
@@ -387,7 +294,7 @@ export function EmberAgent() {
     return (
       <div className="ember-page min-h-screen flex items-center justify-center p-8" style={{ backgroundColor: 'var(--color-background)' }}>
         <div className="text-center max-w-md">
-          <h2 className="text-2xl mt-6 mb-3 font-semibold" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-title mt-6 mb-3" style={{ color: 'var(--color-text)' }}>
             Complete your assessment first
           </h2>
           <p className="mb-6" style={{ color: 'var(--color-textMuted)' }}>
@@ -409,118 +316,58 @@ export function EmberAgent() {
 
   return (
     <div className="ember-page min-h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-
-        {/* Header — matches dashboard DashboardHeader bento-card style */}
-        {view !== 'deepdive' && (
-          <motion.div
-            className="bento-card p-5 sm:p-6 mb-5"
-            variants={emberFadeUp}
-            initial="hidden"
-            animate="show"
-          >
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-5 flex-1 min-w-0">
-                <div className="hidden sm:flex items-center justify-center w-14 h-14 flex-shrink-0">
-                  <EmberFirefly size="md" mood="happy" animated />
-                </div>
-                <div className="min-w-0">
-                  <h1
-                    className="text-title"
-                    style={{ color: 'var(--color-text)' }}
-                  >
-                    Ember
-                  </h1>
-                  <p
-                    className="text-label mt-1"
-                    style={{ color: 'var(--color-textMuted)' }}
-                  >
-                    {archetype ? `${archetype.name} archetype` : 'Your personalized match gallery'}
-                    {employers.length > 0 ? ` · ${employers.length} companies` : ''}
-                  </p>
-                  {dashboardStats && (
-                    <div className="flex flex-wrap items-center gap-2.5 mt-3">
-                      {([
-                        { label: 'Matches', value: dashboardStats.totalMatches, color: '#f59e0b', Icon: Users },
-                        { label: 'Strong (80+)', value: dashboardStats.strongMatches, color: 'var(--color-trait-openness)', Icon: Zap },
-                        { label: 'Avg score', value: `${dashboardStats.avgScore}%`, color: 'var(--color-trait-conscientiousness)', Icon: TrendingUp },
-                      ] as const).map(stat => (
-                        <span
-                          key={stat.label}
-                          className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full text-[11px] font-semibold"
-                          style={{
-                            background: `linear-gradient(135deg, ${stat.color}18, ${stat.color}08)`,
-                            border: `1px solid ${stat.color}30`,
-                            color: 'var(--color-text)',
-                          }}
-                        >
-                          <span
-                            className="w-6 h-6 rounded-full flex items-center justify-center"
-                            style={{ backgroundColor: `${stat.color}20` }}
-                          >
-                            <stat.Icon className="w-3 h-3" style={{ color: stat.color }} />
-                          </span>
-                          <span className="font-semibold tabular-nums" style={{ color: stat.color }}>{stat.value}</span>
-                          <span style={{ color: 'var(--color-textSecondary)' }}>{stat.label}</span>
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Three-column layout */}
-        <div className="flex gap-4">
-
-          {/* ── Left Sidebar (260px, sticky) ── */}
-          {view !== 'deepdive' && (
-            <motion.aside
-              className="hidden xl:block w-[260px] flex-shrink-0"
-              variants={emberStagger}
-              initial="hidden"
-              animate="show"
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+        <AnimatePresence mode="wait">
+          {view === 'deepdive' && selectedEmployer ? (
+            <DeepDive
+              key="deepdive"
+              mode="candidate"
+              name={selectedEmployer.profileName}
+              subtitle={selectedEmployer.companyName}
+              archetype={selectedEmployer.archetype}
+              overallScore={selectedEmployer.overallScore}
+              traitScore={selectedEmployer.traitScore}
+              cultureScore={selectedEmployer.cultureScore}
+              workStyleScore={selectedEmployer.workStyleFit}
+              communicationScore={Math.round((selectedEmployer.breakdown.extraversionFit + selectedEmployer.breakdown.agreeablenessFit) / 2)}
+              dimensions={deepDiveDimensions}
+              candidateOcean={candidateOcean}
+              employerOcean={selectedEmployer.employerOcean}
+              candidateId={candidate.id}
+              employerId={selectedEmployer.employerId}
+              isSaved={savedIds.has(selectedEmployer.employerId)}
+              avatarUrl={selectedEmployer.logoUrl}
+              connectionStatus={getConnectionStatus(selectedEmployer.userId)}
+              onBack={handleBackToGallery}
+              onBrew={() => setBrewTarget(selectedEmployer)}
+              onToggleSave={() => handleToggleSave(selectedEmployer)}
+              onConnect={() => setConnectTarget(selectedEmployer)}
+            />
+          ) : view === 'gallery' ? (
+            <motion.div
+              key="gallery"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { duration: 0.2 } }}
+              exit={{ opacity: 0, transition: { duration: 0.05 } }}
             >
-              <div className="sticky top-6 space-y-4">
-                <motion.div variants={emberFadeUp}>
-                  <EmberIdentityCard archetype={archetype} ocean={candidateOcean} />
-                </motion.div>
-
-                {/* Overview carousel */}
-                {dashboardStats && (
-                  <motion.div variants={emberFadeUp}>
-                    <OverviewCarousel stats={dashboardStats} />
-                  </motion.div>
+              <PageBanner
+                title="Ember"
+                subtitle={[
+                  archetype ? `${archetype.name} archetype` : 'Your personalized match gallery',
+                  employers.length > 0 ? `${employers.length} ${employers.length === 1 ? 'company' : 'companies'} ranked for you` : '',
+                ].filter(Boolean).join(' · ')}
+                belowSubtitle={dashboardStats && (
+                  <Facts
+                    items={[
+                      { label: 'Strong matches (80+)', value: dashboardStats.strongMatches },
+                      { label: 'Average', value: `${dashboardStats.avgScore}%` },
+                    ]}
+                  />
                 )}
-              </div>
-            </motion.aside>
-          )}
+              />
 
-          {/* ── Center Content (flex) ── */}
-          <main className="flex-1 min-w-0 space-y-4">
-            {/* Brain hero — no card wrapper, breathes freely */}
-            {view === 'gallery' && (
-              <motion.div
-                className="h-64 overflow-hidden"
-                variants={emberFadeUp}
-                initial="hidden"
-                animate="show"
-              >
-                <EmberBrain employers={employers} />
-              </motion.div>
-            )}
-
-            <AnimatePresence mode="wait">
-              {view === 'gallery' ? (
-                <motion.div
-                  key="gallery"
-                  className="space-y-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1, transition: { duration: 0.2 } }}
-                  exit={{ opacity: 0, transition: { duration: 0.05 } }}
-                >
+              <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-8">
+                <main className="min-w-0 space-y-4">
                   <GalleryFilterBar
                     mode="candidate"
                     matchCount={filteredEmployers.length}
@@ -561,47 +408,10 @@ export function EmberAgent() {
                     onToggleSave={handleToggleSave}
                     onConnect={(emp) => setConnectTarget(emp)}
                   />
-                </motion.div>
-              ) : view === 'deepdive' && selectedEmployer ? (
-                <DeepDive
-                  key="deepdive"
-                  mode="candidate"
-                  name={selectedEmployer.profileName}
-                  subtitle={selectedEmployer.companyName}
-                  archetype={selectedEmployer.archetype}
-                  overallScore={selectedEmployer.overallScore}
-                  traitScore={selectedEmployer.traitScore}
-                  cultureScore={selectedEmployer.cultureScore}
-                  workStyleScore={selectedEmployer.workStyleFit}
-                  communicationScore={Math.round((selectedEmployer.breakdown.extraversionFit + selectedEmployer.breakdown.agreeablenessFit) / 2)}
-                  dimensions={deepDiveDimensions}
-                  candidateOcean={candidateOcean}
-                  employerOcean={selectedEmployer.employerOcean}
-                  candidateId={candidate.id}
-                  employerId={selectedEmployer.employerId}
-                  isSaved={savedIds.has(selectedEmployer.employerId)}
-                  avatarUrl={selectedEmployer.logoUrl}
-                  connectionStatus={getConnectionStatus(selectedEmployer.userId)}
-                  onBack={handleBackToGallery}
-                  onBrew={() => setBrewTarget(selectedEmployer)}
-                  onToggleSave={() => handleToggleSave(selectedEmployer)}
-                  onConnect={() => setConnectTarget(selectedEmployer)}
-                />
-              ) : null}
-            </AnimatePresence>
-          </main>
+                </main>
 
-          {/* ── Right Sidebar (320px, sticky) ── */}
-          {view !== 'deepdive' && (
-            <motion.aside
-              className="hidden lg:block w-[320px] flex-shrink-0"
-              variants={emberStagger}
-              initial="hidden"
-              animate="show"
-            >
-              <div className="sticky top-6 space-y-4">
-                {featuredMatch && (
-                  <motion.div variants={emberFadeUp}>
+                <aside className="space-y-8 lg:sticky lg:top-6 lg:self-start">
+                  {featuredMatch && (
                     <TopMatchCard
                       name={featuredMatch.companyName}
                       subtitle={featuredMatch.industry}
@@ -609,89 +419,56 @@ export function EmberAgent() {
                       avatarUrl={featuredMatch.logoUrl}
                       onDeepDive={() => handleDeepDive(featuredMatch)}
                     />
-                  </motion.div>
-                )}
-
-                <motion.div variants={emberFadeUp}>
-                  <MatchActivityFeed
-                    matches={employers}
-                    savedMatches={savedMatches}
-                    pendingSent={pendingSent}
-                    acceptedConnections={accepted}
-                  />
-                </motion.div>
-
-                {/* Bookmarked Jobs — not in a card, raw section */}
-                <motion.div variants={emberFadeUp}>
-                  <p
-                    className="text-label mb-3 mt-1"
-                    style={{ color: 'var(--color-textMuted)' }}
-                  >
-                    <Bookmark className="w-3 h-3 inline-block mr-1.5 -mt-px" />
-                    Saved jobs
-                  </p>
-
-                  {bookmarkedEmployers.length === 0 ? (
-                    <p className="text-xs py-3" style={{ color: 'var(--color-textMuted)' }}>
-                      Bookmark a match to save it here.
-                    </p>
-                  ) : (
-                    <div className="space-y-0">
-                      {bookmarkedEmployers.map((emp, i) => (
-                        <div
-                          key={emp.employerId}
-                          className="flex items-center gap-2.5 py-2.5 group"
-                          style={{
-                            borderBottom: i < bookmarkedEmployers.length - 1
-                              ? '1px solid var(--color-border)'
-                              : undefined,
-                          }}
-                        >
-                          {/* Avatar */}
-                          <div
-                            className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0 text-[10px] font-semibold"
-                            style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-accent)' }}
-                          >
-                            {emp.companyName.charAt(0)}
-                          </div>
-
-                          {/* Info — clickable to deep dive */}
-                          <button
-                            className="flex-1 min-w-0 text-left"
-                            onClick={() => handleDeepDive(emp)}
-                          >
-                            <p
-                              className="text-xs font-medium truncate"
-                              style={{ color: 'var(--color-text)' }}
-                            >
-                              {emp.profileName}
-                            </p>
-                            <p
-                              className="text-[10px] truncate"
-                              style={{ color: 'var(--color-textMuted)' }}
-                            >
-                              {emp.companyName} · {emp.overallScore}%
-                            </p>
-                          </button>
-
-                          {/* Remove bookmark */}
-                          <button
-                            onClick={() => handleToggleSave(emp)}
-                            className="p-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
-                            style={{ color: 'var(--color-textMuted)' }}
-                            title="Remove bookmark"
-                          >
-                            <X className="w-3 h-3" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
                   )}
-                </motion.div>
+
+                  <section>
+                    <h2 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+                      Saved jobs
+                    </h2>
+                    {bookmarkedEmployers.length === 0 ? (
+                      <p className="mt-2 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+                        Bookmark a match to keep it here.
+                      </p>
+                    ) : (
+                      <ul className="mt-2">
+                        {bookmarkedEmployers.map((emp, i) => (
+                          <li
+                            key={emp.employerId}
+                            className="group flex items-center gap-2 py-2.5"
+                            style={{ borderTop: i > 0 ? '1px solid var(--color-border)' : undefined }}
+                          >
+                            <button
+                              type="button"
+                              className="min-w-0 flex-1 text-left"
+                              onClick={() => handleDeepDive(emp)}
+                            >
+                              <span className="block truncate text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+                                {emp.profileName}
+                              </span>
+                              <span className="block truncate text-label font-normal tabular-nums" style={{ color: 'var(--color-textSecondary)' }}>
+                                {emp.companyName} · {emp.overallScore}%
+                              </span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleToggleSave(emp)}
+                              className="rounded-lg p-1.5 transition-opacity hover:bg-[var(--color-surfaceHover)] lg:opacity-0 lg:group-hover:opacity-100 lg:focus-visible:opacity-100"
+                              style={{ color: 'var(--color-textMuted)' }}
+                              aria-label={`Remove ${emp.profileName} from saved`}
+                              title="Remove bookmark"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </section>
+                </aside>
               </div>
-            </motion.aside>
-          )}
-        </div>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </div>
 
       {/* Coffee Brew Modal */}

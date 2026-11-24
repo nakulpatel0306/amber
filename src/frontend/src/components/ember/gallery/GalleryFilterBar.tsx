@@ -53,6 +53,13 @@ const sortOptions: { value: SortOption; label: string }[] = [
   { value: 'recent', label: 'Recent' },
 ];
 
+const controlClass = 'min-h-8 px-3 py-1.5 rounded-lg text-sm';
+const controlStyle = {
+  backgroundColor: 'var(--color-surface)',
+  color: 'var(--color-text)',
+  border: '1px solid var(--color-border)',
+};
+
 export function GalleryFilterBar({
   mode,
   matchCount,
@@ -68,7 +75,6 @@ export function GalleryFilterBar({
   industries,
   selectedIndustry,
   onIndustryChange,
-  workStyles: _workStyles,
   selectedWorkStyle,
   onWorkStyleChange,
   locations,
@@ -77,9 +83,9 @@ export function GalleryFilterBar({
   archetypes,
   selectedArchetypes,
   onToggleArchetype,
-  roles: _roles,
-  selectedRoleId: _selectedRoleId,
-  onRoleChange: _onRoleChange,
+  roles,
+  selectedRoleId,
+  onRoleChange,
   minScore,
   maxScore,
   onMinScoreChange,
@@ -87,241 +93,211 @@ export function GalleryFilterBar({
   onClearFilters,
 }: GalleryFilterBarProps) {
   return (
-    <div className="space-y-3">
-      {/* Main bar */}
-      <div
-        className="sticky top-0 z-20 rounded-xl p-3 flex flex-wrap items-center gap-3"
-        style={{
-          backgroundColor: 'var(--color-surface)',
-          border: '1px solid var(--color-border)',
-        }}
-      >
-        {/* Quick filters — pill tabs matching dashboard nav style */}
-        <div className="flex items-center gap-1.5">
-          {quickFilters.map(f => (
-            <button
-              key={f.value}
-              onClick={() => onQuickFilterChange(f.value)}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
-              style={{
-                backgroundColor: quickFilter === f.value ? 'var(--color-accent)' : 'transparent',
-                color: quickFilter === f.value ? 'white' : 'var(--color-textMuted)',
-              }}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Separator */}
-        <div className="h-5 w-px" style={{ backgroundColor: 'var(--color-border)' }} />
-
-        {/* Sort */}
-        <select
-          value={sortBy}
-          onChange={e => onSortChange(e.target.value as SortOption)}
-          className="appearance-none px-2 py-1 rounded-lg text-xs font-medium cursor-pointer"
-          style={{
-            backgroundColor: 'var(--color-background)',
-            color: 'var(--color-textSecondary)',
-            border: '1px solid var(--color-border)',
-          }}
-        >
-          {sortOptions.map(o => (
-            <option key={o.value} value={o.value}>{o.label}</option>
-          ))}
-        </select>
-
-        {/* Spacer */}
-        <div className="flex-1" />
-
-        {/* Search */}
-        <div className="relative">
-          <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />
+    <div className="space-y-4">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center">
+        <div className="relative md:w-64">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
           <input
-            type="text"
+            type="search"
             value={searchQuery}
             onChange={e => onSearchChange(e.target.value)}
-            placeholder="Search..."
-            className="pl-7 pr-7 py-1.5 rounded-lg text-xs w-40"
-            style={{
-              backgroundColor: 'var(--color-background)',
-              color: 'var(--color-text)',
-              border: '1px solid var(--color-border)',
-            }}
+            placeholder={mode === 'candidate' ? 'Search companies' : 'Search candidates'}
+            aria-label={mode === 'candidate' ? 'Search companies' : 'Search candidates'}
+            className={`${controlClass} w-full pl-9 pr-8`}
+            style={controlStyle}
           />
           {searchQuery && (
             <button
+              type="button"
               onClick={() => onSearchChange('')}
-              className="absolute right-2 top-1/2 -translate-y-1/2"
+              aria-label="Clear search"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2"
             >
-              <X className="w-3 h-3" style={{ color: 'var(--color-textMuted)' }} />
+              <X className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />
             </button>
           )}
         </div>
 
-        {/* Filter toggle */}
-        <Button
-          size="xs"
-          variant={showFilters ? 'primary' : 'outline'}
-          onClick={onToggleFilters}
-        >
-          <SlidersHorizontal className="w-3.5 h-3.5" />
-          {activeFilterCount > 0 && (
-            <span className="ml-1 w-4 h-4 rounded-full text-[10px] font-semibold flex items-center justify-center bg-white/20">
-              {activeFilterCount}
-            </span>
-          )}
-        </Button>
+        <div className="flex flex-wrap items-center gap-2 md:ml-auto">
+          <div className="flex items-center gap-0.5" role="group" aria-label="Show">
+            {quickFilters.map(f => (
+              <button
+                key={f.value}
+                type="button"
+                onClick={() => onQuickFilterChange(f.value)}
+                aria-pressed={quickFilter === f.value}
+                className="px-2.5 py-1.5 rounded-lg text-label whitespace-nowrap transition-colors hover:text-[var(--color-text)]"
+                style={{
+                  backgroundColor: quickFilter === f.value ? 'var(--color-surfaceHover)' : 'transparent',
+                  color: quickFilter === f.value ? 'var(--color-text)' : 'var(--color-textSecondary)',
+                }}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
 
-        {/* Match count */}
-        <span className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
-          {matchCount} {matchCount === 1 ? 'match' : 'matches'}
-        </span>
+          {mode === 'employer' && roles && roles.length > 0 && (
+            <select
+              value={selectedRoleId ?? ''}
+              onChange={e => onRoleChange?.(e.target.value || null)}
+              aria-label="Score for role"
+              className={`${controlClass} cursor-pointer max-w-[12rem]`}
+              style={controlStyle}
+            >
+              <option value="">All roles</option>
+              {roles.map(r => <option key={r.id} value={r.id}>{r.title}</option>)}
+            </select>
+          )}
+
+          <select
+            value={sortBy}
+            onChange={e => onSortChange(e.target.value as SortOption)}
+            aria-label="Sort by"
+            className={`${controlClass} cursor-pointer`}
+            style={controlStyle}
+          >
+            {sortOptions.map(o => (
+              <option key={o.value} value={o.value}>{o.label}</option>
+            ))}
+          </select>
+
+          <Button
+            size="sm"
+            variant={showFilters ? 'secondary' : 'outline'}
+            onClick={onToggleFilters}
+            aria-expanded={showFilters}
+          >
+            <SlidersHorizontal className="w-3.5 h-3.5" />
+            Filters
+            {activeFilterCount > 0 && <span className="tabular-nums">({activeFilterCount})</span>}
+          </Button>
+        </div>
       </div>
 
-      {/* Expanded filter panel */}
+      <p className="text-label font-normal tabular-nums" style={{ color: 'var(--color-textSecondary)' }}>
+        {matchCount} {mode === 'candidate'
+          ? (matchCount === 1 ? 'match' : 'matches')
+          : (matchCount === 1 ? 'candidate' : 'candidates')}
+      </p>
+
       {showFilters && (
-        <div
-          className="rounded-xl p-4 space-y-4"
-          style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
-        >
+        <div className="bento-card space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Filters</h3>
             {activeFilterCount > 0 && (
-              <button
-                onClick={onClearFilters}
-                className="text-xs flex items-center gap-1"
-                style={{ color: 'var(--color-accent)' }}
-              >
-                <X className="w-3 h-3" />
+              <Button size="xs" variant="link" onClick={onClearFilters}>
                 Clear all
-              </button>
+              </Button>
             )}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {/* Industry (candidate view) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             {mode === 'candidate' && industries && industries.length > 0 && (
-              <div>
-                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Industry</label>
+              <FilterField label="Industry">
                 <select
                   value={selectedIndustry || ''}
                   onChange={e => onIndustryChange?.(e.target.value)}
-                  className="w-full px-2 py-1.5 rounded-lg text-xs"
-                  style={{
-                    backgroundColor: 'var(--color-background)',
-                    color: 'var(--color-text)',
-                    border: '1px solid var(--color-border)',
-                  }}
+                  className={`${controlClass} w-full`}
+                  style={controlStyle}
                 >
                   <option value="">All industries</option>
                   {industries.map(i => <option key={i} value={i}>{i}</option>)}
                 </select>
-              </div>
+              </FilterField>
             )}
 
-            {/* Work Style */}
             {mode === 'candidate' && (
-              <div>
-                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Work style</label>
+              <FilterField label="Work style">
                 <select
                   value={selectedWorkStyle || ''}
                   onChange={e => onWorkStyleChange?.(e.target.value)}
-                  className="w-full px-2 py-1.5 rounded-lg text-xs"
-                  style={{
-                    backgroundColor: 'var(--color-background)',
-                    color: 'var(--color-text)',
-                    border: '1px solid var(--color-border)',
-                  }}
+                  className={`${controlClass} w-full`}
+                  style={controlStyle}
                 >
                   <option value="">All styles</option>
                   {['remote', 'hybrid', 'onsite', 'flexible'].map(ws => (
                     <option key={ws} value={ws}>{ws.charAt(0).toUpperCase() + ws.slice(1)}</option>
                   ))}
                 </select>
-              </div>
+              </FilterField>
             )}
 
-            {/* Location (candidate view) */}
             {mode === 'candidate' && locations && locations.length > 0 && (
-              <div>
-                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Location</label>
+              <FilterField label="Location">
                 <select
                   value={selectedLocation || ''}
                   onChange={e => onLocationChange?.(e.target.value)}
-                  className="w-full px-2 py-1.5 rounded-lg text-xs"
-                  style={{
-                    backgroundColor: 'var(--color-background)',
-                    color: 'var(--color-text)',
-                    border: '1px solid var(--color-border)',
-                  }}
+                  className={`${controlClass} w-full`}
+                  style={controlStyle}
                 >
                   <option value="">All locations</option>
                   {locations.map(l => <option key={l} value={l}>{l}</option>)}
                 </select>
-              </div>
+              </FilterField>
             )}
 
-            {/* Archetype filter (employer view) */}
             {mode === 'employer' && archetypes && archetypes.length > 0 && (
-              <div className="col-span-2">
-                <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Archetypes</label>
-                <div className="flex flex-wrap gap-1">
-                  {archetypes.map(arch => (
-                    <button
-                      key={arch}
-                      onClick={() => onToggleArchetype?.(arch)}
-                      className="px-2 py-0.5 rounded-full text-[10px] font-medium transition-all"
-                      style={{
-                        backgroundColor: selectedArchetypes?.has(arch) ? 'var(--color-accent)' : 'var(--color-background)',
-                        color: selectedArchetypes?.has(arch) ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
-                        border: '1px solid var(--color-border)',
-                      }}
-                    >
-                      {arch}
-                    </button>
-                  ))}
+              <div className="sm:col-span-2">
+                <p className="text-label mb-1.5" style={{ color: 'var(--color-textSecondary)' }}>Archetypes</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {archetypes.map(arch => {
+                    const on = selectedArchetypes?.has(arch) ?? false;
+                    return (
+                      <button
+                        key={arch}
+                        type="button"
+                        onClick={() => onToggleArchetype?.(arch)}
+                        aria-pressed={on}
+                        className="px-2.5 py-1 rounded-full text-caption transition-colors"
+                        style={{
+                          backgroundColor: on ? 'var(--color-surfaceHover)' : 'transparent',
+                          color: on ? 'var(--color-text)' : 'var(--color-textSecondary)',
+                          border: `1px solid ${on ? 'var(--color-borderHover)' : 'var(--color-border)'}`,
+                        }}
+                      >
+                        {arch}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
-            {/* Score range */}
-            <div>
-              <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Min score</label>
+            <FilterField label="Min score">
               <input
                 type="number"
                 min={0}
                 max={100}
                 value={minScore}
                 onChange={e => onMinScoreChange(Number(e.target.value))}
-                className="w-full px-2 py-1.5 rounded-lg text-xs"
-                style={{
-                  backgroundColor: 'var(--color-background)',
-                  color: 'var(--color-text)',
-                  border: '1px solid var(--color-border)',
-                }}
+                className={`${controlClass} w-full tabular-nums`}
+                style={controlStyle}
               />
-            </div>
-            <div>
-              <label className="text-xs font-medium mb-1 block" style={{ color: 'var(--color-textMuted)' }}>Max score</label>
+            </FilterField>
+            <FilterField label="Max score">
               <input
                 type="number"
                 min={0}
                 max={100}
                 value={maxScore}
                 onChange={e => onMaxScoreChange(Number(e.target.value))}
-                className="w-full px-2 py-1.5 rounded-lg text-xs"
-                style={{
-                  backgroundColor: 'var(--color-background)',
-                  color: 'var(--color-text)',
-                  border: '1px solid var(--color-border)',
-                }}
+                className={`${controlClass} w-full tabular-nums`}
+                style={controlStyle}
               />
-            </div>
+            </FilterField>
           </div>
         </div>
       )}
     </div>
+  );
+}
+
+function FilterField({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="block">
+      <span className="text-label mb-1.5 block" style={{ color: 'var(--color-textSecondary)' }}>{label}</span>
+      {children}
+    </label>
   );
 }
