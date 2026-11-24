@@ -389,7 +389,7 @@ function WeekCalendar({
     if (scrollRef.current && !hasScrolled.current) {
       const hour = getHours(new Date());
       const anchor = hour >= 8 && hour <= 20 ? hour - 1 : 7;
-      const scrollTo = anchor * HOUR_HEIGHT;
+      const scrollTo = Math.max(0, anchor * HOUR_HEIGHT - 8);
       scrollRef.current.scrollTop = scrollTo;
       hasScrolled.current = true;
     }
