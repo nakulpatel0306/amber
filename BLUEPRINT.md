@@ -301,75 +301,14 @@ Stripe integration with:
 
 ### The Design System
 
-#### Color Palette
+The case-study build settled on a quiet, single-family UI. Tokens live in `src/frontend/src/styles/globals.css` and `contexts/ThemeContext.tsx`; the type scale lives in `tailwind.config.js`.
 
-| Token | Hex | Usage |
-|-------|-----|-------|
-| Amber 600 | `#D97706` | Primary accent — buttons, links, active states, score highlights |
-| Amber 500 | `#F59E0B` | Warning states, secondary amber accent |
-| Stone 500 | `#78716C` | Muted text, secondary labels, disabled states |
-| Cream 100 | `#F5F3EF` | Light mode background |
-| Stone 900 | `#1C1917` | Dark mode background |
-| Green 600 | `#16A34A` | Success states, positive match indicators |
-| Red 600 | `#DC2626` | Error states, destructive actions, low compatibility warnings |
-
-#### Themes
-
-- **Amber Light** — Cream background (`#F5F3EF`) with warm amber accents and stone text. Feels warm, approachable, and professional.
-- **Amber Dark** — Stone background (`#1C1917`) with amber highlights. The amber accent glows against the dark surface, giving Ember's fire theme more presence.
-
-Theme switching via Settings > Appearance. Persisted per-user in the `user_settings` Supabase table and locally via CSS variables.
-
-#### Component Library (31+ components)
-
-Located in `src/frontend/src/components/ui/`:
-
-| Component | Variants / Notes |
-|-----------|-----------------|
-| `Button` | primary, secondary, outline, ghost, danger. Supports loading state with spinner. |
-| `Input` | With label, error state (red border + message), disabled, left/right icon slots |
-| `Card` | Container with padding, border, and optional hover elevation |
-| `Modal` | Center-aligned overlay, header/body/footer sections, nestable |
-| `Toast` | Success (green), error (red), info (amber) notification banners. Auto-dismiss with timer. |
-| `Avatar` | Image with fallback initials, configurable size |
-| `AvatarPicker` | Photo upload with crop/preview |
-| `Badge` | Status indicator pills (active, pending, closed, etc.) |
-| `Dropdown` | Accessible dropdown with keyboard navigation |
-| `DatePicker` | Date selection for scheduling |
-| `SearchInput` | Filterable search bar with debounce |
-| `Skeleton` | Loading placeholder animations matching content layout |
-| `Spinner` | Animated loading indicator |
-| `GradientProgressBar` | Amber gradient progress visualization |
-| `AmberLogo` | Brand logo with optional text |
-| `SplashScreen` | App-level loading screen |
-| `ArchetypeCard` | Archetype visualization with icon, name, and description |
-| `CoffeeBrewLoader` | Animated coffee cup loading state (brand-specific) |
-| `GlitchMascot` | Error state mascot animation |
-| `LocationPicker` | Location input with autocomplete |
-| `PageBanner` | Page header with icon and title |
-
-#### Animation and Motion
-
-Powered by **Framer Motion 12.x**:
-
-- **Page Transitions** — Fade-up entry animations on route changes
-- **Stagger Effects** — Cards and list items animate in sequence (`emberStagger` preset)
-- **Interactive Elements:**
-  - `MagneticButton` — Button follows cursor with magnetic pull effect
-  - `CursorSpotlight` — Mouse-tracking light effect on landing page
-  - `TiltCard` — 3D tilt on hover via CSS transforms
-  - `FloatingCoffeeBeans` — Parallax floating elements on landing
-  - `TypewriterText` — Character-by-character text reveal
-  - `ScrollProgress` — Reading progress bar
-- **Micro-interactions** — Button hover scale, toast slide-in/out, modal fade, carousel slide
-
-#### Responsive Design
-
-- Mobile-first Tailwind breakpoints (`sm`, `md`, `lg`, `xl`)
-- Sidebar collapses to icon-only on small screens
-- Mobile top bar with hamburger menu
-- Touch-friendly chat panels and cards
-- Responsive grids (1 column mobile, 2–4 columns desktop)
+- **Type:** Inter only, at weights 400, 500 and 600, with named roles (caption, label, heading, title, headline, display). Hierarchy comes from size, weight and color, not a second face.
+- **Color:** neutral surfaces with one amber accent for primary actions, selection and links (`#B45309` in light, `#F09030` in dark, both chosen to pass WCAG AA). Five trait colors mark the OCEAN dimensions in charts and bars.
+- **Themes:** light and dark, following the operating system until the user picks one in Settings or the header toggle.
+- **Components:** one card style (`.bento-card`), `Button` with fixed sizes, `PageBanner` for page headers and `Facts` for label/value lists, plus `Input`, `Modal`, `Toast`, `Avatar`, `Badge`, `Dropdown`, `DatePicker`, `LocationPicker`, `ScoreRing`, `RadarChart`, `Skeleton` and the `CoffeeBrewLoader`, all in `src/frontend/src/components/ui/`.
+- **Motion:** Framer Motion for short fades and progress, never decorative. Everything honors `prefers-reduced-motion`.
+- **Responsive:** mobile-first Tailwind breakpoints; the sidebar becomes a top bar with a menu on phones.
 
 ---
 
@@ -529,19 +468,19 @@ For local development without Supabase:
 
 ## Where Amber Was Going (never built)
 
-The features below represent Amber's growth trajectory — from a matching platform into a **hiring intelligence system** that fundamentally changes how companies and candidates find each other.
+Nothing in this section was built. It is the roadmap as it stood when Amber was shelved: the path from a matching platform to a **hiring intelligence system**. It's kept in the conditional, as the plan it was.
 
 ---
 
 ### Phase 1: Conversational Ember AI
 
-**Status:** Dependencies installed (OpenAI 1.54.0, LangChain 0.3.0, Ollama 0.4.3). Infrastructure ready. Not yet integrated.
+**Status:** Never built. The OpenAI, LangChain and Ollama dependencies were added to the backend, but no conversational flow was integrated.
 
-**The Problem:** The current 10-question multiple-choice assessment captures personality dimensions accurately, but the experience feels like a form. Users complete it and move on. There's no engagement, no memorability, no reason to tell anyone about it.
+**The Problem:** The shipped multiple-choice assessment captured personality dimensions accurately, but the experience felt like a form. Users complete it and move on. There's no engagement, no memorability, no reason to tell anyone about it.
 
-**The Solution:** Transform Ember from a scoring engine into a **conversational AI agent** that conducts natural, open-ended personality interviews.
+**The plan:** Transform Ember from a scoring engine into a **conversational AI agent** that conducts natural, open-ended personality interviews.
 
-#### How It Will Work
+#### How It Would Have Worked
 
 1. **Conversational Assessment Flow**
    - Candidate opens the assessment and is greeted by Ember as a conversational partner, not a quiz
@@ -564,7 +503,7 @@ The features below represent Amber's growth trajectory — from a matching platf
    - The structured assessment remains as a fallback and calibration tool
 
 4. **Ongoing Ember Interactions**
-   - After initial assessment, Ember becomes a persistent career advisor:
+   - After initial assessment, Ember would have become a persistent career advisor:
      - "I noticed your top match this week is a Connector-culture company. Based on our conversation, here's why I think you'd thrive there..."
      - "You mentioned you value autonomy highly. This role at [Company] has a micromanagement flag from employee reviews. Want me to dig deeper?"
      - Pre-coffee-chat coaching: "You're meeting with [Employer] tomorrow. Based on their Architect culture and your Explorer personality, here are three things to discuss and two things to be careful about."
@@ -576,7 +515,7 @@ The features below represent Amber's growth trajectory — from a matching platf
    - Conversation transcripts stored in Supabase with trait annotations
    - Real-time streaming responses via WebSocket for natural conversation feel
 
-#### Why This Matters for the Business
+#### Why It Would Have Mattered
 
 - **Engagement:** People remember conversations. "I talked to Ember and it told me I'm an Explorer" is viral in a way "I took a quiz" is not.
 - **Data Moat:** Conversation transcripts with trait annotations create a proprietary dataset that improves extraction accuracy over time. No competitor can replicate this without building the same conversation history.
@@ -587,11 +526,11 @@ The features below represent Amber's growth trajectory — from a matching platf
 
 ### Phase 2: Team DNA Mapping
 
-**The Problem:** Amber currently matches candidates to **companies**. But people don't quit companies — they quit teams. A candidate who thrives in the engineering team's culture might struggle in the same company's sales team. And the most valuable hire isn't always someone who mirrors the existing team — it's someone who **complements** the team's gaps.
+**The Problem:** Amber matched candidates to **companies**. But people don't quit companies — they quit teams. A candidate who thrives in the engineering team's culture might struggle in the same company's sales team. And the most valuable hire isn't always someone who mirrors the existing team — it's someone who **complements** the team's gaps.
 
-**The Solution:** Let employers map the personality composition of their existing teams, then match candidates who balance and strengthen team dynamics.
+**The plan:** Let employers map the personality composition of their existing teams, then match candidates who balance and strengthen team dynamics.
 
-#### How It Will Work
+#### How It Would Have Worked
 
 1. **Team Personality Mapping**
    - Employers invite existing team members to take a lightweight personality assessment (5 minutes, not the full 10-question flow)
@@ -625,10 +564,10 @@ The features below represent Amber's growth trajectory — from a matching platf
 - Extended compatibility engine: add `calculate_team_complement_score()` alongside existing `calculate_compatibility()`
 - Frontend: Team management UI for employers, team composition visualizations (radar charts, archetype distribution bars), toggle between fit/add modes in candidate browsing
 
-#### Why This Matters for the Business
+#### Why It Would Have Mattered
 
 - **Unique Positioning:** No hiring platform offers team-level personality matching. LinkedIn, Indeed, Greenhouse — none of them. This is Amber's wedge.
-- **Enterprise Value:** Team DNA mapping is a feature enterprise HR teams will pay premium for. It transforms Amber from a matching tool into a **team intelligence platform**.
+- **Enterprise Value:** Team DNA mapping is a feature enterprise HR teams would have paid a premium for. It transforms Amber from a matching tool into a **team intelligence platform**.
 - **Stickiness:** Once an employer maps their teams, they're deeply invested in the platform. The data is unique to Amber and creates massive switching costs.
 
 ---
@@ -637,9 +576,9 @@ The features below represent Amber's growth trajectory — from a matching platf
 
 **The Problem:** Every company says they have great culture. Employer self-reported culture profiles are aspirational, not actual. Candidates have no way to verify culture claims before accepting a job. Glassdoor reviews are unstructured, outdated, and not connected to personality science.
 
-**The Solution:** Build an anonymous verification system where current and former employees validate employer culture claims against the same OCEAN-based framework Amber uses for matching.
+**The plan:** Build an anonymous verification system where current and former employees validate employer culture claims against the same OCEAN-based framework Amber uses for matching.
 
-#### How It Will Work
+#### How It Would Have Worked
 
 1. **Employee Culture Micro-Survey**
    - Short (2-minute) anonymous survey sent to current/former employees
@@ -681,9 +620,9 @@ The features below represent Amber's growth trajectory — from a matching platf
 - Extended matching engine: `calculate_compatibility()` gains an optional `use_verified_culture` flag
 - Frontend: verification survey page (anonymous, no login required), gap visualization component, verified badge display, dual match score display
 
-#### Why This Matters for the Business
+#### Why It Would Have Mattered
 
-- **Trust Moat:** This data is incredibly hard to replicate. Every employee response makes Amber's culture intelligence more accurate. Over time, Amber becomes the **source of truth** for company culture.
+- **Trust Moat:** This data is incredibly hard to replicate. Every employee response makes Amber's culture intelligence more accurate. Over time, Amber would have become the **source of truth** for company culture.
 - **Network Effect:** Candidates prefer platforms that show verified data. More candidates attract more employers. More employers attract more employee verifiers. Flywheel.
 - **Press and Virality:** "Company X claims they value work-life balance, but employees rate it 3/10" is headline-worthy content. Culture gap reports generate organic press coverage.
 - **Revenue:** Premium employers pay for access to their gap report and improvement recommendations. Enterprise analytics tier.
@@ -692,11 +631,11 @@ The features below represent Amber's growth trajectory — from a matching platf
 
 ### Phase 4: Predictive Retention Intelligence
 
-**The Problem:** Hiring is expensive. The average cost of a bad hire is $17,000–$240,000 depending on seniority. Current matching tells you "will they fit?" but not "will they stay?" or "will they thrive long-term?"
+**The Problem:** A bad hire is expensive, and more so the more senior the role. Amber's matching told you "will they fit?" but not "will they stay?" or "will they thrive long-term?"
 
-**The Solution:** Build a predictive model that estimates retention probability and long-term success based on personality-culture alignment patterns.
+**The plan:** Build a predictive model that estimates retention probability and long-term success based on personality-culture alignment patterns.
 
-#### How It Will Work
+#### How It Would Have Worked
 
 1. **Outcome Tracking**
    - After a hire is made through Amber, track key outcomes over time:
@@ -739,9 +678,9 @@ The features below represent Amber's growth trajectory — from a matching platf
 - Model retraining: weekly batch job with latest outcome data
 - API: retention score endpoint, risk factor breakdown, intervention recommendations
 
-#### Why This Matters for the Business
+#### Why It Would Have Mattered
 
-- **Premium Revenue:** Retention prediction is the feature enterprise HR teams will pay the most for. The ROI is immediately quantifiable: "Amber saved us $240K by flagging 3 high-risk hires that traditional interviews missed."
+- **Premium Revenue:** Retention prediction is the feature enterprise HR teams would have paid the most for. The ROI is immediately quantifiable: "Amber saved us $240K by flagging 3 high-risk hires that traditional interviews missed."
 - **Self-Improving System:** Every hire and every outcome makes the model better. After 1,000 tracked hires, Amber's predictions become genuinely hard to compete with.
 - **Market Positioning:** Moves Amber from "matching platform" to "hiring intelligence platform." Direct competitor to industrial-organizational psychology consulting firms charging $50K+ per engagement.
 
@@ -751,9 +690,9 @@ The features below represent Amber's growth trajectory — from a matching platf
 
 **The Problem:** Amber has a chicken-and-egg marketplace problem. Employers must complete a culture quiz before candidates can match with them. Most employers won't do this on day one. Meanwhile, candidates who sign up and see zero matches leave immediately.
 
-**The Solution:** Auto-generate preliminary culture profiles for companies using publicly available data, before the employer ever signs up.
+**The plan:** Auto-generate preliminary culture profiles for companies using publicly available data, before the employer ever signs up.
 
-#### How It Will Work
+#### How It Would Have Worked
 
 1. **Data Ingestion Pipeline**
    - Glassdoor reviews: sentiment analysis and theme extraction mapped to OCEAN dimensions
@@ -790,7 +729,7 @@ The features below represent Amber's growth trajectory — from a matching platf
 - API: passive profile lookup, correction submission, confidence metrics
 - Frontend: "preliminary profile" badge, confidence indicators, employer correction flow
 
-#### Why This Matters for the Business
+#### Why It Would Have Mattered
 
 - **Solves Cold Start:** Candidates see matches from day one. No empty state. No waiting for employers to finish onboarding.
 - **Employer Acquisition:** Companies see their auto-generated profile and think "I should claim this and make it accurate" — similar to how businesses claim Google Business profiles.
@@ -802,9 +741,9 @@ The features below represent Amber's growth trajectory — from a matching platf
 
 **The Problem:** Unconscious bias corrupts hiring decisions. Candidates chase brand names (Google, Meta) regardless of culture fit. Employers judge candidates on pedigree (Stanford, ex-FAANG) regardless of personality alignment. The result: prestigious hires who leave in 6 months because the culture was wrong.
 
-**The Solution:** A matching mode that strips away all identifying information and forces both sides to evaluate on culture and personality alone.
+**The plan:** A matching mode that strips away all identifying information and forces both sides to evaluate on culture and personality alone.
 
-#### How It Will Work
+#### How It Would Have Worked
 
 1. **For Candidates: Blind Role Discovery**
    - Toggle "Blind Mode" in the Ember matching gallery
@@ -823,7 +762,7 @@ The features below represent Amber's growth trajectory — from a matching platf
 3. **Mutual Blind Matching**
    - When both sides express interest while in Blind Mode, it's a "Blind Match"
    - Blind Matches get a special badge and are prioritized in the coffee chat queue
-   - The reveal moment becomes a positive experience: "You both chose each other based purely on personality — now meet the person behind the profile"
+   - The reveal moment would have become a positive experience: "You both chose each other based purely on personality — now meet the person behind the profile"
 
 4. **Blind Match Analytics**
    - Track outcomes of Blind Matches vs. standard matches:
@@ -832,7 +771,7 @@ The features below represent Amber's growth trajectory — from a matching platf
      - Do Blind Matches have better retention rates?
    - Publish anonymized insights: "Blind Matches on Amber result in 40% higher 12-month retention than standard matches"
 
-#### Why This Matters for the Business
+#### Why It Would Have Mattered
 
 - **Virality:** "I found my dream job without knowing the company name" is an inherently shareable story. This is the feature that gets press coverage and social media virality.
 - **Differentiation:** No other hiring platform offers this. It's a bold, category-defining feature that positions Amber as genuinely different, not just "another job board with extra steps."
@@ -843,20 +782,15 @@ The features below represent Amber's growth trajectory — from a matching platf
 
 ### Additional Roadmap Features
 
-#### In-App Messaging
-- Direct messaging between connected candidates and employers
-- Persistent threads with read receipts and timestamps
-- Real-time delivery via Supabase realtime subscriptions
-- Max 3 floating chat panels open simultaneously (already built into frontend architecture)
-- Unread message counts and notification badges
+A few items from this list shipped before Amber was shelved and are no longer roadmap: **in-app messaging** (realtime chat on every coffee chat, persistent threads with read state, up to three floating chat panels, unread counts) and the **in-app notification center**. The annotations below mark what else was partly built. Everything without one was never built.
 
-#### Notification System
+#### Notification System (in-app center shipped; push and email never built)
 - In-app notification center: new matches, coffee chat requests, status changes, messages
 - Browser push notifications for time-sensitive updates
 - Email digests: daily (new matches), weekly (activity summary), monthly (insights report)
 - Notification preferences per channel (in-app, push, email) in settings
 
-#### Public Job Board
+#### Public Job Board (partly shipped: a signed-in roles page with filters, and saved matches)
 - Searchable, filterable job listings accessible without login
 - Filters: location, work style, salary range, company size, industry, personality fit score (requires assessment)
 - Individual role pages with full descriptions, requirements, and compatibility preview
@@ -888,7 +822,7 @@ The features below represent Amber's growth trajectory — from a matching platf
 - Availability sharing: "Here are my open slots this week"
 - Timezone-aware scheduling
 
-#### AI Mock Interview Preparation
+#### AI Mock Interview Preparation (not built; the app has a scripted, non-AI practice coffee chat)
 - Ember conducts practice interviews tailored to the specific company and role
 - Questions based on the employer's culture values and the candidate's personality gaps
 - Real-time feedback: "Your answer emphasized autonomy, but this company values collaboration. Here's how to reframe..."
@@ -921,85 +855,13 @@ The features below represent Amber's growth trajectory — from a matching platf
 - Achievement badges: assessment completed, first coffee chat, first match, 5-star feedback received
 - Progress levels: Culture Explorer → Connection Builder → Match Master → Amber Ambassador
 - Streak tracking: consecutive days of platform engagement
-- Leaderboards (already partially built): global and role-specific rankings
+- Leaderboards: global and role-specific rankings
 
 ---
 
 ## Styling Direction
 
-### Current Identity
-
-Amber's visual identity is built around **warmth, approachability, and professionalism**. The amber/orange accent (`#D97706`) is the defining color — it conveys energy, optimism, and human connection without the coldness of corporate blue or the aggression of red.
-
-### Recommendations for Evolution
-
-#### Typography
-
-- **Current:** System fonts via Tailwind defaults
-- **Recommendation:** Introduce a branded typeface pair:
-  - **Headings:** A geometric sans-serif with personality — something like **General Sans**, **Satoshi**, or **Cabinet Grotesk**. These feel modern and confident without being sterile. They carry the "startup with substance" energy.
-  - **Body:** Keep a clean, highly readable sans-serif — **Inter** or **DM Sans**. The body text should disappear and let the content speak. High x-height, generous letter-spacing for long-form content like insights and summaries.
-  - **Monospace accent:** For data-heavy elements (match scores, OCEAN breakdowns, code-like config), use **JetBrains Mono** or **IBM Plex Mono** for a technical-but-warm accent.
-
-#### Color Evolution
-
-- **Current palette is solid** — don't abandon it. Amber 600 is distinctive and ownable.
-- **Add depth** with an expanded warm palette:
-  - Amber 50 (`#FFFBEB`) for subtle backgrounds and card fills in light mode
-  - Amber 800 (`#92400E`) for deep accents, hover states, and dark mode emphasis
-  - A complementary **slate-blue** accent (`#475569`) for secondary CTAs and informational elements — gives visual hierarchy without competing with amber
-  - A **sage green** (`#65A30D`) for positive signals, growth metrics, and verified badges — warmer than the current pure green, aligns with the organic/human feel
-
-#### Spatial Design
-
-- **Increase whitespace** on data-heavy pages (dashboard, matching, insights). Personality data is cognitively dense — breathing room prevents overwhelm.
-- **Card-based layouts with generous padding** for match results. Each match should feel like a considered recommendation, not a row in a spreadsheet.
-- **Progressive disclosure** on complex screens: show the headline metric (overall match %) prominently, then let users drill into trait breakdown, culture alignment, and insights on demand.
-
-#### Data Visualization
-
-- **Replace or supplement numeric scores with visual metaphors:**
-  - Radar/spider charts for OCEAN breakdowns — immediately shows the "shape" of a personality
-  - Circular progress rings for match scores (already partially implemented with Ember score rings)
-  - Gradient bars for per-dimension alignment (candidate score vs. employer preference, with the gap visually highlighted)
-  - Archetype distribution pie charts for Team DNA mapping
-- **Color-code match quality** consistently across all surfaces:
-  - 85–100%: Amber 600 (strong match — highlight color)
-  - 70–84%: Amber 400 (good match — warm but muted)
-  - 55–69%: Stone 400 (moderate match — neutral tone)
-  - Below 55%: Stone 300 (weak match — de-emphasized)
-
-#### Ember's Visual Presence
-
-- **Ember should feel like a character, not an icon.** The current flame mascot with mood-based animations is a strong start.
-- **Expand Ember's expressiveness:**
-  - Ember "reacts" to match scores — excited for 90%+, thoughtful for 70–89%, concerned for <70%
-  - Ember appears contextually — peeking in from the corner of the screen during coffee chat prep, celebrating when a connection is accepted
-  - Ember's animation intensity matches the significance of the moment — subtle idle animation on the dashboard, energetic animation during match reveals
-- **Ember's conversation UI** (Phase 1) should feel distinct from the rest of the app — slightly different background tone, rounder corners, conversational bubble layout. It should feel like you stepped into Ember's space.
-
-#### Dark Mode Enhancement
-
-- **Dark mode should feel premium, not just inverted.** The current Stone 900 background is good, but:
-  - Add subtle gradient backgrounds on key surfaces (dashboard hero, match reveal) — deep amber gradients against stone
-  - Ember's flame accent should feel like it **glows** in dark mode — use subtle box shadows with amber hue (`box-shadow: 0 0 20px rgba(217, 119, 6, 0.15)`)
-  - Cards should use slightly elevated tones (`Stone 800`) against the `Stone 900` background for clear visual hierarchy
-  - Text hierarchy: pure white for primary, Stone 300 for secondary, Stone 500 for tertiary
-
-#### Motion Philosophy
-
-- **Purposeful, not decorative.** Every animation should communicate something:
-  - Match score counting up from 0 communicates "this was calculated, not random"
-  - Card stagger animation communicates "these are ranked in order"
-  - Ember's typing simulation communicates "analysis is happening"
-- **Reduce landing page animation density** for returning users — the first visit should be immersive, but repeat visits should load fast and get out of the way
-- **Add micro-celebrations** for key moments: connection accepted (confetti burst), coffee chat completed (subtle glow), first 85%+ match found (Ember celebration)
-
-#### Mobile-Specific Styling
-
-- **Bottom navigation bar** instead of collapsing sidebar on mobile — match the platform convention (similar to Instagram/LinkedIn mobile nav)
-- **Swipe gestures** on match cards — swipe right to connect, swipe left to pass (brings the Blind Matching concept to mobile in an intuitive way)
-- **Full-screen match reveal** on mobile — when opening a match detail, it should take over the screen with a smooth upward slide, not open in a modal
+While building we planned a louder identity: a display face paired with a body sans, glows and gradients in dark mode, and an animated Ember character. The case-study build went the other way, to a single sans (Inter) and a quieter interface where the accent marks only actions and selection. See [The Design System](#the-design-system) for what shipped.
 
 ---
 
