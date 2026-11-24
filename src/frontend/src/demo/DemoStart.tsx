@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Building2, FastForward, User } from 'lucide-react';
 import { AmberLogo } from '../components/ui/AmberLogo';
+import { Button } from '../components/ui/Button';
 import { useAuth } from '../contexts/AuthContext';
 import { usePageTitle } from '../hooks/usePageTitle';
 import { resetDemo } from './store';
@@ -63,12 +64,12 @@ export function DemoStart() {
           <ArrowLeft className="w-4 h-4" />
           Back to the case study
         </Link>
-        <AmberLogo size="md" />
+        <AmberLogo size="sm" />
       </header>
 
       <main className="flex-1 px-4 sm:px-6 pb-24 max-w-5xl w-full mx-auto">
-        <div className="text-center mt-6 sm:mt-12 mb-10">
-          <h1 className="text-title" style={{ color: 'var(--color-text)' }}>
+        <div className="text-center mt-8 sm:mt-14 mb-10">
+          <h1 className="text-headline" style={{ color: 'var(--color-text)' }}>
             Try Amber
           </h1>
           <p className="mt-3 text-sm sm:text-base max-w-xl mx-auto" style={{ color: 'var(--color-textSecondary)' }}>
@@ -79,8 +80,7 @@ export function DemoStart() {
 
         {user && profile?.role && (
           <div
-            className="mb-6 rounded-xl border p-4 flex flex-col sm:flex-row sm:items-center gap-3 justify-between"
-            style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}
+            className="bento-card mb-6 !p-4 flex flex-col sm:flex-row sm:items-center gap-3 justify-between"
           >
             <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
               You have a demo {profile.role === 'candidate' ? 'job seeker' : 'employer'} run in progress. Starting a new one replaces it.
@@ -96,57 +96,41 @@ export function DemoStart() {
           </div>
         )}
 
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2">
           {ROLES.map((role) => (
-            <section
-              key={role.id}
-              className="rounded-2xl border p-6 sm:p-7 flex flex-col"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}
-            >
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center text-white"
-                  style={{ backgroundColor: 'var(--color-accent)' }}
-                >
-                  <role.icon className="w-5 h-5" />
-                </div>
-                <h2 className="text-xl font-semibold" style={{ color: 'var(--color-text)' }}>
+            <section key={role.id} className="bento-card !p-6 flex flex-col">
+              <div className="flex items-center gap-2.5">
+                <role.icon className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
+                <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>
                   {role.label}
                 </h2>
               </div>
-              <p className="mt-4 text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+              <p className="mt-3 text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
                 {role.summary}
               </p>
-              <ol className="mt-5 flex flex-wrap gap-2 text-xs" style={{ color: 'var(--color-textMuted)' }}>
-                {role.steps.map((step, i) => (
-                  <li
-                    key={step}
-                    className="rounded-full border px-2.5 py-1"
-                    style={{ borderColor: 'var(--color-border)' }}
-                  >
-                    {i + 1}. {step}
-                  </li>
-                ))}
-              </ol>
+              <p className="mt-3 text-label font-normal" style={{ color: 'var(--color-textMuted)' }}>
+                {role.steps.join(' → ')}
+              </p>
               <div className="mt-auto pt-7 flex flex-col gap-2">
-                <button
+                <Button
+                  fullWidth
+                  size="lg"
                   onClick={() => start(role.id, false)}
                   disabled={busy !== null}
-                  className="w-full rounded-xl px-4 py-3 text-sm font-medium text-white flex items-center justify-center gap-2 transition-opacity hover:opacity-90 disabled:opacity-60"
-                  style={{ backgroundColor: 'var(--color-accent)' }}
+                  rightIcon={<ArrowRight className="w-4 h-4" />}
                 >
                   {busy === `${role.id}-false` ? 'Setting up...' : role.id === 'candidate' ? 'Take the assessment' : 'Take the culture quiz'}
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <button
+                </Button>
+                <Button
+                  fullWidth
+                  size="lg"
+                  variant="outline"
                   onClick={() => start(role.id, true)}
                   disabled={busy !== null}
-                  className="w-full rounded-xl border px-4 py-3 text-sm font-medium flex items-center justify-center gap-2 transition-colors hover:bg-[var(--color-background)] disabled:opacity-60"
-                  style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                  leftIcon={<FastForward className="w-4 h-4" />}
                 >
-                  <FastForward className="w-4 h-4" />
                   {busy === `${role.id}-true` ? 'Setting up...' : 'Skip with sample answers'}
-                </button>
+                </Button>
                 <p className="text-xs text-center mt-1" style={{ color: 'var(--color-textMuted)' }}>
                   {role.id === 'candidate'
                     ? 'Skipping pre-fills all but the last question with a random persona.'
