@@ -13,11 +13,11 @@ interface OceanMindMapProps {
 }
 
 const DEFAULT_COLORS: Record<string, string> = {
-  openness: '#8B5CF6',
-  conscientiousness: '#10B981',
-  extraversion: '#F59E0B',
-  agreeableness: '#EC4899',
-  neuroticism: '#06B6D4',
+  openness: 'var(--color-trait-openness)',
+  conscientiousness: 'var(--color-trait-conscientiousness)',
+  extraversion: 'var(--color-trait-extraversion)',
+  agreeableness: 'var(--color-trait-agreeableness)',
+  neuroticism: 'var(--color-trait-stability)',
 };
 
 const DEFAULT_LABELS: Record<string, string> = {
@@ -28,11 +28,14 @@ const DEFAULT_LABELS: Record<string, string> = {
   neuroticism: 'Neuroticism',
 };
 
+// Label sizes are in viewBox units; the box is wide enough that "Conscientiousness" fits beside its bubble,
+// which keeps labels at >= 12px when the map renders at its usual widths
 const SIZE_CONFIG = {
-  sm: { vbW: 530, vbH: 400, orbitR: 115, minR: 30, maxR: 50, centerR: 32, scoreFontSize: 16, centerFontSize: 11, labelFontSize: 9, labelGap: 10 },
-  md: { vbW: 640, vbH: 490, orbitR: 140, minR: 36, maxR: 60, centerR: 38, scoreFontSize: 20, centerFontSize: 13, labelFontSize: 11, labelGap: 12 },
-  lg: { vbW: 760, vbH: 560, orbitR: 165, minR: 45, maxR: 75, centerR: 48, scoreFontSize: 26, centerFontSize: 15, labelFontSize: 13, labelGap: 14 },
+  sm: { vbW: 680, vbH: 420, orbitR: 115, minR: 30, maxR: 50, centerR: 32, scoreFontSize: 17, centerFontSize: 13, labelFontSize: 16, labelGap: 10 },
+  md: { vbW: 780, vbH: 500, orbitR: 140, minR: 36, maxR: 60, centerR: 38, scoreFontSize: 20, centerFontSize: 14, labelFontSize: 17, labelGap: 12 },
+  lg: { vbW: 900, vbH: 580, orbitR: 165, minR: 45, maxR: 75, centerR: 48, scoreFontSize: 24, centerFontSize: 15, labelFontSize: 19, labelGap: 14 },
 };
+
 
 export function OceanMindMap({
   scores,
@@ -94,7 +97,7 @@ export function OceanMindMap({
             strokeDasharray="4,4"
             initial={animated ? { opacity: 0 } : { opacity: 0.3 }}
             animate={{ opacity: 0.3 }}
-            transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
+            transition={{ delay: 0.1, duration: 0.4 }}
           />
         );
       })}
@@ -116,17 +119,10 @@ export function OceanMindMap({
         return (
           <motion.g
             key={dim}
-            initial={animated ? { opacity: 0, scale: 0 } : undefined}
-            animate={animated ? { opacity: 1, scale: 1 } : undefined}
-            transition={{
-              delay: 0.2 + i * 0.1,
-              duration: 0.4,
-              ease: [0.23, 1, 0.32, 1],
-            }}
-            style={{
-              transformOrigin: `${x}px ${y}px`,
-              cursor: onDimensionClick ? 'pointer' : 'default',
-            }}
+            initial={animated ? { opacity: 0 } : undefined}
+            animate={animated ? { opacity: 1 } : undefined}
+            transition={{ delay: 0.15, duration: 0.4 }}
+            style={{ cursor: onDimensionClick ? 'pointer' : 'default' }}
             onClick={() => onDimensionClick?.(dim)}
           >
             {/* Circle background + border */}
@@ -148,7 +144,7 @@ export function OceanMindMap({
               dominantBaseline="central"
               fill={color}
               fontSize={config.scoreFontSize}
-              fontWeight="700"
+              fontWeight="600"
               style={{ pointerEvents: 'none' }}
             >
               {Math.round(score)}
@@ -160,9 +156,9 @@ export function OceanMindMap({
               y={labelY}
               textAnchor={textAnchor}
               dominantBaseline="central"
-              fill={color}
+              fill="var(--color-textSecondary)"
               fontSize={config.labelFontSize}
-              fontWeight="600"
+              fontWeight="500"
               style={{ pointerEvents: 'none' }}
             >
               {label}
@@ -173,10 +169,9 @@ export function OceanMindMap({
 
       {/* Center circle — always visible */}
       <motion.g
-        initial={animated ? { opacity: 0, scale: 0 } : undefined}
-        animate={animated ? { opacity: 1, scale: 1 } : undefined}
-        transition={{ delay: 0.1, duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-        style={{ transformOrigin: `${cx}px ${cy}px` }}
+        initial={animated ? { opacity: 0 } : undefined}
+        animate={animated ? { opacity: 1 } : undefined}
+        transition={{ duration: 0.4 }}
       >
         <circle
           cx={cx}
@@ -195,7 +190,7 @@ export function OceanMindMap({
               dominantBaseline="central"
               fill="var(--color-text)"
               fontSize={config.centerFontSize}
-              fontWeight="700"
+              fontWeight="600"
             >
               {centerLabel}
             </text>
@@ -220,7 +215,7 @@ export function OceanMindMap({
             dominantBaseline="central"
             fill="var(--color-textMuted)"
             fontSize={config.centerFontSize}
-            fontWeight="700"
+            fontWeight="600"
           >
             OCEAN
           </text>

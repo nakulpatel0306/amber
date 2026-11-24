@@ -1,56 +1,19 @@
-import { Facts } from '../ui/Facts';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Brain,
-  Lightbulb,
-  Target,
-  Compass,
-  Sparkles,
-  Heart,
-  Anchor,
-  Zap,
-  Layers,
-  CheckCircle2,
-  ArrowRight,
-  Clock,
-  RotateCcw,
-  X,
-  Users,
-  TrendingUp,
-  Shield,
-  Rocket,
-  Scale,
-  Focus,
-  Palette,
-  Award,
-  Building2,
-  Eye,
-  Lock,
-  GraduationCap,
-  MessageCircle,
-  Puzzle,
-  Battery,
-  ChevronDown,
-  ChevronUp,
-  Leaf,
-} from 'lucide-react';
+import { ArrowRight, ChevronDown, RotateCcw } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { supabase } from '../../lib/supabase';
 import { Button } from '../ui/Button';
 import { CoffeeBrewLoader, useMinLoader } from '../ui/CoffeeBrewLoader';
-import { OceanMindMap } from '../ui/OceanMindMap';
 import { GradientProgressBar } from '../ui/GradientProgressBar';
 import { ArchetypeCard } from '../ui/ArchetypeCard';
-import { ProfileCompleteness } from '../ui/ProfileCompleteness';
 import { PersonalitySnapshotCard } from '../ui/PersonalitySnapshotCard';
-import { DidYouKnowCard } from '../ui/DidYouKnowCard';
 import { PageBanner } from '../ui/PageBanner';
+import { Facts } from '../ui/Facts';
 import { getArchetypeByName } from '../../lib/archetypes';
 import { calculateCombinedOCEAN, type OCEANScores } from '../../lib/personalityEngine';
-import { getFactsForProfile } from '../../data/personalityFacts';
 
 interface PersonalityData {
   openness_score: number | null;
@@ -77,9 +40,7 @@ const OCEAN_INFO = {
     lowTraits: ['Practical and grounded decision-making', 'Preference for proven methods', 'Focus on concrete outcomes', 'Detail-oriented execution'],
     idealRoles: ['Product design', 'R&D', 'Marketing', 'Strategy', 'Content creation'],
     cultureMatch: ['Innovative startups', 'Creative agencies', 'Research institutions'],
-    icon: Lightbulb,
     color: 'var(--color-trait-openness)',
-    progressColor: 'purple',
   },
   conscientiousness: {
     label: 'Conscientiousness',
@@ -91,9 +52,7 @@ const OCEAN_INFO = {
     lowTraits: ['Flexible and spontaneous', 'Comfortable with last-minute changes', 'Big-picture focus', 'Adaptable to shifting priorities'],
     idealRoles: ['Project management', 'Operations', 'Finance', 'QA', 'Data analysis'],
     cultureMatch: ['Structured enterprises', 'Regulated industries', 'Process-driven orgs'],
-    icon: Target,
     color: 'var(--color-trait-conscientiousness)',
-    progressColor: 'green',
   },
   extraversion: {
     label: 'Extraversion',
@@ -105,9 +64,7 @@ const OCEAN_INFO = {
     lowTraits: ['Deep, focused work', 'Thoughtful listener', 'Independent problem-solving', 'Reflective decision-making'],
     idealRoles: ['Sales', 'Leadership', 'Public relations', 'Client success', 'Team management'],
     cultureMatch: ['Collaborative teams', 'Client-facing roles', 'High-energy environments'],
-    icon: Zap,
     color: 'var(--color-trait-extraversion)',
-    progressColor: 'amber',
   },
   agreeableness: {
     label: 'Agreeableness',
@@ -119,9 +76,7 @@ const OCEAN_INFO = {
     lowTraits: ['Objective and analytical thinking', 'Comfortable with difficult decisions', 'Direct and straightforward', 'Competitive drive'],
     idealRoles: ['Human resources', 'Customer service', 'Healthcare', 'Teaching', 'Counseling'],
     cultureMatch: ['People-first cultures', 'Service industries', 'Mission-driven orgs'],
-    icon: Heart,
     color: 'var(--color-trait-agreeableness)',
-    progressColor: 'pink',
   },
   neuroticism: {
     label: 'Stability',
@@ -133,9 +88,7 @@ const OCEAN_INFO = {
     lowTraits: ['Highly attuned to risks', 'Passionate and emotionally invested', 'Detail-conscious', 'Empathetic to concerns'],
     idealRoles: ['Crisis management', 'Executive leadership', 'High-stakes negotiations'],
     cultureMatch: ['Fast-paced startups', 'High-pressure industries'],
-    icon: Anchor,
     color: 'var(--color-trait-stability)',
-    progressColor: 'cyan',
   },
 };
 
@@ -144,8 +97,6 @@ const ADDITIONAL_ASSESSMENTS = [
     id: 'visual-perception',
     name: 'Visual perception test',
     description: 'Discover your perceptual style through visual challenges.',
-    icon: Eye,
-    color: 'var(--color-trait-openness)',
     duration: '~5 min',
     status: 'available' as const,
     dataField: 'visual_perception_data',
@@ -156,8 +107,6 @@ const ADDITIONAL_ASSESSMENTS = [
     id: 'work-values',
     name: 'Drive & motivation',
     description: 'Explore what drives you at work — purpose, growth, recognition, and more.',
-    icon: Scale,
-    color: 'var(--color-trait-conscientiousness)',
     duration: '~5 min',
     status: 'available' as const,
     dataField: 'work_values_data',
@@ -168,8 +117,6 @@ const ADDITIONAL_ASSESSMENTS = [
     id: 'situational-judgment',
     name: 'Social energy',
     description: 'How do you handle real workplace scenarios? Conflicts, pressure, and feedback.',
-    icon: Shield,
-    color: 'var(--color-trait-extraversion)',
     duration: '~5 min',
     status: 'available' as const,
     dataField: 'situational_judgment_data',
@@ -180,8 +127,6 @@ const ADDITIONAL_ASSESSMENTS = [
     id: 'cognitive-patterns',
     name: 'Cognitive style',
     description: 'Explore your problem-solving approach, decision-making, and learning preferences.',
-    icon: GraduationCap,
-    color: 'var(--color-trait-agreeableness)',
     duration: '~5 min',
     status: 'available' as const,
     dataField: 'cognitive_patterns_data',
@@ -196,7 +141,6 @@ export function PersonalityInsights() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [personalityData, setPersonalityData] = useState<PersonalityData | null>(null);
-  const [selectedDimension, setSelectedDimension] = useState<keyof typeof OCEAN_INFO | null>(null);
   const [expandedDimension, setExpandedDimension] = useState<string | null>(null);
   const [cooldownRemaining, setCooldownRemaining] = useState<number | null>(null);
   const [assessmentCooldowns, setAssessmentCooldowns] = useState<Record<string, number | null>>({});
@@ -303,18 +247,15 @@ export function PersonalityInsights() {
 
   if (!hasCompletedAssessment) {
     return (
-      <div className="flex-1 flex items-center justify-center px-4 py-12" style={{ backgroundColor: 'var(--color-background)', minHeight: 'calc(100vh - 80px)' }}>
-        <div className="text-center">
-          <div className="w-20 h-20 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}>
-            <Brain className="w-10 h-10" style={{ color: 'var(--color-trait-openness)' }} />
-          </div>
-          <h1 className="text-title mb-4" style={{ color: 'var(--color-text)' }}>Discover your personality</h1>
-          <p className="mb-6 max-w-sm mx-auto" style={{ color: 'var(--color-textSecondary)' }}>
-            Take the personality assessment to unlock your insights and find jobs that truly fit your style.
+      <div className="flex-1 flex items-center justify-center px-4 py-12" style={{ minHeight: 'calc(100vh - 80px)' }}>
+        <div className="text-center max-w-sm">
+          <h1 className="text-title" style={{ color: 'var(--color-text)' }}>Discover your personality</h1>
+          <p className="mt-2 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+            Take the personality assessment to unlock your insights and find jobs that fit your style.
           </p>
-          <Link to="/app/personality">
-            <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>Start assessment</Button>
-          </Link>
+          <Button className="mt-6" rightIcon={<ArrowRight className="w-4 h-4" />} onClick={() => navigate('/app/personality')}>
+            Start assessment
+          </Button>
         </div>
       </div>
     );
@@ -417,9 +358,6 @@ export function PersonalityInsights() {
   if (scores.conscientiousness > 60) { energizers.push('Clear goals & progress'); drainers.push('Unclear expectations'); }
   else { energizers.push('Flexible schedules'); drainers.push('Rigid processes'); }
 
-  // Personality facts
-  const personalityFacts = getFactsForProfile(scores, 4);
-
   // Archetype name for header
   const primaryArchetype = personalityData?.top_traits?.[0] || 'The Explorer';
   // Generate tagline
@@ -433,583 +371,394 @@ export function PersonalityInsights() {
   const tagline = taglineMap[dominantDimension] || 'A unique blend of traits that makes you distinctively you';
 
   return (
-    <div className="min-h-screen py-6 px-4 sm:px-6" style={{ backgroundColor: 'var(--color-background)' }}>
-      <div className="max-w-7xl mx-auto">
-
-        {/* 1. Hero / Profile Header */}
-        <PageBanner
-          title={primaryArchetype}
-          subtitle={tagline}
-          belowSubtitle={<Facts items={[{ label: 'Strongest trait', value: OCEAN_INFO[dominantDimension]?.label || 'Openness' }, { label: 'Decision style', value: decisionStyle }, { label: 'Top score', value: `${sortedScores[0]?.[1] || 0}%` }]} />}
-          rightContent={
-            <div className="flex items-center gap-3 flex-wrap">
-              <ProfileCompleteness completedCount={completionCount} variant="ring" size="sm" showLabel={false} />
-              <Button variant="ghost" size="sm" onClick={() => setShowSnapshotCard(!showSnapshotCard)}>
-                {showSnapshotCard ? 'Hide snapshot' : 'Share profile'}
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <PageBanner
+        title={primaryArchetype}
+        subtitle={tagline}
+        belowSubtitle={
+          <Facts
+            items={[
+              { label: 'Strongest trait', value: OCEAN_INFO[dominantDimension]?.label || 'Openness' },
+              { label: 'Decision style', value: decisionStyle },
+              { label: 'Top score', value: sortedScores[0]?.[1] || 0 },
+            ]}
+          />
+        }
+        rightContent={
+          <>
+            <Button variant="ghost" size="sm" onClick={() => setShowSnapshotCard(!showSnapshotCard)}>
+              {showSnapshotCard ? 'Hide snapshot' : 'Share profile'}
+            </Button>
+            {cooldownRemaining && cooldownRemaining > 0 ? (
+              <span className="text-label" style={{ color: 'var(--color-textMuted)' }}>
+                Retake in {formatCooldown(cooldownRemaining)}
+              </span>
+            ) : (
+              <Button
+                variant="outline"
+                size="sm"
+                leftIcon={<RotateCcw className="w-3.5 h-3.5" />}
+                onClick={() => navigate('/app/personality')}
+              >
+                Retake
               </Button>
-              {cooldownRemaining && cooldownRemaining > 0 ? (
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ backgroundColor: 'var(--color-surface)' }}>
-                  <Clock className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />
-                  <span className="text-xs" style={{ color: 'var(--color-textMuted)' }}>Retake in {formatCooldown(cooldownRemaining)}</span>
-                </div>
-              ) : (
-                <Link to="/app/personality">
-                  <Button variant="outline" size="sm" leftIcon={<RotateCcw className="w-3.5 h-3.5" />}>Retake</Button>
-                </Link>
-              )}
-            </div>
-          }
-        />
+            )}
+          </>
+        }
+      />
 
-        {/* Snapshot Card (toggleable) */}
-        <AnimatePresence>
-          {showSnapshotCard && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mb-6 overflow-hidden"
-            >
+      <AnimatePresence>
+        {showSnapshotCard && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="pb-10">
               <PersonalitySnapshotCard
                 archetypeName={primaryArchetype}
                 topTraits={personalityData?.top_traits?.slice(0, 3) || []}
                 scores={scores}
                 tagline={tagline}
               />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* 2. OCEAN Radar Chart + Dimension Breakdown */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
-          <motion.div
-            className="lg:col-span-3 bento-card"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-              <Brain className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              OCEAN profile
-            </h2>
-            {completionCount > 1 && (
-              <p className="text-caption mt-1 mb-3" style={{ color: 'var(--color-accent)' }}>
-                Enhanced with {completionCount - 1} supplementary assessment{completionCount > 2 ? 's' : ''}
-              </p>
-            )}
-            <OceanMindMap
-              scores={scores}
-              colors={Object.fromEntries(Object.entries(OCEAN_INFO).map(([k, v]) => [k, v.color]))}
-              labels={Object.fromEntries(Object.entries(OCEAN_INFO).map(([k, v]) => [k, v.label]))}
-              size="lg"
-              animated
-              onDimensionClick={(key) => setSelectedDimension(selectedDimension === key ? null : key as keyof typeof OCEAN_INFO)}
-              selectedDimension={selectedDimension}
-            />
-            <p className="text-caption text-center mt-2" style={{ color: 'var(--color-textMuted)' }}>
-              Click a dimension to explore
-            </p>
-          </motion.div>
-
-          {/* 3. Dimension Breakdown */}
-          <motion.div
-            className="lg:col-span-2 bento-card"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-          >
-            {selectedDimension ? (
-              <DimensionDetail
-                dimension={selectedDimension}
-                score={scores[selectedDimension]}
-                info={OCEAN_INFO[selectedDimension]}
-                onClose={() => setSelectedDimension(null)}
-              />
-            ) : (
-              <div>
-                <h2 className="text-base font-semibold tracking-tight mb-2 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                  <Layers className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-                  Dimension breakdown
-                </h2>
-                <div className="space-y-4">
-                  {(Object.entries(OCEAN_INFO) as [keyof typeof OCEAN_INFO, typeof OCEAN_INFO[keyof typeof OCEAN_INFO]][]).map(([key, info]) => (
-                    <div key={key}>
-                      <button
-                        className="w-full text-left"
-                        onClick={() => setExpandedDimension(expandedDimension === key ? null : key)}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <div className="flex items-center gap-2">
-                            <info.icon className="w-4 h-4" style={{ color: info.color }} />
-                            <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-                              {info.fullLabel}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold" style={{ color: info.color }}>
-                              {scores[key]}
-                            </span>
-                            {expandedDimension === key
-                              ? <ChevronUp className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />
-                              : <ChevronDown className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />
-                            }
-                          </div>
-                        </div>
-                      </button>
-                      <GradientProgressBar value={scores[key]} showValue={false} size="sm" color={info.color} />
-                      <AnimatePresence>
-                        {expandedDimension === key && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="overflow-hidden"
-                          >
-                            <div className="pt-2 pb-1">
-                              <p className="text-xs mb-2" style={{ color: 'var(--color-textMuted)' }}>
-                                {info.description}
-                              </p>
-                              <div className="flex flex-wrap gap-1">
-                                {(scores[key] >= 50 ? info.highTraits : info.lowTraits).slice(0, 3).map((trait, i) => (
-                                  <span key={i} className="text-xs px-2 py-0.5 rounded-md" style={{ backgroundColor: `${info.color}10`, color: info.color }}>
-                                    {trait}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </motion.div>
-        </div>
-
-        {/* 4. Your Archetypes */}
-        {personalityData?.top_traits && personalityData.top_traits.length > 0 && (
-          <motion.div
-            className="bento-card mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-              <Sparkles className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              Your personality archetypes
-            </h2>
-            <p className="text-label mb-4" style={{ color: 'var(--color-textMuted)' }}>
-              Work, lead, collaborate
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {personalityData.top_traits.slice(0, 3).map((trait, index) => {
-                const arch = getArchetypeByName(trait);
-                const variants: ('primary' | 'secondary' | 'tertiary')[] = ['primary', 'secondary', 'tertiary'];
-                return (
-                  <ArchetypeCard
-                    key={trait}
-                    name={trait}
-                    description={arch?.description || ''}
-                    strengths={arch?.strengths || []}
-                    idealEnvironments={arch?.idealEnvironments || []}
-                    variant={variants[index]}
-                    delay={index * 0.15}
-                  />
-                );
-              })}
             </div>
           </motion.div>
         )}
+      </AnimatePresence>
 
-        {/* 5. Thinking & Operating Style */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-        >
-          <h2 className="text-base font-semibold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <Puzzle className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Thinking & operating style
-          </h2>
+      <Section
+        title="Trait scores"
+        aside={completionCount > 1 && (
+          <span className="text-caption" style={{ color: 'var(--color-textMuted)' }}>
+            Includes {completionCount - 1} supplementary assessment{completionCount > 2 ? 's' : ''}
+          </span>
+        )}
+        first
+      >
+        <ul className="bento-card !p-0 overflow-hidden">
+          {(Object.entries(OCEAN_INFO) as [keyof typeof OCEAN_INFO, typeof OCEAN_INFO[keyof typeof OCEAN_INFO]][]).map(([key, info], i) => (
+            <TraitRow
+              key={key}
+              info={info}
+              score={scores[key]}
+              divided={i > 0}
+              expanded={expandedDimension === key}
+              onToggle={() => setExpandedDimension(expandedDimension === key ? null : key)}
+            />
+          ))}
+        </ul>
+      </Section>
+
+      {personalityData?.top_traits && personalityData.top_traits.length > 0 && (
+        <Section title="Your archetypes">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { icon: Brain, label: 'Decision-making', value: decisionStyle, color: 'var(--color-trait-openness)' },
-              { icon: MessageCircle, label: 'Communication', value: communicationStyle, color: 'var(--color-trait-conscientiousness)' },
-              { icon: Lightbulb, label: 'Problem-solving', value: problemSolvingStyle, color: 'var(--color-trait-extraversion)' },
-            ].map((item) => (
-              <div key={item.label} className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-                <div className="flex items-center gap-2 mb-2">
-                  <item.icon className="w-4 h-4" style={{ color: item.color }} />
-                  <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{item.label}</span>
-                </div>
-                <p className="font-semibold" style={{ color: item.color }}>{item.value}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* 6. Energy Map */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <h2 className="text-base font-semibold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <Battery className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Your energy map
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: 'var(--color-trait-conscientiousness)' }}>
-                <Zap className="w-4 h-4" /> What energizes you
-              </p>
-              <div className="space-y-2">
-                {energizers.map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 p-3 rounded-lg" style={{ backgroundColor: 'rgba(16, 185, 129, 0.06)' }}>
-                    <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--color-trait-conscientiousness)' }} />
-                    <span className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: '#EF4444' }}>
-                <Battery className="w-4 h-4" /> What drains you
-              </p>
-              <div className="space-y-2">
-                {drainers.map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 p-3 rounded-lg" style={{ backgroundColor: 'rgba(239, 68, 68, 0.06)' }}>
-                    <X className="w-4 h-4 flex-shrink-0" style={{ color: '#EF4444' }} />
-                    <span className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* 7. Environments You Thrive In */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35 }}
-        >
-          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <Building2 className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Environments you thrive in
-          </h2>
-          <p className="text-label mb-4" style={{ color: 'var(--color-textMuted)' }}>
-            Ideal work settings
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              {
-                icon: scores.openness > 60 ? Palette : Shield,
-                label: scores.openness > 60 ? 'Innovation-driven' : 'Proven methods',
-                desc: scores.openness > 60 ? 'Values creativity' : 'Values stability',
-                color: 'var(--color-trait-openness)',
-              },
-              {
-                icon: scores.conscientiousness > 60 ? Target : Compass,
-                label: scores.conscientiousness > 60 ? 'Goal-oriented' : 'Flexible goals',
-                desc: scores.conscientiousness > 60 ? 'Clear metrics' : 'Adaptive objectives',
-                color: 'var(--color-trait-conscientiousness)',
-              },
-              {
-                icon: scores.extraversion > 60 ? Users : Focus,
-                label: scores.extraversion > 60 ? 'Collaborative' : 'Focused work',
-                desc: scores.extraversion > 60 ? 'Team-based' : 'Independent',
-                color: 'var(--color-trait-extraversion)',
-              },
-              {
-                icon: scores.agreeableness > 60 ? Heart : Award,
-                label: scores.agreeableness > 60 ? 'People-first' : 'Results-first',
-                desc: scores.agreeableness > 60 ? 'Relationships' : 'Outcomes',
-                color: 'var(--color-trait-agreeableness)',
-              },
-            ].map((item, i) => (
-              <div key={i} className="p-4 rounded-xl text-center" style={{ backgroundColor: 'var(--color-background)' }}>
-                <div className="w-10 h-10 rounded-xl mx-auto mb-3 flex items-center justify-center" style={{ backgroundColor: `${item.color}15` }}>
-                  <item.icon className="w-5 h-5" style={{ color: item.color }} />
-                </div>
-                <p className="font-medium text-sm mb-1" style={{ color: 'var(--color-text)' }}>{item.label}</p>
-                <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* 8. Growth Edges */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <Leaf className="w-5 h-5" style={{ color: 'var(--color-trait-conscientiousness)' }} />
-            Growth edges
-          </h2>
-          <p className="text-label mb-4" style={{ color: 'var(--color-textMuted)' }}>
-            Room to grow
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {sortedScores.slice(-2).map(([key, value]) => {
-              const info = OCEAN_INFO[key as keyof typeof OCEAN_INFO];
-              const growthTips: Record<string, string> = {
-                openness: 'Try experimenting with one new approach per week in your work.',
-                conscientiousness: 'Start with small planning habits — even a daily 5-minute review helps.',
-                extraversion: 'Practice sharing one idea per meeting, even informally.',
-                agreeableness: 'Try active listening exercises to deepen team connections.',
-                neuroticism: 'Build a stress toolkit — breathing exercises, journaling, or physical activity.',
-              };
+            {personalityData.top_traits.slice(0, 3).map((trait, index) => {
+              const arch = getArchetypeByName(trait);
+              const variants: ('primary' | 'secondary' | 'tertiary')[] = ['primary', 'secondary', 'tertiary'];
               return (
-                <div key={key} className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <info.icon className="w-4 h-4" style={{ color: info.color }} />
-                    <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{info.fullLabel}</span>
-                    <span className="text-xs font-semibold ml-auto" style={{ color: info.color }}>{value}/100</span>
+                <ArchetypeCard
+                  key={trait}
+                  name={trait}
+                  description={arch?.description || ''}
+                  strengths={arch?.strengths || []}
+                  idealEnvironments={arch?.idealEnvironments || []}
+                  variant={variants[index]}
+                />
+              );
+            })}
+          </div>
+        </Section>
+      )}
+
+      <Section title="How you work">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="bento-card">
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Thinking and operating style</h3>
+            <dl className="mt-4 space-y-3">
+              <Detail label="Decision-making">{decisionStyle}</Detail>
+              <Detail label="Communication">{communicationStyle}</Detail>
+              <Detail label="Problem-solving">{problemSolvingStyle}</Detail>
+            </dl>
+          </div>
+          <div className="bento-card">
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Energy</h3>
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <DotList title="What energizes you" items={energizers} dot="var(--color-success)" />
+              <DotList title="What drains you" items={drainers} dot="var(--color-error)" />
+            </div>
+          </div>
+        </div>
+      </Section>
+
+      <Section title="Where you fit">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="bento-card">
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Work settings you thrive in</h3>
+            <dl className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+              <Detail label={scores.openness > 60 ? 'Innovation-driven' : 'Proven methods'}>
+                {scores.openness > 60 ? 'Values creativity' : 'Values stability'}
+              </Detail>
+              <Detail label={scores.conscientiousness > 60 ? 'Goal-oriented' : 'Flexible goals'}>
+                {scores.conscientiousness > 60 ? 'Clear metrics' : 'Adaptive objectives'}
+              </Detail>
+              <Detail label={scores.extraversion > 60 ? 'Collaborative' : 'Focused work'}>
+                {scores.extraversion > 60 ? 'Team-based' : 'Independent'}
+              </Detail>
+              <Detail label={scores.agreeableness > 60 ? 'People-first' : 'Results-first'}>
+                {scores.agreeableness > 60 ? 'Relationships' : 'Outcomes'}
+              </Detail>
+            </dl>
+          </div>
+          <div className="bento-card flex flex-col">
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Team and culture fit</h3>
+            <dl className="mt-4 space-y-3">
+              <Detail label="Company size">
+                {scores.conscientiousness > 65 ? 'Mid-size to enterprise' : scores.openness > 65 ? 'Startups to mid-size' : 'Flexible across sizes'}
+              </Detail>
+              <Detail label="Team dynamic">
+                {scores.extraversion > 65 ? 'Collaborative and social' : scores.extraversion < 35 ? 'Small and focused' : 'Balanced teams'}
+              </Detail>
+              <Detail label="Management style">
+                {scores.conscientiousness > 65 ? 'Structured and clear' : scores.openness > 65 ? 'Autonomous and trust-based' : 'Supportive and flexible'}
+              </Detail>
+            </dl>
+            <Link
+              to="/app/ember"
+              className="group mt-auto pt-5 inline-flex items-center gap-1.5 self-start text-label"
+              style={{ color: 'var(--color-accent)' }}
+            >
+              View your matches
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+        </div>
+      </Section>
+
+      <Section title="Growth edges">
+        <div className="bento-card grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+          {sortedScores.slice(-2).map(([key, value]) => {
+            const info = OCEAN_INFO[key as keyof typeof OCEAN_INFO];
+            return (
+              <div key={key}>
+                <GradientProgressBar value={value} label={info.fullLabel} color={info.color} size="sm" />
+                <p className="mt-2 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+                  {GROWTH_TIPS[key]}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </Section>
+
+      <Section
+        title="Enhance your profile"
+        aside={
+          <span className="text-caption tabular-nums" style={{ color: 'var(--color-textMuted)' }}>
+            {completionCount} of {completedAssessments.length} complete
+          </span>
+        }
+      >
+        <p className="-mt-1 mb-3 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+          Each extra assessment sharpens your trait scores and your matches.
+        </p>
+        <ul className="bento-card !p-0 overflow-hidden">
+          {ADDITIONAL_ASSESSMENTS.map((assessment, i) => {
+            const isAvailable = assessment.status === 'available';
+            const isCompleted = personalityData
+              ? !!(personalityData as unknown as Record<string, unknown>)[assessment.dataField]
+              : false;
+            const cooldown = assessmentCooldowns[assessment.id];
+            const isOnCooldown = isCompleted && cooldown !== null && cooldown !== undefined && cooldown > 0;
+
+            return (
+              <li
+                key={assessment.id}
+                className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 sm:px-5 py-4"
+                style={{ borderTop: i > 0 ? '1px solid var(--color-border)' : undefined }}
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <h3 className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{assessment.name}</h3>
+                    {isCompleted && <StatusDot label="Done" />}
                   </div>
-                  <GradientProgressBar value={value} showValue={false} size="sm" color={info.color} />
-                  <p className="text-xs mt-2" style={{ color: 'var(--color-textMuted)' }}>
-                    {growthTips[key]}
+                  <p className="mt-0.5 text-sm" style={{ color: 'var(--color-textSecondary)' }}>{assessment.description}</p>
+                  <p className="mt-1 text-caption" style={{ color: 'var(--color-textMuted)' }}>
+                    {assessment.duration} · {assessment.traits.join(', ')}
                   </p>
                 </div>
-              );
-            })}
-          </div>
-        </motion.div>
+                {isAvailable ? (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="self-start sm:self-auto flex-shrink-0"
+                    onClick={() => handleAssessmentClick(assessment.id, isCompleted, cooldown)}
+                  >
+                    {isOnCooldown ? `Retake in ${formatCooldown(cooldown!)}` : isCompleted ? 'Retake' : 'Start'}
+                  </Button>
+                ) : (
+                  <span className="text-label flex-shrink-0" style={{ color: 'var(--color-textMuted)' }}>Coming soon</span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </Section>
 
-        {/* 9. Compatibility Signals */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45 }}
-        >
-          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <TrendingUp className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Compatibility signals
-          </h2>
-          <p className="text-label mb-3" style={{ color: 'var(--color-textMuted)' }}>
-            Team and culture fit
+      <section className="mt-10 bento-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>Ready to find your match?</h2>
+          <p className="mt-1 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+            See companies whose culture lines up with your profile.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="text-caption mb-1" style={{ color: 'var(--color-textMuted)' }}>Company size</p>
-              <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
-                {scores.conscientiousness > 65 ? 'Mid-size to enterprise' : scores.openness > 65 ? 'Startups to mid-size' : 'Flexible across sizes'}
-              </p>
-            </div>
-            <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="text-caption mb-1" style={{ color: 'var(--color-textMuted)' }}>Team dynamic</p>
-              <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
-                {scores.extraversion > 65 ? 'Collaborative & social' : scores.extraversion < 35 ? 'Small & focused' : 'Balanced teams'}
-              </p>
-            </div>
-            <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="text-caption mb-1" style={{ color: 'var(--color-textMuted)' }}>Management style</p>
-              <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
-                {scores.conscientiousness > 65 ? 'Structured & clear' : scores.openness > 65 ? 'Autonomous & trust-based' : 'Supportive & flexible'}
-              </p>
-            </div>
-          </div>
-          <Link to="/app/ember">
-            <Button variant="outline" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
-              View your matches
-            </Button>
-          </Link>
-        </motion.div>
-
-        {/* 10. Supplementary Assessments */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+        </div>
+        <Button
+          className="self-start sm:self-auto flex-shrink-0"
+          rightIcon={<ArrowRight className="w-4 h-4" />}
+          onClick={() => navigate('/app/ember')}
         >
-          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <Rocket className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Enhance your profile
-          </h2>
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-label" style={{ color: 'var(--color-textMuted)' }}>
-              Complete more assessments for a more accurate personality picture
-            </p>
-            <ProfileCompleteness completedCount={completionCount} variant="ring" size="sm" showLabel={false} />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {ADDITIONAL_ASSESSMENTS.map(assessment => {
-              const AssessmentIcon = assessment.icon;
-              const isAvailable = assessment.status === 'available';
-              const isCompleted = personalityData
-                ? !!(personalityData as unknown as Record<string, unknown>)[assessment.dataField]
-                : false;
-              const cooldown = assessmentCooldowns[assessment.id];
-              const isOnCooldown = isCompleted && cooldown !== null && cooldown !== undefined && cooldown > 0;
-
-              return (
-                <div
-                  key={assessment.id}
-                  className="p-5 rounded-xl flex gap-4 transition-all"
-                  style={{
-                    backgroundColor: 'var(--color-background)',
-                    border: isCompleted ? `1px solid ${assessment.color}60` : `1px solid ${assessment.color}40`,
-                    opacity: isAvailable ? 1 : 0.7,
-                  }}
-                >
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 relative" style={{ backgroundColor: `${assessment.color}15` }}>
-                    <AssessmentIcon className="w-6 h-6" style={{ color: assessment.color }} />
-                    {isCompleted && (
-                      <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--color-trait-conscientiousness)' }}>
-                        <CheckCircle2 className="w-3 h-3 text-white" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-medium text-sm" style={{ color: 'var(--color-text)' }}>{assessment.name}</h3>
-                      {isCompleted && <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', color: 'var(--color-trait-conscientiousness)' }}>Done</span>}
-                      {isOnCooldown && (
-                        <span className="px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1" style={{ backgroundColor: `${assessment.color}10`, color: assessment.color }}>
-                          <Clock className="w-3 h-3" />{formatCooldown(cooldown!)}
-                        </span>
-                      )}
-                      {!isAvailable && (
-                        <span className="px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1" style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textMuted)' }}>
-                          <Lock className="w-3 h-3" />Soon
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs mb-2" style={{ color: 'var(--color-textMuted)' }}>{assessment.description}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex flex-wrap gap-1">
-                        {assessment.traits.map((t, i) => (
-                          <span key={i} className="px-1.5 py-0.5 rounded text-xs" style={{ backgroundColor: `${assessment.color}10`, color: assessment.color }}>{t}</span>
-                        ))}
-                      </div>
-                      <span className="text-xs flex-shrink-0 ml-2" style={{ color: 'var(--color-textMuted)' }}>{assessment.duration}</span>
-                    </div>
-                    {isAvailable && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="mt-3"
-                        rightIcon={<ArrowRight className="w-3 h-3" />}
-                        onClick={() => handleAssessmentClick(assessment.id, isCompleted, cooldown)}
-                      >
-                        {isOnCooldown ? `Retake in ${formatCooldown(cooldown!)}` : isCompleted ? 'Retake' : 'Start'}
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </motion.div>
-
-        {/* 11. Did You Know? */}
-        <motion.div
-          className="mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.55 }}
-        >
-          <DidYouKnowCard facts={personalityFacts} />
-        </motion.div>
-
-        {/* CTA */}
-        <motion.div
-          className="bento-card text-center"
-          style={{ borderLeft: '3px solid var(--color-accent)' }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          <h3 className="text-base font-semibold tracking-tight mb-2" style={{ color: 'var(--color-text)' }}>Ready to find your match?</h3>
-          <p className="text-sm mb-4" style={{ color: 'var(--color-textSecondary)' }}>
-            Discover companies whose culture aligns with your personality profile
-          </p>
-          <Link to="/app/ember">
-            <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>View matches</Button>
-          </Link>
-        </motion.div>
-      </div>
+          View matches
+        </Button>
+      </section>
     </div>
   );
 }
 
-// Dimension detail panel
-function DimensionDetail({
-  score,
-  info,
-  onClose,
+const GROWTH_TIPS: Record<string, string> = {
+  openness: 'Try experimenting with one new approach per week in your work.',
+  conscientiousness: 'Start with small planning habits — even a daily 5-minute review helps.',
+  extraversion: 'Practice sharing one idea per meeting, even informally.',
+  agreeableness: 'Try active listening exercises to deepen team connections.',
+  neuroticism: 'Build a stress toolkit — breathing exercises, journaling, or physical activity.',
+};
+
+function Section({
+  title,
+  aside,
+  first = false,
+  children,
 }: {
-  dimension?: string;
-  score: number;
-  info: typeof OCEAN_INFO[keyof typeof OCEAN_INFO];
-  onClose: () => void;
+  title: string;
+  aside?: React.ReactNode;
+  first?: boolean;
+  children: React.ReactNode;
 }) {
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${info.color}20` }}>
-            <info.icon className="w-6 h-6" style={{ color: info.color }} />
-          </div>
-          <div>
-            <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--color-text)' }}>{info.fullLabel}</h2>
-            <p className="text-sm" style={{ color: info.color }}>Score: {score}/100</p>
-          </div>
-        </div>
-        <button onClick={onClose} className="p-2 rounded-lg hover:bg-[var(--color-background)]">
-          <X className="w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
-        </button>
+    <section className={first ? undefined : 'mt-10'}>
+      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>{title}</h2>
+        {aside}
       </div>
+      {children}
+    </section>
+  );
+}
 
-      <GradientProgressBar value={score} color={info.color} showValue={false} size="md" />
-
-      <p className="text-sm mt-3 mb-3" style={{ color: 'var(--color-textSecondary)' }}>{info.description}</p>
-
-      <div className="p-3 rounded-lg mb-4" style={{ backgroundColor: 'var(--color-background)' }}>
-        <p className="text-xs font-medium mb-1" style={{ color: 'var(--color-text)' }}>Workplace impact</p>
-        <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>{info.workplaceImpact}</p>
-      </div>
-
-      <div className="flex-1 overflow-auto">
-        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
-          {score >= 50 ? 'Your strengths' : 'Your approach'}
-        </h3>
-        <ul className="space-y-1.5 mb-4">
-          {(score >= 50 ? info.highTraits : info.lowTraits).map((trait, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm">
-              <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: info.color }} />
-              <span style={{ color: 'var(--color-textSecondary)' }}>{trait}</span>
-            </li>
-          ))}
-        </ul>
-
-        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Ideal roles</h3>
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {info.idealRoles.map((role, i) => (
-            <span key={i} className="px-2 py-1 rounded-md text-xs" style={{ backgroundColor: `${info.color}15`, color: info.color }}>{role}</span>
-          ))}
-        </div>
-
-        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Culture match</h3>
-        <div className="flex flex-wrap gap-1.5">
-          {info.cultureMatch.map((culture, i) => (
-            <span key={i} className="px-2 py-1 rounded-md text-xs" style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textSecondary)' }}>{culture}</span>
-          ))}
-        </div>
-      </div>
+function Detail({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <dt className="text-caption" style={{ color: 'var(--color-textMuted)' }}>{label}</dt>
+      <dd className="mt-0.5 text-sm" style={{ color: 'var(--color-text)' }}>{children}</dd>
     </div>
+  );
+}
+
+function DotList({ title, items, dot }: { title: string; items: string[]; dot: string }) {
+  return (
+    <div>
+      <p className="text-caption" style={{ color: 'var(--color-textMuted)' }}>{title}</p>
+      <ul className="mt-2 space-y-2">
+        {items.map((item) => (
+          <li key={item} className="flex items-center gap-2.5 text-sm" style={{ color: 'var(--color-text)' }}>
+            <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: dot }} />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function StatusDot({ label }: { label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 text-caption" style={{ color: 'var(--color-textSecondary)' }}>
+      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-success)' }} />
+      {label}
+    </span>
+  );
+}
+
+// One trait: the score bar is always visible and the explanation opens in place
+function TraitRow({
+  info,
+  score,
+  divided,
+  expanded,
+  onToggle,
+}: {
+  info: typeof OCEAN_INFO[keyof typeof OCEAN_INFO];
+  score: number;
+  divided: boolean;
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  const traits = score >= 50 ? info.highTraits : info.lowTraits;
+
+  return (
+    <li style={{ borderTop: divided ? '1px solid var(--color-border)' : undefined }}>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={expanded}
+        className="w-full px-4 sm:px-5 py-3.5 text-left transition-colors hover:bg-[var(--color-surfaceHover)]"
+      >
+        <div className="mb-1.5 flex items-baseline justify-between gap-3">
+          <span className="min-w-0 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+            {info.fullLabel}
+            <span className="hidden sm:inline font-normal" style={{ color: 'var(--color-textMuted)' }}> · {info.shortDesc}</span>
+          </span>
+          <span className="flex items-center gap-2 text-sm tabular-nums" style={{ color: 'var(--color-textSecondary)' }}>
+            {score}
+            <ChevronDown
+              className={`w-4 h-4 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+              style={{ color: 'var(--color-textMuted)' }}
+            />
+          </span>
+        </div>
+        <GradientProgressBar value={score} showValue={false} size="sm" color={info.color} />
+      </button>
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 px-4 sm:px-5 pb-5 pt-1">
+              <div className="space-y-2 text-sm">
+                <p style={{ color: 'var(--color-text)' }}>{info.description}</p>
+                <p style={{ color: 'var(--color-textSecondary)' }}>{info.workplaceImpact}</p>
+              </div>
+              <dl className="space-y-3">
+                <div>
+                  <dt className="text-caption" style={{ color: 'var(--color-textMuted)' }}>
+                    {score >= 50 ? 'Your strengths' : 'Your approach'}
+                  </dt>
+                  <dd className="mt-1">
+                    <ul className="space-y-1 text-sm" style={{ color: 'var(--color-text)' }}>
+                      {traits.map((trait) => <li key={trait}>{trait}</li>)}
+                    </ul>
+                  </dd>
+                </div>
+                <Detail label="Ideal roles">{info.idealRoles.join(', ')}</Detail>
+                <Detail label="Culture match">{info.cultureMatch.join(', ')}</Detail>
+              </dl>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </li>
   );
 }
 

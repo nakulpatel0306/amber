@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Sparkles, Target, AlertTriangle } from 'lucide-react';
 
 interface ArchetypeCardProps {
   name: string;
@@ -13,6 +12,8 @@ interface ArchetypeCardProps {
   delay?: number;
 }
 
+const RANK_LABEL = { primary: 'Primary', secondary: 'Secondary', tertiary: 'Tertiary' };
+
 export function ArchetypeCard({
   name,
   description,
@@ -25,142 +26,49 @@ export function ArchetypeCard({
   delay = 0,
 }: ArchetypeCardProps) {
   const idealItems = idealEnvironments || idealCandidates || [];
-  const isHighlighted = isPrimary || variant === 'primary';
+  const rank = variant ?? (isPrimary ? 'primary' : null);
 
-  const variantConfig = {
-    primary: { label: 'Primary', bgColor: 'var(--color-accent)', textColor: 'white', borderColor: 'var(--color-accent)', borderWidth: 2 },
-    secondary: { label: 'Secondary', bgColor: 'rgba(139, 92, 246, 0.15)', textColor: '#8B5CF6', borderColor: '#8B5CF680', borderWidth: 1.5 },
-    tertiary: { label: 'Tertiary', bgColor: 'rgba(6, 182, 212, 0.12)', textColor: '#06B6D4', borderColor: '#06B6D460', borderWidth: 1 },
-  };
-
-  const vConfig = variant ? variantConfig[variant] : (isHighlighted ? variantConfig.primary : null);
+  const groups = [
+    { label: 'Strengths', items: strengths.slice(0, 4) },
+    { label: idealCandidates ? 'Ideal candidates' : 'Ideal for', items: idealItems.slice(0, 3) },
+    { label: 'Watch for', items: (blindspots ?? []).slice(0, 3) },
+  ].filter((g) => g.items.length > 0);
 
   return (
     <motion.div
-      className="p-5 rounded-2xl border h-full"
-      style={{
-        backgroundColor: 'var(--color-surface)',
-        borderColor: vConfig ? vConfig.borderColor : 'var(--color-border)',
-        borderWidth: vConfig ? vConfig.borderWidth : 1,
-      }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.4 }}
+      className="bento-card h-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay, duration: 0.3 }}
     >
-      {/* Header */}
-      <div className="flex items-center gap-2 mb-3">
-        {vConfig && (
-          <span
-            className="px-2 py-0.5 rounded-full text-xs font-medium"
-            style={{
-              backgroundColor: vConfig.bgColor,
-              color: vConfig.textColor,
-            }}
-          >
-            {vConfig.label}
-          </span>
-        )}
-        <h3
-          className="font-semibold text-lg"
-          style={{ color: 'var(--color-text)' }}
+      {rank && (
+        <p
+          className="text-caption font-medium"
+          style={{ color: rank === 'primary' ? 'var(--color-accent)' : 'var(--color-textMuted)' }}
         >
-          {name}
-        </h3>
-      </div>
-
-      {/* Description */}
-      <p
-        className="text-sm mb-4"
-        style={{ color: 'var(--color-textSecondary)' }}
-      >
+          {RANK_LABEL[rank]}
+        </p>
+      )}
+      <h3 className="mt-1 text-heading" style={{ color: 'var(--color-text)' }}>
+        {name}
+      </h3>
+      <p className="mt-1.5 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
         {description}
       </p>
 
-      {/* Strengths */}
-      {strengths.length > 0 && (
-        <div className="mb-4">
-          <div className="flex items-center gap-1.5 mb-2">
-            <Sparkles className="w-3.5 h-3.5" style={{ color: '#10B981' }} />
-            <span
-              className="text-xs font-medium"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Strengths
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {strengths.slice(0, 4).map((strength, i) => (
-              <span
-                key={i}
-                className="px-2 py-1 rounded-lg text-xs"
-                style={{
-                  backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                  color: '#10B981',
-                }}
-              >
-                {strength}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Ideal Environments/Candidates */}
-      {idealItems.length > 0 && (
-        <div className="mb-4">
-          <div className="flex items-center gap-1.5 mb-2">
-            <Target className="w-3.5 h-3.5" style={{ color: '#8B5CF6' }} />
-            <span
-              className="text-xs font-medium"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              {idealCandidates ? 'Ideal candidates' : 'Ideal for'}
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {idealItems.slice(0, 3).map((item, i) => (
-              <span
-                key={i}
-                className="px-2 py-1 rounded-lg text-xs"
-                style={{
-                  backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                  color: '#8B5CF6',
-                }}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Blindspots */}
-      {blindspots && blindspots.length > 0 && (
-        <div>
-          <div className="flex items-center gap-1.5 mb-2">
-            <AlertTriangle className="w-3.5 h-3.5" style={{ color: '#F59E0B' }} />
-            <span
-              className="text-xs font-medium"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Watch for
-            </span>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {blindspots.slice(0, 3).map((blindspot, i) => (
-              <span
-                key={i}
-                className="px-2 py-1 rounded-lg text-xs"
-                style={{
-                  backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                  color: '#F59E0B',
-                }}
-              >
-                {blindspot}
-              </span>
-            ))}
-          </div>
-        </div>
+      {groups.length > 0 && (
+        <dl className="mt-4 space-y-3">
+          {groups.map((group) => (
+            <div key={group.label}>
+              <dt className="text-caption" style={{ color: 'var(--color-textMuted)' }}>
+                {group.label}
+              </dt>
+              <dd className="mt-0.5 text-sm" style={{ color: 'var(--color-text)' }}>
+                {group.items.join(', ')}
+              </dd>
+            </div>
+          ))}
+        </dl>
       )}
     </motion.div>
   );

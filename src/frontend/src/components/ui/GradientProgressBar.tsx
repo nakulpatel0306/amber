@@ -10,11 +10,12 @@ interface GradientProgressBarProps {
 }
 
 const SIZE_CONFIG = {
-  sm: { height: 6, labelSize: 'text-xs', valueSize: 'text-xs' },
-  md: { height: 8, labelSize: 'text-sm', valueSize: 'text-sm' },
-  lg: { height: 10, labelSize: 'text-base', valueSize: 'text-base' },
+  sm: { height: 6, textSize: 'text-sm' },
+  md: { height: 8, textSize: 'text-sm' },
+  lg: { height: 10, textSize: 'text-base' },
 };
 
+// The color goes on the bar only; label and value stay in text colors so a list of bars reads as one list
 export function GradientProgressBar({
   value,
   color = 'var(--color-accent)',
@@ -29,20 +30,14 @@ export function GradientProgressBar({
   return (
     <div className="w-full">
       {(label || showValue) && (
-        <div className="flex justify-between items-center mb-1.5">
+        <div className={`flex justify-between items-baseline gap-3 mb-1.5 ${config.textSize}`}>
           {label && (
-            <span
-              className={`font-medium ${config.labelSize}`}
-              style={{ color: 'var(--color-text)' }}
-            >
+            <span className="font-medium" style={{ color: 'var(--color-text)' }}>
               {label}
             </span>
           )}
           {showValue && (
-            <span
-              className={`font-semibold ${config.valueSize}`}
-              style={{ color }}
-            >
+            <span className="tabular-nums" style={{ color: 'var(--color-textSecondary)' }}>
               {Math.round(clampedValue)}
             </span>
           )}
@@ -57,9 +52,7 @@ export function GradientProgressBar({
       >
         <motion.div
           className="h-full rounded-full"
-          style={{
-            backgroundColor: color,
-          }}
+          style={{ backgroundColor: color }}
           initial={animated ? { width: 0 } : { width: `${clampedValue}%` }}
           animate={{ width: `${clampedValue}%` }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: animated ? 0.2 : 0 }}

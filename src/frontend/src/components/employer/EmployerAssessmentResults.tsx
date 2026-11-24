@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Building2 } from 'lucide-react';
-import { AssessmentResultsTemplate } from '../assessments/AssessmentResultsTemplate';
+import { ArrowRight } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
+import { determineEmployerArchetype } from '../../data/employerArchetypes';
+import { Button } from '../ui/Button';
+import { PageBanner } from '../ui/PageBanner';
+import { GradientProgressBar } from '../ui/GradientProgressBar';
 import { CoffeeBrewLoader, useMinLoader } from '../ui/CoffeeBrewLoader';
 
 interface CultureScores {
@@ -15,11 +18,11 @@ interface CultureScores {
 }
 
 const DIMENSION_CONFIG = {
-  openness: { label: 'Openness', color: '#8B5CF6', progressColor: '#8B5CF6' },
-  conscientiousness: { label: 'Conscientiousness', color: '#10B981', progressColor: '#10B981' },
-  extraversion: { label: 'Extraversion', color: '#F59E0B', progressColor: '#F59E0B' },
-  agreeableness: { label: 'Agreeableness', color: '#EC4899', progressColor: '#EC4899' },
-  neuroticism: { label: 'Stability', color: '#06B6D4', progressColor: '#06B6D4' },
+  openness: { label: 'Openness', color: 'var(--color-trait-openness)' },
+  conscientiousness: { label: 'Conscientiousness', color: 'var(--color-trait-conscientiousness)' },
+  extraversion: { label: 'Extraversion', color: 'var(--color-trait-extraversion)' },
+  agreeableness: { label: 'Agreeableness', color: 'var(--color-trait-agreeableness)' },
+  neuroticism: { label: 'Stability', color: 'var(--color-trait-stability)' },
 };
 
 export function EmployerAssessmentResults() {
@@ -76,25 +79,70 @@ export function EmployerAssessmentResults() {
     return null;
   }
 
-  const dimensions = Object.entries(DIMENSION_CONFIG).map(([key, config]) => ({
-    key,
-    label: config.label,
-    value: scores[key as keyof CultureScores],
-    color: config.color,
-    progressColor: config.progressColor,
-  }));
+  // Same mapping the culture insights page uses, so both pages name the same archetype
+  const archetype = determineEmployerArchetype({
+    innovation: scores.openness,
+    collaboration: (scores.extraversion + scores.agreeableness) / 2,
+    results: scores.conscientiousness,
+    warmth: scores.agreeableness,
+    growth: (scores.openness + scores.conscientiousness) / 2,
+    excellence: scores.conscientiousness,
+  }).primary;
+
+  const dimensions = Object.entries(DIMENSION_CONFIG)
+    .map(([key, config]) => ({ key, ...config, value: scores[key as keyof CultureScores] }))
+    .sort((a, b) => b.value - a.value);
 
   return (
-    <AssessmentResultsTemplate
-      title="Culture profile complete"
-      subtitle="Your ideal candidate profile has been created"
-      dimensions={dimensions}
-      enhancedMessage="Ember now ranks candidates against this profile. Set trait ranges on each role to sharpen the ranking."
-      icon={<Building2 className="w-10 h-10 text-white" />}
-      profileUrl="/app/employer/insights"
-      matchesUrl="/app/employer/top-candidates"
-      profileLabel="View insights"
-      matchesLabel="Browse candidates"
-    />
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
+      <PageBanner
+        title="Culture profile complete"
+        subtitle="Your ideal candidate profile across the five OCEAN traits."
+      />
+
+      <section className="bento-card">
+        <p className="text-label" style={{ color: 'var(--color-textSecondary)' }}>
+          Your culture archetype
+        </p>
+        <h2 className="mt-2 text-title" style={{ color: 'var(--color-text)' }}>
+          {archetype.name}
+        </h2>
+        <p className="mt-1.5 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+          {archetype.description}
+        </p>
+        <p className="mt-3 text-sm" style={{ color: 'var(--color-text)' }}>
+          <span style={{ color: 'var(--color-textMuted)' }}>Ideal candidates </span>
+          {archetype.idealCandidates.join(', ')}
+        </p>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>
+          Ideal candidate traits
+        </h2>
+        <div className="bento-card mt-3 space-y-4">
+          {dimensions.map((dim) => (
+            <GradientProgressBar key={dim.key} value={dim.value} label={dim.label} color={dim.color} size="sm" />
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-10">
+        <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+          Ember now ranks candidates against this profile. Set trait ranges on each role to sharpen the ranking.
+        </p>
+        <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-3">
+          <Button onClick={() => navigate('/app/employer/top-candidates')} rightIcon={<ArrowRight className="w-4 h-4" />}>
+            Browse candidates
+          </Button>
+          <Button variant="outline" onClick={() => navigate('/app/employer/insights')}>
+            View full insights
+          </Button>
+          <Button variant="ghost" onClick={() => navigate('/app/employer')}>
+            Go to dashboard
+          </Button>
+        </div>
+      </section>
+    </div>
   );
 }

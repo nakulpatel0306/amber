@@ -29,25 +29,10 @@ export function PersonalitySnapshotCard({
   };
 
   return (
-    <div
-      className="p-6 rounded-2xl border relative overflow-hidden"
-      style={{
-        backgroundColor: 'var(--color-surface)',
-        borderColor: 'var(--color-border)',
-      }}
-    >
-      {/* Top accent bar */}
-      <div
-        className="absolute top-0 left-0 right-0 h-1"
-        style={{ backgroundColor: 'var(--color-accent)' }}
-      />
-
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <p className="text-xs font-medium mb-1" style={{ color: 'var(--color-textMuted)' }}>
-            Your personality snapshot
-          </p>
-          <h3 className="text-xl font-semibold" style={{ color: 'var(--color-text)' }}>
+    <div className="bento-card">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h3 className="text-heading" style={{ color: 'var(--color-text)' }}>
             {archetypeName}
           </h3>
           {tagline && (
@@ -66,29 +51,20 @@ export function PersonalitySnapshotCard({
         </Button>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-center gap-4">
+      <div className="mt-4 flex flex-col sm:flex-row items-center gap-4">
         <div className="w-44 flex-shrink-0">
           <RadarChart scores={scores} size={180} showLabels={false} animated={false} />
         </div>
-        <div className="flex-1">
-          <p className="text-xs font-medium mb-2" style={{ color: 'var(--color-text)' }}>
-            Top traits
-          </p>
-          <div className="flex flex-wrap gap-1.5">
-            {topTraits.map((trait, i) => {
-              const colors = ['#8B5CF6', '#F59E0B', '#10B981'];
-              return (
-                <span
-                  key={trait}
-                  className="px-2.5 py-1 rounded-lg text-xs font-medium"
-                  style={{ backgroundColor: `${colors[i % 3]}15`, color: colors[i % 3] }}
-                >
-                  {trait}
-                </span>
-              );
-            })}
-          </div>
-        </div>
+        {topTraits.length > 0 && (
+          <dl className="flex-1 self-stretch sm:self-center">
+            <dt className="text-caption" style={{ color: 'var(--color-textMuted)' }}>
+              Top traits
+            </dt>
+            <dd className="mt-0.5 text-sm" style={{ color: 'var(--color-text)' }}>
+              {topTraits.join(', ')}
+            </dd>
+          </dl>
+        )}
       </div>
     </div>
   );

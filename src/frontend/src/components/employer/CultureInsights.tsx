@@ -1,51 +1,17 @@
-import { Facts } from '../ui/Facts';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Brain,
-  Lightbulb,
-  Target,
-  Sparkles,
-  Heart,
-  Anchor,
-  Zap,
-  Layers,
-  CheckCircle2,
-  ArrowRight,
-  Clock,
-  RotateCcw,
-  X,
-  Users,
-  TrendingUp,
-  Building2,
-  AlertCircle,
-  MessageCircle,
-  Shield,
-  Rocket,
-  Battery,
-  Leaf,
-  Puzzle,
-  ChevronDown,
-  ChevronUp,
-  Focus,
-  Award,
-  Palette,
-  Compass,
-} from 'lucide-react';
+import { ArrowRight, ChevronDown, RotateCcw } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { supabase } from '../../lib/supabase';
 import { Button } from '../ui/Button';
 import { CoffeeBrewLoader, useMinLoader } from '../ui/CoffeeBrewLoader';
-import { OceanMindMap } from '../ui/OceanMindMap';
 import { GradientProgressBar } from '../ui/GradientProgressBar';
 import { ArchetypeCard } from '../ui/ArchetypeCard';
-import { ProfileCompleteness } from '../ui/ProfileCompleteness';
-import { DidYouKnowCard } from '../ui/DidYouKnowCard';
 import { PageBanner } from '../ui/PageBanner';
+import { Facts } from '../ui/Facts';
 import { determineEmployerArchetype } from '../../data/employerArchetypes';
-import { getFactsForProfile } from '../../data/personalityFacts';
 import { calculateCombinedEmployerOCEAN, type OCEANScores } from '../../lib/personalityEngine';
 
 interface CultureData {
@@ -69,8 +35,6 @@ const EMPLOYER_ADDITIONAL_ASSESSMENTS = [
     id: 'team-dynamics',
     name: 'Team dynamics',
     description: 'Collaboration, communication, and conflict handling style.',
-    icon: Users,
-    color: 'var(--color-trait-extraversion)',
     duration: '~5 min',
     dataField: 'team_dynamics_data',
     traits: ['Collaboration', 'Communication', 'Conflict'],
@@ -80,8 +44,6 @@ const EMPLOYER_ADDITIONAL_ASSESSMENTS = [
     id: 'leadership-style',
     name: 'Leadership & management',
     description: 'Management philosophy, feedback culture, and decision authority.',
-    icon: Award,
-    color: 'var(--color-trait-openness)',
     duration: '~5 min',
     dataField: 'leadership_style_data',
     traits: ['Management', 'Feedback', 'Authority'],
@@ -91,8 +53,6 @@ const EMPLOYER_ADDITIONAL_ASSESSMENTS = [
     id: 'growth-philosophy',
     name: 'Growth & development',
     description: 'Learning culture, mentorship, and career path philosophy.',
-    icon: Rocket,
-    color: 'var(--color-trait-conscientiousness)',
     duration: '~5 min',
     dataField: 'growth_philosophy_data',
     traits: ['Learning', 'Mentorship', 'Career paths'],
@@ -102,8 +62,6 @@ const EMPLOYER_ADDITIONAL_ASSESSMENTS = [
     id: 'work-environment',
     name: 'Work environment & pace',
     description: 'Remote/hybrid preferences, work-life balance, and urgency culture.',
-    icon: Building2,
-    color: 'var(--color-trait-stability)',
     duration: '~5 min',
     dataField: 'work_environment_data',
     traits: ['Environment', 'Pace', 'Balance'],
@@ -121,9 +79,7 @@ const DIMENSION_INFO: Record<string, {
   lowCandidates: string[];
   idealFor: string[];
   candidateTypes: string[];
-  icon: React.ElementType;
   color: string;
-  progressColor: string;
 }> = {
   openness: {
     label: 'Openness',
@@ -145,9 +101,7 @@ const DIMENSION_INFO: Record<string, {
     ],
     idealFor: ['Product innovation', 'R&D teams', 'Creative departments', 'Strategy roles', 'Design teams'],
     candidateTypes: ['Innovators', 'Creative thinkers', 'Early adopters'],
-    icon: Lightbulb,
     color: 'var(--color-trait-openness)',
-    progressColor: 'purple',
   },
   conscientiousness: {
     label: 'Conscientiousness',
@@ -169,9 +123,7 @@ const DIMENSION_INFO: Record<string, {
     ],
     idealFor: ['Operations', 'Project management', 'Finance', 'Quality assurance', 'Compliance'],
     candidateTypes: ['Achievers', 'Organizers', 'Detail-oriented pros'],
-    icon: Target,
     color: 'var(--color-trait-conscientiousness)',
-    progressColor: 'green',
   },
   extraversion: {
     label: 'Extraversion',
@@ -193,9 +145,7 @@ const DIMENSION_INFO: Record<string, {
     ],
     idealFor: ['Sales', 'Client success', 'Team leadership', 'Public relations', 'Recruiting'],
     candidateTypes: ['Communicators', 'Collaborators', 'Relationship builders'],
-    icon: Zap,
     color: 'var(--color-trait-extraversion)',
-    progressColor: 'amber',
   },
   agreeableness: {
     label: 'Agreeableness',
@@ -217,9 +167,7 @@ const DIMENSION_INFO: Record<string, {
     ],
     idealFor: ['Customer service', 'HR', 'Team support', 'Healthcare', 'Counseling'],
     candidateTypes: ['Team players', 'Supporters', 'Mediators'],
-    icon: Heart,
     color: 'var(--color-trait-agreeableness)',
-    progressColor: 'pink',
   },
   neuroticism: {
     label: 'Stability',
@@ -241,9 +189,7 @@ const DIMENSION_INFO: Record<string, {
     ],
     idealFor: ['Crisis management', 'Executive roles', 'High-stakes negotiations', 'Emergency response'],
     candidateTypes: ['Steady performers', 'Crisis handlers', 'Reliable anchors'],
-    icon: Anchor,
     color: 'var(--color-trait-stability)',
-    progressColor: 'cyan',
   },
 };
 
@@ -295,7 +241,6 @@ export function CultureInsights() {
   const [isLoading, setIsLoading] = useState(true);
   const [cultureData, setCultureData] = useState<CultureData | null>(null);
   const [expandedDimension, setExpandedDimension] = useState<string | null>(null);
-  const [selectedDimension, setSelectedDimension] = useState<string | null>(null);
   const [cooldownRemaining, setCooldownRemaining] = useState<number | null>(null);
   const [assessmentCooldowns, setAssessmentCooldowns] = useState<Record<string, number | null>>({});
 
@@ -403,22 +348,19 @@ export function CultureInsights() {
 
   if (!cultureData?.culture_quiz_completed) {
     return (
-      <div className="flex-1 flex items-center justify-center px-4 py-12" style={{ backgroundColor: 'var(--color-background)', minHeight: 'calc(100vh - 80px)' }}>
-        <div className="text-center">
-          <div className="w-20 h-20 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}>
-            <Building2 className="w-10 h-10" style={{ color: 'var(--color-trait-openness)' }} />
-          </div>
-          <h1 className="text-title mb-4" style={{ color: 'var(--color-text)' }}>
-            Define your culture
-          </h1>
-          <p className="mb-6 max-w-sm mx-auto" style={{ color: 'var(--color-textSecondary)' }}>
+      <div className="flex-1 flex items-center justify-center px-4 py-12" style={{ minHeight: 'calc(100vh - 80px)' }}>
+        <div className="text-center max-w-sm">
+          <h1 className="text-title" style={{ color: 'var(--color-text)' }}>Define your culture</h1>
+          <p className="mt-2 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
             Take the culture assessment to define your ideal candidate profile and start matching with compatible talent.
           </p>
-          <Link to="/app/employer/culture-assessment">
-            <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>
-              Start assessment
-            </Button>
-          </Link>
+          <Button
+            className="mt-6"
+            rightIcon={<ArrowRight className="w-4 h-4" />}
+            onClick={() => navigate('/app/employer/culture-assessment')}
+          >
+            Start assessment
+          </Button>
         </div>
       </div>
     );
@@ -531,26 +473,17 @@ export function CultureInsights() {
   if (preferences.conscientiousness > 60) { attractors.push('Clear goals & accountability'); repellers.push('Ambiguous expectations'); }
   else { attractors.push('Flexible deadlines & autonomy'); repellers.push('Micromanagement & rigid timelines'); }
 
-  // Culture strengths (top dimensions) & growth areas (bottom dimensions)
-  const dimensionMeta: { key: string; icon: React.ElementType; strengthLabel: string; strengthDesc: string; gapLabel: string; gapDesc: string; color: string }[] = [
-    { key: 'openness', icon: Lightbulb, strengthLabel: 'Innovation-first', strengthDesc: 'Your culture prizes creative thinking and new approaches', gapLabel: 'Innovation opportunities', gapDesc: 'Creating more space for creative experimentation could attract diverse thinkers', color: 'var(--color-trait-openness)' },
-    { key: 'conscientiousness', icon: Target, strengthLabel: 'Results-driven', strengthDesc: 'Clear accountability and high performance standards', gapLabel: 'Structure opportunities', gapDesc: 'Adding clearer goals and processes could boost team performance', color: 'var(--color-trait-conscientiousness)' },
-    { key: 'extraversion', icon: Users, strengthLabel: 'Highly collaborative', strengthDesc: 'Strong team dynamics and open communication', gapLabel: 'Collaboration opportunities', gapDesc: 'More team interaction and social touchpoints could enhance outcomes', color: 'var(--color-trait-extraversion)' },
-    { key: 'agreeableness', icon: Heart, strengthLabel: 'People-first', strengthDesc: 'Empathy and support are core to your culture', gapLabel: 'Empathy opportunities', gapDesc: 'More emphasis on interpersonal warmth could improve retention', color: 'var(--color-trait-agreeableness)' },
-    { key: 'neuroticism', icon: Shield, strengthLabel: 'Resilient & steady', strengthDesc: 'Calm under pressure with consistent performance', gapLabel: 'Resilience opportunities', gapDesc: 'Building stress-management practices could strengthen your team', color: 'var(--color-trait-stability)' },
+  // Top 2 preferences are culture strengths, bottom 2 are growth areas
+  const dimensionMeta = [
+    { key: 'openness', strengthLabel: 'Innovation-first', strengthDesc: 'Your culture prizes creative thinking and new approaches', gapDesc: 'Creating more space for creative experimentation could attract diverse thinkers' },
+    { key: 'conscientiousness', strengthLabel: 'Results-driven', strengthDesc: 'Clear accountability and high performance standards', gapDesc: 'Adding clearer goals and processes could boost team performance' },
+    { key: 'extraversion', strengthLabel: 'Highly collaborative', strengthDesc: 'Strong team dynamics and open communication', gapDesc: 'More team interaction and social touchpoints could enhance outcomes' },
+    { key: 'agreeableness', strengthLabel: 'People-first', strengthDesc: 'Empathy and support are core to your culture', gapDesc: 'More emphasis on interpersonal warmth could improve retention' },
+    { key: 'neuroticism', strengthLabel: 'Resilient and steady', strengthDesc: 'Calm under pressure with consistent performance', gapDesc: 'Building stress-management practices could strengthen your team' },
   ];
-
-  const cultureStrengths: { icon: React.ElementType; label: string; desc: string; color: string }[] = [];
-  const cultureGaps: { icon: React.ElementType; label: string; desc: string; color: string }[] = [];
-
-  // Top 2 dimensions are strengths, bottom 2 are growth areas
-  const sortedDimensions = [...dimensionMeta].sort((a, b) => (preferences[b.key as keyof typeof preferences] || 0) - (preferences[a.key as keyof typeof preferences] || 0));
-  sortedDimensions.slice(0, 2).forEach(d => {
-    cultureStrengths.push({ icon: d.icon, label: d.strengthLabel, desc: d.strengthDesc, color: d.color });
-  });
-  sortedDimensions.slice(-2).forEach(d => {
-    cultureGaps.push({ icon: d.icon, label: d.gapLabel, desc: d.gapDesc, color: d.color });
-  });
+  const rankedDimensions = [...dimensionMeta].sort((a, b) => (preferences[b.key as keyof typeof preferences] || 0) - (preferences[a.key as keyof typeof preferences] || 0));
+  const strongest = rankedDimensions.slice(0, 2);
+  const weakest = rankedDimensions.slice(-2);
 
   // Compatibility signals
   const hiringPace = preferences.extraversion > 60 && preferences.conscientiousness > 60
@@ -571,688 +504,399 @@ export function CultureInsights() {
     ? 'Empathetic team players & mediators'
     : 'Steady performers & resilient anchors';
 
-  // Personality facts (reuse for employer context)
-  const personalityFacts = getFactsForProfile(preferences, 4);
-
-  const handleDimensionClick = (key: string) => {
-    setSelectedDimension(prev => prev === key ? null : key);
-  };
-
   return (
-    <div className="min-h-screen py-6 px-4 sm:px-6" style={{ backgroundColor: 'var(--color-background)' }}>
-      <div className="max-w-7xl mx-auto">
-
-        {/* 1. Hero / Profile Header */}
-        <PageBanner
-          title={archetypes.primary.name}
-          subtitle={tagline}
-          belowSubtitle={<Facts items={[{ label: 'Strongest trait', value: DIMENSION_INFO[sortedPrefs[0]?.[0]]?.label || 'Openness' }, { label: 'Decision style', value: decisionStyle }, { label: 'Top score', value: `${sortedPrefs[0]?.[1] || 0}%` }]} />}
-          rightContent={
-            <div className="flex items-center gap-3 flex-wrap">
-              <ProfileCompleteness completedCount={completionCount} variant="ring" size="sm" showLabel={false} />
-              {cooldownRemaining && cooldownRemaining > 0 ? (
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg" style={{ backgroundColor: 'var(--color-surface)' }}>
-                  <Clock className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />
-                  <span className="text-xs" style={{ color: 'var(--color-textMuted)' }}>Retake in {formatCooldown(cooldownRemaining)}</span>
-                </div>
-              ) : (
-                <Link to="/app/employer/culture-assessment">
-                  <Button variant="outline" size="sm" leftIcon={<RotateCcw className="w-3.5 h-3.5" />}>Retake</Button>
-                </Link>
-              )}
-            </div>
-          }
-        />
-
-        {/* 2. OCEAN Mind Map + Dimension Breakdown */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
-          <motion.div
-            className="lg:col-span-3 bento-card"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-              <Brain className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              Ideal candidate profile
-            </h2>
-            {completionCount > 1 && (
-              <p className="text-xs mb-3 flex items-center gap-1.5" style={{ color: 'var(--color-accent)' }}>
-                <Sparkles className="w-3 h-3" />
-                Enhanced with {completionCount - 1} supplementary assessment{completionCount > 2 ? 's' : ''}
-              </p>
-            )}
-            <OceanMindMap
-              scores={preferences}
-              colors={Object.fromEntries(Object.entries(DIMENSION_INFO).map(([k, v]) => [k, v.color]))}
-              labels={Object.fromEntries(Object.entries(DIMENSION_INFO).map(([k, v]) => [k, v.label]))}
-              centerLabel="IDEAL"
-              centerSubLabel="candidate"
-              size="lg"
-              animated
-              onDimensionClick={handleDimensionClick}
-              selectedDimension={selectedDimension}
-            />
-            <p className="text-caption text-center mt-2" style={{ color: 'var(--color-textMuted)' }}>
-              Click a dimension to explore
-            </p>
-          </motion.div>
-
-          {/* Dimension Breakdown / Detail */}
-          <motion.div
-            className="lg:col-span-2 bento-card"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-          >
-            {selectedDimension && DIMENSION_INFO[selectedDimension] ? (
-              <DimensionDetail
-                dimension={selectedDimension}
-                score={preferences[selectedDimension as keyof typeof preferences]}
-                info={DIMENSION_INFO[selectedDimension]}
-                onClose={() => setSelectedDimension(null)}
-              />
-            ) : (
-              <div>
-                <h2 className="text-base font-semibold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                  <Layers className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-                  Preference breakdown
-                </h2>
-                <div className="space-y-4">
-                  {(Object.entries(DIMENSION_INFO) as [string, typeof DIMENSION_INFO[string]][]).map(([key, info]) => (
-                    <div key={key}>
-                      <button
-                        className="w-full text-left"
-                        onClick={() => setExpandedDimension(expandedDimension === key ? null : key)}
-                      >
-                        <div className="flex items-center justify-between mb-1">
-                          <div className="flex items-center gap-2">
-                            <info.icon className="w-4 h-4" style={{ color: info.color }} />
-                            <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-                              {info.fullLabel}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-semibold" style={{ color: info.color }}>
-                              {preferences[key as keyof typeof preferences]}
-                            </span>
-                            {expandedDimension === key
-                              ? <ChevronUp className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />
-                              : <ChevronDown className="w-3.5 h-3.5" style={{ color: 'var(--color-textMuted)' }} />
-                            }
-                          </div>
-                        </div>
-                      </button>
-                      <GradientProgressBar value={preferences[key as keyof typeof preferences]} showValue={false} size="sm" color={info.color} />
-                      <AnimatePresence>
-                        {expandedDimension === key && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="overflow-hidden"
-                          >
-                            <div className="pt-2 pb-1">
-                              <p className="text-xs mb-2" style={{ color: 'var(--color-textMuted)' }}>
-                                {info.description}
-                              </p>
-                              <div className="flex flex-wrap gap-1">
-                                {info.candidateTypes.map((type, i) => (
-                                  <span key={i} className="text-xs px-2 py-0.5 rounded-md" style={{ backgroundColor: `${info.color}10`, color: info.color }}>
-                                    {type}
-                                  </span>
-                                ))}
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </motion.div>
-        </div>
-
-        {/* 3. Culture Archetypes */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <Sparkles className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Your culture archetypes
-          </h2>
-          <p className="text-label mb-4" style={{ color: 'var(--color-textMuted)' }}>
-            Attract, retain, develop
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <ArchetypeCard
-              name={archetypes.primary.name}
-              description={archetypes.primary.description}
-              strengths={archetypes.primary.strengths}
-              idealEnvironments={archetypes.primary.idealCandidates}
-              blindspots={archetypes.primary.blindspots}
-              variant="primary"
-              delay={0.1}
-            />
-            <ArchetypeCard
-              name={archetypes.secondary.name}
-              description={archetypes.secondary.description}
-              strengths={archetypes.secondary.strengths}
-              idealEnvironments={archetypes.secondary.idealCandidates}
-              blindspots={archetypes.secondary.blindspots}
-              variant="secondary"
-              delay={0.2}
-            />
-            <ArchetypeCard
-              name={archetypes.tertiary.name}
-              description={archetypes.tertiary.description}
-              strengths={archetypes.tertiary.strengths}
-              idealEnvironments={archetypes.tertiary.idealCandidates}
-              blindspots={archetypes.tertiary.blindspots}
-              variant="tertiary"
-              delay={0.3}
-            />
-          </div>
-        </motion.div>
-
-        {/* 4. Operating Style */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-        >
-          <h2 className="text-base font-semibold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <Puzzle className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Operating style
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { icon: Brain, label: 'Decision-making', value: decisionStyle, color: 'var(--color-trait-openness)' },
-              { icon: MessageCircle, label: 'Communication', value: communicationStyle, color: 'var(--color-trait-conscientiousness)' },
-              { icon: Users, label: 'Team dynamic', value: teamDynamic, color: 'var(--color-trait-extraversion)' },
-            ].map((item) => (
-              <div key={item.label} className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-                <div className="flex items-center gap-2 mb-2">
-                  <item.icon className="w-4 h-4" style={{ color: item.color }} />
-                  <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{item.label}</span>
-                </div>
-                <p className="font-semibold" style={{ color: item.color }}>{item.value}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* 5. Hiring Energy Map */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <h2 className="text-base font-semibold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <Battery className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Hiring energy map
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: 'var(--color-trait-conscientiousness)' }}>
-                <Zap className="w-4 h-4" /> What attracts talent
-              </p>
-              <div className="space-y-2">
-                {attractors.map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 p-3 rounded-lg" style={{ backgroundColor: 'rgba(16, 185, 129, 0.06)' }}>
-                    <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--color-trait-conscientiousness)' }} />
-                    <span className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="text-sm font-medium mb-3 flex items-center gap-2" style={{ color: '#EF4444' }}>
-                <Battery className="w-4 h-4" /> What may repel talent
-              </p>
-              <div className="space-y-2">
-                {repellers.map((item, i) => (
-                  <div key={i} className="flex items-center gap-2 p-3 rounded-lg" style={{ backgroundColor: 'rgba(239, 68, 68, 0.06)' }}>
-                    <X className="w-4 h-4 flex-shrink-0" style={{ color: '#EF4444' }} />
-                    <span className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* 6. Culture Environment */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35 }}
-        >
-          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <Building2 className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            The environment you create
-          </h2>
-          <p className="text-label mb-4" style={{ color: 'var(--color-textMuted)' }}>
-            Culture environment
-          </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              {
-                icon: preferences.openness > 60 ? Palette : Shield,
-                label: preferences.openness > 60 ? 'Innovation-driven' : 'Stability-focused',
-                desc: preferences.openness > 60 ? 'Encourages creativity' : 'Values consistency',
-                color: 'var(--color-trait-openness)',
-              },
-              {
-                icon: preferences.conscientiousness > 60 ? Target : Compass,
-                label: preferences.conscientiousness > 60 ? 'Goal-oriented' : 'Flexible goals',
-                desc: preferences.conscientiousness > 60 ? 'Clear metrics' : 'Adaptive objectives',
-                color: 'var(--color-trait-conscientiousness)',
-              },
-              {
-                icon: preferences.extraversion > 60 ? Users : Focus,
-                label: preferences.extraversion > 60 ? 'Team-centric' : 'Focus-centric',
-                desc: preferences.extraversion > 60 ? 'Collaborative work' : 'Independent work',
-                color: 'var(--color-trait-extraversion)',
-              },
-              {
-                icon: preferences.agreeableness > 60 ? Heart : Award,
-                label: preferences.agreeableness > 60 ? 'People-first' : 'Results-first',
-                desc: preferences.agreeableness > 60 ? 'Relationships matter' : 'Outcomes matter',
-                color: 'var(--color-trait-agreeableness)',
-              },
-            ].map((item, i) => (
-              <div key={i} className="p-4 rounded-xl text-center" style={{ backgroundColor: 'var(--color-background)' }}>
-                <div className="w-10 h-10 rounded-xl mx-auto mb-3 flex items-center justify-center" style={{ backgroundColor: `${item.color}15` }}>
-                  <item.icon className="w-5 h-5" style={{ color: item.color }} />
-                </div>
-                <p className="font-medium text-sm mb-1" style={{ color: 'var(--color-text)' }}>{item.label}</p>
-                <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* 7. Growth Edges */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <Leaf className="w-5 h-5" style={{ color: 'var(--color-trait-conscientiousness)' }} />
-            Growth edges
-          </h2>
-          <p className="text-label mb-4" style={{ color: 'var(--color-textMuted)' }}>
-            Room to grow
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {sortedPrefs.slice(-2).map(([key, value]) => {
-              const info = DIMENSION_INFO[key];
-              const growthTips: Record<string, string> = {
-                openness: 'Host innovation days or hackathons to encourage creative thinking in your teams.',
-                conscientiousness: 'Introduce light project management rituals to bring clarity without rigidity.',
-                extraversion: 'Create more cross-team touchpoints — standups, social events, or collaboration channels.',
-                agreeableness: 'Invest in conflict resolution training and psychological safety workshops.',
-                neuroticism: 'Build resilience programs — mindfulness resources, wellness days, or manager training.',
-              };
-              return (
-                <div key={key} className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <info.icon className="w-4 h-4" style={{ color: info.color }} />
-                    <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{info.fullLabel}</span>
-                    <span className="text-xs font-semibold ml-auto" style={{ color: info.color }}>{value}/100</span>
-                  </div>
-                  <GradientProgressBar value={value} showValue={false} size="sm" color={info.color} />
-                  <p className="text-xs mt-2" style={{ color: 'var(--color-textMuted)' }}>
-                    {growthTips[key]}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </motion.div>
-
-        {/* 8. Culture Strengths & Growth Areas */}
-        {/* 8. Culture Strengths & Growth Areas — always shown */}
-        {(cultureStrengths.length > 0 || cultureGaps.length > 0) && (
-          <motion.div
-            className="bento-card mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45 }}
-          >
-            <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-              <TrendingUp className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              Culture strengths & growth areas
-            </h2>
-            <p className="text-label mb-4" style={{ color: 'var(--color-textMuted)' }}>
-              Strengths and growth areas
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {cultureStrengths.length > 0 && (
-                <div>
-                  <p className="text-sm font-medium mb-3" style={{ color: 'var(--color-trait-conscientiousness)' }}>
-                    Strengths
-                  </p>
-                  <div className="space-y-3">
-                    {cultureStrengths.map((item, i) => (
-                      <div key={i} className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: 'var(--color-background)' }}>
-                        <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                          style={{ backgroundColor: `${item.color}15` }}
-                        >
-                          <item.icon className="w-4 h-4" style={{ color: item.color }} />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{item.label}</p>
-                          <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>{item.desc}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {cultureGaps.length > 0 && (
-                <div>
-                  <p className="text-sm font-medium mb-3" style={{ color: 'var(--color-trait-extraversion)' }}>
-                    Growth areas
-                  </p>
-                  <div className="space-y-3">
-                    {cultureGaps.map((item, i) => (
-                      <div key={i} className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: 'var(--color-background)' }}>
-                        <div
-                          className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                          style={{ backgroundColor: `${item.color}15` }}
-                        >
-                          <item.icon className="w-4 h-4" style={{ color: item.color }} />
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{item.label}</p>
-                          <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>{item.desc}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </motion.div>
-        )}
-
-        {/* 9. Compatibility Signals */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <Rocket className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Compatibility signals
-          </h2>
-          <p className="text-label mb-3" style={{ color: 'var(--color-textMuted)' }}>
-            Candidate and culture fit
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="text-caption mb-1" style={{ color: 'var(--color-textMuted)' }}>Hiring pace</p>
-              <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>{hiringPace}</p>
-            </div>
-            <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="text-caption mb-1" style={{ color: 'var(--color-textMuted)' }}>Ideal candidates</p>
-              <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>{idealCandidateType}</p>
-            </div>
-            <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="text-caption mb-1" style={{ color: 'var(--color-textMuted)' }}>Work pace</p>
-              <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
-                {(preferences.extraversion + preferences.openness) / 2 > 60
-                  ? 'Fast-paced & dynamic'
-                  : (preferences.extraversion + preferences.openness) / 2 < 40
-                  ? 'Measured & thoughtful'
-                  : 'Balanced rhythm'}
-              </p>
-            </div>
-          </div>
-          <Link to="/app/employer/top-candidates">
-            <Button variant="outline" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
-              Browse candidates
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <PageBanner
+        title={archetypes.primary.name}
+        subtitle={tagline}
+        belowSubtitle={
+          <Facts
+            items={[
+              { label: 'Strongest trait', value: DIMENSION_INFO[sortedPrefs[0]?.[0]]?.label || 'Openness' },
+              { label: 'Decision style', value: decisionStyle },
+              { label: 'Top score', value: sortedPrefs[0]?.[1] || 0 },
+            ]}
+          />
+        }
+        rightContent={
+          cooldownRemaining && cooldownRemaining > 0 ? (
+            <span className="text-label" style={{ color: 'var(--color-textMuted)' }}>
+              Retake in {formatCooldown(cooldownRemaining)}
+            </span>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              leftIcon={<RotateCcw className="w-3.5 h-3.5" />}
+              onClick={() => navigate('/app/employer/culture-assessment')}
+            >
+              Retake
             </Button>
-          </Link>
-        </motion.div>
+          )
+        }
+      />
 
-        {/* 10. Culture Values */}
-        {cultureData?.culture_values && cultureData.culture_values.length > 0 && (
-          <motion.div
-            className="bento-card mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55 }}
-          >
-            <h2 className="text-base font-semibold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-              <Sparkles className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-              Your culture values
-            </h2>
-            <div className="flex flex-wrap gap-3">
-              {cultureData.culture_values.map((value, index) => {
-                const colors = ['var(--color-trait-openness)', 'var(--color-trait-extraversion)', 'var(--color-trait-conscientiousness)', 'var(--color-trait-agreeableness)', 'var(--color-trait-stability)'];
-                const color = colors[index % colors.length];
-
-                return (
-                  <span
-                    key={value}
-                    className="px-4 py-2 rounded-xl font-medium capitalize"
-                    style={{ backgroundColor: `${color}15`, color }}
-                  >
-                    {value}
-                  </span>
-                );
-              })}
-            </div>
-          </motion.div>
+      <Section
+        title="Ideal candidate profile"
+        aside={completionCount > 1 && (
+          <span className="text-caption" style={{ color: 'var(--color-textMuted)' }}>
+            Includes {completionCount - 1} supplementary assessment{completionCount > 2 ? 's' : ''}
+          </span>
         )}
+        first
+      >
+        <ul className="bento-card !p-0 overflow-hidden">
+          {Object.entries(DIMENSION_INFO).map(([key, info], i) => (
+            <PreferenceRow
+              key={key}
+              info={info}
+              score={preferences[key as keyof typeof preferences]}
+              divided={i > 0}
+              expanded={expandedDimension === key}
+              onToggle={() => setExpandedDimension(expandedDimension === key ? null : key)}
+            />
+          ))}
+        </ul>
+      </Section>
 
-        {/* 11. Enhance Your Culture Profile — Supplementary Assessments */}
-        <motion.div
-          className="bento-card mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-            <Rocket className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-            Enhance your culture profile
-          </h2>
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-label" style={{ color: 'var(--color-textMuted)' }}>
-              Deeper culture insights
-            </p>
-            <ProfileCompleteness completedCount={completionCount} variant="ring" size="sm" showLabel={false} />
+      <Section title="Your culture archetypes">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {(['primary', 'secondary', 'tertiary'] as const).map((rank) => (
+            <ArchetypeCard
+              key={rank}
+              name={archetypes[rank].name}
+              description={archetypes[rank].description}
+              strengths={archetypes[rank].strengths}
+              idealCandidates={archetypes[rank].idealCandidates}
+              blindspots={archetypes[rank].blindspots}
+              variant={rank}
+            />
+          ))}
+        </div>
+      </Section>
+
+      <Section title="How your team works">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="bento-card">
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Operating style</h3>
+            <dl className="mt-4 space-y-3">
+              <Detail label="Decision-making">{decisionStyle}</Detail>
+              <Detail label="Communication">{communicationStyle}</Detail>
+              <Detail label="Team dynamic">{teamDynamic}</Detail>
+            </dl>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {EMPLOYER_ADDITIONAL_ASSESSMENTS.map(assessment => {
-              const AssessmentIcon = assessment.icon;
-              const isCompleted = cultureData
-                ? !!(cultureData as unknown as Record<string, unknown>)[assessment.dataField]
-                : false;
-              const cooldown = assessmentCooldowns[assessment.id];
-              const isOnCooldown = isCompleted && cooldown !== null && cooldown !== undefined && cooldown > 0;
-
-              return (
-                <div
-                  key={assessment.id}
-                  className="p-5 rounded-xl flex gap-4 transition-all"
-                  style={{
-                    backgroundColor: 'var(--color-background)',
-                    border: isCompleted ? `1px solid ${assessment.color}60` : `1px solid ${assessment.color}40`,
-                  }}
-                >
-                  <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 relative" style={{ backgroundColor: `${assessment.color}15` }}>
-                    <AssessmentIcon className="w-6 h-6" style={{ color: assessment.color }} />
-                    {isCompleted && (
-                      <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--color-trait-conscientiousness)' }}>
-                        <CheckCircle2 className="w-3 h-3 text-white" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-medium text-sm" style={{ color: 'var(--color-text)' }}>{assessment.name}</h3>
-                      {isCompleted && <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', color: 'var(--color-trait-conscientiousness)' }}>Done</span>}
-                      {isOnCooldown && (
-                        <span className="px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1" style={{ backgroundColor: `${assessment.color}10`, color: assessment.color }}>
-                          <Clock className="w-3 h-3" />{formatCooldown(cooldown!)}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-xs mb-2" style={{ color: 'var(--color-textMuted)' }}>{assessment.description}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex flex-wrap gap-1">
-                        {assessment.traits.map((t, i) => (
-                          <span key={i} className="px-1.5 py-0.5 rounded text-xs" style={{ backgroundColor: `${assessment.color}10`, color: assessment.color }}>{t}</span>
-                        ))}
-                      </div>
-                      <span className="text-xs flex-shrink-0 ml-2" style={{ color: 'var(--color-textMuted)' }}>{assessment.duration}</span>
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="mt-3"
-                      rightIcon={<ArrowRight className="w-3 h-3" />}
-                      onClick={() => handleAssessmentClick(assessment.id, isCompleted, cooldown)}
-                    >
-                      {isOnCooldown ? `Retake in ${formatCooldown(cooldown!)}` : isCompleted ? 'Retake' : 'Start'}
-                    </Button>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="bento-card">
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>The environment you create</h3>
+            <dl className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3">
+              <Detail label={preferences.openness > 60 ? 'Innovation-driven' : 'Stability-focused'}>
+                {preferences.openness > 60 ? 'Encourages creativity' : 'Values consistency'}
+              </Detail>
+              <Detail label={preferences.conscientiousness > 60 ? 'Goal-oriented' : 'Flexible goals'}>
+                {preferences.conscientiousness > 60 ? 'Clear metrics' : 'Adaptive objectives'}
+              </Detail>
+              <Detail label={preferences.extraversion > 60 ? 'Team-centric' : 'Focus-centric'}>
+                {preferences.extraversion > 60 ? 'Collaborative work' : 'Independent work'}
+              </Detail>
+              <Detail label={preferences.agreeableness > 60 ? 'People-first' : 'Results-first'}>
+                {preferences.agreeableness > 60 ? 'Relationships matter' : 'Outcomes matter'}
+              </Detail>
+            </dl>
           </div>
-        </motion.div>
+        </div>
+      </Section>
 
-        {/* 12. Did You Know? */}
-        <motion.div
-          className="mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          <DidYouKnowCard facts={personalityFacts} />
-        </motion.div>
+      <Section title="Hiring fit">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="bento-card">
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>What attracts and repels talent</h3>
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <DotList title="Attracts" items={attractors} dot="var(--color-success)" />
+              <DotList title="May repel" items={repellers} dot="var(--color-error)" />
+            </div>
+          </div>
+          <div className="bento-card flex flex-col">
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Candidate and culture fit</h3>
+            <dl className="mt-4 space-y-3">
+              <Detail label="Ideal candidates">{idealCandidateType}</Detail>
+              <Detail label="Hiring pace">{hiringPace}</Detail>
+              <Detail label="Work pace">
+                {(preferences.extraversion + preferences.openness) / 2 > 60
+                  ? 'Fast-paced and dynamic'
+                  : (preferences.extraversion + preferences.openness) / 2 < 40
+                  ? 'Measured and thoughtful'
+                  : 'Balanced rhythm'}
+              </Detail>
+            </dl>
+            <Link
+              to="/app/employer/top-candidates"
+              className="group mt-auto pt-5 inline-flex items-center gap-1.5 self-start text-label"
+              style={{ color: 'var(--color-accent)' }}
+            >
+              Browse candidates
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+        </div>
+      </Section>
 
-        {/* Disclaimer */}
-        <motion.div
-          className="p-4 bento-card mb-6 flex items-start gap-3"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.65 }}
-        >
-          <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'var(--color-textMuted)' }} />
+      <Section title="Strengths and growth areas">
+        <div className="bento-card grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
           <div>
-            <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-text)' }}>
-              About culture matching
-            </p>
-            <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
-              This profile is based on the Big Five (OCEAN) model. We use these preferences alongside skills and experience to suggest compatible candidates — never as a sole deciding factor.
-            </p>
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Strengths</h3>
+            <ul className="mt-3 space-y-4">
+              {strongest.map((d) => (
+                <li key={d.key}>
+                  <GradientProgressBar
+                    value={preferences[d.key as keyof typeof preferences]}
+                    label={d.strengthLabel}
+                    color={DIMENSION_INFO[d.key].color}
+                    size="sm"
+                  />
+                  <p className="mt-2 text-sm" style={{ color: 'var(--color-textSecondary)' }}>{d.strengthDesc}</p>
+                </li>
+              ))}
+            </ul>
           </div>
-        </motion.div>
+          <div>
+            <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Growth areas</h3>
+            <ul className="mt-3 space-y-4">
+              {weakest.map((d) => (
+                <li key={d.key}>
+                  <GradientProgressBar
+                    value={preferences[d.key as keyof typeof preferences]}
+                    label={DIMENSION_INFO[d.key].fullLabel}
+                    color={DIMENSION_INFO[d.key].color}
+                    size="sm"
+                  />
+                  <p className="mt-2 text-sm" style={{ color: 'var(--color-textSecondary)' }}>{d.gapDesc}</p>
+                  <p className="mt-1 text-sm" style={{ color: 'var(--color-text)' }}>{GROWTH_TIPS[d.key]}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </Section>
 
-        {/* CTA */}
-        <motion.div
-          className="bento-card text-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-        >
-          <h3 className="text-base font-semibold tracking-tight mb-2" style={{ color: 'var(--color-text)' }}>Ready to find your matches?</h3>
-          <p className="text-sm mb-4" style={{ color: 'var(--color-textSecondary)' }}>
-            Discover candidates whose personality aligns with your culture
+      {cultureData?.culture_values && cultureData.culture_values.length > 0 && (
+        <Section title="Your culture values">
+          <div className="flex flex-wrap gap-2">
+            {cultureData.culture_values.map((value) => (
+              <span
+                key={value}
+                className="px-3 py-1 rounded-full text-label capitalize"
+                style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }}
+              >
+                {value}
+              </span>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      <Section
+        title="Enhance your culture profile"
+        aside={
+          <span className="text-caption tabular-nums" style={{ color: 'var(--color-textMuted)' }}>
+            {completionCount} of {completedAssessments.length} complete
+          </span>
+        }
+      >
+        <p className="-mt-1 mb-3 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+          Each extra assessment sharpens your ideal candidate profile and your rankings.
+        </p>
+        <ul className="bento-card !p-0 overflow-hidden">
+          {EMPLOYER_ADDITIONAL_ASSESSMENTS.map((assessment, i) => {
+            const isCompleted = cultureData
+              ? !!(cultureData as unknown as Record<string, unknown>)[assessment.dataField]
+              : false;
+            const cooldown = assessmentCooldowns[assessment.id];
+            const isOnCooldown = isCompleted && cooldown !== null && cooldown !== undefined && cooldown > 0;
+
+            return (
+              <li
+                key={assessment.id}
+                className="flex flex-col sm:flex-row sm:items-center gap-3 px-4 sm:px-5 py-4"
+                style={{ borderTop: i > 0 ? '1px solid var(--color-border)' : undefined }}
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <h3 className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{assessment.name}</h3>
+                    {isCompleted && <StatusDot label="Done" />}
+                  </div>
+                  <p className="mt-0.5 text-sm" style={{ color: 'var(--color-textSecondary)' }}>{assessment.description}</p>
+                  <p className="mt-1 text-caption" style={{ color: 'var(--color-textMuted)' }}>
+                    {assessment.duration} · {assessment.traits.join(', ')}
+                  </p>
+                </div>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="self-start sm:self-auto flex-shrink-0"
+                  onClick={() => handleAssessmentClick(assessment.id, isCompleted, cooldown)}
+                >
+                  {isOnCooldown ? `Retake in ${formatCooldown(cooldown!)}` : isCompleted ? 'Retake' : 'Start'}
+                </Button>
+              </li>
+            );
+          })}
+        </ul>
+      </Section>
+
+      <section className="mt-10 bento-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>Ready to find your matches?</h2>
+          <p className="mt-1 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+            See candidates whose personality lines up with your culture.
           </p>
-          <Link to="/app/employer/top-candidates">
-            <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>Browse candidates</Button>
-          </Link>
-        </motion.div>
-      </div>
+        </div>
+        <Button
+          className="self-start sm:self-auto flex-shrink-0"
+          rightIcon={<ArrowRight className="w-4 h-4" />}
+          onClick={() => navigate('/app/employer/top-candidates')}
+        >
+          Browse candidates
+        </Button>
+      </section>
+
+      <p className="mt-6 text-caption" style={{ color: 'var(--color-textMuted)' }}>
+        This profile is based on the Big Five (OCEAN) model. Ember uses these preferences alongside skills and
+        experience to suggest compatible candidates, never as the sole deciding factor.
+      </p>
     </div>
   );
 }
 
-// Dimension detail panel (shown when a mind map bubble is clicked)
-function DimensionDetail({
-  score,
-  info,
-  onClose,
+const GROWTH_TIPS: Record<string, string> = {
+  openness: 'Host innovation days or hackathons to encourage creative thinking in your teams.',
+  conscientiousness: 'Introduce light project management rituals to bring clarity without rigidity.',
+  extraversion: 'Create more cross-team touchpoints — standups, social events, or collaboration channels.',
+  agreeableness: 'Invest in conflict resolution training and psychological safety workshops.',
+  neuroticism: 'Build resilience programs — mindfulness resources, wellness days, or manager training.',
+};
+
+function Section({
+  title,
+  aside,
+  first = false,
+  children,
 }: {
-  dimension?: string;
-  score: number;
-  info: typeof DIMENSION_INFO[string];
-  onClose: () => void;
+  title: string;
+  aside?: React.ReactNode;
+  first?: boolean;
+  children: React.ReactNode;
 }) {
   return (
-    <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${info.color}20` }}>
-            <info.icon className="w-6 h-6" style={{ color: info.color }} />
-          </div>
-          <div>
-            <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--color-text)' }}>{info.fullLabel}</h2>
-            <p className="text-sm" style={{ color: info.color }}>Preference: {score}/100</p>
-          </div>
-        </div>
-        <button onClick={onClose} className="p-2 rounded-lg hover:bg-[var(--color-background)]">
-          <X className="w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
-        </button>
+    <section className={first ? undefined : 'mt-10'}>
+      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>{title}</h2>
+        {aside}
       </div>
+      {children}
+    </section>
+  );
+}
 
-      <GradientProgressBar value={score} color={info.color} showValue={false} size="md" />
-
-      <p className="text-sm mt-3 mb-3" style={{ color: 'var(--color-textSecondary)' }}>{info.description}</p>
-
-      <div className="p-3 rounded-lg mb-4" style={{ backgroundColor: 'var(--color-background)' }}>
-        <p className="text-xs font-medium mb-1" style={{ color: 'var(--color-text)' }}>Hiring impact</p>
-        <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>{info.workplaceImpact}</p>
-      </div>
-
-      <div className="flex-1 overflow-auto">
-        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
-          Candidates you attract
-        </h3>
-        <ul className="space-y-1.5 mb-4">
-          {(score >= 50 ? info.highCandidates : info.lowCandidates).map((trait, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm">
-              <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: info.color }} />
-              <span style={{ color: 'var(--color-textSecondary)' }}>{trait}</span>
-            </li>
-          ))}
-        </ul>
-
-        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Ideal roles</h3>
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {info.idealFor.map((role, i) => (
-            <span key={i} className="px-2 py-1 rounded-md text-xs" style={{ backgroundColor: `${info.color}15`, color: info.color }}>{role}</span>
-          ))}
-        </div>
-
-        <h3 className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>Candidate types</h3>
-        <div className="flex flex-wrap gap-1.5">
-          {info.candidateTypes.map((type, i) => (
-            <span key={i} className="px-2 py-1 rounded-md text-xs" style={{ backgroundColor: 'var(--color-background)', color: 'var(--color-textSecondary)' }}>{type}</span>
-          ))}
-        </div>
-      </div>
+function Detail({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <dt className="text-caption" style={{ color: 'var(--color-textMuted)' }}>{label}</dt>
+      <dd className="mt-0.5 text-sm" style={{ color: 'var(--color-text)' }}>{children}</dd>
     </div>
+  );
+}
+
+function DotList({ title, items, dot }: { title: string; items: string[]; dot: string }) {
+  return (
+    <div>
+      <p className="text-caption" style={{ color: 'var(--color-textMuted)' }}>{title}</p>
+      <ul className="mt-2 space-y-2">
+        {items.map((item) => (
+          <li key={item} className="flex items-center gap-2.5 text-sm" style={{ color: 'var(--color-text)' }}>
+            <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: dot }} />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function StatusDot({ label }: { label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 text-caption" style={{ color: 'var(--color-textSecondary)' }}>
+      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-success)' }} />
+      {label}
+    </span>
+  );
+}
+
+// One preference: the score bar is always visible and the hiring detail opens in place
+function PreferenceRow({
+  info,
+  score,
+  divided,
+  expanded,
+  onToggle,
+}: {
+  info: typeof DIMENSION_INFO[string];
+  score: number;
+  divided: boolean;
+  expanded: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <li style={{ borderTop: divided ? '1px solid var(--color-border)' : undefined }}>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={expanded}
+        className="w-full px-4 sm:px-5 py-3.5 text-left transition-colors hover:bg-[var(--color-surfaceHover)]"
+      >
+        <div className="mb-1.5 flex items-baseline justify-between gap-3">
+          <span className="min-w-0 text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+            {info.fullLabel}
+            <span className="hidden sm:inline font-normal" style={{ color: 'var(--color-textMuted)' }}> · {info.shortDesc}</span>
+          </span>
+          <span className="flex items-center gap-2 text-sm tabular-nums" style={{ color: 'var(--color-textSecondary)' }}>
+            {score}
+            <ChevronDown
+              className={`w-4 h-4 transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+              style={{ color: 'var(--color-textMuted)' }}
+            />
+          </span>
+        </div>
+        <GradientProgressBar value={score} showValue={false} size="sm" color={info.color} />
+      </button>
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 px-4 sm:px-5 pb-5 pt-1">
+              <div className="space-y-2 text-sm">
+                <p style={{ color: 'var(--color-text)' }}>{info.description}</p>
+                <p style={{ color: 'var(--color-textSecondary)' }}>{info.workplaceImpact}</p>
+              </div>
+              <dl className="space-y-3">
+                <div>
+                  <dt className="text-caption" style={{ color: 'var(--color-textMuted)' }}>Candidates you attract</dt>
+                  <dd className="mt-1">
+                    <ul className="space-y-1 text-sm" style={{ color: 'var(--color-text)' }}>
+                      {(score >= 50 ? info.highCandidates : info.lowCandidates).map((trait) => <li key={trait}>{trait}</li>)}
+                    </ul>
+                  </dd>
+                </div>
+                <Detail label="Ideal roles">{info.idealFor.join(', ')}</Detail>
+                <Detail label="Candidate types">{info.candidateTypes.join(', ')}</Detail>
+              </dl>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </li>
   );
 }
 
