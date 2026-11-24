@@ -54,8 +54,8 @@ export default {
         label: ['0.8125rem', { lineHeight: '1.25rem', letterSpacing: '-0.003em', fontWeight: '500' }],
         heading: ['1.0625rem', { lineHeight: '1.5rem', letterSpacing: '-0.012em', fontWeight: '600' }],
         title: ['1.625rem', { lineHeight: '2rem', letterSpacing: '-0.022em', fontWeight: '600' }],
-        headline: ['clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem)', { lineHeight: '1.15', letterSpacing: '-0.028em', fontWeight: '600' }],
-        display: ['clamp(2.5rem, 1.4rem + 3.6vw, 4.5rem)', { lineHeight: '1.04', letterSpacing: '-0.036em', fontWeight: '600' }],
+        headline: ['clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem)', { lineHeight: '1.15', letterSpacing: '-0.024em', fontWeight: '600' }],
+        display: ['clamp(2.5rem, 1.4rem + 3.6vw, 4.5rem)', { lineHeight: '1.05', letterSpacing: '-0.03em', fontWeight: '600' }],
       },
       borderRadius: {
         '4xl': '2rem',
