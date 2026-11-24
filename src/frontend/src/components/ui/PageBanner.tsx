@@ -44,12 +44,13 @@ export function PageBanner({ title, subtitle, icon: Icon, iconNode, rightContent
       initial="hidden"
       animate="visible"
       className={cn(
-        'bento-card rounded-2xl p-6 mb-6',
+        'bento-card rounded-2xl p-5 sm:p-6 mb-6',
         className
       )}
     >
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-5 flex-1 min-w-0">
+      {/* Wraps the right-hand actions under the title when they don't fit beside it */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-5 flex-1 min-w-[min(100%,18rem)]">
           {iconNode ? (
             <motion.div variants={childVariants} className="hidden sm:block flex-shrink-0">
               {iconNode}
@@ -91,7 +92,7 @@ export function PageBanner({ title, subtitle, icon: Icon, iconNode, rightContent
           </div>
         </div>
         {rightContent && (
-          <motion.div variants={rightVariants} className="flex items-center gap-2 flex-shrink-0">
+          <motion.div variants={rightVariants} className="flex flex-wrap items-center gap-2">
             {rightContent}
           </motion.div>
         )}

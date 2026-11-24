@@ -27,7 +27,7 @@ export function DashboardHeader({ greeting, firstName }: DashboardHeaderProps) {
   const TimeIcon = getTimeIcon();
 
   return (
-    <div className="bento-card rounded-2xl p-6 mb-6">
+    <div className="bento-card rounded-2xl p-5 sm:p-6 mb-6">
       <div className="flex items-center justify-between gap-4">
         {/* Left: Greeting */}
         <div className="flex items-center gap-5 flex-1 min-w-0">
@@ -53,8 +53,8 @@ export function DashboardHeader({ greeting, firstName }: DashboardHeaderProps) {
           </div>
         </div>
 
-        {/* Right: Theme toggle + Notifications together */}
-        <div className="flex items-center gap-2 flex-shrink-0">
+        {/* Right: theme toggle + notifications (the mobile top bar has its own) */}
+        <div className="hidden md:flex items-center gap-2 flex-shrink-0">
           <button
             onClick={toggleTheme}
             className="p-2 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)]"

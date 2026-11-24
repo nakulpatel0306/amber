@@ -452,11 +452,11 @@ export function NetworkHub() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.35 }}
-        className="bento-card rounded-2xl p-6 mb-6"
+        className="bento-card rounded-2xl p-5 sm:p-6 mb-6"
       >
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           {/* Left: avatar + text */}
-          <div className="flex items-center gap-3 flex-1 min-w-0">
+          <div className="flex items-center gap-3 flex-1 min-w-[min(100%,18rem)]">
             <Avatar
               src={profile?.avatar_url}
               fallback={profile?.full_name || 'User'}
@@ -511,7 +511,7 @@ export function NetworkHub() {
           </div>
 
           {/* Right: actions */}
-          <div className="flex items-center gap-3 flex-wrap flex-shrink-0">
+          <div className="flex items-center gap-3 flex-wrap">
             <Button
               size="sm"
               leftIcon={<Plus className="w-3.5 h-3.5" />}

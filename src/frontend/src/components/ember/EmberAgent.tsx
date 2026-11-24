@@ -409,12 +409,12 @@ export function EmberAgent() {
 
   return (
     <div className="ember-page min-h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
-      <div className="max-w-7xl mx-auto px-6 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
 
         {/* Header — matches dashboard DashboardHeader bento-card style */}
         {view !== 'deepdive' && (
           <motion.div
-            className="bento-card p-6 mb-5"
+            className="bento-card p-5 sm:p-6 mb-5"
             variants={emberFadeUp}
             initial="hidden"
             animate="show"
