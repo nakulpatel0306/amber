@@ -16,7 +16,7 @@ export function PublicLayout() {
       style={{ backgroundColor: 'var(--color-background)' }}
     >
       <LandingNav />
-      <main className="flex-1 pt-[4.5rem]">
+      <main className="flex-1">
         <Outlet />
       </main>
       <LandingFooter />

@@ -6,14 +6,11 @@ import {
   Calendar,
   Check,
   Coffee,
-  Lock,
   Send,
   Sparkles,
   Target,
   TrendingUp,
-  Users,
-  Zap,
-} from 'lucide-react';
+  } from 'lucide-react';
 
 /* ─────────────────────────────────────────────
    1. BIG CARD: 4-Step Process (real app flow)
@@ -21,27 +18,27 @@ import {
 
 const PROCESS_STEPS = [
   {
-    number: '01',
+    number: '1',
     label: 'Dashboard',
-    caption: 'Your home base for matches, chats, and metrics.',
+    caption: 'Home base: your archetype, your matches and your chats.',
     icon: Target,
   },
   {
-    number: '02',
+    number: '2',
     label: 'Assessment',
-    caption: '15-min Big Five · Scenario-based questions.',
+    caption: 'A 15-minute Big Five assessment built from workplace scenarios.',
     icon: Sparkles,
   },
   {
-    number: '03',
+    number: '3',
     label: 'Insights',
-    caption: 'Your archetype · OCEAN trait breakdown.',
+    caption: 'Your archetype and a trait-by-trait breakdown of each match.',
     icon: Brain,
   },
   {
-    number: '04',
+    number: '4',
     label: 'Connect',
-    caption: 'Pick a match · Book a 15-min coffee chat.',
+    caption: 'Pick a match and propose times for a 15-minute coffee chat.',
     icon: Coffee,
   },
 ];
@@ -130,11 +127,11 @@ function SceneDashboard() {
         </div>
         <div className="flex-1 min-w-0">
           <p
-            className="text-[13px] font-serif leading-none"
+            className="text-[13px] leading-none"
             style={{ color: 'var(--color-text)' }}
           >
             Good evening,{' '}
-            <span className="" style={{ color: 'var(--color-accent)' }}>
+            <span style={{ color: 'var(--color-accent)' }}>
               Alex
             </span>
           </p>
@@ -161,7 +158,7 @@ function SceneDashboard() {
           transition={{ delay: 0.3 }}
         >
           <Brain className="w-2.5 h-2.5" style={{ color: 'var(--color-accent)' }} />
-          <span className="text-[9px] font-serif" style={{ color: 'var(--color-accent)' }}>
+          <span className="text-[9px]" style={{ color: 'var(--color-accent)' }}>
             The Strategist
           </span>
         </motion.div>
@@ -201,7 +198,7 @@ function SceneDashboard() {
               />
             </div>
             <p
-              className="text-[20px] font-serif leading-none mt-1"
+              className="text-[20px] leading-none mt-1"
               style={{ color: 'var(--color-text)' }}
             >
               <AnimatedScoreNumber value={m.value} suffix={m.suffix} delay={0.3 + i * 0.08} />
@@ -291,7 +288,7 @@ function SceneDashboard() {
                   />
                 </div>
                 <span
-                  className="text-[11px] font-serif font-semibold tabular-nums"
+                  className="text-[11px] font-semibold tabular-nums"
                   style={{ color: 'var(--color-accent)' }}
                 >
                   <AnimatedScoreNumber value={m.score} suffix="%" delay={0.8 + i * 0.08} />
@@ -408,7 +405,7 @@ function SceneAssessmentScene({ pickedIndex, hoverIndex }: { pickedIndex: number
         <div className="flex items-center gap-1.5 flex-shrink-0">
           {/* Auto-save indicator — live pulse (label hidden on narrow widths) */}
           <motion.div
-            className="flex items-center gap-1 text-[8px] font-mono"
+            className="flex items-center gap-1 text-[8px]"
             style={{ color: 'var(--color-success)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -436,7 +433,7 @@ function SceneAssessmentScene({ pickedIndex, hoverIndex }: { pickedIndex: number
 
       {/* Scenario question — tighter with less empty space */}
       <motion.div
-        className="text-[19px] font-serif leading-[1.25] tracking-tight mb-2"
+        className="text-[19px] leading-[1.25] tracking-tight mb-2"
         style={{ color: 'var(--color-text)' }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -446,7 +443,7 @@ function SceneAssessmentScene({ pickedIndex, hoverIndex }: { pickedIndex: number
           text="You're offered a role in a completely new field. More money, but you'd be starting from scratch. Your current role has a "
           delay={0.2}
         />
-        <span className="" style={{ color: 'var(--color-accent)' }}>
+        <span style={{ color: 'var(--color-accent)' }}>
           <TypedText text="clear promotion path." delay={2.4} />
         </span>
       </motion.div>
@@ -526,16 +523,16 @@ function SceneAssessmentScene({ pickedIndex, hoverIndex }: { pickedIndex: number
         {/* Keyboard shortcut hint */}
         <div className="flex items-center gap-1">
           <span
-            className="text-[7.5px] font-mono px-1 py-0.5 rounded border flex items-center gap-0.5"
+            className="text-[7.5px] px-1 py-0.5 rounded border flex items-center gap-0.5"
             style={{
               color: 'var(--color-textMuted)',
               borderColor: 'var(--color-border)',
               backgroundColor: 'var(--color-surface)',
             }}
           >
-            <kbd className="font-mono">1</kbd>
+            <kbd className="">1</kbd>
             –
-            <kbd className="font-mono">4</kbd>
+            <kbd className="">4</kbd>
           </span>
           <span className="text-[7.5px]" style={{ color: 'var(--color-textMuted)' }}>
             Pick
@@ -658,7 +655,7 @@ function SceneInsights() {
         </div>
         <div className="flex items-center gap-1.5 flex-shrink-0">
           <p
-            className="text-[18px] font-serif leading-none tabular-nums"
+            className="text-[18px] leading-none tabular-nums"
             style={{ color: 'var(--color-text)' }}
           >
             <AnimatedScoreNumber value={85} suffix="%" delay={0.3} />
@@ -724,7 +721,7 @@ function SceneInsights() {
                 {s.label}
               </p>
               <p
-                className="text-[24px] font-serif leading-none tabular-nums pl-1.5 mb-2"
+                className="text-[24px] leading-none tabular-nums pl-1.5 mb-2"
                 style={{ color: 'var(--color-text)' }}
               >
                 <AnimatedScoreNumber value={s.value} suffix="%" delay={0.4 + i * 0.06} />
@@ -766,7 +763,7 @@ function SceneInsights() {
           >
             Flavor profile
           </p>
-          <div className="flex items-center gap-2 text-[7px] font-mono" style={{ color: 'var(--color-textMuted)' }}>
+          <div className="flex items-center gap-2 text-[7px]" style={{ color: 'var(--color-textMuted)' }}>
             <span className="flex items-center gap-0.5">
               <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }} />
               You
@@ -799,7 +796,7 @@ function SceneInsights() {
                 transition={{ delay: 0.4 + i * 0.06 }}
               >
                 <div
-                  className="w-4 h-4 rounded flex items-center justify-center text-[8px] font-mono font-semibold flex-shrink-0"
+                  className="w-4 h-4 rounded flex items-center justify-center text-[8px] font-semibold flex-shrink-0"
                   style={{
                     backgroundColor: `color-mix(in srgb, ${dim.color} 15%, transparent)`,
                     color: dim.color,
@@ -833,7 +830,7 @@ function SceneInsights() {
                   />
                 </div>
                 <span
-                  className="text-[8px] font-mono tabular-nums flex-shrink-0 w-[28px] text-right"
+                  className="text-[8px] tabular-nums flex-shrink-0 w-[28px] text-right"
                   style={{ color: dim.color }}
                 >
                   {dim.you}
@@ -986,7 +983,7 @@ function SceneConnect({ stage }: { stage: number }) {
         </div>
         <div className="flex items-center gap-1.5 flex-shrink-0">
           <p
-            className="text-[18px] font-serif leading-none tabular-nums"
+            className="text-[18px] leading-none tabular-nums"
             style={{ color: 'var(--color-text)' }}
           >
             85%
@@ -1058,7 +1055,7 @@ function SceneConnect({ stage }: { stage: number }) {
             ◀ April 2026 ▶
           </span>
           <span
-            className="text-[8px] font-mono"
+            className="text-[8px]"
             style={{ color: 'var(--color-textMuted)' }}
           >
             2/5 Dates Selected
@@ -1099,7 +1096,7 @@ function SceneConnect({ stage }: { stage: number }) {
               return (
                 <motion.div
                   key={i}
-                  className="text-[9px] font-mono rounded flex items-center justify-center"
+                  className="text-[9px] rounded flex items-center justify-center"
                   style={{
                     color: !c.inMonth
                       ? 'color-mix(in srgb, var(--color-textMuted) 50%, transparent)'
@@ -1194,7 +1191,7 @@ function SceneConnect({ stage }: { stage: number }) {
           />
         </p>
         <span
-          className="text-[7.5px] font-mono flex-shrink-0"
+          className="text-[7.5px] flex-shrink-0"
           style={{ color: 'var(--color-textMuted)' }}
         >
           11/100
@@ -1290,54 +1287,20 @@ function ProcessCard() {
 
   return (
     <div
-      className="relative rounded-3xl p-7 lg:p-8 h-full overflow-hidden flex flex-col"
+      className="relative rounded-xl p-5 sm:p-7 h-full overflow-hidden flex flex-col"
       style={{
         backgroundColor: 'var(--color-surface)',
         border: '1px solid var(--color-border)',
       }}
     >
-      <div
-        className="absolute inset-0 opacity-[0.1] pointer-events-none"
-        style={{
-          backgroundImage:
-            'linear-gradient(to right, var(--color-border) 1px, transparent 1px), linear-gradient(to bottom, var(--color-border) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-          maskImage: 'radial-gradient(ellipse at top right, black, transparent 70%)',
-          WebkitMaskImage: 'radial-gradient(ellipse at top right, black, transparent 70%)',
-        }}
-      />
 
       <div className="relative flex flex-col h-full">
-        <div className="flex items-center gap-2 mb-3">
-          <motion.div
-            className="w-1.5 h-1.5 rounded-full"
-            style={{ backgroundColor: 'var(--color-accent)' }}
-            animate={{ opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <span
-            className="text-[10px] font-medium"
-            style={{ color: 'var(--color-accent)' }}
-          >
-            The 4-step journey
-          </span>
-        </div>
-
-        <h3
-          className="text-2xl lg:text-3xl font-serif font-normal tracking-tight mb-1 leading-[1.1]"
-          style={{ color: 'var(--color-text)' }}
-        >
-          From dashboard to offer.{' '}
-          <span className="" style={{ color: 'var(--color-accent)' }}>
-            Effortlessly.
-          </span>
-        </h3>
 
         <AnimatePresence mode="wait">
           <motion.p
             key={step.number}
             className="text-sm leading-relaxed mb-5 max-w-md"
-            style={{ color: 'var(--color-textMuted)' }}
+            style={{ color: 'var(--color-textSecondary)' }}
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
@@ -1348,7 +1311,7 @@ function ProcessCard() {
         </AnimatePresence>
 
         <div
-          className="relative flex-1 rounded-2xl overflow-hidden border mb-5"
+          className="relative flex-1 rounded-lg overflow-hidden border mb-5"
           style={{
             borderColor: 'var(--color-border)',
             backgroundColor: 'color-mix(in srgb, var(--color-background) 60%, transparent)',
@@ -1371,7 +1334,7 @@ function ProcessCard() {
               <AnimatePresence mode="wait">
                 <motion.span
                   key={step.label}
-                  className="text-[8px] font-mono tracking-wider"
+                  className="text-[8px] tracking-wider"
                   style={{ color: 'var(--color-textMuted)' }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -1407,7 +1370,7 @@ function ProcessCard() {
             return (
               <div key={s.number} className="flex items-center gap-2 flex-1 min-w-0">
                 <div
-                  className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[9px] font-mono font-semibold transition-all"
+                  className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-semibold tabular-nums transition-all"
                   style={{
                     backgroundColor:
                       isActive || isDone ? 'var(--color-accent)' : 'transparent',
@@ -1423,7 +1386,7 @@ function ProcessCard() {
                   {isDone ? <Check className="w-2.5 h-2.5" /> : s.number}
                 </div>
                 <span
-                  className="text-[10px] font-medium truncate hidden sm:inline"
+                  className="text-label truncate hidden sm:inline"
                   style={{
                     color: isActive ? 'var(--color-text)' : 'var(--color-textMuted)',
                     opacity: isActive ? 1 : 0.5,
@@ -1446,548 +1409,26 @@ function ProcessCard() {
   );
 }
 
-/* ─────────────────────────────────────────────
-   2. SCIENCE: Big Five / OCEAN radar
-   ───────────────────────────────────────────── */
-
-const RADAR_TRAITS = ['O', 'C', 'E', 'A', 'S'];
-
-function ScienceCard() {
-  return (
-    <div
-      className="relative rounded-3xl p-7 h-full overflow-hidden"
-      style={{
-        backgroundColor: 'var(--color-surface)',
-        border: '1px solid var(--color-border)',
-      }}
-    >
-      <div
-        className="absolute inset-0 opacity-[0.12] pointer-events-none"
-        style={{
-          backgroundImage:
-            'linear-gradient(to right, var(--color-border) 1px, transparent 1px), linear-gradient(to bottom, var(--color-border) 1px, transparent 1px)',
-          backgroundSize: '24px 24px',
-          maskImage: 'radial-gradient(ellipse at center, black, transparent 70%)',
-          WebkitMaskImage: 'radial-gradient(ellipse at center, black, transparent 70%)',
-        }}
-      />
-
-      <div className="relative flex flex-col h-full">
-        <div className="flex items-center gap-2 mb-4">
-          <Brain className="w-3 h-3" style={{ color: 'var(--color-accent)' }} />
-          <span
-            className="text-[10px]"
-            style={{ color: 'var(--color-textMuted)' }}
-          >
-            Big Five · OCEAN
-          </span>
-        </div>
-
-        <h3
-          className="text-2xl font-serif font-normal tracking-tight mb-2 leading-tight"
-          style={{ color: 'var(--color-text)' }}
-        >
-          Decades of research,{' '}
-          <span className="" style={{ color: 'var(--color-accent)' }}>
-            in 15 minutes.
-          </span>
-        </h3>
-
-        <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textMuted)' }}>
-          The Big Five, the most studied model in personality research: openness, conscientiousness,
-          extraversion, agreeableness, stability.
-        </p>
-
-        {/* Radar with 5 labeled points */}
-        <div className="mt-auto pt-5 flex justify-center">
-          <div className="relative w-40 h-40">
-            {[0.4, 0.7, 1].map((scale, i) => (
-              <motion.div
-                key={i}
-                className="absolute inset-0 rounded-full"
-                style={{
-                  border: '1px solid color-mix(in srgb, var(--color-accent) 30%, transparent)',
-                }}
-                animate={{ scale: [scale * 0.9, scale, scale * 0.9], opacity: [0.4, 0.8, 0.4] }}
-                transition={{ duration: 3, delay: i * 0.4, repeat: Infinity, ease: 'easeInOut' }}
-              />
-            ))}
-            {RADAR_TRAITS.map((letter, i) => {
-              const angle = (i * (360 / RADAR_TRAITS.length) - 90) * (Math.PI / 180);
-              const r = 70;
-              return (
-                <div
-                  key={letter}
-                  className="absolute text-xs font-mono font-semibold flex items-center justify-center w-6 h-6 rounded-full"
-                  style={{
-                    left: `calc(50% + ${Math.cos(angle) * r}px - 12px)`,
-                    top: `calc(50% + ${Math.sin(angle) * r}px - 12px)`,
-                    backgroundColor: 'var(--color-background)',
-                    color: 'var(--color-accent)',
-                    border: '1px solid var(--color-accent)',
-                  }}
-                >
-                  {letter}
-                </div>
-              );
-            })}
-            <div
-              className="absolute inset-0 flex items-center justify-center text-3xl font-serif font-normal"
-              style={{ color: 'var(--color-accent)' }}
-            >
-              5
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   3. SPEED: No resume
-   ───────────────────────────────────────────── */
-
-function SpeedCard() {
-  const [seconds, setSeconds] = useState(900); // 15 min countdown visual
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setSeconds((s) => (s <= 0 ? 900 : s - 1));
-    }, 60);
-    return () => clearInterval(id);
-  }, []);
-
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-
-  return (
-    <div
-      className="relative rounded-3xl p-7 h-full overflow-hidden"
-      style={{
-        backgroundColor: 'var(--color-surface)',
-        border: '1px solid var(--color-border)',
-      }}
-    >
-      <div className="flex items-center gap-2 mb-4">
-        <Zap className="w-3 h-3" style={{ color: 'var(--color-accent)' }} />
-        <span
-          className="text-[10px]"
-          style={{ color: 'var(--color-textMuted)' }}
-        >
-          Assessment · Timer
-        </span>
-      </div>
-
-      <h3
-        className="text-2xl font-serif font-normal tracking-tight mb-2 leading-tight"
-        style={{ color: 'var(--color-text)' }}
-      >
-        No resume.{' '}
-        <span className="" style={{ color: 'var(--color-accent)' }}>
-          No cover letter.
-        </span>
-      </h3>
-
-      <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textMuted)' }}>
-        Answer a few questions about how you think and work. We do the rest.
-      </p>
-
-      {/* Countdown widget */}
-      <div className="mt-auto pt-5">
-        <div
-          className="rounded-xl p-4 border flex items-center justify-between"
-          style={{
-            borderColor: 'color-mix(in srgb, var(--color-accent) 20%, transparent)',
-            backgroundColor: 'color-mix(in srgb, var(--color-accent) 5%, transparent)',
-          }}
-        >
-          <div>
-            <p
-              className="text-[10px] font-medium mb-1"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Time remaining
-            </p>
-            <p
-              className="text-3xl font-serif font-normal tabular-nums"
-              style={{ color: 'var(--color-text)' }}
-            >
-              {String(mins).padStart(2, '0')}
-              <span style={{ color: 'var(--color-accent)' }}>:</span>
-              {String(secs).padStart(2, '0')}
-            </p>
-          </div>
-          <div className="relative w-12 h-12">
-            <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
-              <circle
-                cx="24"
-                cy="24"
-                r="20"
-                fill="none"
-                stroke="var(--color-border)"
-                strokeWidth="3"
-              />
-              <circle
-                cx="24"
-                cy="24"
-                r="20"
-                fill="none"
-                stroke="var(--color-accent)"
-                strokeWidth="3"
-                strokeDasharray={`${(seconds / 900) * 125.6} 125.6`}
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   4. COFFEE: animated booking slots
-   ───────────────────────────────────────────── */
-
-function CoffeeChatCard() {
-  const [filled, setFilled] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setFilled((f) => (f + 1) % 7);
-    }, 800);
-    return () => clearInterval(id);
-  }, []);
-
-  return (
-    <div
-      className="relative rounded-3xl p-7 h-full overflow-hidden"
-      style={{
-        backgroundColor: 'var(--color-surface)',
-        border: '1px solid var(--color-border)',
-      }}
-    >
-      <div className="flex items-center gap-2 mb-4">
-        <Coffee className="w-3 h-3" style={{ color: 'var(--color-accent)' }} />
-        <span
-          className="text-[10px]"
-          style={{ color: 'var(--color-textMuted)' }}
-        >
-          15 Min · Video
-        </span>
-      </div>
-
-      <h3
-        className="text-2xl font-serif font-normal tracking-tight mb-2 leading-tight"
-        style={{ color: 'var(--color-text)' }}
-      >
-        Book a coffee. Skip the{' '}
-        <span className="" style={{ color: 'var(--color-accent)' }}>
-          cold apply.
-        </span>
-      </h3>
-
-      <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textMuted)' }}>
-        Connect with hiring managers directly. One click, real conversation.
-      </p>
-
-      <div className="mt-auto pt-5">
-        <div className="grid grid-cols-6 gap-1.5">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <motion.div
-              key={i}
-              className="h-8 rounded"
-              animate={{
-                backgroundColor:
-                  i < filled
-                    ? 'var(--color-accent)'
-                    : 'color-mix(in srgb, var(--color-accent) 8%, transparent)',
-                borderColor:
-                  i < filled
-                    ? 'var(--color-accent)'
-                    : 'color-mix(in srgb, var(--color-accent) 25%, transparent)',
-              }}
-              style={{ border: '1px solid' }}
-              transition={{ duration: 0.3 }}
-            />
-          ))}
-        </div>
-        <div className="flex justify-between mt-2 px-0.5">
-          <span
-            className="text-[9px]"
-            style={{ color: 'var(--color-textMuted)' }}
-          >
-            Mon
-          </span>
-          <span
-            className="text-[9px]"
-            style={{ color: 'var(--color-textMuted)' }}
-          >
-            Sat
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   5. TWO-SIDED: Venn
-   ───────────────────────────────────────────── */
-
-function TwoSidedCard() {
-  return (
-    <div
-      className="relative rounded-3xl p-7 h-full overflow-hidden"
-      style={{
-        backgroundColor: 'var(--color-surface)',
-        border: '1px solid var(--color-border)',
-      }}
-    >
-      <div className="flex items-center gap-2 mb-4">
-        <Users className="w-3 h-3" style={{ color: 'var(--color-accent)' }} />
-        <span
-          className="text-[10px]"
-          style={{ color: 'var(--color-textMuted)' }}
-        >
-          Two-way matching
-        </span>
-      </div>
-
-      <h3
-        className="text-2xl font-serif font-normal tracking-tight mb-2 leading-tight"
-        style={{ color: 'var(--color-text)' }}
-      >
-        Made for both{' '}
-        <span className="" style={{ color: 'var(--color-accent)' }}>
-          sides.
-        </span>
-      </h3>
-
-      <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textMuted)' }}>
-        Employers define culture. Candidates share personality. Matches happen where they overlap.
-      </p>
-
-      {/* Breathing Venn */}
-      <div className="mt-auto pt-6 flex justify-center items-center h-24 relative">
-        <div className="relative">
-          <motion.div
-            className="absolute w-16 h-16 rounded-full"
-            style={{
-              backgroundColor: 'color-mix(in srgb, var(--color-accent) 45%, transparent)',
-              left: -20,
-              mixBlendMode: 'multiply',
-            }}
-            animate={{ x: [-20, -10, -20] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            className="absolute w-16 h-16 rounded-full"
-            style={{
-              backgroundColor: 'color-mix(in srgb, var(--color-trait-conscientiousness) 45%, transparent)',
-              left: 20,
-              mixBlendMode: 'multiply',
-            }}
-            animate={{ x: [20, 10, 20] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <div className="w-16 h-16" />
-        </div>
-        <div
-          className="absolute text-[10px] font-medium"
-          style={{ color: 'var(--color-text)' }}
-        >
-          FIT
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   6. PRIVACY: lock + encryption visual
-   ───────────────────────────────────────────── */
-
-function PrivacyCard() {
-  return (
-    <div
-      className="relative rounded-3xl p-7 h-full overflow-hidden"
-      style={{
-        backgroundColor: 'var(--color-surface)',
-        border: '1px solid var(--color-border)',
-      }}
-    >
-      <div className="flex items-center gap-2 mb-4">
-        <Lock className="w-3 h-3" style={{ color: 'var(--color-accent)' }} />
-        <span
-          className="text-[10px]"
-          style={{ color: 'var(--color-textMuted)' }}
-        >
-          Postgres · RLS
-        </span>
-      </div>
-
-      <h3
-        className="text-2xl font-serif font-normal tracking-tight mb-2 leading-tight"
-        style={{ color: 'var(--color-text)' }}
-      >
-        Scoped by{' '}
-        <span className="" style={{ color: 'var(--color-accent)' }}>
-          design.
-        </span>
-      </h3>
-
-      <p className="text-sm leading-relaxed" style={{ color: 'var(--color-textMuted)' }}>
-        Row Level Security decides who can read each profile, chat and message. Candidates can hide their profile from search at any time.
-      </p>
-
-      {/* Encryption visual: animated hash string */}
-      <div className="mt-auto pt-5">
-        <div
-          className="rounded-xl p-4 border flex items-center gap-3 font-mono text-[10px]"
-          style={{
-            borderColor: 'var(--color-border)',
-            backgroundColor: 'color-mix(in srgb, var(--color-background) 50%, transparent)',
-          }}
-        >
-          <Lock className="w-3.5 h-3.5 flex-shrink-0" style={{ color: 'var(--color-success)' }} />
-          <div className="flex-1 min-w-0 overflow-hidden">
-            <motion.div
-              className="truncate tracking-widest"
-              style={{ color: 'var(--color-textSecondary)' }}
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              auth.uid() = user_id
-            </motion.div>
-            <p
-              className="text-[9px] mt-0.5"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Policy · per row
-            </p>
-          </div>
-          <div
-            className="w-1.5 h-1.5 rounded-full"
-            style={{ backgroundColor: 'var(--color-success)' }}
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   MAIN SECTION
-   ───────────────────────────────────────────── */
-
 export function FeatureBento() {
   return (
-    <section className="py-28 lg:py-36 px-4 sm:px-6 lg:px-8 relative">
+    <section className="px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
       <div className="max-w-5xl mx-auto">
         <motion.div
-          className="max-w-2xl mb-16"
-          initial={{ opacity: 0, y: 40 }}
+          className="max-w-2xl mb-10"
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: '-80px' }}
-          transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
         >
-          <div className="flex items-center gap-2 mb-5">
-            <div
-              className="w-1.5 h-1.5 rounded-full status-dot"
-              style={{ backgroundColor: 'var(--color-accent)' }}
-            />
-            <span
-              className="text-[10px] font-medium"
-              style={{ color: 'var(--color-accent)' }}
-            >
-              Features / How It Works
-            </span>
-          </div>
-
-          <h2
-            className="text-4xl sm:text-5xl lg:text-6xl font-serif font-normal tracking-tight leading-[1.05]"
-            style={{ color: 'var(--color-text)' }}
-          >
-            The whole job search,{' '}
-            <span className="" style={{ color: 'var(--color-accent)' }}>
-              rethought.
-            </span>
+          <h2 className="text-headline" style={{ color: 'var(--color-text)' }}>
+            A tour of the product
           </h2>
+          <p className="mt-4 text-base sm:text-lg leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+            Recreations of the four screens a job seeker moves through, from the dashboard to booking a coffee chat.
+          </p>
         </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-5 auto-rows-[minmax(280px,auto)]">
-          {/* Big process card: 2 cols, 2 rows */}
-          <motion.div
-            className="lg:col-span-2 lg:row-span-2 min-h-[620px] sm:min-h-[580px] lg:min-h-[540px]"
-            initial={{ opacity: 0, scale: 0.82, filter: 'blur(12px)' }}
-            whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            whileHover={{ scale: 1.01 }}
-            viewport={{ once: false, margin: '-60px' }}
-            transition={{ duration: 0.7, delay: 0.05, ease: [0.23, 1, 0.32, 1] }}
-            style={{ transformOrigin: 'center center' }}
-          >
-            <ProcessCard />
-          </motion.div>
-
-          {/* Right column top: Science */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, filter: 'blur(10px)' }}
-            whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            whileHover={{ scale: 1.015 }}
-            viewport={{ once: false, margin: '-60px' }}
-            transition={{ duration: 0.6, delay: 0.18, ease: [0.23, 1, 0.32, 1] }}
-            style={{ transformOrigin: 'center center' }}
-          >
-            <ScienceCard />
-          </motion.div>
-
-          {/* Right column bottom: Speed */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, filter: 'blur(10px)' }}
-            whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            whileHover={{ scale: 1.015 }}
-            viewport={{ once: false, margin: '-60px' }}
-            transition={{ duration: 0.6, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
-            style={{ transformOrigin: 'center center' }}
-          >
-            <SpeedCard />
-          </motion.div>
-
-          {/* Bottom row */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, filter: 'blur(10px)' }}
-            whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            whileHover={{ scale: 1.015 }}
-            viewport={{ once: false, margin: '-60px' }}
-            transition={{ duration: 0.6, delay: 0.42, ease: [0.23, 1, 0.32, 1] }}
-            style={{ transformOrigin: 'center center' }}
-          >
-            <CoffeeChatCard />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, filter: 'blur(10px)' }}
-            whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            whileHover={{ scale: 1.015 }}
-            viewport={{ once: false, margin: '-60px' }}
-            transition={{ duration: 0.6, delay: 0.54, ease: [0.23, 1, 0.32, 1] }}
-            style={{ transformOrigin: 'center center' }}
-          >
-            <TwoSidedCard />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, filter: 'blur(10px)' }}
-            whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-            whileHover={{ scale: 1.015 }}
-            viewport={{ once: false, margin: '-60px' }}
-            transition={{ duration: 0.6, delay: 0.66, ease: [0.23, 1, 0.32, 1] }}
-            style={{ transformOrigin: 'center center' }}
-          >
-            <PrivacyCard />
-          </motion.div>
+        <div className="min-h-[600px] sm:min-h-[560px]">
+          <ProcessCard />
         </div>
       </div>
     </section>
