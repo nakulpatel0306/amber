@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   User,
@@ -7,17 +6,13 @@ import {
   Palette,
   MessageSquare,
   Settings,
-  ChevronRight,
   Briefcase,
   Building2,
   Crown,
-  CheckCircle2,
-  Sliders,
-  Sparkles,
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
+import { PageBanner } from '../ui/PageBanner';
 import { useAuth } from '../../contexts/AuthContext';
-import { getUserSettings } from '../../lib/supabase';
 
 // Section components
 import { ProfileSection } from './ProfileSection';
@@ -56,30 +51,9 @@ const allSections: SectionConfig[] = [
 export function SettingsPage() {
   const { section } = useParams<{ section?: string }>();
   const navigate = useNavigate();
-  const { user, profile, isCandidate, isEmployer } = useAuth();
+  const { isCandidate, isEmployer } = useAuth();
 
   const activeSection = (section as SettingsSection) || 'profile';
-
-  // Compute profile completeness
-  const [notificationsConfigured, setNotificationsConfigured] = useState(false);
-  useEffect(() => {
-    if (!user) return;
-    getUserSettings(user.id).then((data: Record<string, unknown> | null) => {
-      if (data) {
-        const hasAnyToggle = data.email_daily_digest || data.email_matches || data.email_messages || data.sms_enabled;
-        setNotificationsConfigured(!!hasAnyToggle);
-      }
-    }).catch(() => {});
-  }, [user]);
-
-  const profileComplete = !!(profile?.full_name && profile?.avatar_url);
-  const completedCount = [profileComplete, notificationsConfigured, !!profile?.avatar_url].filter(Boolean).length;
-
-  const headerPills = [
-    { label: 'Sections', value: `${isCandidate || isEmployer ? 8 : 7}`, color: '#f59e0b', Icon: Sliders },
-    { label: 'Profile', value: profileComplete ? 'Complete' : 'Incomplete', color: profileComplete ? '#10B981' : '#ef4444', Icon: CheckCircle2 },
-    { label: 'Status', value: completedCount >= 2 ? 'Configured' : 'Setup needed', color: completedCount >= 2 ? '#8B5CF6' : '#06B6D4', Icon: Sparkles },
-  ];
 
   // Filter sections based on user role
   const sections = allSections.filter(s => {
@@ -119,54 +93,7 @@ export function SettingsPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Header */}
-      <div className="bento-card rounded-2xl p-6 mb-6">
-        <div className="flex items-center gap-4">
-          <div
-            className="hidden sm:flex items-center justify-center w-14 h-14 rounded-xl flex-shrink-0"
-            style={{ background: 'linear-gradient(135deg, #b45309, #d97706, #f59e0b)' }}
-          >
-            <Settings className="w-7 h-7 text-white" />
-          </div>
-          <div className="flex-1">
-            <h1
-              className="text-title"
-              style={{ color: 'var(--color-text)' }}
-            >
-              Settings
-            </h1>
-            <p
-              className="text-label mt-1"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Manage your account & preferences
-            </p>
-            {/* Stat pills */}
-            <div className="flex flex-wrap gap-2 mt-3">
-              {headerPills.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium"
-                  style={{
-                    background: `linear-gradient(135deg, ${stat.color}18, ${stat.color}08)`,
-                    border: `1px solid ${stat.color}30`,
-                    color: 'var(--color-text)',
-                  }}
-                >
-                  <div
-                    className="w-5 h-5 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: `${stat.color}20` }}
-                  >
-                    <stat.Icon className="w-3 h-3" style={{ color: stat.color }} />
-                  </div>
-                  <span className="opacity-60">{stat.label}</span>
-                  <span className="font-semibold" style={{ color: stat.color }}>{stat.value}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageBanner title="Settings" subtitle="Manage your account and preferences" />
 
       <div className="flex flex-col md:flex-row gap-8">
         {/* Sidebar navigation */}
@@ -177,40 +104,28 @@ export function SettingsPage() {
                 <button
                   onClick={() => handleSectionChange(id)}
                   className={cn(
-                    'w-full flex items-center gap-3 px-4 py-3 rounded-xl',
+                    'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg',
                     'text-left transition-all'
                   )}
                   style={{
                     backgroundColor:
                       activeSection === id
-                        ? 'rgba(245, 158, 11, 0.08)'
+                        ? 'var(--color-surfaceHover)'
                         : 'transparent',
                     color:
                       activeSection === id
                         ? 'var(--color-text)'
                         : 'var(--color-textSecondary)',
-                    border: activeSection === id
-                      ? '1px solid rgba(245, 158, 11, 0.2)'
-                      : '1px solid transparent',
                   }}
                 >
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
+                  <Icon
+                    className="w-4 h-4 flex-shrink-0"
                     style={{
-                      backgroundColor: activeSection === id
-                        ? 'rgba(245, 158, 11, 0.15)'
-                        : 'var(--color-surface)',
+                      color: activeSection === id
+                        ? 'var(--color-accent)'
+                        : 'var(--color-textMuted)',
                     }}
-                  >
-                    <Icon
-                      className="w-4 h-4"
-                      style={{
-                        color: activeSection === id
-                          ? '#f59e0b'
-                          : 'var(--color-textMuted)',
-                      }}
-                    />
-                  </div>
+                  />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium">{label}</p>
                     <p
@@ -220,17 +135,6 @@ export function SettingsPage() {
                       {description}
                     </p>
                   </div>
-                  <ChevronRight
-                    className={cn(
-                      'w-4 h-4 flex-shrink-0 transition-transform',
-                      activeSection === id && 'rotate-90'
-                    )}
-                    style={{
-                      color: activeSection === id
-                        ? '#f59e0b'
-                        : 'var(--color-textMuted)',
-                    }}
-                  />
                 </button>
               </li>
             ))}

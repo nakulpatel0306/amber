@@ -8,7 +8,6 @@ import {
   Zap,
   ArrowRight,
   ArrowLeft,
-  CreditCard,
   Loader2,
 } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -126,21 +125,6 @@ export function PricingPage() {
           </div>
         )}
 
-        <div className="flex items-center gap-3 mb-4">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center"
-            style={{ backgroundColor: 'rgba(245, 158, 11, 0.1)' }}
-          >
-            <CreditCard className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
-          </div>
-          <span
-            className="text-xs font-medium"
-            style={{ color: 'var(--color-accent)' }}
-          >
-            Pricing
-          </span>
-        </div>
-
         <h1
           className="text-title mb-4"
           style={{ color: 'var(--color-text)' }}
@@ -151,7 +135,7 @@ export function PricingPage() {
           className="text-sm sm:text-base max-w-2xl leading-relaxed"
           style={{ color: 'var(--color-textSecondary)' }}
         >
-          From casual networking to serious hiring, pick the plan that matches your vibe.
+          From casual networking to serious hiring, pick the plan that fits.
           Every plan starts free so you can explore before you commit. Use connects to
           reach out to matches, and upgrade when you are ready for more.
         </p>
