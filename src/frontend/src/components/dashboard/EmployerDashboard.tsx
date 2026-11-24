@@ -194,8 +194,8 @@ export function EmployerDashboard() {
               .filter((c: any) => c.status !== 'cancelled')
               .map((c: any) => ({
                 id: c.id,
-                company: c.candidate_name || 'Unknown',
-                person: c.candidate_name || 'Unknown',
+                company: '',
+                person: c.candidate_name || 'Unknown candidate',
                 role: c.role_title || 'Coffee chat',
                 time: c.scheduled_at ? new Date(c.scheduled_at).toLocaleDateString() : 'TBD',
                 scheduledAt: c.scheduled_at || null,

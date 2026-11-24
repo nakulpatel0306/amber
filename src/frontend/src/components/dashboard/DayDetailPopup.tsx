@@ -157,7 +157,7 @@ export function DayDetailPopup({
                   <div className="flex-1 min-w-0">
                     <p className="font-medium text-sm truncate" style={{ color: 'var(--color-text)' }}>
                       {chat.person}
-                      <span style={{ color: 'var(--color-textMuted)' }}> @ {chat.company}</span>
+                      {chat.company && <span style={{ color: 'var(--color-textMuted)' }}> at {chat.company}</span>}
                     </p>
                     <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
                       {chat.role}

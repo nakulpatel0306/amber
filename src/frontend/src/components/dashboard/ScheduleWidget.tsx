@@ -311,10 +311,10 @@ export function ScheduleWidget({ upcomingChats, pendingChats: _pendingChats, acc
                       {chat.person}
                     </p>
                     <p className="text-[10px] truncate" style={{ color: 'var(--color-textMuted)' }}>
-                      {chat.company}
-                      {chat.scheduledAt && (
-                        <> · {format(parseISO(chat.scheduledAt), 'MMM d, h:mm a')}</>
-                      )}
+                      {[
+                        chat.role !== 'Coffee chat' ? chat.role : null,
+                        chat.scheduledAt ? format(parseISO(chat.scheduledAt), 'MMM d, h:mm a') : 'Time to be confirmed',
+                      ].filter(Boolean).join(' · ')}
                     </p>
                   </div>
                 </div>

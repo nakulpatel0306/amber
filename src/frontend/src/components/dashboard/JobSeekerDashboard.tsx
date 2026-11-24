@@ -211,8 +211,9 @@ export function JobSeekerDashboard() {
               .filter((c: any) => c.status !== 'cancelled')
               .map((c: any) => ({
                 id: c.id,
-                company: c.company_name || 'Unknown',
-                person: c.candidate_name || c.company_name || 'Unknown',
+                // The other side of a candidate's chat is the company
+                company: '',
+                person: c.company_name || 'Unknown company',
                 role: c.role_title || 'Coffee chat',
                 time: c.scheduled_at ? new Date(c.scheduled_at).toLocaleDateString() : 'TBD',
                 scheduledAt: c.scheduled_at || null,
