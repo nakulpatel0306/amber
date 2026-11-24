@@ -1,8 +1,10 @@
 # Amber - Culture-First Job Matching
 
+Hiring matches on resumes and keywords, while culture fit only shows up after someone starts, in exit interviews and anonymous reviews. Amber's thesis was to measure how people work and compare it with a team's real culture, so both sides could meet over a coffee chat before anyone applied. Fit is worth measuring early: in a meta-analysis, person-organization fit correlated .51 with organizational commitment and -.35 with intent to quit ([Kristof-Brown, Zimmerman and Johnson, 2005](https://doi.org/10.1111/j.1744-6570.2005.00672.x)).
+
 **[Try the demo](https://nakulpatel0306.github.io/amber/)**: it runs entirely in your browser, with invented people and companies and no signup.
 
-Amber matched candidates and companies on personality and culture fit instead of resume keywords. Candidates took a Big Five (OCEAN) assessment and got one of 8 work archetypes, employers defined their culture and per-role trait ranges, and the Ember engine ranked both sides against each other. Matches met over a short coffee chat before any application.
+Candidates took a Big Five (OCEAN) assessment and got one of 8 work archetypes, employers defined their culture and per-role trait ranges, and the Ember engine ranked both sides against each other. Matches met over a short coffee chat before any application.
 
 **Status:** shelved in 2026. Three of us built Amber from January to November 2026 and took it close to launch. The culture-fit hiring space filled up quickly, competing would have meant raising money, and we chose not to. The code stays open and the full stack still runs locally.
 
@@ -68,6 +70,17 @@ The GitHub Pages build (`npm run build:demo`, which sets `VITE_DEMO=1` and base 
 - [`utils/api.ts`](src/frontend/src/utils/api.ts) routes `apiFetch` to [`src/demo/backend.ts`](src/frontend/src/demo/backend.ts), which serves the same routes and response shapes as FastAPI using the TypeScript Ember port
 
 Everything else is the production code. Seeded people (16 candidates, 6 companies, 13 roles, all invented, all `example.com`) accept requests and answer messages on their own, and those replies are labelled as automatic. A banner offers "Reset demo" at any time. The demo makes no network requests beyond the site's own files, and the normal build tree-shakes the demo out.
+
+## Where It Was Going
+
+None of this was built. These are the six phases the team planned next, from [BLUEPRINT.md](BLUEPRINT.md#where-amber-was-going-never-built), which has the detail.
+
+1. **Conversational Ember AI.** Ember would have replaced the multiple-choice assessment with an open-ended interview, reading trait signals from how people answer, and stayed on afterwards as a career advisor.
+2. **Team DNA mapping.** Employers would have mapped the personalities of an existing team, so matching could favor candidates who balance its gaps instead of matching the company as a whole.
+3. **Culture verification.** Current and former employees would have anonymously checked an employer's culture claims against the same OCEAN framework used for matching.
+4. **Predictive retention.** A model would have estimated how likely a hire was to stay and do well, from patterns in personality and culture alignment.
+5. **Passive culture signals.** Preliminary culture profiles generated from public data, so candidates would have seen companies before those companies ever signed up.
+6. **Blind culture matching.** A mode that hid names, brands and pedigree, so both sides judged each other on culture and personality alone.
 
 ## What We Learned
 
