@@ -1,15 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  ArrowRight,
-  ArrowLeft,
-  Sparkles,
-  User,
-  Briefcase,
-  Link as LinkIcon,
-  DollarSign,
-  CheckCircle2,
-} from 'lucide-react';
+import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { LocationPicker } from '../ui/LocationPicker';
@@ -17,6 +8,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { supabase } from '../../lib/supabase';
 import { cn } from '../../utils/cn';
+import { optionClass } from '../assessments/QuestionParts';
 
 interface CandidateSetupModalProps {
   isOpen: boolean;
@@ -55,10 +47,10 @@ const COMPANY_SIZES = [
 ];
 
 const STEPS = [
-  { id: 'intro', title: 'Welcome', icon: Sparkles },
-  { id: 'basic', title: 'About you', icon: User },
-  { id: 'preferences', title: 'Preferences', icon: Briefcase },
-  { id: 'links', title: 'Links', icon: LinkIcon },
+  { id: 'intro', title: 'Welcome' },
+  { id: 'basic', title: 'About you' },
+  { id: 'preferences', title: 'Preferences' },
+  { id: 'links', title: 'Links' },
 ];
 
 export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAssessment = false }: CandidateSetupModalProps) {
@@ -288,322 +280,166 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
 
   return (
     <>
-      {/* Backdrop with blur */}
-      <div
-        className="fixed inset-0 z-40 modal-backdrop"
-        aria-hidden="true"
-      />
+      <div className="fixed inset-0 z-40 modal-backdrop" aria-hidden="true" />
 
-      {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div
-          className="relative w-full max-w-2xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden animate-scale-in flex flex-col"
-          style={{
-            backgroundColor: 'var(--color-background)',
-            border: '1px solid var(--color-border)',
-          }}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="candidate-setup-title"
+          className="relative w-full max-w-xl max-h-[90vh] rounded-xl border overflow-hidden flex flex-col"
+          style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
         >
-          {/* Progress bar */}
-          <div
-            className="h-1 transition-all duration-300"
-            style={{
-              width: `${((currentStep + 1) / STEPS.length) * 100}%`,
-              backgroundColor: 'var(--color-accent)',
-            }}
-          />
-
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 pb-0">
-            <div className="flex items-center gap-2">
-              {STEPS.map((step, index) => (
-                <div
-                  key={step.id}
-                  className={cn(
-                    'w-8 h-8 rounded-full flex items-center justify-center transition-all',
-                    index < currentStep
-                      ? 'bg-[var(--color-success)]'
-                      : index === currentStep
-                      ? 'bg-[var(--color-accent)]'
-                      : 'bg-[var(--color-surface)]'
-                  )}
-                >
-                  {index < currentStep ? (
-                    <CheckCircle2 className="w-4 h-4 text-white" />
-                  ) : (
-                    <step.icon
-                      className="w-4 h-4"
-                      style={{
-                        color: index === currentStep ? 'white' : 'var(--color-textMuted)',
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
+          <div className="px-6 pt-5">
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-label tabular-nums" style={{ color: 'var(--color-textSecondary)' }}>
+                Step {currentStep + 1} of {STEPS.length}
+              </span>
+              <Button variant="ghost" size="sm" onClick={handleSkip}>
+                Skip for now
+              </Button>
             </div>
-            <button
-              onClick={handleSkip}
-              className="text-sm px-3 py-1.5 rounded-lg transition-colors hover:bg-[var(--color-surface)]"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Skip for now
-            </button>
+            <div className="mt-2 h-1 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-border)' }}>
+              <div
+                className="h-full rounded-full transition-[width] duration-300 ease-out"
+                style={{ width: `${((currentStep + 1) / STEPS.length) * 100}%`, backgroundColor: 'var(--color-accent)' }}
+              />
+            </div>
           </div>
 
-          {/* Content */}
-          <div className="p-8 overflow-y-auto flex-1">
-            {/* Step 0: Intro */}
+          <div className="p-6 overflow-y-auto flex-1">
             {currentStep === 0 && (
-              <div className="text-center">
-                <div
-                  className="w-20 h-20 rounded-3xl mx-auto mb-6 flex items-center justify-center"
-                  style={{
-                    backgroundColor: 'var(--color-accent)',
-                  }}
-                >
-                  <Sparkles className="w-10 h-10 text-white" />
-                </div>
-                <h2
-                  className="text-title mb-4"
-                  style={{ color: 'var(--color-text)' }}
-                >
-                  Welcome, {firstName}!
-                </h2>
-                <p
-                  className="text-lg mb-6"
-                  style={{ color: 'var(--color-textSecondary)' }}
-                >
-                  Let's set up your profile to find the perfect job match.
-                </p>
-                <p
-                  className="text-sm"
-                  style={{ color: 'var(--color-textMuted)' }}
-                >
-                  This only takes a few minutes. You can skip and complete it later.
-                </p>
-              </div>
+              <StepHeading
+                title={`Welcome, ${firstName}`}
+                description="Let's set up your profile so we can find jobs that fit you. It takes a few minutes, and you can skip it and finish later."
+              />
             )}
 
-            {/* Step 1: Basic Info */}
             {currentStep === 1 && (
-              <div className="space-y-6">
-                <div className="text-center mb-8">
-                  <h2
-                    className="text-xl font-semibold mb-2"
-                    style={{ color: 'var(--color-text)' }}
-                  >
-                    Tell us about yourself
-                  </h2>
-                  <p
-                    className="text-sm"
-                    style={{ color: 'var(--color-textMuted)' }}
-                  >
-                    Help employers understand who you are
-                  </p>
-                </div>
+              <div className="space-y-5">
+                <StepHeading
+                  title="Tell us about yourself"
+                  description="Help employers understand who you are. All fields are required."
+                />
 
                 <Input
-                  label="Professional headline *"
+                  label="Professional headline"
                   type="text"
                   value={data.headline}
                   onChange={(e) => setData({ ...data, headline: e.target.value })}
                   placeholder="e.g., Senior Product Designer with 5+ years experience"
-                  leftIcon={<User className="w-4 h-4" />}
                 />
 
                 <div>
                   <label
+                    htmlFor="candidate-bio"
                     className="block text-sm font-medium mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Bio *
+                    Bio
                   </label>
                   <textarea
+                    id="candidate-bio"
                     value={data.bio}
                     onChange={(e) => setData({ ...data, bio: e.target.value })}
                     placeholder="Tell us a bit about yourself, your experience, and what you're looking for..."
                     rows={3}
-                    className="w-full px-4 py-3 rounded-xl text-sm resize-none focus:outline-none focus:ring-2"
-                    style={{
-                      backgroundColor: 'var(--color-surface)',
-                      color: 'var(--color-text)',
-                      border: '1px solid var(--color-border)',
-                    }}
+                    className={textareaClass}
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-4">
                   <LocationPicker
-                    label="Location *"
+                    label="Location"
                     value={data.location}
                     onChange={(location) => setData({ ...data, location })}
                     placeholder="Select your location"
                   />
                   <Input
-                    label="Years of experience *"
+                    label="Years of experience"
                     type="number"
                     value={data.years_experience?.toString() || ''}
                     onChange={(e) => setData({ ...data, years_experience: e.target.value ? parseInt(e.target.value) : null })}
                     placeholder="e.g., 5"
-                    leftIcon={<Briefcase className="w-4 h-4" />}
                   />
                 </div>
-
-                {!canProceedToNext() && (
-                  <p className="text-xs text-center" style={{ color: 'var(--color-textMuted)' }}>
-                    Please fill in all required fields (*)
-                  </p>
-                )}
               </div>
             )}
 
-            {/* Step 2: Preferences */}
             {currentStep === 2 && (
               <div className="space-y-6">
-                <div className="text-center mb-8">
-                  <h2
-                    className="text-xl font-semibold mb-2"
-                    style={{ color: 'var(--color-text)' }}
-                  >
-                    Your work preferences
-                  </h2>
-                  <p
-                    className="text-sm"
-                    style={{ color: 'var(--color-textMuted)' }}
-                  >
-                    Help us find jobs that match your ideal work environment
-                  </p>
-                </div>
+                <StepHeading
+                  title="Your work preferences"
+                  description="Help us find jobs that match your ideal work environment."
+                />
 
                 <div>
-                  <label
-                    className="block text-sm font-medium mb-3"
-                    style={{ color: 'var(--color-text)' }}
-                  >
+                  <p className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
                     Preferred work style
-                  </label>
+                  </p>
                   <div className="grid grid-cols-2 gap-3">
                     {WORK_STYLES.map((style) => (
-                      <button
+                      <ChoiceTile
                         key={style.id}
-                        type="button"
-                        onClick={() => setData({ ...data, preferred_work_style: style.id })}
-                        className={cn(
-                          'p-4 rounded-xl border text-left transition-all',
-                          data.preferred_work_style === style.id
-                            ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10'
-                            : 'border-[var(--color-border)] hover:border-[var(--color-borderHover)]'
-                        )}
-                        style={{
-                          backgroundColor: data.preferred_work_style === style.id
-                            ? undefined
-                            : 'var(--color-surface)',
-                        }}
-                      >
-                        <p
-                          className="font-medium text-sm"
-                          style={{ color: 'var(--color-text)' }}
-                        >
-                          {style.label}
-                        </p>
-                        <p
-                          className="text-xs mt-0.5"
-                          style={{ color: 'var(--color-textMuted)' }}
-                        >
-                          {style.description}
-                        </p>
-                      </button>
+                        selected={data.preferred_work_style === style.id}
+                        onSelect={() => setData({ ...data, preferred_work_style: style.id })}
+                        label={style.label}
+                        description={style.description}
+                      />
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label
-                    className="block text-sm font-medium mb-3"
-                    style={{ color: 'var(--color-text)' }}
-                  >
+                  <p className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
                     Preferred company size
-                  </label>
+                  </p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {COMPANY_SIZES.map((size) => (
-                      <button
+                      <ChoiceTile
                         key={size.id}
-                        type="button"
-                        onClick={() => setData({ ...data, preferred_company_size: size.id })}
-                        className={cn(
-                          'p-3 rounded-xl border text-left transition-all',
-                          data.preferred_company_size === size.id
-                            ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10'
-                            : 'border-[var(--color-border)] hover:border-[var(--color-borderHover)]'
-                        )}
-                        style={{
-                          backgroundColor: data.preferred_company_size === size.id
-                            ? undefined
-                            : 'var(--color-surface)',
-                        }}
-                      >
-                        <p
-                          className="font-medium text-sm"
-                          style={{ color: 'var(--color-text)' }}
-                        >
-                          {size.label}
-                        </p>
-                        <p
-                          className="text-xs mt-0.5"
-                          style={{ color: 'var(--color-textMuted)' }}
-                        >
-                          {size.description}
-                        </p>
-                      </button>
+                        selected={data.preferred_company_size === size.id}
+                        onSelect={() => setData({ ...data, preferred_company_size: size.id })}
+                        label={size.label}
+                        description={size.description}
+                      />
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label
-                    className="block text-sm font-medium mb-3"
-                    style={{ color: 'var(--color-text)' }}
-                  >
-                    Salary Expectations (USD/year)
-                  </label>
-                  <div className="grid grid-cols-2 gap-4">
+                  <p className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
+                    Salary expectations{' '}
+                    <span className="font-normal" style={{ color: 'var(--color-textMuted)' }}>
+                      USD per year, optional
+                    </span>
+                  </p>
+                  <div className="grid grid-cols-2 gap-3">
                     <Input
-                      label=""
                       type="number"
+                      aria-label="Minimum salary"
                       value={data.salary_expectation_min?.toString() || ''}
                       onChange={(e) => setData({ ...data, salary_expectation_min: e.target.value ? parseInt(e.target.value) : null })}
                       placeholder="Minimum"
-                      leftIcon={<DollarSign className="w-4 h-4" />}
                     />
                     <Input
-                      label=""
                       type="number"
+                      aria-label="Maximum salary"
                       value={data.salary_expectation_max?.toString() || ''}
                       onChange={(e) => setData({ ...data, salary_expectation_max: e.target.value ? parseInt(e.target.value) : null })}
                       placeholder="Maximum"
-                      leftIcon={<DollarSign className="w-4 h-4" />}
                     />
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Step 3: Links */}
             {currentStep === 3 && (
-              <div className="space-y-6">
-                <div className="text-center mb-8">
-                  <h2
-                    className="text-xl font-semibold mb-2"
-                    style={{ color: 'var(--color-text)' }}
-                  >
-                    Share your work
-                  </h2>
-                  <p
-                    className="text-sm"
-                    style={{ color: 'var(--color-textMuted)' }}
-                  >
-                    Optional: Add links to showcase your experience
-                  </p>
-                </div>
+              <div className="space-y-5">
+                <StepHeading
+                  title="Share your work"
+                  description="Optional. Add links that show your experience. You can update these anytime in settings."
+                />
 
                 <Input
                   label="LinkedIn profile"
@@ -611,7 +447,6 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                   value={data.linkedin_url}
                   onChange={(e) => setData({ ...data, linkedin_url: e.target.value })}
                   placeholder="https://linkedin.com/in/yourprofile"
-                  leftIcon={<LinkIcon className="w-4 h-4" />}
                 />
 
                 <Input
@@ -620,82 +455,89 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                   value={data.github_url}
                   onChange={(e) => setData({ ...data, github_url: e.target.value })}
                   placeholder="https://github.com/yourusername"
-                  leftIcon={<LinkIcon className="w-4 h-4" />}
                 />
 
                 <Input
-                  label="Portfolio / Website"
+                  label="Portfolio or website"
                   type="url"
                   value={data.portfolio_url}
                   onChange={(e) => setData({ ...data, portfolio_url: e.target.value })}
                   placeholder="https://"
-                  leftIcon={<LinkIcon className="w-4 h-4" />}
                 />
-
-                <div
-                  className="p-4 rounded-xl flex items-start gap-3"
-                  style={{ backgroundColor: 'var(--color-surface)' }}
-                >
-                  <CheckCircle2
-                    className="w-5 h-5 mt-0.5 flex-shrink-0"
-                    style={{ color: 'var(--color-success)' }}
-                  />
-                  <div>
-                    <p
-                      className="text-sm font-medium"
-                      style={{ color: 'var(--color-text)' }}
-                    >
-                      You're all set!
-                    </p>
-                    <p
-                      className="text-xs mt-0.5"
-                      style={{ color: 'var(--color-textMuted)' }}
-                    >
-                      Click "Complete setup" to save your profile and start the personality assessment. You can update these details anytime in settings.
-                    </p>
-                  </div>
-                </div>
               </div>
             )}
           </div>
 
-          {/* Footer */}
           <div
-            className="flex items-center justify-between p-6 pt-0"
+            className="flex items-center justify-between gap-3 px-6 py-4 border-t"
+            style={{ borderColor: 'var(--color-border)' }}
           >
             <div>
               {currentStep > 0 && (
-                <Button
-                  variant="ghost"
-                  onClick={handlePrev}
-                  leftIcon={<ArrowLeft className="w-4 h-4" />}
-                >
+                <Button variant="outline" onClick={handlePrev} leftIcon={<ArrowLeft className="w-4 h-4" />}>
                   Back
                 </Button>
               )}
             </div>
-            <div>
-              {currentStep < STEPS.length - 1 ? (
-                <Button
-                  onClick={handleNext}
-                  disabled={!canProceedToNext()}
-                  rightIcon={<ArrowRight className="w-4 h-4" />}
-                >
-                  {currentStep === 0 ? 'Get started' : 'Continue'}
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleComplete}
-                  isLoading={isSaving}
-                  rightIcon={!isSaving ? <ArrowRight className="w-4 h-4" /> : undefined}
-                >
-                  {redirectToAssessment ? 'Complete & take assessment' : 'Complete setup'}
-                </Button>
-              )}
-            </div>
+            {currentStep < STEPS.length - 1 ? (
+              <Button
+                onClick={handleNext}
+                disabled={!canProceedToNext()}
+                rightIcon={<ArrowRight className="w-4 h-4" />}
+              >
+                {currentStep === 0 ? 'Get started' : 'Continue'}
+              </Button>
+            ) : (
+              <Button
+                onClick={handleComplete}
+                isLoading={isSaving}
+                rightIcon={<ArrowRight className="w-4 h-4" />}
+              >
+                {redirectToAssessment ? 'Complete & take assessment' : 'Complete setup'}
+              </Button>
+            )}
           </div>
         </div>
       </div>
     </>
+  );
+}
+
+const textareaClass =
+  'w-full px-4 py-2.5 rounded-xl border text-sm resize-none bg-[var(--color-surface)] text-[var(--color-text)] border-[var(--color-border)] placeholder:text-[var(--color-textMuted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)]';
+
+function StepHeading({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="mb-6">
+      <h2 id="candidate-setup-title" className="text-heading" style={{ color: 'var(--color-text)' }}>
+        {title}
+      </h2>
+      <p className="mt-1 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+        {description}
+      </p>
+    </div>
+  );
+}
+
+function ChoiceTile({
+  selected,
+  onSelect,
+  label,
+  description,
+}: {
+  selected: boolean;
+  onSelect: () => void;
+  label: string;
+  description: string;
+}) {
+  return (
+    <button type="button" onClick={onSelect} aria-pressed={selected} className={cn(optionClass(selected), 'p-3')}>
+      <span className="block text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+        {label}
+      </span>
+      <span className="mt-0.5 block text-caption" style={{ color: 'var(--color-textSecondary)' }}>
+        {description}
+      </span>
+    </button>
   );
 }

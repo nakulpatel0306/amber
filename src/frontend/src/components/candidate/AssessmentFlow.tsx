@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Check, Loader2, ArrowRight, Coffee, Sparkles } from 'lucide-react';
+import { Loader2, ArrowRight } from 'lucide-react';
+import { Button } from '../ui/Button';
+import { QuestionProgress, QuestionHeading, OptionCard } from '../assessments/QuestionParts';
 import {
   startAssessment,
   submitAnswer,
@@ -14,6 +16,9 @@ interface AssessmentStep {
   questionId: number;
   answered: boolean;
 }
+
+const fieldClass =
+  'w-full px-3 py-2.5 rounded-lg border text-sm bg-[var(--color-surface)] text-[var(--color-text)] border-[var(--color-border)] placeholder:text-[var(--color-textMuted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)]';
 
 export function AssessmentFlow() {
   const [state, setState] = useState<AssessmentState>('welcome');
@@ -31,7 +36,7 @@ export function AssessmentFlow() {
 
   const handleStartAssessment = async () => {
     if (!name.trim() || !email.trim()) {
-      setError('please enter your name and email');
+      setError('Please enter your name and email.');
       return;
     }
 
@@ -54,7 +59,7 @@ export function AssessmentFlow() {
 
       setState('assessment');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'failed to start assessment');
+      setError(err instanceof Error ? err.message : 'Failed to start the assessment.');
     } finally {
       setIsLoading(false);
     }
@@ -90,7 +95,7 @@ export function AssessmentFlow() {
             setResults(assessmentResults);
             setState('results');
           } catch {
-            setError('failed to get results');
+            setError('Failed to get results.');
             setState('assessment');
           }
         }, 2000);
@@ -104,7 +109,7 @@ export function AssessmentFlow() {
         setSelectedAnswer(null);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'failed to submit answer');
+      setError(err instanceof Error ? err.message : 'Failed to submit your answer.');
     } finally {
       setIsLoading(false);
     }
@@ -115,442 +120,170 @@ export function AssessmentFlow() {
     setSelectedAnswer(null);
   };
 
-  // Welcome screen
+  const errorMessage = error && (
+    <p role="alert" className="mb-4 text-sm" style={{ color: 'var(--color-error)' }}>
+      {error}
+    </p>
+  );
+
   if (state === 'welcome') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-full px-6 py-12">
-        <div className="w-full max-w-md">
-          {/* header */}
-          <div className="text-center mb-10">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div
-                className="w-14 h-14 rounded-2xl flex items-center justify-center"
-                style={{
-                  backgroundColor: 'var(--color-accent)',
-                  boxShadow: '0 8px 24px rgba(139, 92, 246, 0.25)',
-                }}
-              >
-                <Coffee className="w-7 h-7 text-white" />
-              </div>
-            </div>
-            <h1
-              className="text-title mb-3"
-              style={{ color: 'var(--color-text)' }}
-            >
-              culture fit assessment
-            </h1>
-            <p
-              className="text-base"
-              style={{ color: 'var(--color-textSecondary)' }}
-            >
-              let's see if we're a great fit! this takes about 5 minutes.
-            </p>
-          </div>
-
-          {/* form */}
-          <div
-            className="p-6 rounded-2xl border"
-            style={{
-              backgroundColor: 'var(--color-surface)',
-              borderColor: 'var(--color-border)',
-            }}
-          >
-            {error && (
-              <div
-                className="mb-4 p-3 rounded-lg text-sm"
-                style={{
-                  backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                  color: 'var(--color-error)',
-                }}
-              >
-                {error}
-              </div>
-            )}
-
-            <div className="space-y-4">
-              <div>
-                <label
-                  className="block text-sm mb-1.5"
-                  style={{ color: 'var(--color-textSecondary)' }}
-                >
-                  your name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  placeholder="Your name"
-                  className="w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:ring-2"
-                  style={{
-                    backgroundColor: 'var(--color-background)',
-                    borderColor: 'var(--color-border)',
-                    color: 'var(--color-text)',
-                  }}
-                />
-              </div>
-
-              <div>
-                <label
-                  className="block text-sm mb-1.5"
-                  style={{ color: 'var(--color-textSecondary)' }}
-                >
-                  email address
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="jane@example.com"
-                  className="w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:ring-2"
-                  style={{
-                    backgroundColor: 'var(--color-background)',
-                    borderColor: 'var(--color-border)',
-                    color: 'var(--color-text)',
-                  }}
-                />
-              </div>
-
-              <button
-                onClick={handleStartAssessment}
-                disabled={isLoading}
-                className="w-full py-3 rounded-xl text-sm font-medium btn-smooth flex items-center justify-center gap-2 disabled:opacity-50"
-                style={{
-                  backgroundColor: 'var(--color-accent)',
-                  color: 'var(--color-accentText)',
-                }}
-              >
-                {isLoading ? (
-                  <Loader2 className="w-4 h-4 spinner" />
-                ) : (
-                  <>
-                    start assessment
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Halfway confirmation
-  if (state === 'halfway') {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-full px-6 py-12">
-        <div className="w-full max-w-md text-center">
-          <div
-            className="w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center"
-            style={{ backgroundColor: 'rgba(139, 92, 246, 0.15)' }}
-          >
-            <Sparkles className="w-8 h-8" style={{ color: 'var(--color-accent)' }} />
-          </div>
-
-          <h2
-            className="text-xl font-semibold mb-2"
-            style={{ color: 'var(--color-text)' }}
-          >
-            you're halfway there!
-          </h2>
-          <p
-            className="text-sm mb-8"
-            style={{ color: 'var(--color-textSecondary)' }}
-          >
-            just 5 more questions to go. ready to continue?
+      <div className="min-h-full px-4 sm:px-6 py-12">
+        <div className="w-full max-w-md mx-auto">
+          <h1 className="text-title" style={{ color: 'var(--color-text)' }}>
+            Culture fit assessment
+          </h1>
+          <p className="mt-2 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+            A few short questions about how you like to work. It takes about five minutes.
           </p>
 
-          <div className="flex gap-3 justify-center">
-            <button
-              onClick={handleContinue}
-              className="px-6 py-3 rounded-xl text-sm font-medium btn-smooth flex items-center gap-2"
-              style={{
-                backgroundColor: 'var(--color-accent)',
-                color: 'var(--color-accentText)',
-              }}
-            >
-              yes, continue
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* progress */}
-          <div className="mt-8">
-            <div className="flex justify-center gap-1.5">
-              {steps.map((step, i) => (
-                <div
-                  key={i}
-                  className="w-2.5 h-2.5 rounded-full transition-all"
-                  style={{
-                    backgroundColor: step.answered
-                      ? 'var(--color-accent)'
-                      : 'var(--color-border)',
-                  }}
-                />
-              ))}
+          <div className="mt-8 space-y-4">
+            {errorMessage}
+            <div>
+              <label htmlFor="af-name" className="block text-label mb-1.5" style={{ color: 'var(--color-text)' }}>
+                Your name
+              </label>
+              <input
+                id="af-name"
+                type="text"
+                value={name}
+                onChange={e => setName(e.target.value)}
+                placeholder="Your name"
+                className={fieldClass}
+              />
             </div>
+            <div>
+              <label htmlFor="af-email" className="block text-label mb-1.5" style={{ color: 'var(--color-text)' }}>
+                Email address
+              </label>
+              <input
+                id="af-email"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="jane@example.com"
+                className={fieldClass}
+              />
+            </div>
+            <Button
+              onClick={handleStartAssessment}
+              isLoading={isLoading}
+              fullWidth
+              rightIcon={<ArrowRight className="w-4 h-4" />}
+            >
+              Start assessment
+            </Button>
           </div>
         </div>
       </div>
     );
   }
 
-  // Calculating screen
+  if (state === 'halfway') {
+    const answered = steps.filter(step => step.answered).length;
+    return (
+      <div className="min-h-full px-4 sm:px-6 py-12">
+        <div className="w-full max-w-md mx-auto">
+          <QuestionProgress current={answered} total={totalQuestions} />
+          <h2 className="mt-8 text-xl font-semibold" style={{ color: 'var(--color-text)' }}>
+            You're halfway there
+          </h2>
+          <p className="mt-2 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+            Just 5 more questions to go.
+          </p>
+          <Button className="mt-6" onClick={handleContinue} rightIcon={<ArrowRight className="w-4 h-4" />}>
+            Continue
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   if (state === 'calculating') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-full px-6 py-12">
+      <div className="flex flex-col items-center justify-center min-h-full px-4 sm:px-6 py-12">
         <div className="text-center">
-          <Loader2
-            className="w-12 h-12 mx-auto mb-6 spinner"
-            style={{ color: 'var(--color-accent)' }}
-          />
-          <h2
-            className="text-xl font-semibold mb-2"
-            style={{ color: 'var(--color-text)' }}
-          >
-            calculating your fit score...
+          <Loader2 className="w-8 h-8 mx-auto mb-4 spinner" style={{ color: 'var(--color-accent)' }} />
+          <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>
+            Calculating your fit score
           </h2>
-          <p
-            className="text-sm"
-            style={{ color: 'var(--color-textSecondary)' }}
-          >
-            analyzing your responses
+          <p className="mt-1 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+            Analyzing your responses
           </p>
         </div>
       </div>
     );
   }
 
-  // Results screen
   if (state === 'results' && results) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-full px-6 py-12">
-        <div className="w-full max-w-md">
-          {/* score card */}
-          <div
-            className="p-8 rounded-2xl border text-center mb-6"
-            style={{
-              backgroundColor: 'var(--color-surface)',
-              borderColor: 'var(--color-border)',
-            }}
-          >
-            <div
-              className="w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center"
-              style={{
-                backgroundColor: 'var(--color-accent)',
-              }}
-            >
-              <Check className="w-10 h-10 text-white" />
-            </div>
+      <div className="min-h-full px-4 sm:px-6 py-12">
+        <div className="w-full max-w-md mx-auto">
+          <h1 className="text-title" style={{ color: 'var(--color-text)' }}>
+            Assessment complete
+          </h1>
+          <p className="mt-2 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+            Here's your culture fit score.
+          </p>
 
-            <h2
-              className="text-xl font-semibold mb-1"
-              style={{ color: 'var(--color-text)' }}
-            >
-              assessment complete!
-            </h2>
-            <p
-              className="text-sm mb-6"
-              style={{ color: 'var(--color-textSecondary)' }}
-            >
-              here's your culture fit score
+          <div className="bento-card mt-8">
+            <p className="text-label" style={{ color: 'var(--color-textSecondary)' }}>
+              Culture fit
             </p>
-
-            <div
-              className="text-title mb-2"
-              style={{ color: 'var(--color-accent)' }}
-            >
+            <p className="mt-1 text-title tabular-nums" style={{ color: 'var(--color-text)' }}>
               {results.culture_fit_score}
-              <span className="text-2xl">/100</span>
-            </div>
-
-            <p
-              className="text-sm leading-relaxed mt-4"
-              style={{ color: 'var(--color-textSecondary)' }}
-            >
+              <span className="text-base font-normal" style={{ color: 'var(--color-textMuted)' }}>/100</span>
+            </p>
+            <p className="mt-3 text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
               {results.explanation}
             </p>
-          </div>
 
-          {/* traits */}
-          <div
-            className="p-6 rounded-2xl border"
-            style={{
-              backgroundColor: 'var(--color-surface)',
-              borderColor: 'var(--color-border)',
-            }}
-          >
-            <h3
-              className="text-sm font-medium mb-4"
-              style={{ color: 'var(--color-text)' }}
-            >
-              your top traits
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {results.top_traits.map((trait, i) => (
-                <span
-                  key={i}
-                  className="px-3 py-1.5 rounded-full text-xs font-medium"
-                  style={{
-                    backgroundColor: 'rgba(139, 92, 246, 0.15)',
-                    color: 'var(--color-accent)',
-                  }}
-                >
-                  {trait}
-                </span>
-              ))}
+            <div className="mt-6 pt-5 border-t space-y-3" style={{ borderColor: 'var(--color-border)' }}>
+              <ScoreBar label="Work style" score={results.work_style_score} />
+              <ScoreBar label="Communication" score={results.communication_score} />
+              <ScoreBar label="Values" score={results.values_score} />
             </div>
 
-            {/* score breakdown */}
-            <div className="mt-6 space-y-3">
-              <ScoreBar label="work style" score={results.work_style_score} />
-              <ScoreBar label="communication" score={results.communication_score} />
-              <ScoreBar label="values" score={results.values_score} />
+            <div className="mt-6 pt-5 border-t" style={{ borderColor: 'var(--color-border)' }}>
+              <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+                Your top traits
+              </h3>
+              <p className="mt-1 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+                {results.top_traits.join(', ')}
+              </p>
             </div>
           </div>
 
-          <p
-            className="text-xs text-center mt-6"
-            style={{ color: 'var(--color-textMuted)' }}
-          >
-            we'll be in touch soon with next steps!
+          <p className="mt-6 text-sm" style={{ color: 'var(--color-textMuted)' }}>
+            We'll be in touch soon with next steps.
           </p>
         </div>
       </div>
     );
   }
 
-  // Assessment questions
   return (
-    <div className="flex flex-col min-h-full">
-      {/* progress header */}
-      <div
-        className="px-6 py-4 border-b"
-        style={{ borderColor: 'var(--color-border)' }}
-      >
-        <div className="max-w-2xl mx-auto">
-          <div className="flex items-center justify-between mb-2">
-            <span
-              className="text-xs font-medium"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              question {currentQuestionNumber} of {totalQuestions}
-            </span>
-            <span
-              className="text-xs"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              {Math.round((currentQuestionNumber / totalQuestions) * 100)}% complete
-            </span>
-          </div>
+    <div className="min-h-full px-4 sm:px-6 py-8">
+      <div className="w-full max-w-2xl mx-auto">
+        <QuestionProgress current={currentQuestionNumber} total={totalQuestions} />
 
-          {/* progress bar */}
-          <div
-            className="h-1.5 rounded-full overflow-hidden"
-            style={{ backgroundColor: 'var(--color-border)' }}
-          >
-            <div
-              className="h-full rounded-full transition-all duration-300"
-              style={{
-                width: `${(currentQuestionNumber / totalQuestions) * 100}%`,
-                backgroundColor: 'var(--color-accent)',
-              }}
-            />
-          </div>
-
-          {/* step indicators */}
-          <div className="flex justify-center gap-1.5 mt-4">
-            {steps.map((step, i) => (
-              <div
-                key={i}
-                className="w-2 h-2 rounded-full transition-all"
-                style={{
-                  backgroundColor:
-                    step.answered
-                      ? 'var(--color-accent)'
-                      : i + 1 === currentQuestionNumber
-                      ? 'var(--color-accentHover)'
-                      : 'var(--color-border)',
-                  transform: i + 1 === currentQuestionNumber ? 'scale(1.25)' : 'scale(1)',
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* question content */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12">
-        <div className="w-full max-w-lg">
-          {error && (
-            <div
-              className="mb-4 p-3 rounded-lg text-sm text-center"
-              style={{
-                backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                color: 'var(--color-error)',
-              }}
-            >
-              {error}
-            </div>
-          )}
-
+        <div className="mt-8">
+          {errorMessage}
           {currentQuestion && (
-            <div className="message-enter">
-              <h2
-                className="text-xl font-medium mb-8 text-center leading-relaxed"
-                style={{ color: 'var(--color-text)' }}
-              >
-                {currentQuestion.question}
-              </h2>
-
-              <div className="space-y-3">
-                {currentQuestion.options.map((option, i) => {
-                  const isSelected = selectedAnswer === option;
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => handleSubmitAnswer(option)}
-                      disabled={isLoading}
-                      className="w-full p-4 rounded-xl border text-left transition-all btn-smooth disabled:opacity-50"
-                      style={{
-                        backgroundColor: isSelected
-                          ? 'rgba(139, 92, 246, 0.1)'
-                          : 'var(--color-surface)',
-                        borderColor: isSelected
-                          ? 'var(--color-accent)'
-                          : 'var(--color-border)',
-                      }}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all"
-                          style={{
-                            borderColor: isSelected
-                              ? 'var(--color-accent)'
-                              : 'var(--color-border)',
-                            backgroundColor: isSelected
-                              ? 'var(--color-accent)'
-                              : 'transparent',
-                          }}
-                        >
-                          {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
-                        </div>
-                        <span
-                          className="text-sm"
-                          style={{
-                            color: isSelected
-                              ? 'var(--color-text)'
-                              : 'var(--color-textSecondary)',
-                          }}
-                        >
-                          {option}
-                        </span>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+            <>
+              <QuestionHeading question={currentQuestion.question} />
+              {/* A fieldset disables every option at once while an answer is in flight */}
+              <fieldset disabled={isLoading} className="space-y-3 disabled:opacity-60">
+                {currentQuestion.options.map((option, i) => (
+                  <OptionCard
+                    key={i}
+                    selected={selectedAnswer === option}
+                    onSelect={() => handleSubmitAnswer(option)}
+                    text={option}
+                  />
+                ))}
+              </fieldset>
+            </>
           )}
         </div>
       </div>
@@ -561,25 +294,14 @@ export function AssessmentFlow() {
 function ScoreBar({ label, score }: { label: string; score: number }) {
   return (
     <div>
-      <div className="flex items-center justify-between mb-1">
-        <span className="text-xs" style={{ color: 'var(--color-textSecondary)' }}>
-          {label}
-        </span>
-        <span className="text-xs font-medium" style={{ color: 'var(--color-text)' }}>
+      <div className="flex items-center justify-between mb-1 text-sm">
+        <span style={{ color: 'var(--color-textSecondary)' }}>{label}</span>
+        <span className="font-medium tabular-nums" style={{ color: 'var(--color-text)' }}>
           {score}%
         </span>
       </div>
-      <div
-        className="h-1.5 rounded-full overflow-hidden"
-        style={{ backgroundColor: 'var(--color-border)' }}
-      >
-        <div
-          className="h-full rounded-full"
-          style={{
-            width: `${score}%`,
-            backgroundColor: 'var(--color-accent)',
-          }}
-        />
+      <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-border)' }}>
+        <div className="h-full rounded-full" style={{ width: `${score}%`, backgroundColor: 'var(--color-accent)' }} />
       </div>
     </div>
   );

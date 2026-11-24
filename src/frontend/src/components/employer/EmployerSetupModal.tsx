@@ -1,15 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  ArrowRight,
-  ArrowLeft,
-  Sparkles,
-  Building2,
-  Users,
-  Link as LinkIcon,
-  Globe,
-  CheckCircle2,
-  Linkedin,
-} from 'lucide-react';
+import { ArrowRight, ArrowLeft, Check } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { LocationPicker } from '../ui/LocationPicker';
@@ -17,6 +7,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { supabase } from '../../lib/supabase';
 import { cn } from '../../utils/cn';
+import { optionClass } from '../assessments/QuestionParts';
 
 interface EmployerSetupModalProps {
   isOpen: boolean;
@@ -54,10 +45,10 @@ const INDUSTRIES = [
 ];
 
 const STEPS = [
-  { id: 'intro', title: 'Welcome', icon: Sparkles },
-  { id: 'company', title: 'Company', icon: Building2 },
-  { id: 'details', title: 'Details', icon: Users },
-  { id: 'links', title: 'Links', icon: LinkIcon },
+  { id: 'intro', title: 'Welcome' },
+  { id: 'company', title: 'Company' },
+  { id: 'details', title: 'Details' },
+  { id: 'links', title: 'Links' },
 ];
 
 export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetupModalProps) {
@@ -242,121 +233,51 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
   if (!isOpen) return null;
 
   const firstName = profile?.full_name?.split(' ')[0] || 'there';
+  const hasCustomIndustry = data.industry === 'Other' || (!!data.industry && !INDUSTRIES.slice(0, -1).includes(data.industry));
 
   return (
     <>
-      {/* Backdrop with blur */}
-      <div
-        className="fixed inset-0 z-40 modal-backdrop"
-        aria-hidden="true"
-      />
+      <div className="fixed inset-0 z-40 modal-backdrop" aria-hidden="true" />
 
-      {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div
-          className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl animate-scale-in"
-          style={{
-            backgroundColor: 'var(--color-background)',
-            border: '1px solid var(--color-border)',
-          }}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="employer-setup-title"
+          className="relative w-full max-w-xl max-h-[90vh] rounded-xl border overflow-hidden flex flex-col"
+          style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
         >
-          {/* Progress bar */}
-          <div
-            className="h-1 transition-all duration-300"
-            style={{
-              width: `${((currentStep + 1) / STEPS.length) * 100}%`,
-              backgroundColor: 'var(--color-accent)',
-            }}
-          />
-
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 pb-0">
-            <div className="flex items-center gap-2">
-              {STEPS.map((step, index) => (
-                <div
-                  key={step.id}
-                  className={cn(
-                    'w-8 h-8 rounded-full flex items-center justify-center transition-all',
-                    index < currentStep
-                      ? 'bg-[var(--color-success)]'
-                      : index === currentStep
-                      ? 'bg-[var(--color-accent)]'
-                      : 'bg-[var(--color-surface)]'
-                  )}
-                >
-                  {index < currentStep ? (
-                    <CheckCircle2 className="w-4 h-4 text-white" />
-                  ) : (
-                    <step.icon
-                      className="w-4 h-4"
-                      style={{
-                        color: index === currentStep ? 'white' : 'var(--color-textMuted)',
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
+          <div className="px-6 pt-5">
+            <div className="flex items-center justify-between gap-4">
+              <span className="text-label tabular-nums" style={{ color: 'var(--color-textSecondary)' }}>
+                Step {currentStep + 1} of {STEPS.length}
+              </span>
+              <Button variant="ghost" size="sm" onClick={handleSkip}>
+                Skip for now
+              </Button>
             </div>
-            <button
-              onClick={handleSkip}
-              className="text-sm px-3 py-1.5 rounded-lg transition-colors hover:bg-[var(--color-surface)]"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Skip for now
-            </button>
+            <div className="mt-2 h-1 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-border)' }}>
+              <div
+                className="h-full rounded-full transition-[width] duration-300 ease-out"
+                style={{ width: `${((currentStep + 1) / STEPS.length) * 100}%`, backgroundColor: 'var(--color-accent)' }}
+              />
+            </div>
           </div>
 
-          {/* Content */}
-          <div className="p-8">
-            {/* Step 0: Intro */}
+          <div className="p-6 overflow-y-auto flex-1">
             {currentStep === 0 && (
-              <div className="text-center">
-                <div
-                  className="w-20 h-20 rounded-3xl mx-auto mb-6 flex items-center justify-center"
-                  style={{
-                    backgroundColor: 'var(--color-accent)',
-                  }}
-                >
-                  <Building2 className="w-10 h-10 text-white" />
-                </div>
-                <h2
-                  className="text-title mb-4"
-                  style={{ color: 'var(--color-text)' }}
-                >
-                  Welcome, {firstName}!
-                </h2>
-                <p
-                  className="text-lg mb-6"
-                  style={{ color: 'var(--color-textSecondary)' }}
-                >
-                  Let's set up your company profile to find the perfect candidates.
-                </p>
-                <p
-                  className="text-sm"
-                  style={{ color: 'var(--color-textMuted)' }}
-                >
-                  This only takes a few minutes. You can skip and complete it later.
-                </p>
-              </div>
+              <StepHeading
+                title={`Welcome, ${firstName}`}
+                description="Let's set up your company profile so we can find candidates who fit. It takes a few minutes, and you can skip it and finish later."
+              />
             )}
 
-            {/* Step 1: Company Info */}
             {currentStep === 1 && (
-              <div className="space-y-6">
-                <div className="text-center mb-8">
-                  <h2
-                    className="text-xl font-semibold mb-2"
-                    style={{ color: 'var(--color-text)' }}
-                  >
-                    Tell us about your company
-                  </h2>
-                  <p
-                    className="text-sm"
-                    style={{ color: 'var(--color-textMuted)' }}
-                  >
-                    Help candidates understand who you are
-                  </p>
-                </div>
+              <div className="space-y-5">
+                <StepHeading
+                  title="Tell us about your company"
+                  description="Help candidates understand who you are. All fields are required."
+                />
 
                 <Input
                   label="Company name"
@@ -364,68 +285,47 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                   value={data.company_name}
                   onChange={(e) => setData({ ...data, company_name: e.target.value })}
                   placeholder="e.g., Acme Corporation"
-                  leftIcon={<Building2 className="w-4 h-4" />}
                   required
                 />
 
                 <div>
                   <label
+                    htmlFor="employer-description"
                     className="block text-sm font-medium mb-2"
                     style={{ color: 'var(--color-text)' }}
                   >
-                    Company description <span style={{ color: 'var(--color-error)' }}>*</span>
+                    Company description
                   </label>
                   <textarea
+                    id="employer-description"
                     value={data.description}
                     onChange={(e) => setData({ ...data, description: e.target.value })}
                     placeholder="Tell candidates about your company, mission, and what makes you unique..."
                     rows={3}
-                    className="w-full px-4 py-3 rounded-xl text-sm resize-none focus:outline-none focus:ring-2"
-                    style={{
-                      backgroundColor: 'var(--color-surface)',
-                      color: 'var(--color-text)',
-                      border: '1px solid var(--color-border)',
-                    }}
+                    className={textareaClass}
                   />
                 </div>
 
                 <div>
-                  <label
-                    className="block text-sm font-medium mb-3"
-                    style={{ color: 'var(--color-text)' }}
-                  >
-                    Industry <span style={{ color: 'var(--color-error)' }}>*</span>
-                  </label>
+                  <p className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
+                    Industry
+                  </p>
                   <div className="flex flex-wrap gap-2">
                     {INDUSTRIES.map((industry) => {
-                      // Check if this industry button should be selected
-                      // For "Other", check if current value is not in the predefined list
-                      const isOtherSelected = industry === 'Other' &&
-                        data.industry &&
-                        !INDUSTRIES.slice(0, -1).includes(data.industry);
-                      const isSelected = data.industry === industry || isOtherSelected;
-
+                      // "Other" stays selected while the user types a custom industry
+                      const isSelected = industry === 'Other' ? hasCustomIndustry : data.industry === industry;
                       return (
                         <button
                           key={industry}
                           type="button"
-                          onClick={() => {
-                            if (industry === 'Other') {
-                              // Clear to show input, will be filled by user
-                              setData({ ...data, industry: 'Other' });
-                            } else {
-                              setData({ ...data, industry });
-                            }
-                          }}
+                          aria-pressed={isSelected}
+                          onClick={() => setData({ ...data, industry })}
                           className={cn(
-                            'px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                            'px-3 py-1.5 rounded-lg border text-label transition-colors',
                             isSelected
-                              ? 'bg-[var(--color-accent)] text-white'
-                              : 'bg-[var(--color-surface)] border border-[var(--color-border)]'
+                              ? 'border-[var(--color-accent)] bg-[color-mix(in_srgb,var(--color-accent)_8%,transparent)] text-[var(--color-text)]'
+                              : 'border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-textSecondary)] hover:border-[var(--color-borderHover)]'
                           )}
-                          style={{
-                            color: isSelected ? undefined : 'var(--color-text)',
-                          }}
                         >
                           {industry}
                         </button>
@@ -433,12 +333,11 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                     })}
                   </div>
 
-                  {/* Custom industry input when "Other" is selected */}
-                  {(data.industry === 'Other' || (data.industry && !INDUSTRIES.slice(0, -1).includes(data.industry))) && (
+                  {hasCustomIndustry && (
                     <div className="mt-3">
                       <Input
-                        label=""
                         type="text"
+                        aria-label="Your industry"
                         value={data.industry === 'Other' ? '' : data.industry}
                         onChange={(e) => setData({ ...data, industry: e.target.value || 'Other' })}
                         placeholder="Enter your industry"
@@ -449,68 +348,39 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
               </div>
             )}
 
-            {/* Step 2: Details */}
             {currentStep === 2 && (
               <div className="space-y-6">
-                <div className="text-center mb-8">
-                  <h2
-                    className="text-xl font-semibold mb-2"
-                    style={{ color: 'var(--color-text)' }}
-                  >
-                    Company details
-                  </h2>
-                  <p
-                    className="text-sm"
-                    style={{ color: 'var(--color-textMuted)' }}
-                  >
-                    Help us match you with the right candidates
-                  </p>
-                </div>
+                <StepHeading
+                  title="Company details"
+                  description="Help us match you with the right candidates."
+                />
 
                 <div>
-                  <label
-                    className="block text-sm font-medium mb-3"
-                    style={{ color: 'var(--color-text)' }}
-                  >
-                    Company size <span style={{ color: 'var(--color-error)' }}>*</span>
-                  </label>
+                  <p className="text-sm font-medium mb-2" style={{ color: 'var(--color-text)' }}>
+                    Company size
+                  </p>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {COMPANY_SIZES.map((size) => (
                       <button
                         key={size.id}
                         type="button"
+                        aria-pressed={data.company_size === size.id}
                         onClick={() => setData({ ...data, company_size: size.id })}
-                        className={cn(
-                          'p-3 rounded-xl border text-left transition-all',
-                          data.company_size === size.id
-                            ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10'
-                            : 'border-[var(--color-border)] hover:border-[var(--color-borderHover)]'
-                        )}
-                        style={{
-                          backgroundColor: data.company_size === size.id
-                            ? undefined
-                            : 'var(--color-surface)',
-                        }}
+                        className={cn(optionClass(data.company_size === size.id), 'p-3')}
                       >
-                        <p
-                          className="font-medium text-sm"
-                          style={{ color: 'var(--color-text)' }}
-                        >
+                        <span className="block text-sm font-medium" style={{ color: 'var(--color-text)' }}>
                           {size.label}
-                        </p>
-                        <p
-                          className="text-xs mt-0.5"
-                          style={{ color: 'var(--color-textMuted)' }}
-                        >
+                        </span>
+                        <span className="mt-0.5 block text-caption" style={{ color: 'var(--color-textSecondary)' }}>
                           {size.description}
-                        </p>
+                        </span>
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <LocationPicker
-                  label="Headquarters location *"
+                  label="Headquarters location"
                   value={data.location}
                   onChange={(location) => setData({ ...data, location })}
                   placeholder="Select headquarters location"
@@ -519,105 +389,71 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
               </div>
             )}
 
-            {/* Step 3: Links */}
             {currentStep === 3 && (
-              <div className="space-y-6">
-                <div className="text-center mb-8">
-                  <h2
-                    className="text-xl font-semibold mb-2"
-                    style={{ color: 'var(--color-text)' }}
-                  >
-                    Company links
-                  </h2>
-                  <p
-                    className="text-sm"
-                    style={{ color: 'var(--color-textMuted)' }}
-                  >
-                    Help candidates learn more about you
-                  </p>
-                </div>
+              <div className="space-y-5">
+                <StepHeading
+                  title="Company links"
+                  description="Optional. Help candidates learn more about you. Next, take the culture quiz to start matching."
+                />
 
                 <Input
-                  label="Your LinkedIn profile (optional)"
+                  label="Your LinkedIn profile"
                   type="url"
                   value={data.linkedin_url}
                   onChange={(e) => setData({ ...data, linkedin_url: e.target.value })}
                   placeholder="https://linkedin.com/in/yourprofile"
-                  leftIcon={<Linkedin className="w-4 h-4" />}
                 />
 
                 <Input
-                  label="Company website (optional)"
+                  label="Company website"
                   type="url"
                   value={data.company_website}
                   onChange={(e) => setData({ ...data, company_website: e.target.value })}
                   placeholder="https://"
-                  leftIcon={<Globe className="w-4 h-4" />}
                 />
-
-                <div
-                  className="p-4 rounded-xl flex items-start gap-3"
-                  style={{ backgroundColor: 'var(--color-surface)' }}
-                >
-                  <CheckCircle2
-                    className="w-5 h-5 mt-0.5 flex-shrink-0"
-                    style={{ color: 'var(--color-success)' }}
-                  />
-                  <div>
-                    <p
-                      className="text-sm font-medium"
-                      style={{ color: 'var(--color-text)' }}
-                    >
-                      You're all set!
-                    </p>
-                    <p
-                      className="text-xs mt-0.5"
-                      style={{ color: 'var(--color-textMuted)' }}
-                    >
-                      Click "Complete setup" to save your company profile. Next, take the culture quiz to start matching with candidates.
-                    </p>
-                  </div>
-                </div>
               </div>
             )}
           </div>
 
-          {/* Footer */}
           <div
-            className="flex items-center justify-between p-6 pt-0"
+            className="flex items-center justify-between gap-3 px-6 py-4 border-t"
+            style={{ borderColor: 'var(--color-border)' }}
           >
             <div>
               {currentStep > 0 && (
-                <Button
-                  variant="ghost"
-                  onClick={handlePrev}
-                  leftIcon={<ArrowLeft className="w-4 h-4" />}
-                >
+                <Button variant="outline" onClick={handlePrev} leftIcon={<ArrowLeft className="w-4 h-4" />}>
                   Back
                 </Button>
               )}
             </div>
-            <div>
-              {currentStep < STEPS.length - 1 ? (
-                <Button
-                  onClick={handleNext}
-                  rightIcon={<ArrowRight className="w-4 h-4" />}
-                >
-                  {currentStep === 0 ? 'Get started' : 'Continue'}
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleComplete}
-                  isLoading={isSaving}
-                  rightIcon={!isSaving ? <CheckCircle2 className="w-4 h-4" /> : undefined}
-                >
-                  Complete setup
-                </Button>
-              )}
-            </div>
+            {currentStep < STEPS.length - 1 ? (
+              <Button onClick={handleNext} rightIcon={<ArrowRight className="w-4 h-4" />}>
+                {currentStep === 0 ? 'Get started' : 'Continue'}
+              </Button>
+            ) : (
+              <Button onClick={handleComplete} isLoading={isSaving} rightIcon={<Check className="w-4 h-4" />}>
+                Complete setup
+              </Button>
+            )}
           </div>
         </div>
       </div>
     </>
+  );
+}
+
+const textareaClass =
+  'w-full px-4 py-2.5 rounded-xl border text-sm resize-none bg-[var(--color-surface)] text-[var(--color-text)] border-[var(--color-border)] placeholder:text-[var(--color-textMuted)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-1 focus:ring-[var(--color-accent)]';
+
+function StepHeading({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="mb-6">
+      <h2 id="employer-setup-title" className="text-heading" style={{ color: 'var(--color-text)' }}>
+        {title}
+      </h2>
+      <p className="mt-1 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+        {description}
+      </p>
+    </div>
   );
 }

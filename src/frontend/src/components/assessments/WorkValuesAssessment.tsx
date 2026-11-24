@@ -1,20 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Scale,
-  ArrowRight,
-  ArrowLeft,
-  CheckCircle2,
-} from 'lucide-react';
-import { Button } from '../ui/Button';
 import { AssessmentResultsTemplate } from './AssessmentResultsTemplate';
+import { AssessmentShell, QuestionHeading, ScaleSlider, OptionList, QuestionNav } from './QuestionParts';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { supabase } from '../../lib/supabase';
 import { workValuesQuestions } from '../../data/assessmentQuestions';
 import { PersonalityEngine, type OCEANScores } from '../../lib/personalityEngine';
-
-const ACCENT = '#10B981';
 
 export function WorkValuesAssessment() {
   const { user } = useAuth();
@@ -27,7 +19,6 @@ export function WorkValuesAssessment() {
   const [oceanScores, setOceanScores] = useState<OCEANScores | null>(null);
 
   const question = workValuesQuestions[currentQuestion];
-  const progress = ((currentQuestion + (answers[question?.id] !== undefined ? 1 : 0)) / workValuesQuestions.length) * 100;
 
   const handleSelect = (optionId: string) => {
     setAnswers(prev => ({ ...prev, [question.id]: optionId }));
@@ -102,11 +93,11 @@ export function WorkValuesAssessment() {
   // Results view
   if (isComplete && oceanScores) {
     const dimensions = [
-      { key: 'openness', label: 'Openness', value: oceanScores.openness, color: '#8B5CF6', progressColor: 'purple' },
-      { key: 'conscientiousness', label: 'Conscientiousness', value: oceanScores.conscientiousness, color: '#10B981', progressColor: 'green' },
-      { key: 'extraversion', label: 'Extraversion', value: oceanScores.extraversion, color: '#F59E0B', progressColor: 'amber' },
-      { key: 'agreeableness', label: 'Agreeableness', value: oceanScores.agreeableness, color: '#EC4899', progressColor: 'pink' },
-      { key: 'neuroticism', label: 'Emotional stability', value: 100 - oceanScores.neuroticism, color: '#06B6D4', progressColor: 'cyan' },
+      { key: 'openness', label: 'Openness', value: oceanScores.openness },
+      { key: 'conscientiousness', label: 'Conscientiousness', value: oceanScores.conscientiousness },
+      { key: 'extraversion', label: 'Extraversion', value: oceanScores.extraversion },
+      { key: 'agreeableness', label: 'Agreeableness', value: oceanScores.agreeableness },
+      { key: 'neuroticism', label: 'Emotional stability', value: 100 - oceanScores.neuroticism },
     ];
 
     return (
@@ -115,139 +106,48 @@ export function WorkValuesAssessment() {
         subtitle="Here's what your work values reveal about your motivational drivers"
         dimensions={dimensions}
         enhancedMessage="Your work values have been factored into your personality profile with a 12% weight, making your culture matches more accurate."
-        icon={<Scale className="w-10 h-10 text-white" />}
-        accentColor="#10B981"
       />
     );
   }
 
-  // Slider value for current question
   const sliderVal = (answers[question.id] as number) ?? 50;
-  const sliderPercentage = question.sliderConfig
-    ? ((sliderVal - question.sliderConfig.min) / (question.sliderConfig.max - question.sliderConfig.min)) * 100
-    : 0;
 
-  // Question view
   return (
-    <div className="min-h-screen py-8 px-4" style={{ backgroundColor: 'var(--color-background)' }}>
-      <div className="max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${ACCENT}15` }}>
-              <Scale className="w-5 h-5" style={{ color: ACCENT }} />
-            </div>
-            <div>
-              <h1 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>Work values assessment</h1>
-              <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
-                Question {currentQuestion + 1} of {workValuesQuestions.length}
-              </p>
-            </div>
-          </div>
-          <button onClick={() => navigate('/app/insights')} className="text-sm px-3 py-1.5 rounded-lg transition-colors hover:bg-[var(--color-surface)]" style={{ color: 'var(--color-textMuted)' }}>Exit</button>
-        </div>
+    <AssessmentShell
+      title="Work values assessment"
+      onExit={() => navigate('/app/insights')}
+      current={currentQuestion + 1}
+      total={workValuesQuestions.length}
+      category={question.category}
+    >
+      <QuestionHeading question={question.question} description={question.description} />
 
-        {/* Progress bar */}
-        <div className="h-1.5 rounded-full mb-8 overflow-hidden" style={{ backgroundColor: 'var(--color-surface)' }}>
-          <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, backgroundColor: ACCENT }} />
-        </div>
+      {question.type === 'slider' && question.sliderConfig && (
+        <ScaleSlider
+          min={question.sliderConfig.min}
+          max={question.sliderConfig.max}
+          minLabel={question.sliderConfig.minLabel}
+          maxLabel={question.sliderConfig.maxLabel}
+          value={sliderVal}
+          onChange={handleSliderChange}
+        />
+      )}
 
-        {/* Question card */}
-        <div className="p-6 rounded-2xl border mb-6" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
-          <p className="text-xs font-medium mb-2" style={{ color: ACCENT }}>{question.category}</p>
-          <h2 className="text-lg font-semibold mb-1" style={{ color: 'var(--color-text)' }}>{question.question}</h2>
-          {question.description && (
-            <p className="text-sm mb-6" style={{ color: 'var(--color-textMuted)' }}>{question.description}</p>
-          )}
+      {question.options && (
+        <OptionList
+          options={question.options}
+          selected={answers[question.id] as string | undefined}
+          onSelect={handleSelect}
+        />
+      )}
 
-          {/* Slider question */}
-          {question.type === 'slider' && question.sliderConfig && (
-            <div className="space-y-4">
-              <div
-                className="relative pt-14 pb-8 px-5 rounded-2xl"
-                style={{ backgroundColor: 'var(--color-background)', '--slider-color': ACCENT } as React.CSSProperties}
-              >
-                <div
-                  className="absolute top-2 px-3.5 py-1.5 rounded-xl font-semibold text-base transform -translate-x-1/2 transition-all duration-150 shadow-md"
-                  style={{
-                    backgroundColor: ACCENT,
-                    color: 'white',
-                    left: `calc(${sliderPercentage}% + ${(50 - sliderPercentage) * 0.2}px)`,
-                  }}
-                >
-                  {sliderVal}
-                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45" style={{ backgroundColor: ACCENT }} />
-                </div>
-                <input
-                  type="range"
-                  min={question.sliderConfig.min}
-                  max={question.sliderConfig.max}
-                  value={sliderVal}
-                  onChange={e => handleSliderChange(parseInt(e.target.value))}
-                  className="w-full slider-thumb"
-                  style={{
-                    background: `linear-gradient(to right, ${ACCENT} 0%, ${ACCENT} ${sliderPercentage}%, var(--color-border) ${sliderPercentage}%, var(--color-border) 100%)`,
-                  }}
-                />
-                <div className="flex justify-between mt-2 px-0.5">
-                  {[0, 25, 50, 75, 100].map(tick => (
-                    <div key={tick} className="w-0.5 h-1.5 rounded-full" style={{ backgroundColor: sliderPercentage >= tick ? ACCENT : 'var(--color-border)', opacity: 0.5 }} />
-                  ))}
-                </div>
-              </div>
-              <div className="flex justify-between text-sm px-1">
-                <p className="max-w-[40%] font-medium" style={{ color: 'var(--color-textSecondary)' }}>{question.sliderConfig.minLabel}</p>
-                <p className="max-w-[40%] text-right font-medium" style={{ color: 'var(--color-textSecondary)' }}>{question.sliderConfig.maxLabel}</p>
-              </div>
-            </div>
-          )}
-
-          {/* Multiple choice options */}
-          {question.options && (
-            <div className={`grid gap-3 ${question.options.length === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2'}`}>
-              {question.options.map(option => {
-                const isSelected = answers[question.id] === option.id;
-                return (
-                  <button
-                    key={option.id}
-                    onClick={() => handleSelect(option.id)}
-                    className="p-4 rounded-xl text-left transition-all"
-                    style={{
-                      backgroundColor: isSelected ? `${ACCENT}12` : 'var(--color-background)',
-                      border: isSelected ? `2px solid ${ACCENT}` : '1px solid var(--color-border)',
-                    }}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div
-                        className="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5"
-                        style={{ borderColor: isSelected ? ACCENT : 'var(--color-border)', backgroundColor: isSelected ? ACCENT : 'transparent' }}
-                      >
-                        {isSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
-                      </div>
-                      <div>
-                        <p className="font-medium text-sm" style={{ color: 'var(--color-text)' }}>{option.text}</p>
-                        {option.description && <p className="text-xs mt-0.5" style={{ color: 'var(--color-textMuted)' }}>{option.description}</p>}
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
-        {/* Navigation */}
-        <div className="flex items-center justify-between">
-          <Button variant="ghost" onClick={handleBack} disabled={currentQuestion === 0} leftIcon={<ArrowLeft className="w-4 h-4" />}>Back</Button>
-          <Button
-            onClick={handleNext}
-            disabled={answers[question.id] === undefined}
-            rightIcon={currentQuestion === workValuesQuestions.length - 1 ? <CheckCircle2 className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
-          >
-            {currentQuestion === workValuesQuestions.length - 1 ? 'Complete' : 'Next'}
-          </Button>
-        </div>
-      </div>
-    </div>
+      <QuestionNav
+        onBack={handleBack}
+        backDisabled={currentQuestion === 0}
+        onNext={handleNext}
+        nextDisabled={answers[question.id] === undefined}
+        isLast={currentQuestion === workValuesQuestions.length - 1}
+      />
+    </AssessmentShell>
   );
 }

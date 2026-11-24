@@ -1,16 +1,13 @@
-import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Brain, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '../ui/Button';
-import { OceanMindMap } from '../ui/OceanMindMap';
+import { PageBanner } from '../ui/PageBanner';
 import { GradientProgressBar } from '../ui/GradientProgressBar';
 
 interface DimensionScore {
   key: string;
   label: string;
   value: number;
-  color: string;
-  progressColor: string;
 }
 
 interface AssessmentResultsTemplateProps {
@@ -18,28 +15,19 @@ interface AssessmentResultsTemplateProps {
   subtitle: string;
   dimensions: DimensionScore[];
   enhancedMessage: string;
-  icon: React.ReactNode;
-  accentColor?: string;
   profileUrl?: string;
   matchesUrl?: string;
   profileLabel?: string;
   matchesLabel?: string;
 }
 
-const OCEAN_LABELS: Record<string, string> = {
-  openness: 'Openness',
-  conscientiousness: 'Conscientiousness',
-  extraversion: 'Extraversion',
-  agreeableness: 'Agreeableness',
-  neuroticism: 'Stability',
-};
-
-const OCEAN_COLORS: Record<string, string> = {
-  openness: '#8B5CF6',
-  conscientiousness: '#10B981',
-  extraversion: '#F59E0B',
-  agreeableness: '#EC4899',
-  neuroticism: '#06B6D4',
+// Bars encode a trait, so they take the trait color; neuroticism is shown as stability
+const TRAIT_COLORS: Record<string, string> = {
+  openness: 'var(--color-trait-openness)',
+  conscientiousness: 'var(--color-trait-conscientiousness)',
+  extraversion: 'var(--color-trait-extraversion)',
+  agreeableness: 'var(--color-trait-agreeableness)',
+  neuroticism: 'var(--color-trait-stability)',
 };
 
 export function AssessmentResultsTemplate({
@@ -47,175 +35,48 @@ export function AssessmentResultsTemplate({
   subtitle,
   dimensions,
   enhancedMessage,
-  icon,
-  accentColor = 'var(--color-accent)',
   profileUrl = '/app/insights',
   matchesUrl = '/app/ember',
   profileLabel = 'View full profile',
   matchesLabel = 'Find matches',
 }: AssessmentResultsTemplateProps) {
   const navigate = useNavigate();
-
-  // Build radar chart scores
-  const radarScores: Record<string, number> = {};
-  for (const d of dimensions) {
-    radarScores[d.key] = d.value;
-  }
-
   const sortedDimensions = [...dimensions].sort((a, b) => b.value - a.value);
-  const topDimension = sortedDimensions[0];
 
   return (
-    <div className="min-h-screen py-8 px-4" style={{ backgroundColor: 'var(--color-background)' }}>
-      <div className="max-w-2xl mx-auto">
-        {/* Hero */}
-        <motion.div
-          className="text-center mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <motion.div
-            className="w-20 h-20 rounded-3xl mx-auto mb-5 flex items-center justify-center"
-            style={{ backgroundColor: accentColor }}
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.1, duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-          >
-            {icon}
-          </motion.div>
-          <motion.h1
-            className="text-title mb-3"
-            style={{ color: 'var(--color-text)' }}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            {title}
-          </motion.h1>
-          <motion.p
-            className="text-sm"
-            style={{ color: 'var(--color-textSecondary)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            {subtitle}
-          </motion.p>
-        </motion.div>
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
+      <PageBanner title={title} subtitle={subtitle} />
 
-        {/* Top Result Highlight */}
-        {topDimension && (
-          <motion.div
-            className="bento-card p-5 mb-6 text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-          >
-            <p className="text-xs font-medium mb-1" style={{ color: 'var(--color-textMuted)' }}>
-              Strongest signal
-            </p>
-            <p className="text-xl font-semibold" style={{ color: topDimension.color }}>
-              {topDimension.label}
-            </p>
-            <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
-              Score: {Math.round(topDimension.value)}/100
-            </p>
-          </motion.div>
-        )}
-
-        {/* Radar Chart */}
-        <motion.div
-          className="bento-card p-6 mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <div className="max-w-md mx-auto">
-            <OceanMindMap
-              scores={radarScores}
-              labels={OCEAN_LABELS}
-              colors={OCEAN_COLORS}
+      <section>
+        <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>
+          Trait scores
+        </h2>
+        <div className="bento-card mt-3 space-y-4">
+          {sortedDimensions.map((dim) => (
+            <GradientProgressBar
+              key={dim.key}
+              value={dim.value}
+              label={dim.label}
+              color={TRAIT_COLORS[dim.key]}
               size="sm"
-              animated
             />
-          </div>
-        </motion.div>
+          ))}
+        </div>
+      </section>
 
-        {/* Dimension Breakdown */}
-        <motion.div
-          className="bento-card p-6 mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--color-text)' }}>
-            Trait scores
-          </h2>
-          <div className="space-y-3">
-            {sortedDimensions.map((dim, i) => (
-              <motion.div
-                key={dim.key}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.7 + i * 0.1 }}
-              >
-                <GradientProgressBar
-                  value={dim.value}
-                  label={dim.label}
-                  color={dim.progressColor}
-                  size="sm"
-                />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* What the result changes */}
-        <motion.div
-          className="bento-card p-4 mb-6 flex items-start gap-3"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-        >
-          <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-            style={{ backgroundColor: 'color-mix(in srgb, var(--color-success) 12%, transparent)' }}
-          >
-            <CheckCircle2 className="w-4 h-4" style={{ color: 'var(--color-success)' }} />
-          </div>
-          <div>
-            <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-text)' }}>
-              Profile updated
-            </p>
-            <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
-              {enhancedMessage}
-            </p>
-          </div>
-        </motion.div>
-
-        {/* CTAs */}
-        <motion.div
-          className="flex flex-col-reverse sm:flex-row gap-3 justify-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0 }}
-        >
-          <Button
-            variant="outline"
-            onClick={() => navigate(profileUrl)}
-            leftIcon={<Brain className="w-4 h-4" />}
-          >
-            {profileLabel}
-          </Button>
-          <Button
-            onClick={() => navigate(matchesUrl)}
-            rightIcon={<ArrowRight className="w-4 h-4" />}
-          >
+      <section className="mt-10">
+        <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+          {enhancedMessage}
+        </p>
+        <div className="mt-4 flex flex-col sm:flex-row sm:items-center gap-3">
+          <Button onClick={() => navigate(matchesUrl)} rightIcon={<ArrowRight className="w-4 h-4" />}>
             {matchesLabel}
           </Button>
-        </motion.div>
-      </div>
+          <Button variant="outline" onClick={() => navigate(profileUrl)}>
+            {profileLabel}
+          </Button>
+        </div>
+      </section>
     </div>
   );
 }

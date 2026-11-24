@@ -1,13 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Eye,
-  ArrowRight,
-  ArrowLeft,
-  CheckCircle2,
-} from 'lucide-react';
-import { Button } from '../ui/Button';
 import { AssessmentResultsTemplate } from './AssessmentResultsTemplate';
+import { AssessmentShell, QuestionHeading, OptionList, QuestionNav } from './QuestionParts';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { supabase } from '../../lib/supabase';
@@ -558,7 +552,6 @@ export function VisualPerceptionAssessment() {
   const [_isSaving, setIsSaving] = useState(false);
 
   const question = VISUAL_QUESTIONS[currentQuestion];
-  const progress = ((currentQuestion + (answers[question?.id] ? 1 : 0)) / VISUAL_QUESTIONS.length) * 100;
 
   const handleSelect = (optionId: string) => {
     setAnswers(prev => ({ ...prev, [question.id]: optionId }));
@@ -687,11 +680,11 @@ export function VisualPerceptionAssessment() {
 
     const maxPossible = 50;
     const dimensions = [
-      { key: 'openness', label: 'Openness', value: Math.min(100, (traitScores.openness / maxPossible) * 100), color: '#8B5CF6', progressColor: 'purple' },
-      { key: 'conscientiousness', label: 'Conscientiousness', value: Math.min(100, (traitScores.conscientiousness / maxPossible) * 100), color: '#10B981', progressColor: 'green' },
-      { key: 'extraversion', label: 'Extraversion', value: Math.min(100, (traitScores.extraversion / maxPossible) * 100), color: '#F59E0B', progressColor: 'amber' },
-      { key: 'agreeableness', label: 'Agreeableness', value: Math.min(100, (traitScores.agreeableness / maxPossible) * 100), color: '#EC4899', progressColor: 'pink' },
-      { key: 'neuroticism', label: 'Emotional stability', value: Math.min(100, (traitScores.neuroticism_inv / maxPossible) * 100), color: '#06B6D4', progressColor: 'cyan' },
+      { key: 'openness', label: 'Openness', value: Math.min(100, (traitScores.openness / maxPossible) * 100) },
+      { key: 'conscientiousness', label: 'Conscientiousness', value: Math.min(100, (traitScores.conscientiousness / maxPossible) * 100) },
+      { key: 'extraversion', label: 'Extraversion', value: Math.min(100, (traitScores.extraversion / maxPossible) * 100) },
+      { key: 'agreeableness', label: 'Agreeableness', value: Math.min(100, (traitScores.agreeableness / maxPossible) * 100) },
+      { key: 'neuroticism', label: 'Emotional stability', value: Math.min(100, (traitScores.neuroticism_inv / maxPossible) * 100) },
     ];
 
     return (
@@ -700,142 +693,39 @@ export function VisualPerceptionAssessment() {
         subtitle="Here's what your visual perception style reveals about your personality"
         dimensions={dimensions}
         enhancedMessage="These visual perception modifiers have been applied to your personality profile, making your matches more accurate. The more assessments you complete, the better your results."
-        icon={<Eye className="w-10 h-10 text-white" />}
-        accentColor="#8B5CF6"
       />
     );
   }
 
-  // Question view
   return (
-    <div
-      className="min-h-screen py-8 px-4"
-      style={{ backgroundColor: 'var(--color-background)' }}
+    <AssessmentShell
+      title="Visual perception test"
+      onExit={() => navigate('/app/insights')}
+      current={currentQuestion + 1}
+      total={VISUAL_QUESTIONS.length}
     >
-      <div className="max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center"
-              style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}
-            >
-              <Eye className="w-5 h-5" style={{ color: '#8B5CF6' }} />
-            </div>
-            <div>
-              <h1 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
-                Visual perception test
-              </h1>
-              <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
-                Question {currentQuestion + 1} of {VISUAL_QUESTIONS.length}
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => navigate('/app/insights')}
-            className="text-sm px-3 py-1.5 rounded-lg transition-colors hover:bg-[var(--color-surface)]"
-            style={{ color: 'var(--color-textMuted)' }}
-          >
-            Exit
-          </button>
-        </div>
+      <QuestionHeading question={question.title} description={question.instruction} />
 
-        {/* Progress bar */}
-        <div
-          className="h-1.5 rounded-full mb-8 overflow-hidden"
-          style={{ backgroundColor: 'var(--color-surface)' }}
-        >
-          <div
-            className="h-full rounded-full transition-all duration-500"
-            style={{ width: `${progress}%`, backgroundColor: '#8B5CF6' }}
-          />
-        </div>
-
-        {/* Question card */}
-        <div
-          className="p-6 rounded-2xl border mb-6"
-          style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
-        >
-          <h2
-            className="text-lg font-semibold mb-1"
-            style={{ color: 'var(--color-text)' }}
-          >
-            {question.title}
-          </h2>
-          <p className="text-sm mb-6" style={{ color: 'var(--color-textMuted)' }}>
-            {question.instruction}
-          </p>
-
-          {/* Visual */}
-          <div
-            className="w-full h-64 rounded-xl mb-6 overflow-hidden flex items-center justify-center"
-            style={{ backgroundColor: 'var(--color-background)' }}
-          >
-            {question.svg}
-          </div>
-
-          {/* Options */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {question.options.map(option => {
-              const isSelected = answers[question.id] === option.id;
-              return (
-                <button
-                  key={option.id}
-                  onClick={() => handleSelect(option.id)}
-                  className="p-4 rounded-xl text-left transition-all"
-                  style={{
-                    backgroundColor: isSelected ? 'rgba(139, 92, 246, 0.08)' : 'var(--color-background)',
-                    border: isSelected ? '2px solid #8B5CF6' : '1px solid var(--color-border)',
-                  }}
-                >
-                  <div className="flex items-start gap-3">
-                    <div
-                      className="w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5"
-                      style={{
-                        borderColor: isSelected ? '#8B5CF6' : 'var(--color-border)',
-                        backgroundColor: isSelected ? '#8B5CF6' : 'transparent',
-                      }}
-                    >
-                      {isSelected && <CheckCircle2 className="w-3 h-3 text-white" />}
-                    </div>
-                    <div>
-                      <p className="font-medium text-sm" style={{ color: 'var(--color-text)' }}>
-                        {option.label}
-                      </p>
-                      <p className="text-xs mt-0.5" style={{ color: 'var(--color-textMuted)' }}>
-                        {option.description}
-                      </p>
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <div className="flex items-center justify-between">
-          <Button
-            variant="ghost"
-            onClick={handleBack}
-            disabled={currentQuestion === 0}
-            leftIcon={<ArrowLeft className="w-4 h-4" />}
-          >
-            Back
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={!answers[question.id]}
-            rightIcon={
-              currentQuestion === VISUAL_QUESTIONS.length - 1
-                ? <CheckCircle2 className="w-4 h-4" />
-                : <ArrowRight className="w-4 h-4" />
-            }
-          >
-            {currentQuestion === VISUAL_QUESTIONS.length - 1 ? 'Complete' : 'Next'}
-          </Button>
-        </div>
+      <div
+        className="w-full h-56 sm:h-64 rounded-xl border mb-6 overflow-hidden flex items-center justify-center"
+        style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
+      >
+        {question.svg}
       </div>
-    </div>
+
+      <OptionList
+        options={question.options.map(o => ({ id: o.id, text: o.label, description: o.description }))}
+        selected={answers[question.id]}
+        onSelect={handleSelect}
+      />
+
+      <QuestionNav
+        onBack={handleBack}
+        backDisabled={currentQuestion === 0}
+        onNext={handleNext}
+        nextDisabled={!answers[question.id]}
+        isLast={currentQuestion === VISUAL_QUESTIONS.length - 1}
+      />
+    </AssessmentShell>
   );
 }
