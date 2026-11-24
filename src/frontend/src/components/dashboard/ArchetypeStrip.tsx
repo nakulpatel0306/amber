@@ -74,7 +74,7 @@ export function ArchetypeStrip({ personalityScores, topTraits }: ArchetypeStripP
 
       {/* Archetype name */}
       <h2
-        className="font-mono text-2xl font-bold mb-1 flex items-center gap-2"
+        className="font-serif text-3xl font-normal tracking-tight mb-1 flex items-center gap-2"
         style={{ color: 'var(--color-text)' }}
       >
         <ArchetypeIcon className="w-6 h-6" style={{ color: 'var(--color-accent)' }} />

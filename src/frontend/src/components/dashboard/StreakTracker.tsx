@@ -337,7 +337,7 @@ export function StreakTracker() {
         className="text-2xl font-bold leading-none mt-3"
         style={{ color: 'var(--color-text)' }}
       >
-        {streak} Day{streak !== 1 ? 's' : ''}
+        {streak} day{streak !== 1 ? 's' : ''}
       </p>
 
       {/* Goal label */}
