@@ -36,7 +36,7 @@ interface AssessmentState {
 
 export function Assessment() {
   const { user } = useAuth();
-  const { success, error: showError } = useToast();
+  const { error: showError } = useToast();
   const navigate = useNavigate();
 
   const [state, setState] = useState<AssessmentState>({
@@ -361,7 +361,6 @@ export function Assessment() {
       if (candidateError) throw candidateError;
 
       setIsComplete(true);
-      success('Assessment complete!', 'Your personality profile is ready.');
     } catch (err) {
       console.error('Assessment error:', err);
       showError('Failed to save', 'Please try again.');

@@ -131,7 +131,7 @@ export function AssessmentResultsTemplate({
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <div className="max-w-xs mx-auto">
+          <div className="max-w-md mx-auto">
             <OceanMindMap
               scores={radarScores}
               labels={OCEAN_LABELS}
@@ -150,7 +150,7 @@ export function AssessmentResultsTemplate({
           transition={{ delay: 0.6 }}
         >
           <h2 className="text-sm font-semibold mb-4" style={{ color: 'var(--color-text)' }}>
-            OCEAN modifiers
+            Trait scores
           </h2>
           <div className="space-y-3">
             {sortedDimensions.map((dim, i) => (
