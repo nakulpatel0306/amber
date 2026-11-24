@@ -29,6 +29,7 @@ import { AppLayout } from './components/layout/AppLayout';
 import { PublicLayout } from './components/layout/PublicLayout';
 import { ErrorBoundary } from './components/layout/ErrorBoundary';
 import { RouteTitleSync } from './components/layout/RouteTitleSync';
+import { CoffeeBrewLoader } from './components/ui/CoffeeBrewLoader';
 
 // Demo build only: role picker and the "this is a demo" banner (see src/demo)
 import { IS_DEMO } from './demo/flag';
@@ -105,16 +106,9 @@ const WorkEnvironmentAssessment = lazy(() => import('./components/assessments/Wo
 import './styles/fonts';
 import './styles/globals.css';
 
-// Minimal loading fallback - keeps UI feeling fast
+// Same loader the pages use, so a route chunk loading doesn't flash a different spinner
 function PageLoader() {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div
-        className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin"
-        style={{ borderColor: 'var(--color-accent)', borderTopColor: 'transparent' }}
-      />
-    </div>
-  );
+  return <CoffeeBrewLoader variant="fullscreen" className="min-h-screen" message="Loading..." />;
 }
 
 function App() {

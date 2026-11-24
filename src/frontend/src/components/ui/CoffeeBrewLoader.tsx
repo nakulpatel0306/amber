@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import { cn } from '../../utils/cn';
 
 const STEPS = [
@@ -10,7 +9,8 @@ const STEPS = [
 ] as const;
 
 const STEP_DURATION = 1800;
-const MIN_LOADER_MS = 2500;
+// Long enough to avoid a flash on fast loads, short enough not to stall the demo's instant data
+const MIN_LOADER_MS = 400;
 
 export interface CoffeeBrewLoaderProps {
   variant?: 'fullscreen' | 'section' | 'content' | 'inline';
@@ -73,8 +73,7 @@ export function CoffeeBrewLoader({
   }, [cycling]);
 
   const { dot: dotSize, gap, text: textClass } = sizeConfig[size];
-  const raw = message || STEPS[step];
-  const displayLabel = raw.replace(/\b\w/g, c => c.toUpperCase());
+  const displayLabel = message || STEPS[step];
 
   const dots = (
     <div className={cn('flex items-center', gap)}>
@@ -86,7 +85,7 @@ export function CoffeeBrewLoader({
             width: dotSize,
             height: dotSize,
             backgroundColor: color,
-            animation: 'dotBounce 1.2s ease-in-out infinite',
+            animation: 'dotPulse 1.2s ease-in-out infinite',
             animationDelay: `${i * 0.15}s`,
           }}
         />
@@ -109,39 +108,29 @@ export function CoffeeBrewLoader({
 
   const wrapperClass = cn(
     'flex items-center justify-center',
-    variant === 'fullscreen' && 'fixed inset-0 z-[9998]',
+    // In-flow so the app shell (sidebar, top bar) stays put while a page loads
+    variant === 'fullscreen' && 'w-full min-h-[70vh]',
     variant === 'section' && 'py-12 w-full',
     variant === 'content' && 'w-full flex-1 min-h-[400px]',
     variant === 'inline' && 'gap-3',
     className,
   );
-  const wrapperStyle =
-    variant === 'fullscreen'
-      ? { backgroundColor: 'var(--color-background)' }
-      : undefined;
 
   if (variant === 'inline') {
     return (
-      <div className={wrapperClass} style={wrapperStyle}>
+      <div className={wrapperClass}>
         {dots}
         {label}
       </div>
     );
   }
 
-  const content = (
-    <div className={wrapperClass} style={wrapperStyle}>
+  return (
+    <div className={wrapperClass}>
       <div className="flex flex-col items-center gap-3">
         {dots}
         {label}
       </div>
     </div>
   );
-
-  // Portal fullscreen loader to document.body so it escapes any stacking context
-  if (variant === 'fullscreen') {
-    return createPortal(content, document.body);
-  }
-
-  return content;
 }
