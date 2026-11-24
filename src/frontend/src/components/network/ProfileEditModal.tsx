@@ -3,12 +3,10 @@ import {
   Camera,
   Plus,
   X,
-  Sparkles,
   Check,
   Loader2,
   Trash2,
   Pencil,
-  Image,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
@@ -335,9 +333,8 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
             {/* Photos Section */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                  <Camera className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                  Photos ({photos.length}/6)
+                <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+                  Photos <span className="font-normal tabular-nums" style={{ color: 'var(--color-textMuted)' }}>{photos.length}/6</span>
                 </h3>
                 {photos.length < 6 && (
                   <Button
@@ -347,7 +344,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploadingPhoto}
                   >
-                    {uploadingPhoto ? 'Uploading...' : 'Add photo'}
+                    {uploadingPhoto ? 'Uploading…' : 'Add photo'}
                   </Button>
                 )}
               </div>
@@ -361,22 +358,24 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
               {photos.length > 0 ? (
                 <div className="grid grid-cols-2 gap-3">
                   {photos.map((photo, index) => (
-                    <div key={index} className="rounded-xl overflow-hidden" style={{ backgroundColor: 'var(--color-background)', border: '1px solid var(--color-border)' }}>
+                    <div key={index} className="rounded-lg overflow-hidden" style={{ border: '1px solid var(--color-border)' }}>
                       <div className="relative aspect-square group">
                         <img src={photo.url} alt="" className="w-full h-full object-cover" />
-                        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute top-2 right-2 flex gap-1 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => {
                               setEditingCaption(index);
                               setCaptionText(photo.caption);
                             }}
+                            aria-label="Edit caption"
                             className="p-1.5 rounded-lg bg-black/50 text-white hover:bg-black/70 transition-colors"
                           >
                             <Pencil className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={() => removePhoto(index)}
-                            className="p-1.5 rounded-lg bg-black/50 text-white hover:bg-red-500 transition-colors"
+                            aria-label="Delete photo"
+                            className="p-1.5 rounded-lg bg-black/50 text-white hover:bg-black/70 transition-colors"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -388,11 +387,11 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                             <textarea
                               value={captionText}
                               onChange={(e) => setCaptionText(e.target.value)}
-                              placeholder="Add a caption (required)..."
+                              placeholder="Add a caption (required)…"
                               className="w-full px-3 py-2 text-sm rounded-lg resize-none"
                               style={{
                                 backgroundColor: 'var(--color-surface)',
-                                border: `1px solid ${!captionText.trim() ? '#ef4444' : 'var(--color-border)'}`,
+                                border: `1px solid ${!captionText.trim() ? 'var(--color-error)' : 'var(--color-border)'}`,
                                 color: 'var(--color-text)',
                               }}
                               rows={2}
@@ -400,8 +399,8 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                               autoFocus
                             />
                             <div className="flex items-center justify-between">
-                              <span className="text-xs" style={{ color: !captionText.trim() ? '#ef4444' : 'var(--color-textMuted)' }}>
-                                {captionText.length}/150 {!captionText.trim() && '• Required'}
+                              <span className="text-caption tabular-nums" style={{ color: !captionText.trim() ? 'var(--color-error)' : 'var(--color-textMuted)' }}>
+                                {captionText.length}/150{!captionText.trim() && ' · Required'}
                               </span>
                               <div className="flex gap-2">
                                 {newPhotoIndex === index ? (
@@ -453,7 +452,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                                 {photo.caption}
                               </p>
                             ) : (
-                              <p className="text-sm flex items-center gap-1" style={{ color: '#ef4444' }}>
+                              <p className="text-sm flex items-center gap-1" style={{ color: 'var(--color-error)' }}>
                                 <Plus className="w-3 h-3" />
                                 Add caption (required)
                               </p>
@@ -466,7 +465,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                 </div>
               ) : (
                 <div
-                  className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer hover:border-[var(--color-accent)] transition-colors"
+                  className="border border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-[var(--color-borderHover)] transition-colors"
                   style={{ borderColor: 'var(--color-border)' }}
                   onClick={() => fileInputRef.current?.click()}
                 >
@@ -481,9 +480,8 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
             {/* Hobbies Section */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
-                  <Sparkles className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                  Hobbies ({hobbies.length}/10)
+                <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+                  Hobbies <span className="font-normal tabular-nums" style={{ color: 'var(--color-textMuted)' }}>{hobbies.length}/10</span>
                 </h3>
                 <Button
                   size="sm"
@@ -502,13 +500,14 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                   {selectedHobbies.map(hobby => (
                     <div
                       key={hobby.id}
-                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs"
+                      className="flex items-center gap-1.5 pl-2.5 pr-1 py-0.5 rounded-full text-caption"
                       style={{ border: '1px solid var(--color-border)', color: 'var(--color-text)' }}
                     >
                       <span>{hobby.name}</span>
                       <button
                         onClick={() => removeHobby(hobby.id)}
-                        className="p-0.5 rounded hover:bg-[var(--color-surface)]"
+                        aria-label={`Remove ${hobby.name}`}
+                        className="p-0.5 rounded-full hover:bg-[var(--color-surfaceHover)]"
                         style={{ color: 'var(--color-textMuted)' }}
                       >
                         <X className="w-3 h-3" />
@@ -518,14 +517,13 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                 </div>
               ) : (
                 <div
-                  className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer hover:border-[var(--color-accent)] transition-colors"
+                  className="border border-dashed rounded-lg p-8 text-center cursor-pointer hover:border-[var(--color-borderHover)] transition-colors"
                   style={{ borderColor: 'var(--color-border)' }}
                   onClick={() => {
                     setTempSelectedHobbies([]);
                     setShowHobbyPicker(true);
                   }}
                 >
-                  <Sparkles className="w-8 h-8 mx-auto mb-2" style={{ color: 'var(--color-textMuted)' }} />
                   <p className="text-sm" style={{ color: 'var(--color-textMuted)' }}>
                     Click to add hobbies
                   </p>
@@ -535,16 +533,15 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
 
             {/* My Posts Section */}
             <div>
-              <h3 className="text-sm font-semibold flex items-center gap-2 mb-3" style={{ color: 'var(--color-text)' }}>
-                <Image className="w-4 h-4" style={{ color: 'var(--color-accent)' }} />
-                My Posts ({myPosts.length})
+              <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--color-text)' }}>
+                My posts <span className="font-normal tabular-nums" style={{ color: 'var(--color-textMuted)' }}>{myPosts.length}</span>
               </h3>
               {myPosts.length > 0 ? (
                 <div className="grid grid-cols-3 gap-2">
                   {myPosts.map(post => (
                     <div
                       key={post.id}
-                      className="relative rounded-xl overflow-hidden group"
+                      className="relative rounded-lg overflow-hidden group"
                       style={{ border: '1px solid var(--color-border)' }}
                     >
                       <div className="aspect-square">
@@ -557,13 +554,14 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                       {/* Overlay on hover */}
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-end">
                         <div className="w-full p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <p className="text-white text-[10px] line-clamp-2 mb-1">
+                          <p className="text-white text-caption line-clamp-2 mb-1">
                             {post.caption}
                           </p>
                         </div>
                         <button
                           onClick={() => deleteMyPost(post.id)}
-                          className="absolute top-1.5 right-1.5 p-1 rounded-lg bg-black/50 text-white hover:bg-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                          aria-label="Delete post"
+                          className="absolute top-1.5 right-1.5 p-1 rounded-lg bg-black/50 text-white hover:bg-black/70 transition-colors sm:opacity-0 sm:group-hover:opacity-100"
                         >
                           <Trash2 className="w-3 h-3" />
                         </button>
@@ -573,7 +571,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                 </div>
               ) : (
                 <p className="text-sm py-4 text-center" style={{ color: 'var(--color-textMuted)' }}>
-                  No posts yet. Use the "+ New post" button to create one.
+                  No posts yet. Use "New post" to share one.
                 </p>
               )}
             </div>
@@ -581,7 +579,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
             {/* Close button */}
             <div className="flex justify-end pt-4 border-t" style={{ borderColor: 'var(--color-border)' }}>
               {photos.some(p => !p.caption.trim()) && (
-                <p className="text-xs mr-auto flex items-center" style={{ color: '#ef4444' }}>
+                <p className="text-caption mr-auto flex items-center" style={{ color: 'var(--color-error)' }}>
                   All photos require captions
                 </p>
               )}
@@ -600,12 +598,12 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
       {showHobbyPicker && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 modal-backdrop">
           <div
-            className="w-full max-w-2xl max-h-[80vh] overflow-hidden rounded-2xl"
-            style={{ backgroundColor: 'var(--color-surface)' }}
+            className="w-full max-w-2xl max-h-[80vh] overflow-hidden rounded-xl border"
+            style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
           >
             <div className="p-4 border-b flex items-center justify-between" style={{ borderColor: 'var(--color-border)' }}>
-              <h3 className="font-semibold" style={{ color: 'var(--color-text)' }}>Select hobbies</h3>
-              <button onClick={() => setShowHobbyPicker(false)} style={{ color: 'var(--color-textMuted)' }}>
+              <h3 className="text-heading" style={{ color: 'var(--color-text)' }}>Select hobbies</h3>
+              <button onClick={() => setShowHobbyPicker(false)} aria-label="Close" style={{ color: 'var(--color-textMuted)' }}>
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -617,11 +615,11 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
-                    className="px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
+                    aria-pressed={selectedCategory === category.id}
+                    className="px-3 py-1.5 rounded-lg text-label transition-colors"
                     style={{
-                      backgroundColor: selectedCategory === category.id ? 'var(--color-accent)' : 'transparent',
-                      color: selectedCategory === category.id ? 'white' : 'var(--color-textSecondary)',
-                      border: selectedCategory === category.id ? 'none' : '1px solid var(--color-border)',
+                      backgroundColor: selectedCategory === category.id ? 'var(--color-surfaceHover)' : 'transparent',
+                      color: selectedCategory === category.id ? 'var(--color-text)' : 'var(--color-textSecondary)',
                     }}
                   >
                     {category.label}
@@ -641,8 +639,8 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                       addCustomHobby();
                     }
                   }}
-                  placeholder="Add your own hobby..."
-                  className="flex-1 px-3 py-2 text-sm rounded-md"
+                  placeholder="Add your own hobby…"
+                  className="flex-1 min-w-0 px-3 py-2 text-sm rounded-lg"
                   style={{
                     backgroundColor: 'var(--color-background)',
                     border: '1px solid var(--color-border)',
@@ -655,7 +653,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                 </Button>
               </div>
 
-              <p className="text-xs mb-3" style={{ color: 'var(--color-textMuted)' }}>
+              <p className="text-caption tabular-nums mb-3" style={{ color: 'var(--color-textMuted)' }}>
                 {tempSelectedHobbies.length} of 10 selected
               </p>
 
@@ -667,9 +665,9 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
                     <button
                       key={hobby.id}
                       onClick={() => toggleHobbySelection(hobby.id)}
-                      className="flex items-center justify-between px-3 py-2 rounded-md text-left transition-all text-sm"
+                      aria-pressed={isSelected}
+                      className="flex items-center justify-between px-3 py-2 rounded-lg text-left transition-colors text-sm"
                       style={{
-                        backgroundColor: isSelected ? 'rgba(245, 158, 11, 0.1)' : 'transparent',
                         border: isSelected ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
                         color: isSelected ? 'var(--color-accent)' : 'var(--color-text)',
                       }}
@@ -685,7 +683,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
             <div className="p-4 border-t flex justify-end gap-3" style={{ borderColor: 'var(--color-border)' }}>
               <Button variant="outline" onClick={() => setShowHobbyPicker(false)}>Cancel</Button>
               <Button onClick={handleHobbyPickerSave} disabled={isSaving}>
-                {isSaving ? 'Saving...' : 'Save'}
+                {isSaving ? 'Saving…' : 'Save'}
               </Button>
             </div>
           </div>

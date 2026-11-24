@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Send, Sparkles, Lightbulb, MessageCircle, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Send, RotateCcw } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 interface Message {
@@ -17,9 +17,9 @@ const SCENARIOS = [
 ];
 
 const TIPS = [
-  { icon: Lightbulb, title: 'Lead with curiosity', desc: 'Ask specific questions about their work rather than generic ones.' },
-  { icon: MessageCircle, title: 'Share, don\'t pitch', desc: 'Talk about what excites you, not just your resume.' },
-  { icon: Sparkles, title: 'End with next steps', desc: 'Suggest a concrete follow-up to keep the connection alive.' },
+  { title: 'Lead with curiosity', desc: 'Ask specific questions about their work rather than generic ones.' },
+  { title: 'Share, don\'t pitch', desc: 'Talk about what excites you, not just your resume.' },
+  { title: 'End with next steps', desc: 'Suggest a concrete follow-up to keep the connection alive.' },
 ];
 
 const AI_RESPONSES: Record<string, string[]> = {
@@ -101,46 +101,46 @@ export function PracticeCoffeeChat() {
       {/* Header */}
       <div className="border-b px-4 py-3" style={{ borderColor: 'var(--color-border)' }}>
         <div className="max-w-2xl mx-auto flex items-center gap-3">
-          <Link to="/app/network" className="p-1.5 rounded-xl hover:bg-[var(--color-surface)] transition-colors" style={{ color: 'var(--color-textMuted)' }}>
+          <Link
+            to="/app/network"
+            aria-label="Back to network"
+            className="p-1.5 rounded-lg hover:bg-[var(--color-surface)] transition-colors"
+            style={{ color: 'var(--color-textMuted)' }}
+          >
             <ArrowLeft className="w-4 h-4" />
           </Link>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>Practice coffee chat</p>
-            <p className="text-[11px]" style={{ color: 'var(--color-textMuted)' }}>Sharpen your networking skills with AI coaching</p>
+            <p className="text-caption" style={{ color: 'var(--color-textMuted)' }}>Sharpen your networking skills with coaching</p>
           </div>
-          <span className="flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-xl" style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-textMuted)', border: '1px solid var(--color-border)' }}>
-            <Sparkles className="w-3 h-3" />
-            Voice practice was planned but not built
-          </span>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-          {/* Tips panel (shown at start) */}
+          {/* Tips, shown before the first reply */}
           {messages.length <= 1 && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {TIPS.map((tip, i) => (
-                <div key={i} className="p-4 rounded-xl border" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}>
-                  <tip.icon className="w-4 h-4 mb-2" style={{ color: 'var(--color-accent)' }} />
-                  <p className="text-xs font-semibold mb-1" style={{ color: 'var(--color-text)' }}>{tip.title}</p>
-                  <p className="text-[11px] leading-relaxed" style={{ color: 'var(--color-textMuted)' }}>{tip.desc}</p>
+            <div className="bento-card grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {TIPS.map(tip => (
+                <div key={tip.title}>
+                  <p className="text-label" style={{ color: 'var(--color-text)' }}>{tip.title}</p>
+                  <p className="text-caption leading-relaxed mt-1" style={{ color: 'var(--color-textSecondary)' }}>{tip.desc}</p>
                 </div>
               ))}
             </div>
           )}
 
           {/* Scenario selector */}
-          <div className="flex gap-2 overflow-x-auto scrollbar-hidden pb-1">
+          <div className="flex gap-1 overflow-x-auto scrollbar-hidden pb-1">
             {SCENARIOS.map((s, i) => (
               <button
-                key={i}
+                key={s.label}
                 onClick={() => switchScenario(i)}
-                className="text-xs px-3 py-1.5 rounded-xl whitespace-nowrap transition-all font-medium"
+                aria-pressed={scenario === i}
+                className="text-label px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors hover:text-[var(--color-text)]"
                 style={{
-                  backgroundColor: scenario === i ? 'var(--color-accent)' : 'var(--color-surface)',
-                  color: scenario === i ? 'var(--color-accentText)' : 'var(--color-textMuted)',
-                  border: `1px solid ${scenario === i ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                  backgroundColor: scenario === i ? 'var(--color-surfaceHover)' : 'transparent',
+                  color: scenario === i ? 'var(--color-text)' : 'var(--color-textSecondary)',
                 }}
               >
                 {s.label}
@@ -152,19 +152,12 @@ export function PracticeCoffeeChat() {
           <div className="space-y-4">
             {messages.map(msg => (
               <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : ''}`}>
-                {msg.role === 'ai' && (
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mr-2 mt-1"
-                    style={{ backgroundColor: 'var(--color-accent)' }}>
-                    <Sparkles className="w-3.5 h-3.5 text-white" />
-                  </div>
-                )}
                 <div
-                  className="max-w-[80%] px-4 py-3 text-sm leading-relaxed"
+                  className="max-w-[85%] px-4 py-3 text-sm leading-relaxed rounded-xl"
                   style={{
                     backgroundColor: msg.role === 'ai' ? 'var(--color-surface)' : 'var(--color-accent)',
                     color: msg.role === 'ai' ? 'var(--color-text)' : 'var(--color-accentText)',
                     border: msg.role === 'ai' ? '1px solid var(--color-border)' : 'none',
-                    borderRadius: msg.role === 'ai' ? '4px 16px 16px 16px' : '16px 4px 16px 16px',
                   }}
                 >
                   {msg.text}
@@ -172,18 +165,13 @@ export function PracticeCoffeeChat() {
               </div>
             ))}
 
-            {/* Typing indicator */}
             {isTyping && (
               <div className="flex">
-                <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mr-2 mt-1"
-                  style={{ backgroundColor: 'var(--color-accent)' }}>
-                  <Sparkles className="w-3.5 h-3.5 text-white" />
-                </div>
                 <div className="px-4 py-3 rounded-xl" style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-                  <div className="flex gap-1">
-                    <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-textMuted)', animationDelay: '0ms' }} />
-                    <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-textMuted)', animationDelay: '150ms' }} />
-                    <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-textMuted)', animationDelay: '300ms' }} />
+                  <div className="flex gap-1" aria-label="Coach is typing">
+                    <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-textMuted)', animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-textMuted)', animationDelay: '150ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: 'var(--color-textMuted)', animationDelay: '300ms' }} />
                   </div>
                 </div>
               </div>
@@ -197,30 +185,25 @@ export function PracticeCoffeeChat() {
       <div className="border-t px-4 py-3" style={{ borderColor: 'var(--color-border)' }}>
         <div className="max-w-2xl mx-auto">
           <div className="flex gap-2">
-            <Button size="sm" variant="ghost" onClick={resetChat} className="flex-shrink-0">
-              <RotateCcw className="w-3.5 h-3.5" />
+            <Button size="icon" variant="ghost" onClick={resetChat} className="flex-shrink-0" aria-label="Restart scenario" title="Restart scenario">
+              <RotateCcw className="w-4 h-4" />
             </Button>
             <input
               type="text"
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && !isTyping && handleSend()}
-              placeholder="Type your response..."
+              placeholder="Type your response…"
               disabled={isTyping}
-              className="flex-1 px-4 py-2.5 rounded-xl text-sm outline-none disabled:opacity-50"
+              className="flex-1 min-w-0 px-3 py-2 rounded-lg text-sm outline-none disabled:opacity-50 focus:border-[var(--color-accent)]"
               style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
             />
-            <button
-              onClick={handleSend}
-              disabled={!input.trim() || isTyping}
-              className="px-3 py-2.5 rounded-xl transition-all disabled:opacity-30"
-              style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-accentText)' }}
-            >
+            <Button size="icon" onClick={handleSend} disabled={!input.trim() || isTyping} className="flex-shrink-0" aria-label="Send">
               <Send className="w-4 h-4" />
-            </button>
+            </Button>
           </div>
-          <p className="text-[10px] text-center mt-2" style={{ color: 'var(--color-textMuted)' }}>
-            Practice mode — responses are AI-generated coaching, not real conversations
+          <p className="text-caption text-center mt-2" style={{ color: 'var(--color-textMuted)' }}>
+            Practice mode: replies are scripted coaching, not a real person. Voice practice was planned but not built.
           </p>
         </div>
       </div>

@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Users, Edit3, Plus, RefreshCw, AlertCircle, Link2, Camera, Sparkles, Eye, EyeOff, Heart } from 'lucide-react';
+import { Users, Edit3, Plus, RefreshCw, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { useConnections } from '../../contexts/ConnectionsContext';
 import { useToast } from '../../contexts/ToastContext';
 import { supabase } from '../../lib/supabase';
-import { Avatar } from '../ui/Avatar';
+import { PageBanner } from '../ui/PageBanner';
+import { Facts } from '../ui/Facts';
 import { Button } from '../ui/Button';
 import { ProfileEditModal } from './ProfileEditModal';
 import { NewPostModal } from './NewPostModal';
@@ -91,8 +92,8 @@ const MOCK_POSTS: FeedPost[] = [
 /* ------------------------------------------------------------------ */
 
 const EMPTY_MESSAGES: Record<FeedFilter, { title: string; sub: string }> = {
-  all: { title: 'No posts yet', sub: 'Be the first to share your hobbies and interests!' },
-  job_seekers: { title: 'No job seeker posts', sub: 'Job seekers haven\'t posted yet. Start the conversation!' },
+  all: { title: 'No posts yet', sub: 'Be the first to share your hobbies and interests.' },
+  job_seekers: { title: 'No job seeker posts', sub: 'Job seekers haven\'t posted yet. Start the conversation.' },
   employers: { title: 'No employer posts', sub: 'No employer culture posts yet. Be the first to showcase your team.' },
   connections: { title: 'Nothing from connections', sub: 'Connect with more people to see their posts here.' },
 };
@@ -102,7 +103,7 @@ const EMPTY_MESSAGES: Record<FeedFilter, { title: string; sub: string }> = {
 /* ------------------------------------------------------------------ */
 
 export function NetworkHub() {
-  const { profile, user } = useAuth();
+  const { user } = useAuth();
   const { accepted } = useConnections();
   const { success: showSuccess, error: showError } = useToast();
 
@@ -437,99 +438,40 @@ export function NetworkHub() {
 
   const gridClass = (() => {
     switch (layout) {
-      case 'grid-3': return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5';
-      case 'grid-2': return 'grid grid-cols-1 md:grid-cols-2 gap-5';
-      case 'feed': return 'max-w-[600px] mx-auto space-y-5';
-      case 'masonry': return 'columns-1 md:columns-2 lg:columns-3 gap-5 [&>*]:mb-5 [&>*]:break-inside-avoid';
-      default: return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5';
+      case 'grid-3': return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
+      case 'grid-2': return 'grid grid-cols-1 md:grid-cols-2 gap-4';
+      case 'feed': return 'max-w-[600px] mx-auto space-y-4';
+      case 'masonry': return 'columns-1 md:columns-2 lg:columns-3 gap-4 [&>*]:mb-4 [&>*]:break-inside-avoid';
+      default: return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
     }
   })();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-6 py-6">
-      {/* ======== HEADER — matches Ember / Insights bento-card style ======== */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.35 }}
-        className="bento-card rounded-2xl p-5 sm:p-6 mb-6"
-      >
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          {/* Left: avatar + text */}
-          <div className="flex items-center gap-3 flex-1 min-w-[min(100%,18rem)]">
-            <Avatar
-              src={profile?.avatar_url}
-              fallback={profile?.full_name || 'User'}
-              size="lg"
-              className="!rounded-xl hidden sm:block flex-shrink-0"
-            />
-            <div className="min-w-0">
-              <h1
-                className="text-title"
-                style={{ color: 'var(--color-text)' }}
-              >
-                Network
-              </h1>
-              <p
-                className="text-label mt-1"
-                style={{ color: 'var(--color-textMuted)' }}
-              >
-                What people do outside work, from both sides of the table
-              </p>
-
-              {/* Stat pills */}
-              <div className="flex flex-wrap items-center gap-2.5 mt-3">
-                {([
-                  { label: 'Connections', value: accepted.length, color: '#f59e0b', Icon: Link2 },
-                  { label: 'Posts', value: myPhotos.length, color: '#8B5CF6', Icon: Camera },
-                  { label: 'Hobbies', value: myHobbies.length, color: '#06B6D4', Icon: Sparkles },
-                  { label: 'Likes', value: myLikes, color: '#ef4444', Icon: Heart },
-                ] as const).map(stat => (
-                  <span
-                    key={stat.label}
-                    className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full text-[11px] font-semibold"
-                    style={{
-                      background: `linear-gradient(135deg, ${stat.color}18, ${stat.color}08)`,
-                      border: `1px solid ${stat.color}30`,
-                      color: 'var(--color-text)',
-                    }}
-                  >
-                    <span
-                      className="w-6 h-6 rounded-full flex items-center justify-center"
-                      style={{ backgroundColor: `${stat.color}20` }}
-                    >
-                      <stat.Icon className="w-3 h-3" style={{ color: stat.color }} />
-                    </span>
-                    <span className="font-semibold tabular-nums" style={{ color: stat.color }}>
-                      {stat.value}
-                    </span>
-                    <span style={{ color: 'var(--color-textSecondary)' }}>{stat.label}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Right: actions */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <Button
-              size="sm"
-              leftIcon={<Plus className="w-3.5 h-3.5" />}
-              onClick={() => setShowNewPost(true)}
-            >
-              New post
-            </Button>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <PageBanner
+        title="Network"
+        subtitle="What people do outside work, from both sides of the table"
+        belowSubtitle={
+          <Facts
+            items={[
+              { label: 'Connections', value: accepted.length },
+              { label: 'Posts', value: myPhotos.length },
+              { label: 'Hobbies', value: myHobbies.length },
+              { label: 'Likes', value: myLikes },
+            ]}
+          />
+        }
+        rightContent={
+          <>
             <Button
               variant="ghost"
               size="sm"
               leftIcon={profileVisible ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
               onClick={toggleVisibility}
               disabled={savingVisibility}
-              style={{
-                color: profileVisible ? 'var(--color-accent)' : 'var(--color-textMuted)',
-              }}
+              title={profileVisible ? 'Hide your profile from the feed' : 'Show your profile in the feed'}
             >
-              {profileVisible ? 'Visible' : 'Hidden'}
+              {profileVisible ? 'Visible in feed' : 'Hidden from feed'}
             </Button>
             <Button
               variant="outline"
@@ -537,11 +479,18 @@ export function NetworkHub() {
               leftIcon={<Edit3 className="w-3.5 h-3.5" />}
               onClick={() => setShowEditModal(true)}
             >
-              Edit
+              Edit profile
             </Button>
-          </div>
-        </div>
-      </motion.div>
+            <Button
+              size="sm"
+              leftIcon={<Plus className="w-3.5 h-3.5" />}
+              onClick={() => setShowNewPost(true)}
+            >
+              New post
+            </Button>
+          </>
+        }
+      />
 
       {/* ======== FILTER BAR ======== */}
       <FilterBar
@@ -555,11 +504,8 @@ export function NetworkHub() {
       <div className="mt-6">
         {/* Error banner */}
         {hasError && (
-          <div
-            className="flex items-center gap-3 p-4 rounded-xl mb-6 border"
-            style={{ backgroundColor: 'rgba(239, 68, 68, 0.08)', borderColor: 'rgba(239, 68, 68, 0.2)' }}
-          >
-            <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+          <div className="bento-card flex flex-wrap items-center gap-3 mb-6">
+            <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--color-error)' }} />
             <p className="text-sm flex-1" style={{ color: 'var(--color-text)' }}>
               Couldn't load the latest posts. Showing sample content.
             </p>
@@ -587,18 +533,13 @@ export function NetworkHub() {
             /* ---- Empty State ---- */
             <motion.div
               key="empty"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="text-center py-20"
             >
-              <div
-                className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: 'var(--color-surface)' }}
-              >
-                <Users className="w-8 h-8" style={{ color: 'var(--color-textMuted)' }} />
-              </div>
-              <p className="text-lg font-semibold mb-2" style={{ color: 'var(--color-text)' }}>
+              <Users className="w-8 h-8 mx-auto mb-4" style={{ color: 'var(--color-textMuted)' }} />
+              <p className="text-heading mb-2" style={{ color: 'var(--color-text)' }}>
                 {EMPTY_MESSAGES[filter].title}
               </p>
               <p className="text-sm mb-6" style={{ color: 'var(--color-textMuted)' }}>
@@ -621,10 +562,9 @@ export function NetworkHub() {
               {posts.map(post => (
                 <motion.div
                   key={post.id}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  layout
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.25 }}
                 >
                   <PostCard
                     post={post}

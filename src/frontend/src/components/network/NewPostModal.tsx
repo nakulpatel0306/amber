@@ -230,14 +230,15 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
 
       {/* Modal */}
       <motion.div
-        initial={{ opacity: 0, y: 60 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 60 }}
-        transition={{ type: 'spring', damping: 35, stiffness: 300 }}
+        exit={{ opacity: 0, y: 8 }}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
         className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        onClick={onClose}
       >
         <div
-          className="relative w-full max-w-xl max-h-[85vh] rounded-2xl overflow-hidden border"
+          className="relative w-full max-w-xl max-h-[85vh] rounded-xl overflow-hidden border"
           style={{
             backgroundColor: 'var(--color-backgroundSecondary)',
             borderColor: 'var(--color-border)',
@@ -249,11 +250,12 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
             className="flex items-center justify-between px-5 py-4 border-b"
             style={{ borderColor: 'var(--color-border)' }}
           >
-            <h2 className="text-lg font-semibold" style={{ color: 'var(--color-text)' }}>
+            <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>
               Create post
             </h2>
             <button
               onClick={onClose}
+              aria-label="Close"
               className="p-2 rounded-lg transition-colors hover:bg-[var(--color-surface)]"
               style={{ color: 'var(--color-textMuted)' }}
             >
@@ -279,17 +281,16 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
                   {/* Preview Grid */}
                   <div className="grid grid-cols-3 gap-2">
                     {images.map((img, idx) => (
-                      <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group">
+                      <div key={idx} className="relative aspect-square rounded-lg overflow-hidden group">
                         <img src={img.preview} alt="" className="w-full h-full object-cover" />
+                        {/* Always visible on touch screens, hover-revealed where there is a pointer */}
                         <button
                           onClick={() => removeImage(idx)}
-                          className="absolute top-1.5 right-1.5 p-1 rounded-md bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500"
+                          aria-label={`Remove image ${idx + 1}`}
+                          className="absolute top-1.5 right-1.5 p-1 rounded-md bg-black/60 text-white sm:opacity-0 sm:group-hover:opacity-100 transition-opacity hover:bg-black/80"
                         >
                           <X className="w-3.5 h-3.5" />
                         </button>
-                        <div className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[10px] bg-black/60 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                          {idx + 1}
-                        </div>
                       </div>
                     ))}
 
@@ -297,14 +298,15 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
                     {images.length < MAX_IMAGES && (
                       <button
                         onClick={() => fileInputRef.current?.click()}
-                        className="aspect-square rounded-xl border-2 border-dashed flex items-center justify-center transition-colors hover:border-[var(--color-accent)]"
+                        aria-label="Add images"
+                        className="aspect-square rounded-lg border border-dashed flex items-center justify-center transition-colors hover:border-[var(--color-borderHover)]"
                         style={{ borderColor: 'var(--color-border)' }}
                       >
                         <Plus className="w-6 h-6" style={{ color: 'var(--color-textMuted)' }} />
                       </button>
                     )}
                   </div>
-                  <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
+                  <p className="text-caption tabular-nums" style={{ color: 'var(--color-textMuted)' }}>
                     {images.length}/{MAX_IMAGES} images
                   </p>
                 </div>
@@ -314,17 +316,17 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all"
+                  className="border border-dashed rounded-lg p-10 text-center cursor-pointer transition-colors"
                   style={{
                     borderColor: isDragging ? 'var(--color-accent)' : 'var(--color-border)',
-                    backgroundColor: isDragging ? 'rgba(245, 158, 11, 0.05)' : 'transparent',
+                    backgroundColor: isDragging ? 'var(--color-surface)' : 'transparent',
                   }}
                 >
-                  <Camera className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--color-textMuted)' }} />
+                  <Camera className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--color-textMuted)' }} />
                   <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-                    Drag & drop or click to upload
+                    Drag and drop, or click to upload
                   </p>
-                  <p className="text-xs mt-1" style={{ color: 'var(--color-textMuted)' }}>
+                  <p className="text-caption mt-1" style={{ color: 'var(--color-textMuted)' }}>
                     Up to {MAX_IMAGES} images &middot; Max 5MB each
                   </p>
                 </div>
@@ -335,11 +337,11 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
             <div>
               <label className="flex items-center justify-between mb-1.5">
                 <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-                  Caption <span style={{ color: '#ef4444' }}>*</span>
+                  Caption <span style={{ color: 'var(--color-error)' }}>*</span>
                 </span>
                 <span
-                  className="text-xs tabular-nums"
-                  style={{ color: caption.length > MAX_CAPTION ? '#ef4444' : 'var(--color-textMuted)' }}
+                  className="text-caption tabular-nums"
+                  style={{ color: caption.length > MAX_CAPTION ? 'var(--color-error)' : 'var(--color-textMuted)' }}
                 >
                   {caption.length}/{MAX_CAPTION}
                 </span>
@@ -347,8 +349,8 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
               <textarea
                 value={caption}
                 onChange={e => setCaption(e.target.value)}
-                placeholder="Write a caption..."
-                className="w-full px-3 py-2.5 text-sm rounded-xl resize-none outline-none transition-colors focus:border-[var(--color-accent)]"
+                placeholder="Write a caption…"
+                className="w-full px-3 py-2.5 text-sm rounded-lg resize-none outline-none transition-colors focus:border-[var(--color-accent)]"
                 style={{
                   backgroundColor: 'var(--color-surface)',
                   border: '1px solid var(--color-border)',
@@ -373,9 +375,9 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
                     <button
                       key={id}
                       onClick={() => toggleHobby(id)}
-                      className="px-2.5 py-1 rounded-full text-xs font-medium transition-all"
+                      aria-pressed={isSelected}
+                      className="px-2.5 py-1 rounded-full text-caption font-medium transition-colors"
                       style={{
-                        backgroundColor: isSelected ? 'rgba(245, 158, 11, 0.15)' : 'transparent',
                         border: isSelected ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
                         color: isSelected ? 'var(--color-accent)' : 'var(--color-textSecondary)',
                       }}
@@ -387,7 +389,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
               </div>
               <button
                 onClick={() => setShowHobbySearch(!showHobbySearch)}
-                className="text-xs flex items-center gap-1"
+                className="text-label flex items-center gap-1"
                 style={{ color: 'var(--color-accent)' }}
               >
                 <Search className="w-3 h-3" />
@@ -399,7 +401,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
                     type="text"
                     value={hobbySearch}
                     onChange={e => setHobbySearch(e.target.value)}
-                    placeholder="Search hobbies..."
+                    placeholder="Search hobbies…"
                     className="w-full px-3 py-2 text-sm rounded-lg outline-none transition-colors focus:border-[var(--color-accent)]"
                     style={{
                       backgroundColor: 'var(--color-surface)',
@@ -413,7 +415,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
                         <button
                           key={h.id}
                           onClick={() => { toggleHobby(h.id); setHobbySearch(''); }}
-                          className="px-2.5 py-1 rounded-full text-xs font-medium transition-all hover:border-[var(--color-accent)]"
+                          className="px-2.5 py-1 rounded-full text-caption font-medium transition-colors hover:border-[var(--color-borderHover)]"
                           style={{ border: '1px solid var(--color-border)', color: 'var(--color-textSecondary)' }}
                         >
                           + {h.name}
@@ -432,19 +434,17 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
                   Personality tags
                 </label>
                 <div className="flex flex-wrap gap-1.5">
-                  {userTraits.map((trait, i) => {
-                    const colors = ['#8B5CF6', '#F59E0B', '#06B6D4'];
-                    const color = colors[i % colors.length];
+                  {userTraits.map(trait => {
                     const isSelected = selectedTraits.includes(trait);
                     return (
                       <button
                         key={trait}
                         onClick={() => toggleTrait(trait)}
-                        className="px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all"
+                        aria-pressed={isSelected}
+                        className="px-2.5 py-1 rounded-full text-caption font-medium transition-colors"
                         style={{
-                          backgroundColor: isSelected ? `${color}20` : 'transparent',
-                          color: isSelected ? color : 'var(--color-textMuted)',
-                          border: `1px solid ${isSelected ? `${color}50` : 'var(--color-border)'}`,
+                          border: isSelected ? '1px solid var(--color-accent)' : '1px solid var(--color-border)',
+                          color: isSelected ? 'var(--color-accent)' : 'var(--color-textSecondary)',
                         }}
                       >
                         {trait}
@@ -462,7 +462,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
               </label>
               <button
                 onClick={() => setShowVisibility(!showVisibility)}
-                className="flex items-center justify-between w-full px-3 py-2 rounded-xl text-sm transition-colors"
+                className="flex items-center justify-between w-full px-3 py-2 rounded-lg text-sm transition-colors"
                 style={{
                   backgroundColor: 'var(--color-surface)',
                   border: '1px solid var(--color-border)',
@@ -474,7 +474,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
               </button>
               {showVisibility && (
                 <div
-                  className="absolute left-0 right-0 top-full mt-1 py-1 rounded-xl shadow-lg z-10 border"
+                  className="absolute left-0 right-0 top-full mt-1 py-1 rounded-lg shadow-lg z-10 border"
                   style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
                 >
                   {VISIBILITY_OPTIONS.map(opt => (
@@ -484,7 +484,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
                       className="w-full px-3 py-2 text-left text-sm transition-colors hover:bg-[var(--color-surfaceHover)]"
                       style={{
                         color: visibility === opt.value ? 'var(--color-accent)' : 'var(--color-text)',
-                        fontWeight: visibility === opt.value ? 600 : 400,
+                        fontWeight: visibility === opt.value ? 500 : 400,
                       }}
                     >
                       {opt.label}
@@ -509,7 +509,7 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
               isLoading={isUploading}
               size="sm"
             >
-              {isUploading ? 'Posting...' : 'Post'}
+              {isUploading ? 'Posting…' : 'Post'}
             </Button>
           </div>
         </div>

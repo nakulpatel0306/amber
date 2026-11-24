@@ -32,14 +32,14 @@ export function FilterBar({
 }: FilterBarProps) {
   return (
     <div
-      className="sticky top-0 z-30 -mx-4 md:-mx-6 px-4 md:px-6 py-3 backdrop-blur-xl border-b"
+      className="sticky top-0 z-30 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 backdrop-blur-xl border-b"
       style={{
         backgroundColor: 'color-mix(in srgb, var(--color-background) 80%, transparent)',
         borderColor: 'var(--color-border)',
       }}
     >
       <div className="flex items-center gap-3 overflow-x-auto scrollbar-hidden">
-        {/* Filter Tabs */}
+        {/* Filter tabs: a quiet selected state, the accent stays on "New post" */}
         <div className="flex items-center gap-1 flex-shrink-0">
           {FILTER_TABS.map(tab => {
             const isActive = filter === tab.value;
@@ -47,10 +47,11 @@ export function FilterBar({
               <button
                 key={tab.value}
                 onClick={() => onFilterChange(tab.value)}
-                className="px-3.5 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all"
+                aria-pressed={isActive}
+                className="px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors hover:text-[var(--color-text)]"
                 style={{
-                  backgroundColor: isActive ? 'var(--color-accent)' : 'transparent',
-                  color: isActive ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
+                  backgroundColor: isActive ? 'var(--color-surfaceHover)' : 'transparent',
+                  color: isActive ? 'var(--color-text)' : 'var(--color-textSecondary)',
                 }}
               >
                 {tab.label}
@@ -59,13 +60,12 @@ export function FilterBar({
           })}
         </div>
 
-        {/* Spacer */}
         <div className="flex-1 min-w-4" />
 
-        {/* Layout Toggle */}
+        {/* Layout toggle: phones are always one column, so it only shows from sm up */}
         <div
-          className="flex items-center gap-0.5 p-1 rounded-lg flex-shrink-0"
-          style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
+          className="hidden sm:flex items-center gap-0.5 p-1 rounded-lg flex-shrink-0"
+          style={{ border: '1px solid var(--color-border)' }}
         >
           {LAYOUT_OPTIONS.map(opt => {
             const Icon = opt.icon;
@@ -74,12 +74,14 @@ export function FilterBar({
               <button
                 key={opt.value}
                 onClick={() => onLayoutChange(opt.value)}
-                className="p-1.5 rounded-md transition-all"
+                className="p-1.5 rounded-md transition-colors"
                 style={{
-                  backgroundColor: isActive ? 'var(--color-accent)' : 'transparent',
-                  color: isActive ? 'var(--color-accentText)' : 'var(--color-textMuted)',
+                  backgroundColor: isActive ? 'var(--color-surfaceHover)' : 'transparent',
+                  color: isActive ? 'var(--color-text)' : 'var(--color-textMuted)',
                 }}
                 title={opt.label}
+                aria-label={opt.label}
+                aria-pressed={isActive}
               >
                 <Icon className="w-4 h-4" />
               </button>
