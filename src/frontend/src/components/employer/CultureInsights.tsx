@@ -1046,7 +1046,7 @@ export function CultureInsights() {
               </p>
             </div>
           </div>
-          <Link to="/app/employer/candidates">
+          <Link to="/app/employer/top-candidates">
             <Button variant="outline" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
               Browse candidates
             </Button>
@@ -1202,7 +1202,7 @@ export function CultureInsights() {
           <p className="text-sm mb-4" style={{ color: 'var(--color-textSecondary)' }}>
             Discover candidates whose personality aligns with your culture
           </p>
-          <Link to="/app/employer/candidates">
+          <Link to="/app/employer/top-candidates">
             <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>Browse candidates</Button>
           </Link>
         </motion.div>

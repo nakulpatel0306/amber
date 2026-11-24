@@ -174,7 +174,7 @@ export function BookmarkDropdown() {
               >
                 <button
                   onClick={() => {
-                    navigate('/app/employer/candidates');
+                    navigate('/app/employer/top-candidates');
                     setIsOpen(false);
                   }}
                   className="text-xs font-medium transition-colors hover:underline"

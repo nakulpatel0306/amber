@@ -853,7 +853,7 @@ export function PersonalityInsights() {
               </p>
             </div>
           </div>
-          <Link to="/app/matches">
+          <Link to="/app/ember">
             <Button variant="outline" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
               View your matches
             </Button>
@@ -970,7 +970,7 @@ export function PersonalityInsights() {
           <p className="text-sm mb-4" style={{ color: 'var(--color-textSecondary)' }}>
             Discover companies whose culture aligns with your personality profile
           </p>
-          <Link to="/app/matches">
+          <Link to="/app/ember">
             <Button size="lg" rightIcon={<ArrowRight className="w-5 h-5" />}>View matches</Button>
           </Link>
         </motion.div>

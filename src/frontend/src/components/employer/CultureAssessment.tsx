@@ -406,7 +406,7 @@ export function CultureAssessment() {
                 View your insights
               </Button>
             </Link>
-            <Link to="/app/employer/candidates">
+            <Link to="/app/employer/top-candidates">
               <Button variant="ghost" className="w-full">
                 Browse candidates
               </Button>

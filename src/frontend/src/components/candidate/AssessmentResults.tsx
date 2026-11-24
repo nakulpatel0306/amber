@@ -92,7 +92,7 @@ export function AssessmentResults() {
       enhancedMessage="Ember now ranks every open role against these scores, and employers see you in their candidate lists."
       icon={<Brain className="w-10 h-10 text-white" />}
       profileUrl="/app/insights"
-      matchesUrl="/app/matches"
+      matchesUrl="/app/ember"
       profileLabel="View insights"
       matchesLabel="Find matches"
     />

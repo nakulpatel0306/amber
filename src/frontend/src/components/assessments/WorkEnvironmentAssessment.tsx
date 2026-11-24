@@ -153,7 +153,7 @@ export function WorkEnvironmentAssessment() {
         icon={<Building className="w-10 h-10 text-white" />}
         accentColor={ACCENT}
         profileUrl="/app/employer/insights"
-        matchesUrl="/app/employer/candidates"
+        matchesUrl="/app/employer/top-candidates"
         profileLabel="View culture profile"
         matchesLabel="Browse candidates"
       />

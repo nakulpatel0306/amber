@@ -248,7 +248,7 @@ export function CreateRole() {
               View all roles
             </Button>
             <Button
-              onClick={() => navigate('/app/employer/candidates')}
+              onClick={() => navigate('/app/employer/top-candidates')}
               rightIcon={<ArrowRight className="w-4 h-4" />}
             >
               Browse candidates

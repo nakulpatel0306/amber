@@ -10,7 +10,7 @@ export function EmployerQuickActions({ hasCompletedCultureQuiz }: EmployerQuickA
 
   const actions = [
     ...(hasCompletedCultureQuiz
-      ? [{ icon: Search, label: 'Browse candidates', onClick: () => navigate('/app/employer/candidates') }]
+      ? [{ icon: Search, label: 'Browse candidates', onClick: () => navigate('/app/employer/top-candidates') }]
       : [{ icon: Pencil, label: 'Define culture', onClick: () => navigate('/app/employer/culture-assessment') }]),
     { icon: Plus, label: 'Create role', onClick: () => navigate('/app/employer/roles/new') },
     { icon: MessageCircle, label: 'Coffee chats', onClick: () => navigate('/app/employer/chats') },

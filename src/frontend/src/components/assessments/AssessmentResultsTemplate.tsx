@@ -50,7 +50,7 @@ export function AssessmentResultsTemplate({
   icon,
   accentColor = 'var(--color-accent)',
   profileUrl = '/app/insights',
-  matchesUrl = '/app/matches',
+  matchesUrl = '/app/ember',
   profileLabel = 'View full profile',
   matchesLabel = 'Find matches',
 }: AssessmentResultsTemplateProps) {
