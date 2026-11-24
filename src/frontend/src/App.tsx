@@ -2,21 +2,22 @@
  * App.tsx — Root component and route configuration for the Amber frontend.
  *
  * Routes are organized into three groups:
- *   1. Public routes: Landing page, blog, about, legal pages (no auth required)
+ *   1. Public routes: the case-study landing page, the demo role picker, plans
  *   2. Auth routes: Login, signup, OAuth callback, role selection (guest only)
  *   3. Protected routes (/app/*): Dashboards, assessments, matching, settings
  *      - Candidate routes: /app/dashboard, /app/assessment, /app/insights, etc.
  *      - Employer routes: /app/employer/*, culture quiz, roles, candidates
  *      - Shared routes: /app/settings, /app/pricing
  *
- * The provider hierarchy is: ErrorBoundary > AuthProvider > ThemeProvider > ToastProvider
- * This ensures auth state is available to theming (user theme preference) and
+ * The provider hierarchy is: ErrorBoundary > MotionConfig > AuthProvider > ThemeProvider > ToastProvider
+ * MotionConfig makes every Framer Motion animation honor prefers-reduced-motion. This ensures auth state is available to theming (user theme preference) and
  * toast notifications are available to all components.
  *
- * Code Splitting: Route components are lazy-loaded to reduce initial bundle size.
- * The landing page loads instantly while other routes are fetched on demand.
+ * Code splitting: everything except the landing page, including the app layouts, is
+ * lazy-loaded, so a visitor reading the case study doesn't download the app.
  */
 import { lazy, Suspense } from 'react';
+import { MotionConfig } from 'framer-motion';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -24,9 +25,9 @@ import { ToastProvider } from './contexts/ToastContext';
 import { MessagingProvider } from './contexts/MessagingContext';
 import { ConnectionsProvider } from './contexts/ConnectionsContext';
 
-// Layout components (loaded eagerly - needed for app shell)
-import { AppLayout } from './components/layout/AppLayout';
-import { PublicLayout } from './components/layout/PublicLayout';
+// Layouts load with the first route that needs them, so the landing page skips the app shell
+const AppLayout = lazy(() => import('./components/layout/AppLayout').then(m => ({ default: m.AppLayout })));
+const PublicLayout = lazy(() => import('./components/layout/PublicLayout').then(m => ({ default: m.PublicLayout })));
 import { ErrorBoundary } from './components/layout/ErrorBoundary';
 import { RouteTitleSync } from './components/layout/RouteTitleSync';
 import { CoffeeBrewLoader } from './components/ui/CoffeeBrewLoader';
@@ -52,6 +53,7 @@ const Onboarding = lazy(() => import('./components/auth/Onboarding').then(m => (
 const EmailVerificationPage = lazy(() => import('./components/auth/EmailVerificationPage').then(m => ({ default: m.EmailVerificationPage })));
 
 // Lazy-loaded app pages
+const NotFoundPage = lazy(() => import('./components/pages/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
 const RolesPage = lazy(() => import('./components/pages/RolesPage').then(m => ({ default: m.RolesPage })));
 
 // Lazy-loaded dashboard components
@@ -114,6 +116,7 @@ function PageLoader() {
 function App() {
   return (
     <ErrorBoundary>
+      <MotionConfig reducedMotion="user">
       <AuthProvider>
         <ThemeProvider>
           <ToastProvider>
@@ -383,10 +386,10 @@ function App() {
                   <Route path="pricing" element={<PricingPage />} />
                   <Route path="settings" element={<SettingsPage />} />
                   <Route path="settings/:section" element={<SettingsPage />} />
+                  <Route path="*" element={<NotFoundPage inApp />} />
                 </Route>
 
-                {/* Catch all - 404 */}
-                <Route path="*" element={<Navigate to="/" replace />} />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
               </Suspense>
               </MessagingProvider>
@@ -395,6 +398,7 @@ function App() {
           </ToastProvider>
         </ThemeProvider>
       </AuthProvider>
+      </MotionConfig>
     </ErrorBoundary>
   );
 }
