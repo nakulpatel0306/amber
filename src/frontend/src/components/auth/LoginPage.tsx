@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Mail, Lock, Chrome, Github, ArrowLeft, Eye, EyeOff } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Mail, Lock, Chrome, Github } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
-import { AmberLogo } from '../ui/AmberLogo';
+import { AuthDivider, AuthShell, PasswordToggle, authLinkClass } from './AuthShell';
 import { APP_NAME } from '../../utils/constants';
-import { pageEntrance, formStagger, formItem } from '../../utils/motion';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -94,199 +92,78 @@ export function LoginPage() {
   };
 
   return (
-    <div
-      className="min-h-screen flex flex-col"
-      style={{ backgroundColor: 'var(--color-background)' }}
+    <AuthShell
+      title="Welcome back"
+      subtitle={`Sign in to your ${APP_NAME} account.`}
+      footer={
+        <>
+          Don't have an account?{' '}
+          <Link to="/auth/signup" className={authLinkClass}>
+            Sign up
+          </Link>
+        </>
+      }
     >
-      {/* Header */}
-      <header className="p-6">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
-          style={{ color: 'var(--color-textSecondary)' }}
+      <div className="space-y-3">
+        <Button
+          variant="secondary"
+          fullWidth
+          onClick={() => handleOAuthSignIn('google')}
+          leftIcon={<Chrome className="w-4 h-4" />}
+          disabled={isLoading}
         >
-          <ArrowLeft className="w-4 h-4" />
-          Back to home
-        </Link>
-      </header>
-
-      {/* Main content */}
-      <main className="flex-1 flex items-center justify-center px-4 pb-16">
-        <motion.div
-          className="w-full max-w-sm"
-          variants={pageEntrance}
-          initial="hidden"
-          animate="show"
+          Continue with Google
+        </Button>
+        <Button
+          variant="secondary"
+          fullWidth
+          onClick={() => handleOAuthSignIn('github')}
+          leftIcon={<Github className="w-4 h-4" />}
+          disabled={isLoading}
         >
-          {/* Logo */}
-          <div className="text-center mb-8">
-            <motion.div
-              className="flex justify-center mb-4"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-            >
-              <AmberLogo size="xl" animate />
-            </motion.div>
-            <h1
-              className="text-title"
-              style={{ color: 'var(--color-text)' }}
-            >
-              Welcome back
-            </h1>
-            <p
-              className="text-sm mt-2"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Sign in to your {APP_NAME} account
-            </p>
-          </div>
+          Continue with GitHub
+        </Button>
+      </div>
 
-          {/* OAuth buttons */}
-          <motion.div
-            className="space-y-3 mb-6"
-            variants={formStagger}
-            initial="hidden"
-            animate="show"
-          >
-            <motion.div variants={formItem}>
-              <Button
-                variant="secondary"
-                fullWidth
-                onClick={() => handleOAuthSignIn('google')}
-                leftIcon={<Chrome className="w-4 h-4" />}
-                disabled={isLoading}
-                className="hover:!border-blue-400 hover:!bg-blue-50 dark:hover:!bg-blue-950/20"
-              >
-                Continue with Google
-              </Button>
-            </motion.div>
-            <motion.div variants={formItem}>
-              <Button
-                variant="secondary"
-                fullWidth
-                onClick={() => handleOAuthSignIn('github')}
-                leftIcon={<Github className="w-4 h-4" />}
-                disabled={isLoading}
-                className="hover:!border-gray-500 hover:!bg-gray-50 dark:hover:!bg-gray-900/20"
-              >
-                Continue with GitHub
-              </Button>
-            </motion.div>
-          </motion.div>
+      <AuthDivider label="or with email" />
 
-          {/* Divider */}
-          <div className="relative my-6">
-            <div
-              className="absolute inset-0 flex items-center"
-              aria-hidden="true"
-            >
-              <motion.div
-                className="w-full border-t"
-                style={{ borderColor: 'var(--color-border)' }}
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.6, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
-              />
-            </div>
-            <div className="relative flex justify-center text-xs">
-              <motion.span
-                className="px-2"
-                style={{
-                  backgroundColor: 'var(--color-background)',
-                  color: 'var(--color-textMuted)',
-                }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: 0.5 }}
-              >
-                Or continue with email
-              </motion.span>
-            </div>
-          </div>
+      <form onSubmit={handleEmailSignIn} className="space-y-4" noValidate>
+        <Input
+          label="Email"
+          type="email"
+          autoComplete="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="you@example.com"
+          leftIcon={<Mail className="w-4 h-4" />}
+          error={errors.email}
+          disabled={isLoading}
+        />
 
-          {/* Email form */}
-          <motion.form
-            onSubmit={handleEmailSignIn}
-            className="space-y-4"
-            variants={formStagger}
-            initial="hidden"
-            animate="show"
-          >
-            <motion.div variants={formItem}>
-              <Input
-                label="Email"
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                leftIcon={<Mail className="w-4 h-4" />}
-                error={errors.email}
-                disabled={isLoading}
-              />
-            </motion.div>
-
-            <motion.div variants={formItem}>
-              <Input
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                leftIcon={<Lock className="w-4 h-4" />}
-                rightIcon={
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="focus:outline-none"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                }
-                error={errors.password}
-                disabled={isLoading}
-              />
-              <div className="flex justify-end mt-2">
-                <Link
-                  to="/auth/forgot-password"
-                  className="text-xs transition-colors"
-                  style={{ color: 'var(--color-accent)' }}
-                >
-                  Forgot password?
-                </Link>
-              </div>
-            </motion.div>
-
-            <motion.div variants={formItem}>
-              <Button type="submit" fullWidth isLoading={isLoading || isCheckingEmail}>
-                Sign in
-              </Button>
-            </motion.div>
-          </motion.form>
-
-          {/* Sign up link */}
-          <motion.p
-            className="text-center text-sm mt-6"
-            style={{ color: 'var(--color-textMuted)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            Don't have an account?{' '}
-            <Link
-              to="/auth/signup"
-              className="font-medium transition-colors"
-              style={{ color: 'var(--color-accent)' }}
-            >
-              Sign up
+        <div>
+          <Input
+            label="Password"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="current-password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="Your password"
+            leftIcon={<Lock className="w-4 h-4" />}
+            rightIcon={<PasswordToggle shown={showPassword} onToggle={() => setShowPassword(!showPassword)} />}
+            error={errors.password}
+            disabled={isLoading}
+          />
+          <div className="flex justify-end mt-2">
+            <Link to="/auth/forgot-password" className={`text-label ${authLinkClass}`}>
+              Forgot password?
             </Link>
-          </motion.p>
-        </motion.div>
-      </main>
-    </div>
+          </div>
+        </div>
+
+        <Button type="submit" fullWidth isLoading={isLoading || isCheckingEmail}>
+          Sign in
+        </Button>
+      </form>
+    </AuthShell>
   );
 }

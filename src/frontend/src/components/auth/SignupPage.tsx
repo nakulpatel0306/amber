@@ -5,22 +5,17 @@ import {
   Lock,
   Chrome,
   Github,
-  ArrowLeft,
-  Eye,
-  EyeOff,
   User,
   Building2,
   Check,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
-import { AmberLogo } from '../ui/AmberLogo';
+import { AuthDivider, AuthShell, PasswordToggle, authLinkClass } from './AuthShell';
+import { optionClass } from '../assessments/QuestionParts';
 import type { UserRole } from '../../types/auth.types';
-import { cn } from '../../utils/cn';
-import { pageEntrance } from '../../utils/motion';
 
 export function SignupPage() {
   const navigate = useNavigate();
@@ -129,261 +124,151 @@ export function SignupPage() {
   ];
 
   return (
-    <div
-      className="min-h-screen flex flex-col"
-      style={{ backgroundColor: 'var(--color-background)' }}
+    <AuthShell
+      title={step === 'role' ? 'Join Amber' : 'Create your account'}
+      subtitle={
+        step === 'role'
+          ? 'Choose how you want to use Amber.'
+          : `Signing up as ${role === 'candidate' ? 'a job seeker' : 'an employer'}.`
+      }
+      footer={
+        <>
+          Already have an account?{' '}
+          <Link to="/auth/login" className={authLinkClass}>
+            Sign in
+          </Link>
+        </>
+      }
     >
-      {/* Header */}
-      <header className="p-6">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
-          style={{ color: 'var(--color-textSecondary)' }}
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to home
-        </Link>
-      </header>
-
-      {/* Main content */}
-      <main className="flex-1 flex items-center justify-center px-4 pb-16">
-        <motion.div
-          className="w-full max-w-sm"
-          variants={pageEntrance}
-          initial="hidden"
-          animate="show"
-        >
-          {/* Logo */}
-          <div className="text-center mb-8">
-            <motion.div
-              className="flex justify-center mb-4"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-            >
-              <AmberLogo size="xl" animate />
-            </motion.div>
-            <h1
-              className="text-title"
-              style={{ color: 'var(--color-text)' }}
-            >
-              {step === 'role' ? 'Join Amber' : 'Create your account'}
-            </h1>
-            <p
-              className="text-sm mt-2"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              {step === 'role'
-                ? 'How will you be using Amber?'
-                : `Signing up as ${role === 'candidate' ? 'a job seeker' : 'an employer'}`}
-            </p>
-          </div>
-
-          {step === 'role' ? (
-            <>
-              {/* Role selection */}
-              <div className="space-y-3 mb-6">
-                {roleOptions.map(option => (
-                  <button
-                    key={option.id}
-                    onClick={() => setRole(option.id)}
-                    className={cn(
-                      'w-full flex items-start gap-4 p-4 rounded-xl border text-left transition-all',
-                      role === option.id
-                        ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/5'
-                        : 'border-[var(--color-border)] hover:border-[var(--color-borderHover)]'
-                    )}
-                    style={{
-                      backgroundColor:
-                        role === option.id
-                          ? undefined
-                          : 'var(--color-surface)',
-                    }}
-                  >
-                    <div
-                      className={cn(
-                        'w-10 h-10 rounded-xl flex items-center justify-center',
-                        role === option.id
-                          ? 'bg-[var(--color-accent)] text-white'
-                          : 'bg-[var(--color-background)]'
-                      )}
-                      style={{
-                        color:
-                          role === option.id
-                            ? undefined
-                            : 'var(--color-textSecondary)',
-                      }}
-                    >
-                      <option.icon className="w-5 h-5" />
-                    </div>
-                    <div className="flex-1">
-                      <p
-                        className="font-medium text-sm"
-                        style={{ color: 'var(--color-text)' }}
-                      >
+      {step === 'role' ? (
+        <>
+          <div className="space-y-3 mb-5" role="radiogroup" aria-label="Account type">
+            {roleOptions.map(option => {
+              const selected = role === option.id;
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => setRole(option.id)}
+                  className={optionClass(selected)}
+                >
+                  <div className="flex items-start gap-3">
+                    <option.icon
+                      className="w-5 h-5 mt-0.5 flex-shrink-0"
+                      style={{ color: selected ? 'var(--color-accent)' : 'var(--color-textSecondary)' }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
                         {option.label}
                       </p>
-                      <p
-                        className="text-xs mt-0.5"
-                        style={{ color: 'var(--color-textMuted)' }}
-                      >
+                      <p className="text-sm mt-0.5" style={{ color: 'var(--color-textSecondary)' }}>
                         {option.description}
                       </p>
                     </div>
-                    {role === option.id && (
-                      <Check
-                        className="w-5 h-5"
-                        style={{ color: 'var(--color-accent)' }}
-                      />
-                    )}
-                  </button>
-                ))}
-              </div>
+                    {selected && <Check className="w-4 h-4 mt-0.5" style={{ color: 'var(--color-accent)' }} />}
+                  </div>
+                </button>
+              );
+            })}
+          </div>
 
-              <Button fullWidth onClick={() => setStep('details')}>
-                Continue
-              </Button>
-            </>
-          ) : (
-            <>
-              {/* OAuth buttons */}
-              <div className="space-y-3 mb-6">
-                <Button
-                  variant="secondary"
-                  fullWidth
-                  onClick={() => handleOAuthSignUp('google')}
-                  leftIcon={<Chrome className="w-4 h-4" />}
-                  disabled={isLoading}
-                >
-                  Continue with Google
-                </Button>
-                <Button
-                  variant="secondary"
-                  fullWidth
-                  onClick={() => handleOAuthSignUp('github')}
-                  leftIcon={<Github className="w-4 h-4" />}
-                  disabled={isLoading}
-                >
-                  Continue with GitHub
-                </Button>
-              </div>
-
-              {/* Divider */}
-              <div className="relative my-6">
-                <div
-                  className="absolute inset-0 flex items-center"
-                  aria-hidden="true"
-                >
-                  <div
-                    className="w-full border-t"
-                    style={{ borderColor: 'var(--color-border)' }}
-                  />
-                </div>
-                <div className="relative flex justify-center text-xs">
-                  <span
-                    className="px-2"
-                    style={{
-                      backgroundColor: 'var(--color-background)',
-                      color: 'var(--color-textMuted)',
-                    }}
-                  >
-                    Or continue with email
-                  </span>
-                </div>
-              </div>
-
-              {/* Email form */}
-              <form onSubmit={handleEmailSignUp} className="space-y-4">
-                <Input
-                  label="Full name"
-                  type="text"
-                  value={fullName}
-                  onChange={e => setFullName(e.target.value)}
-                  placeholder="Your full name"
-                  leftIcon={<User className="w-4 h-4" />}
-                  error={errors.fullName}
-                  disabled={isLoading}
-                />
-
-                <Input
-                  label="Email"
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  leftIcon={<Mail className="w-4 h-4" />}
-                  error={errors.email}
-                  disabled={isLoading}
-                />
-
-                <Input
-                  label="Password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder="At least 8 characters"
-                  leftIcon={<Lock className="w-4 h-4" />}
-                  rightIcon={
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="focus:outline-none"
-                    >
-                      {showPassword ? (
-                        <EyeOff className="w-4 h-4" />
-                      ) : (
-                        <Eye className="w-4 h-4" />
-                      )}
-                    </button>
-                  }
-                  error={errors.password}
-                  disabled={isLoading}
-                />
-
-                <Input
-                  label="Confirm password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={confirmPassword}
-                  onChange={e => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm your password"
-                  leftIcon={<Lock className="w-4 h-4" />}
-                  error={errors.confirmPassword}
-                  disabled={isLoading}
-                />
-
-                <div className="flex gap-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setStep('role')}
-                    disabled={isLoading || isCheckingEmail}
-                  >
-                    Back
-                  </Button>
-                  <Button type="submit" fullWidth isLoading={isLoading || isCheckingEmail}>
-                    Create account
-                  </Button>
-                </div>
-              </form>
-            </>
-          )}
-
-          {/* Sign in link */}
-          <p
-            className="text-center text-sm mt-6"
-            style={{ color: 'var(--color-textMuted)' }}
-          >
-            Already have an account?{' '}
-            <Link
-              to="/auth/login"
-              className="font-medium transition-colors"
-              style={{ color: 'var(--color-accent)' }}
+          <Button fullWidth onClick={() => setStep('details')}>
+            Continue
+          </Button>
+        </>
+      ) : (
+        <>
+          <div className="space-y-3">
+            <Button
+              variant="secondary"
+              fullWidth
+              onClick={() => handleOAuthSignUp('google')}
+              leftIcon={<Chrome className="w-4 h-4" />}
+              disabled={isLoading}
             >
-              Sign in
-            </Link>
-          </p>
-        </motion.div>
-      </main>
-    </div>
+              Continue with Google
+            </Button>
+            <Button
+              variant="secondary"
+              fullWidth
+              onClick={() => handleOAuthSignUp('github')}
+              leftIcon={<Github className="w-4 h-4" />}
+              disabled={isLoading}
+            >
+              Continue with GitHub
+            </Button>
+          </div>
+
+          <AuthDivider label="or with email" />
+
+          <form onSubmit={handleEmailSignUp} className="space-y-4" noValidate>
+            <Input
+              label="Full name"
+              type="text"
+              autoComplete="name"
+              value={fullName}
+              onChange={e => setFullName(e.target.value)}
+              placeholder="Your full name"
+              leftIcon={<User className="w-4 h-4" />}
+              error={errors.fullName}
+              disabled={isLoading}
+            />
+
+            <Input
+              label="Email"
+              type="email"
+              autoComplete="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              leftIcon={<Mail className="w-4 h-4" />}
+              error={errors.email}
+              disabled={isLoading}
+            />
+
+            <Input
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="new-password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              placeholder="At least 8 characters"
+              leftIcon={<Lock className="w-4 h-4" />}
+              rightIcon={<PasswordToggle shown={showPassword} onToggle={() => setShowPassword(!showPassword)} />}
+              error={errors.password}
+              disabled={isLoading}
+            />
+
+            <Input
+              label="Confirm password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="new-password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              placeholder="Type it again"
+              leftIcon={<Lock className="w-4 h-4" />}
+              error={errors.confirmPassword}
+              disabled={isLoading}
+            />
+
+            <div className="flex gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setStep('role')}
+                disabled={isLoading || isCheckingEmail}
+              >
+                Back
+              </Button>
+              <Button type="submit" fullWidth isLoading={isLoading || isCheckingEmail}>
+                Create account
+              </Button>
+            </div>
+          </form>
+        </>
+      )}
+    </AuthShell>
   );
 }

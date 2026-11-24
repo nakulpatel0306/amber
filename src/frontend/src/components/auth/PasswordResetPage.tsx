@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, ArrowLeft, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Mail, Lock, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
-import { AmberLogo } from '../ui/AmberLogo';
+import { AuthShell, PasswordToggle, authLinkClass } from './AuthShell';
 
 type Step = 'request' | 'reset' | 'success';
 
@@ -86,154 +86,90 @@ export function PasswordResetPage() {
     }
   };
 
+  const titles: Record<Step, string> = {
+    request: 'Reset your password',
+    reset: 'Set a new password',
+    success: 'Check your email',
+  };
+  const subtitles: Record<Step, string> = {
+    request: "Enter your account's email and we'll send you a reset link.",
+    reset: 'Choose a new password for your account.',
+    success: `We sent a reset link to ${email}.`,
+  };
+
   return (
-    <div
-      className="min-h-screen flex flex-col"
-      style={{ backgroundColor: 'var(--color-background)' }}
-    >
-      {/* Header */}
-      <header className="p-6">
-        <Link
-          to="/auth/login"
-          className="inline-flex items-center gap-2 text-sm transition-colors hover:opacity-80"
-          style={{ color: 'var(--color-textSecondary)' }}
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to sign in
-        </Link>
-      </header>
+    <AuthShell title={titles[step]} subtitle={subtitles[step]} back={{ to: '/auth/login', label: 'Back to sign in' }}>
+      {step === 'request' && (
+        <form onSubmit={handleRequestReset} className="space-y-4" noValidate>
+          <Input
+            label="Email"
+            type="email"
+            autoComplete="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            leftIcon={<Mail className="w-4 h-4" />}
+            error={errors.email}
+            disabled={isLoading}
+          />
 
-      {/* Main content */}
-      <main className="flex-1 flex items-center justify-center px-4 pb-16">
-        <div className="w-full max-w-sm">
-          {/* Logo */}
-          <div className="text-center mb-8">
-            {step === 'success' ? (
-              <div
-                className="inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-4"
-                style={{
-                  backgroundColor: 'var(--color-success)',
-                }}
-              >
-                <CheckCircle2 className="w-6 h-6 text-white" />
-              </div>
-            ) : (
-              <div className="flex justify-center mb-4">
-                <AmberLogo size="md" />
-              </div>
-            )}
-            <h1
-              className="text-title"
-              style={{ color: 'var(--color-text)' }}
-            >
-              {step === 'request' && 'Forgot password?'}
-              {step === 'reset' && 'Set new password'}
-              {step === 'success' && 'Check your email'}
-            </h1>
-            <p
-              className="text-sm mt-2"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              {step === 'request' &&
-                "No worries, we'll send you reset instructions"}
-              {step === 'reset' && 'Enter your new password below'}
-              {step === 'success' &&
-                `We've sent a password reset link to ${email}`}
-            </p>
-          </div>
+          <Button type="submit" fullWidth isLoading={isLoading}>
+            Send reset link
+          </Button>
+        </form>
+      )}
 
-          {/* Request form */}
-          {step === 'request' && (
-            <form onSubmit={handleRequestReset} className="space-y-4">
-              <Input
-                label="Email"
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                leftIcon={<Mail className="w-4 h-4" />}
-                error={errors.email}
-                disabled={isLoading}
-              />
+      {step === 'reset' && (
+        <form onSubmit={handleUpdatePassword} className="space-y-4" noValidate>
+          <Input
+            label="New password"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="new-password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="At least 8 characters"
+            leftIcon={<Lock className="w-4 h-4" />}
+            rightIcon={<PasswordToggle shown={showPassword} onToggle={() => setShowPassword(!showPassword)} />}
+            error={errors.password}
+            disabled={isLoading}
+          />
 
-              <Button type="submit" fullWidth isLoading={isLoading}>
-                Send reset link
-              </Button>
-            </form>
-          )}
+          <Input
+            label="Confirm new password"
+            type={showPassword ? 'text' : 'password'}
+            autoComplete="new-password"
+            value={confirmPassword}
+            onChange={e => setConfirmPassword(e.target.value)}
+            placeholder="Type it again"
+            leftIcon={<Lock className="w-4 h-4" />}
+            error={errors.confirmPassword}
+            disabled={isLoading}
+          />
 
-          {/* Reset form */}
-          {step === 'reset' && (
-            <form onSubmit={handleUpdatePassword} className="space-y-4">
-              <Input
-                label="New password"
-                type={showPassword ? 'text' : 'password'}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="At least 8 characters"
-                leftIcon={<Lock className="w-4 h-4" />}
-                rightIcon={
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="focus:outline-none"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-4 h-4" />
-                    ) : (
-                      <Eye className="w-4 h-4" />
-                    )}
-                  </button>
-                }
-                error={errors.password}
-                disabled={isLoading}
-              />
+          <Button type="submit" fullWidth isLoading={isLoading}>
+            Update password
+          </Button>
+        </form>
+      )}
 
-              <Input
-                label="Confirm new password"
-                type={showPassword ? 'text' : 'password'}
-                value={confirmPassword}
-                onChange={e => setConfirmPassword(e.target.value)}
-                placeholder="Confirm your password"
-                leftIcon={<Lock className="w-4 h-4" />}
-                error={errors.confirmPassword}
-                disabled={isLoading}
-              />
+      {step === 'success' && (
+        <div className="space-y-4">
+          <p className="flex items-start gap-2 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+            <CheckCircle2 className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-success)' }} />
+            <span>
+              Didn't get it? Check your spam folder, or{' '}
+              <button type="button" onClick={() => setStep('request')} className={authLinkClass}>
+                try another email address
+              </button>
+              .
+            </span>
+          </p>
 
-              <Button type="submit" fullWidth isLoading={isLoading}>
-                Update password
-              </Button>
-            </form>
-          )}
-
-          {/* Success state */}
-          {step === 'success' && (
-            <div className="space-y-4">
-              <p
-                className="text-sm text-center"
-                style={{ color: 'var(--color-textSecondary)' }}
-              >
-                Didn't get the email? Check your spam folder or{' '}
-                <button
-                  onClick={() => setStep('request')}
-                  className="font-medium"
-                  style={{ color: 'var(--color-accent)' }}
-                >
-                  Try another email address
-                </button>
-              </p>
-
-              <Button
-                variant="secondary"
-                fullWidth
-                onClick={() => navigate('/auth/login')}
-              >
-                Back to sign in
-              </Button>
-            </div>
-          )}
+          <Button variant="secondary" fullWidth onClick={() => navigate('/auth/login')}>
+            Back to sign in
+          </Button>
         </div>
-      </main>
-    </div>
+      )}
+    </AuthShell>
   );
 }
