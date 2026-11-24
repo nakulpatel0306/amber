@@ -1287,15 +1287,13 @@ function ProcessCard() {
 
   return (
     <div
-      className="relative rounded-xl p-5 sm:p-7 h-full overflow-hidden flex flex-col"
+      className="relative rounded-xl p-5 sm:p-7 overflow-hidden flex flex-col"
       style={{
         backgroundColor: 'var(--color-surface)',
         border: '1px solid var(--color-border)',
       }}
     >
-
-      <div className="relative flex flex-col h-full">
-
+      <div className="relative flex flex-col">
         <AnimatePresence mode="wait">
           <motion.p
             key={step.number}
@@ -1311,11 +1309,10 @@ function ProcessCard() {
         </AnimatePresence>
 
         <div
-          className="relative flex-1 rounded-lg overflow-hidden border mb-5"
+          className="relative rounded-lg overflow-hidden border mb-5"
           style={{
             borderColor: 'var(--color-border)',
             backgroundColor: 'color-mix(in srgb, var(--color-background) 60%, transparent)',
-            minHeight: 280,
           }}
         >
           <div
@@ -1347,7 +1344,8 @@ function ProcessCard() {
             </div>
           </div>
 
-          <div className="relative w-full" style={{ height: 'calc(100% - 26px)' }}>
+          {/* Fixed height: the scenes are absolutely positioned, so nothing else gives this box a size */}
+          <div className="relative w-full h-[440px] sm:h-[400px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
@@ -1411,25 +1409,17 @@ function ProcessCard() {
 
 export function FeatureBento() {
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
+    <section className="px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
       <div className="max-w-5xl mx-auto">
-        <motion.div
-          className="max-w-2xl mb-10"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-        >
+        <div className="max-w-2xl mb-10">
           <h2 className="text-headline" style={{ color: 'var(--color-text)' }}>
             A tour of the product
           </h2>
           <p className="mt-4 text-base sm:text-lg leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
             Recreations of the four screens a job seeker moves through, from the dashboard to booking a coffee chat.
           </p>
-        </motion.div>
-        <div className="min-h-[600px] sm:min-h-[560px]">
-          <ProcessCard />
         </div>
+        <ProcessCard />
       </div>
     </section>
   );
