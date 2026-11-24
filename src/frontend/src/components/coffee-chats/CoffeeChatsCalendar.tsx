@@ -384,11 +384,12 @@ function WeekCalendar({
   const scrollRef = useRef<HTMLDivElement>(null);
   const hasScrolled = useRef(false);
 
-  // Auto-scroll to ~current hour on first render
+  // Auto-scroll to the current hour on first render, or to the working day outside it
   useEffect(() => {
     if (scrollRef.current && !hasScrolled.current) {
-      const now = new Date();
-      const scrollTo = Math.max(0, (getHours(now) - 1) * HOUR_HEIGHT);
+      const hour = getHours(new Date());
+      const anchor = hour >= 8 && hour <= 20 ? hour - 1 : 7;
+      const scrollTo = anchor * HOUR_HEIGHT;
       scrollRef.current.scrollTop = scrollTo;
       hasScrolled.current = true;
     }
@@ -516,7 +517,7 @@ function WeekCalendar({
                 key={h}
                 className="absolute right-1.5 text-[9px] font-medium"
                 style={{
-                  top: `${(h - START_HOUR) * HOUR_HEIGHT - 5}px`,
+                  top: `${Math.max(0, (h - START_HOUR) * HOUR_HEIGHT - 5)}px`,
                   color: 'var(--color-textMuted)',
                 }}
               >
