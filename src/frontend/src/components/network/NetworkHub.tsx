@@ -474,7 +474,7 @@ export function NetworkHub() {
                 className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
                 style={{ color: 'var(--color-textMuted)' }}
               >
-                People, companies and roles, with hobbies up front
+                What people do outside work, from both sides of the table
               </p>
 
               {/* Stat pills */}
