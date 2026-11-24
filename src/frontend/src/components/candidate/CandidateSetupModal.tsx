@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useDialogFocus } from '../../hooks/useDialogFocus';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -274,6 +275,10 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
     }
   };
 
+  const dialogRef = useRef<HTMLDivElement>(null);
+  // Escape means the same as Skip for now
+  useDialogFocus(dialogRef, isOpen, handleSkip);
+
   if (!isOpen) return null;
 
   const firstName = profile?.full_name?.split(' ')[0] || 'there';
@@ -284,6 +289,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
 
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-labelledby="candidate-setup-title"

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useDialogFocus } from '../../hooks/useDialogFocus';
 import { ArrowRight, ArrowLeft, Check } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -230,6 +231,10 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
     }
   };
 
+  const dialogRef = useRef<HTMLDivElement>(null);
+  // Escape means the same as Skip for now
+  useDialogFocus(dialogRef, isOpen, handleSkip);
+
   if (!isOpen) return null;
 
   const firstName = profile?.full_name?.split(' ')[0] || 'there';
@@ -241,6 +246,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
 
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-labelledby="employer-setup-title"

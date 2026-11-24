@@ -281,7 +281,8 @@ export function MessagePanel({
             onKeyDown={handleKeyDown}
             placeholder="Type a message…"
             rows={1}
-            className="flex-1 min-w-0 px-3 py-2 rounded-lg text-sm resize-none focus:outline-none"
+            aria-label="Message"
+            className="flex-1 min-w-0 px-3 py-2 rounded-lg text-sm resize-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
             style={{
               backgroundColor: 'var(--color-background)',
               color: 'var(--color-text)',

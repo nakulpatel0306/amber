@@ -6,6 +6,7 @@ import { useToast } from '../../contexts/ToastContext';
 import { Button } from '../ui/Button';
 import { supabase } from '../../lib/supabase';
 import { HOBBIES, getHobbyById, type Hobby } from '../../data/hobbies';
+import { useDialogFocus } from '../../hooks/useDialogFocus';
 
 export type PostVisibility = 'everyone' | 'connections' | 'job_seekers' | 'employers';
 
@@ -215,6 +216,9 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
     }
   };
 
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogFocus(dialogRef, isOpen, onClose);
+
   if (!isOpen) return null;
 
   return (
@@ -238,6 +242,10 @@ export function NewPostModal({ isOpen, onClose }: NewPostModalProps) {
         onClick={onClose}
       >
         <div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Create post"
           className="relative w-full max-w-xl max-h-[85vh] rounded-xl overflow-hidden border"
           style={{
             backgroundColor: 'var(--color-backgroundSecondary)',

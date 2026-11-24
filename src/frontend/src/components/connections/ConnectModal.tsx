@@ -129,7 +129,8 @@ export function ConnectModal({
                 if (words.length <= 100) setMessage(e.target.value);
               }}
               rows={3}
-              className="w-full px-3 py-2 rounded-lg text-sm resize-none focus:outline-none"
+              aria-label="Message"
+              className="w-full px-3 py-2 rounded-lg text-sm resize-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
               style={{
                 backgroundColor: 'var(--color-background)',
                 color: 'var(--color-text)',

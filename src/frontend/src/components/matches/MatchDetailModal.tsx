@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useDialogFocus } from '../../hooks/useDialogFocus';
 import { useNavigate } from 'react-router-dom';
 import { X, Bookmark, BookmarkCheck, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { Button } from '../ui/Button';
@@ -179,14 +180,8 @@ export function MatchDetailModal({
     };
   }, [isOpen, fetchEmberAnalysis]);
 
-  /* Close on Escape */
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    if (isOpen) window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [isOpen, onClose]);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useDialogFocus(dialogRef, isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -211,6 +206,7 @@ export function MatchDetailModal({
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-label={matchData.name}

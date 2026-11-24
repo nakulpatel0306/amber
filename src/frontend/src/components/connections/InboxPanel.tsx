@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { X, Check } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useConnections } from '../../contexts/ConnectionsContext';
@@ -7,6 +7,7 @@ import { useToast } from '../../contexts/ToastContext';
 import { Button } from '../ui/Button';
 import { ScheduleModal } from '../coffee-chats/ScheduleModal';
 import type { Connection } from '../../types/connections.types';
+import { useDialogFocus } from '../../hooks/useDialogFocus';
 
 interface InboxPanelProps {
   isOpen: boolean;
@@ -97,6 +98,9 @@ export function InboxPanel({ isOpen, onClose }: InboxPanelProps) {
     onClose();
   };
 
+  const panelRef = useRef<HTMLDivElement>(null);
+  useDialogFocus(panelRef, isOpen, onClose);
+
   if (!isOpen) return null;
 
   return (
@@ -104,6 +108,10 @@ export function InboxPanel({ isOpen, onClose }: InboxPanelProps) {
       <div className="fixed inset-0 z-40 modal-backdrop" onClick={onClose} />
 
       <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Connection requests"
         className="fixed top-0 right-0 bottom-0 z-50 w-full max-w-sm border-l animate-slide-in-right"
         style={{
           backgroundColor: 'var(--color-surface)',

@@ -46,7 +46,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               'transition-[border-color,box-shadow] duration-150 ease-out-strong',
               'focus:outline-none',
               'disabled:opacity-50 disabled:cursor-not-allowed',
-              'placeholder:text-[var(--color-textMuted)] placeholder:opacity-70',
+              'placeholder:text-[var(--color-textMuted)]',
               leftIcon ? 'pl-10' : 'pl-4',
               rightIcon ? 'pr-10' : 'pr-4',
               'py-2.5',
@@ -124,7 +124,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             'transition-[border-color,box-shadow] duration-150 ease-out-strong',
             'focus:outline-none',
             'disabled:opacity-50 disabled:cursor-not-allowed',
-            'placeholder:text-[var(--color-textMuted)] placeholder:opacity-70',
+            'placeholder:text-[var(--color-textMuted)]',
             'px-4 py-3',
             error
               ? 'border-[var(--color-error)] focus:[box-shadow:0_0_0_2px_var(--color-error)]'

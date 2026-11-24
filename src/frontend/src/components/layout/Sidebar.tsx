@@ -85,6 +85,8 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
         <button
           onClick={() => setCollapsed(!collapsed)}
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          aria-expanded={!collapsed}
           className="hidden md:flex items-center gap-2 transition-transform hover:scale-105 overflow-hidden whitespace-nowrap"
         >
           <AmberLogo size="sm" />

@@ -23,6 +23,7 @@ export function MobileTopBar({ onMenuClick }: MobileTopBarProps) {
     >
       <button
         onClick={onMenuClick}
+        aria-label="Open menu"
         className="p-2 -ml-2 rounded-lg transition-colors hover:bg-[var(--color-surfaceHover)]"
         style={{ color: 'var(--color-textSecondary)' }}
       >

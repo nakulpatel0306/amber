@@ -91,6 +91,7 @@ export function Toast({
       </div>
       <button
         onClick={handleClose}
+        aria-label="Dismiss notification"
         className="flex-shrink-0 p-1 rounded-lg transition-colors hover:bg-[var(--color-surface)]"
         style={{ color: 'var(--color-textMuted)' }}
       >

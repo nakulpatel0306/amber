@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useDialogFocus } from '../../hooks/useDialogFocus';
 import { User, Pencil } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -28,6 +29,8 @@ export function ProfileSection() {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showAvatarPicker, setShowAvatarPicker] = useState(false);
+  const avatarDialogRef = useRef<HTMLDivElement>(null);
+  useDialogFocus(avatarDialogRef, showAvatarPicker, () => setShowAvatarPicker(false));
 
   const [formData, setFormData] = useState({
     full_name: profile?.full_name || '',
@@ -181,6 +184,10 @@ export function ProfileSection() {
           />
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <div
+              ref={avatarDialogRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Choose your avatar"
               className="w-full max-w-md rounded-2xl p-6 shadow-xl"
               style={{
                 backgroundColor: 'var(--color-background)',

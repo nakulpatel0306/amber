@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bookmark, Star, Clock, User } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
+import { useDialogFocus } from '../../hooks/useDialogFocus';
 
 interface SavedCandidate {
   id: string;
@@ -16,6 +17,8 @@ export function BookmarkDropdown() {
   const { user, isEmployer } = useAuth();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+  useDialogFocus(panelRef, isOpen, () => setIsOpen(false));
   const [savedCandidates, setSavedCandidates] = useState<SavedCandidate[]>([]);
 
   useEffect(() => {
@@ -67,12 +70,16 @@ export function BookmarkDropdown() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={savedCandidates.length > 0 ? `Saved candidates, ${savedCandidates.length}` : 'Saved candidates'}
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
         className="p-2 rounded-lg transition-colors hover:bg-[var(--color-surface)] relative"
         style={{ color: 'var(--color-textSecondary)' }}
       >
         <Bookmark className="w-5 h-5" />
         {savedCandidates.length > 0 && (
           <span
+            aria-hidden="true"
             className="absolute -top-0.5 -right-0.5 flex items-center justify-center rounded-full text-[10px] font-semibold text-white"
             style={{
               backgroundColor: 'var(--color-accent)',
@@ -96,6 +103,9 @@ export function BookmarkDropdown() {
 
           {/* Dropdown */}
           <div
+            ref={panelRef}
+            role="dialog"
+            aria-label="Saved candidates"
             className="absolute right-0 top-full mt-2 w-80 rounded-xl border shadow-lg z-50 overflow-hidden"
             style={{
               backgroundColor: 'var(--color-surface)',

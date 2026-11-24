@@ -1,7 +1,8 @@
-import { useEffect, useRef, Fragment, type ReactNode } from 'react';
+import { useEffect, useId, useRef, Fragment, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { cn } from '../../utils/cn';
 import { X } from 'lucide-react';
+import { useDialogFocus } from '../../hooks/useDialogFocus';
 
 export interface ModalProps {
   isOpen: boolean;
@@ -41,19 +42,9 @@ export function Modal({
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Handle escape key
-  useEffect(() => {
-    if (!closeOnEscape) return;
-
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, onClose, closeOnEscape]);
+  useDialogFocus(contentRef, isOpen, closeOnEscape ? onClose : undefined);
+  const titleId = useId();
+  const descriptionId = useId();
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -65,45 +56,6 @@ export function Modal({
 
     return () => {
       document.body.style.overflow = '';
-    };
-  }, [isOpen]);
-
-  // Focus trap — cycle Tab/Shift+Tab within modal, restore focus on close
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const previouslyFocused = document.activeElement as HTMLElement | null;
-    const content = contentRef.current;
-    if (content) content.focus();
-
-    const handleTab = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab' || !content) return;
-
-      const focusable = content.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), textarea, input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      );
-      if (focusable.length === 0) return;
-
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-
-      if (e.shiftKey) {
-        if (document.activeElement === first || document.activeElement === content) {
-          e.preventDefault();
-          last.focus();
-        }
-      } else {
-        if (document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleTab);
-    return () => {
-      document.removeEventListener('keydown', handleTab);
-      previouslyFocused?.focus();
     };
   }, [isOpen]);
 
@@ -128,8 +80,8 @@ export function Modal({
           ref={contentRef}
           role="dialog"
           aria-modal="true"
-          aria-labelledby={title ? 'modal-title' : undefined}
-          aria-describedby={description ? 'modal-description' : undefined}
+          aria-labelledby={title ? titleId : undefined}
+          aria-describedby={description ? descriptionId : undefined}
           tabIndex={-1}
           className={cn(
             'relative w-full rounded-2xl p-6 [box-shadow:var(--shadow-lg)]',
@@ -153,7 +105,7 @@ export function Modal({
                 'transition-colors hover:bg-[var(--color-surface)]'
               )}
               style={{ color: 'var(--color-textMuted)' }}
-              aria-label="Close modal"
+              aria-label="Close"
             >
               <X className="w-5 h-5" />
             </button>
@@ -164,7 +116,7 @@ export function Modal({
             <div className="mb-6 pr-8">
               {title && (
                 <h2
-                  id="modal-title"
+                  id={titleId}
                   className="text-lg font-semibold"
                   style={{ color: 'var(--color-text)' }}
                 >
@@ -173,7 +125,7 @@ export function Modal({
               )}
               {description && (
                 <p
-                  id="modal-description"
+                  id={descriptionId}
                   className="mt-1 text-sm"
                   style={{ color: 'var(--color-textMuted)' }}
                 >

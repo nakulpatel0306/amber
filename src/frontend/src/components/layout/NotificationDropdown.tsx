@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
+import { useDialogFocus } from '../../hooks/useDialogFocus';
 
 interface Notification {
   id: string;
@@ -65,6 +66,8 @@ export function NotificationDropdown() {
   const { user, profile, isEmployer } = useAuth();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+  useDialogFocus(panelRef, isOpen, () => setIsOpen(false));
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [readIds, setReadIds] = useState<Set<string>>(new Set());
   const [dismissedIds, setDismissedIds] = useState<Set<string>>(new Set());
@@ -468,12 +471,16 @@ export function NotificationDropdown() {
       <button
         ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
+        aria-label={unreadCount > 0 ? `Notifications, ${unreadCount} unread` : 'Notifications'}
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
         className="p-2 rounded-lg transition-colors hover:bg-[var(--color-surface)] relative"
         style={{ color: 'var(--color-textSecondary)' }}
       >
         <Bell className="w-5 h-5" />
         {unreadCount > 0 && (
           <span
+            aria-hidden="true"
             className="absolute -top-0.5 -right-0.5 flex items-center justify-center rounded-full text-[10px] font-semibold text-white"
             style={{
               backgroundColor: 'var(--color-error)',
@@ -495,6 +502,9 @@ export function NotificationDropdown() {
           />
 
           <div
+            ref={panelRef}
+            role="dialog"
+            aria-label="Notifications"
             className="fixed w-80 rounded-xl border shadow-lg z-50 overflow-hidden"
             style={{
               backgroundColor: 'var(--color-surface)',
@@ -591,9 +601,10 @@ export function NotificationDropdown() {
                           e.stopPropagation();
                           dismissOne(notif.id);
                         }}
-                        className="absolute top-3 right-3 p-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity hover:bg-[var(--color-surfaceHover)]"
+                        className="absolute top-3 right-3 p-1 rounded-md opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity hover:bg-[var(--color-surfaceHover)]"
                         style={{ color: 'var(--color-textMuted)' }}
                         title="Dismiss"
+                        aria-label="Dismiss notification"
                       >
                         <X className="w-3.5 h-3.5" />
                       </button>
