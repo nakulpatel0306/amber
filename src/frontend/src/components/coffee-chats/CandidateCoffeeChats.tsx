@@ -12,7 +12,7 @@ import { deriveDisplayStatus } from '../../utils/coffeeChatStatus';
 import { CoffeeChatDetailModal } from './CoffeeChatDetailModal';
 import { PageBanner } from '../ui/PageBanner';
 import { InboxPanel } from '../connections/InboxPanel';
-import { Coffee, UserPlus } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 import { useConnections } from '../../contexts/ConnectionsContext';
 import { pageEntrance } from '../../utils/motion';
 import { apiFetch } from '../../utils/api';
@@ -176,7 +176,6 @@ export function CandidateCoffeeChats() {
       <PageBanner
         title="Coffee chats"
         subtitle="Connect with teams over casual conversations"
-        icon={Coffee}
         rightContent={
           <button
             onClick={() => setInboxOpen(true)}
@@ -186,7 +185,7 @@ export function CandidateCoffeeChats() {
             <UserPlus className="w-5 h-5" style={{ color: 'var(--color-textSecondary)' }} />
             {pendingReceivedCount > 0 && (
               <span
-                className="absolute -top-0.5 -right-0.5 flex items-center justify-center rounded-full text-[9px] font-bold text-white"
+                className="absolute -top-0.5 -right-0.5 flex items-center justify-center rounded-full text-[9px] font-semibold text-white"
                 style={{ backgroundColor: 'var(--color-accent)', minWidth: '16px', height: '16px', padding: '0 3px' }}
               >
                 {pendingReceivedCount}

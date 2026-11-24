@@ -29,7 +29,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const baseStyles = cn(
       'inline-flex items-center justify-center gap-2',
-      'font-semibold rounded-lg',
+      'font-medium rounded-lg',
       'transition-[transform,background-color,color,box-shadow,border-color] duration-150 ease-out-strong',
       'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
       'disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none',
@@ -40,11 +40,8 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const variants = {
       primary: cn(
         'bg-[var(--color-accent)] text-[var(--color-accentText)]',
-        'hover:bg-[var(--color-accentHover)] hover:-translate-y-px',
-        'active:translate-y-0',
-        'focus-visible:ring-[var(--color-accent)]',
-        'shadow-sm hover:shadow-md',
-        '[box-shadow:var(--shadow-sm)] hover:[box-shadow:var(--shadow-glow)]'
+        'hover:bg-[var(--color-accentHover)]',
+        'focus-visible:ring-[var(--color-accent)]'
       ),
       secondary: cn(
         'bg-[var(--color-surface)] text-[var(--color-text)]',
@@ -77,10 +74,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const sizes = {
-      xs: 'px-2.5 py-1 text-xs font-medium',
-      sm: 'px-3 py-1.5 text-sm font-medium',
-      md: 'px-4 py-2.5 text-sm',
-      lg: 'px-6 py-3 text-base',
+      xs: 'min-h-7 px-2.5 py-1 text-xs',
+      sm: 'min-h-8 px-3 py-1 text-label',
+      md: 'min-h-10 px-4 py-2 text-sm',
+      lg: 'min-h-11 px-5 py-2.5 text-sm',
       icon: 'h-9 w-9 p-0',
     };
 

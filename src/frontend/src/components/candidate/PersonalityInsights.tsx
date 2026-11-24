@@ -1,3 +1,4 @@
+import { Facts } from '../ui/Facts';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -307,7 +308,7 @@ export function PersonalityInsights() {
           <div className="w-20 h-20 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}>
             <Brain className="w-10 h-10" style={{ color: 'var(--color-trait-openness)' }} />
           </div>
-          <h1 className="text-3xl font-serif font-normal tracking-tight mb-4" style={{ color: 'var(--color-text)' }}>Discover your personality</h1>
+          <h1 className="text-title mb-4" style={{ color: 'var(--color-text)' }}>Discover your personality</h1>
           <p className="mb-6 max-w-sm mx-auto" style={{ color: 'var(--color-textSecondary)' }}>
             Take the personality assessment to unlock your insights and find jobs that truly fit your style.
           </p>
@@ -439,42 +440,7 @@ export function PersonalityInsights() {
         <PageBanner
           title={primaryArchetype}
           subtitle={tagline}
-          iconNode={
-            <div
-              className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background: 'linear-gradient(135deg, #b45309, #d97706, #f59e0b)' }}
-            >
-              <Brain className="w-7 h-7 text-white" />
-            </div>
-          }
-          belowSubtitle={
-            <div className="flex flex-wrap items-center gap-2.5 mt-3">
-              {([
-                { label: 'Strongest', value: OCEAN_INFO[dominantDimension]?.label || 'Openness', color: 'var(--color-trait-openness)', Icon: Brain },
-                { label: 'Style', value: decisionStyle, color: 'var(--color-trait-conscientiousness)', Icon: Compass },
-                { label: 'Top score', value: `${sortedScores[0]?.[1] || 0}%`, color: '#f59e0b', Icon: TrendingUp },
-              ] as const).map(stat => (
-                <span
-                  key={stat.label}
-                  className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full text-[11px] font-semibold"
-                  style={{
-                    background: `linear-gradient(135deg, ${stat.color}18, ${stat.color}08)`,
-                    border: `1px solid ${stat.color}30`,
-                    color: 'var(--color-text)',
-                  }}
-                >
-                  <span
-                    className="w-6 h-6 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: `${stat.color}20` }}
-                  >
-                    <stat.Icon className="w-3 h-3" style={{ color: stat.color }} />
-                  </span>
-                  <span className="font-extrabold" style={{ color: stat.color }}>{stat.value}</span>
-                  <span style={{ color: 'var(--color-textSecondary)' }}>{stat.label}</span>
-                </span>
-              ))}
-            </div>
-          }
+          belowSubtitle={<Facts items={[{ label: 'Strongest trait', value: OCEAN_INFO[dominantDimension]?.label || 'Openness' }, { label: 'Decision style', value: decisionStyle }, { label: 'Top score', value: `${sortedScores[0]?.[1] || 0}%` }]} />}
           rightContent={
             <div className="flex items-center gap-3 flex-wrap">
               <ProfileCompleteness completedCount={completionCount} variant="ring" size="sm" showLabel={false} />
@@ -522,12 +488,12 @@ export function PersonalityInsights() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+            <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
               <Brain className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
               OCEAN profile
             </h2>
             {completionCount > 1 && (
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mt-1 mb-3" style={{ color: 'var(--color-accent)' }}>
+              <p className="text-caption mt-1 mb-3" style={{ color: 'var(--color-accent)' }}>
                 Enhanced with {completionCount - 1} supplementary assessment{completionCount > 2 ? 's' : ''}
               </p>
             )}
@@ -540,7 +506,7 @@ export function PersonalityInsights() {
               onDimensionClick={(key) => setSelectedDimension(selectedDimension === key ? null : key as keyof typeof OCEAN_INFO)}
               selectedDimension={selectedDimension}
             />
-            <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-center mt-2" style={{ color: 'var(--color-textMuted)' }}>
+            <p className="text-caption text-center mt-2" style={{ color: 'var(--color-textMuted)' }}>
               Click a dimension to explore
             </p>
           </motion.div>
@@ -561,7 +527,7 @@ export function PersonalityInsights() {
               />
             ) : (
               <div>
-                <h2 className="text-base font-bold tracking-tight mb-2 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+                <h2 className="text-base font-semibold tracking-tight mb-2 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
                   <Layers className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
                   Dimension breakdown
                 </h2>
@@ -630,12 +596,12 @@ export function PersonalityInsights() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+            <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
               <Sparkles className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
               Your personality archetypes
             </h2>
-            <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4" style={{ color: 'var(--color-textMuted)' }}>
-              Work, Lead, Collaborate //
+            <p className="text-label mb-4" style={{ color: 'var(--color-textMuted)' }}>
+              Work, lead, collaborate
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {personalityData.top_traits.slice(0, 3).map((trait, index) => {
@@ -664,7 +630,7 @@ export function PersonalityInsights() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
         >
-          <h2 className="text-base font-bold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-base font-semibold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Puzzle className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
             Thinking & operating style
           </h2>
@@ -692,7 +658,7 @@ export function PersonalityInsights() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <h2 className="text-base font-bold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-base font-semibold tracking-tight mb-4 flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Battery className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
             Your energy map
           </h2>
@@ -733,12 +699,12 @@ export function PersonalityInsights() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35 }}
         >
-          <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Building2 className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
             Environments you thrive in
           </h2>
-          <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4" style={{ color: 'var(--color-textMuted)' }}>
-            Ideal work settings //
+          <p className="text-label mb-4" style={{ color: 'var(--color-textMuted)' }}>
+            Ideal work settings
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
@@ -785,12 +751,12 @@ export function PersonalityInsights() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Leaf className="w-5 h-5" style={{ color: 'var(--color-trait-conscientiousness)' }} />
             Growth edges
           </h2>
-          <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-4" style={{ color: 'var(--color-textMuted)' }}>
-            Room to Grow //
+          <p className="text-label mb-4" style={{ color: 'var(--color-textMuted)' }}>
+            Room to grow
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {sortedScores.slice(-2).map(([key, value]) => {
@@ -826,28 +792,28 @@ export function PersonalityInsights() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.45 }}
         >
-          <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <TrendingUp className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
             Compatibility signals
           </h2>
-          <p className="font-mono text-[10px] uppercase tracking-[0.25em] mb-3" style={{ color: 'var(--color-textMuted)' }}>
-            Team & Culture Fit //
+          <p className="text-label mb-3" style={{ color: 'var(--color-textMuted)' }}>
+            Team and culture fit
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Company size</p>
+              <p className="text-caption mb-1" style={{ color: 'var(--color-textMuted)' }}>Company size</p>
               <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
                 {scores.conscientiousness > 65 ? 'Mid-size to enterprise' : scores.openness > 65 ? 'Startups to mid-size' : 'Flexible across sizes'}
               </p>
             </div>
             <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Team dynamic</p>
+              <p className="text-caption mb-1" style={{ color: 'var(--color-textMuted)' }}>Team dynamic</p>
               <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
                 {scores.extraversion > 65 ? 'Collaborative & social' : scores.extraversion < 35 ? 'Small & focused' : 'Balanced teams'}
               </p>
             </div>
             <div className="p-4 rounded-xl" style={{ backgroundColor: 'var(--color-background)' }}>
-              <p className="font-mono text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: 'var(--color-textMuted)' }}>Management style</p>
+              <p className="text-caption mb-1" style={{ color: 'var(--color-textMuted)' }}>Management style</p>
               <p className="font-semibold text-sm" style={{ color: 'var(--color-text)' }}>
                 {scores.conscientiousness > 65 ? 'Structured & clear' : scores.openness > 65 ? 'Autonomous & trust-based' : 'Supportive & flexible'}
               </p>
@@ -867,12 +833,12 @@ export function PersonalityInsights() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <h2 className="text-base font-bold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-base font-semibold tracking-tight flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
             <Rocket className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
             Enhance your profile
           </h2>
           <div className="flex items-center justify-between mb-4">
-            <p className="font-mono text-[10px] uppercase tracking-[0.25em]" style={{ color: 'var(--color-textMuted)' }}>
+            <p className="text-label" style={{ color: 'var(--color-textMuted)' }}>
               Complete more assessments for a more accurate personality picture
             </p>
             <ProfileCompleteness completedCount={completionCount} variant="ring" size="sm" showLabel={false} />
@@ -966,7 +932,7 @@ export function PersonalityInsights() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <h3 className="text-base font-bold tracking-tight mb-2" style={{ color: 'var(--color-text)' }}>Ready to find your match?</h3>
+          <h3 className="text-base font-semibold tracking-tight mb-2" style={{ color: 'var(--color-text)' }}>Ready to find your match?</h3>
           <p className="text-sm mb-4" style={{ color: 'var(--color-textSecondary)' }}>
             Discover companies whose culture aligns with your personality profile
           </p>
@@ -998,7 +964,7 @@ function DimensionDetail({
             <info.icon className="w-6 h-6" style={{ color: info.color }} />
           </div>
           <div>
-            <h2 className="text-base font-bold tracking-tight" style={{ color: 'var(--color-text)' }}>{info.fullLabel}</h2>
+            <h2 className="text-base font-semibold tracking-tight" style={{ color: 'var(--color-text)' }}>{info.fullLabel}</h2>
             <p className="text-sm" style={{ color: info.color }}>Score: {score}/100</p>
           </div>
         </div>

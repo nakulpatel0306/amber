@@ -1,102 +1,35 @@
-import { type LucideIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '../../utils/cn';
 
 interface PageBannerProps {
   title: string;
   subtitle?: string;
-  icon?: LucideIcon;
-  iconNode?: React.ReactNode;
   rightContent?: React.ReactNode;
   belowSubtitle?: React.ReactNode;
   className?: string;
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
-  },
-};
-
-const childVariants = {
-  hidden: { opacity: 0, y: 6 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] as const },
-  },
-};
-
-const rightVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { duration: 0.4, delay: 0.3 },
-  },
-};
-
-export function PageBanner({ title, subtitle, icon: Icon, iconNode, rightContent, belowSubtitle, className }: PageBannerProps) {
+// The one page header: a plain title row, no card, so the page content is the first surface
+export function PageBanner({ title, subtitle, rightContent, belowSubtitle, className }: PageBannerProps) {
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className={cn(
-        'bento-card rounded-2xl p-5 sm:p-6 mb-6',
-        className
-      )}
+    <motion.header
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+      className={cn('mb-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-4', className)}
     >
-      {/* Wraps the right-hand actions under the title when they don't fit beside it */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-5 flex-1 min-w-[min(100%,18rem)]">
-          {iconNode ? (
-            <motion.div variants={childVariants} className="hidden sm:block flex-shrink-0">
-              {iconNode}
-            </motion.div>
-          ) : Icon ? (
-            <motion.div
-              variants={childVariants}
-              className="hidden sm:flex w-12 h-12 rounded-xl items-center justify-center flex-shrink-0"
-              style={{
-                background:
-                  'linear-gradient(135deg, var(--color-accent), color-mix(in srgb, var(--color-accent) 60%, black))',
-              }}
-            >
-              <Icon className="w-6 h-6 text-white" />
-            </motion.div>
-          ) : null}
-          <div className="min-w-0">
-            <motion.h1
-              variants={childVariants}
-              className="text-3xl sm:text-4xl font-serif font-normal tracking-tight leading-none"
-              style={{ color: 'var(--color-text)' }}
-            >
-              {title}
-            </motion.h1>
-            {subtitle && (
-              <motion.p
-                variants={childVariants}
-                className="font-mono text-[10px] uppercase tracking-[0.25em] mt-2"
-                style={{ color: 'var(--color-textMuted)' }}
-              >
-                {subtitle}
-              </motion.p>
-            )}
-            {belowSubtitle && (
-              <motion.div variants={childVariants}>
-                {belowSubtitle}
-              </motion.div>
-            )}
-          </div>
-        </div>
-        {rightContent && (
-          <motion.div variants={rightVariants} className="flex flex-wrap items-center gap-2">
-            {rightContent}
-          </motion.div>
+      <div className="min-w-0 flex-1 basis-[min(100%,20rem)]">
+        <h1 className="text-title" style={{ color: 'var(--color-text)' }}>
+          {title}
+        </h1>
+        {subtitle && (
+          <p className="mt-1.5 text-sm" style={{ color: 'var(--color-textSecondary)' }}>
+            {subtitle}
+          </p>
         )}
+        {belowSubtitle}
       </div>
-    </motion.div>
+      {rightContent && <div className="flex flex-wrap items-center gap-2">{rightContent}</div>}
+    </motion.header>
   );
 }

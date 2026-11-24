@@ -1,3 +1,4 @@
+import { Facts } from '../ui/Facts';
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -17,7 +18,7 @@ import { AcceptWithDateModal } from './AcceptWithDateModal';
 import { PageBanner } from '../ui/PageBanner';
 import { Button } from '../ui/Button';
 import { InboxPanel } from '../connections/InboxPanel';
-import { Coffee, UserPlus, Clock, CheckCircle2, CalendarDays } from 'lucide-react';
+import { Coffee, UserPlus } from 'lucide-react';
 import { useConnections } from '../../contexts/ConnectionsContext';
 import { deriveDisplayStatus, type DisplayStatus } from '../../utils/coffeeChatStatus';
 import { apiFetch } from '../../utils/api';
@@ -316,42 +317,7 @@ export function EmployerCoffeeChats() {
       <PageBanner
         title="Coffee chats"
         subtitle="Manage conversations with potential hires"
-        iconNode={
-          <div
-            className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0"
-            style={{ background: 'linear-gradient(135deg, #b45309, #d97706, #f59e0b)' }}
-          >
-            <Coffee className="w-7 h-7 text-white" />
-          </div>
-        }
-        belowSubtitle={
-          <div className="flex flex-wrap items-center gap-2.5 mt-3">
-            {([
-              { label: 'Pending', value: statCounts.pending, color: '#f59e0b', Icon: Clock },
-              { label: 'Upcoming', value: statCounts.upcoming, color: '#06B6D4', Icon: CalendarDays },
-              { label: 'Completed', value: statCounts.completed, color: '#10B981', Icon: CheckCircle2 },
-            ] as const).map(stat => (
-              <span
-                key={stat.label}
-                className="inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full text-[11px] font-semibold"
-                style={{
-                  background: `linear-gradient(135deg, ${stat.color}18, ${stat.color}08)`,
-                  border: `1px solid ${stat.color}30`,
-                  color: 'var(--color-text)',
-                }}
-              >
-                <span
-                  className="w-6 h-6 rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: `${stat.color}20` }}
-                >
-                  <stat.Icon className="w-3 h-3" style={{ color: stat.color }} />
-                </span>
-                <span className="font-extrabold tabular-nums" style={{ color: stat.color }}>{stat.value}</span>
-                <span style={{ color: 'var(--color-textSecondary)' }}>{stat.label}</span>
-              </span>
-            ))}
-          </div>
-        }
+        belowSubtitle={<Facts items={[{ label: 'Pending', value: statCounts.pending }, { label: 'Upcoming', value: statCounts.upcoming }, { label: 'Completed', value: statCounts.completed }]} />}
         rightContent={
           <div className="flex items-center gap-3 flex-wrap">
             <Button size="sm" leftIcon={<Coffee className="w-3.5 h-3.5" />} onClick={() => navigate('/app/employer/ember')}>
@@ -361,7 +327,7 @@ export function EmployerCoffeeChats() {
               Requests
               {pendingReceivedCount > 0 && (
                 <span
-                  className="absolute -top-1.5 -right-1.5 flex items-center justify-center rounded-full text-[9px] font-bold text-white"
+                  className="absolute -top-1.5 -right-1.5 flex items-center justify-center rounded-full text-[9px] font-semibold text-white"
                   style={{ backgroundColor: 'var(--color-accent)', minWidth: '16px', height: '16px', padding: '0 3px' }}
                 >
                   {pendingReceivedCount}
@@ -386,7 +352,7 @@ export function EmployerCoffeeChats() {
           >
             {tab.label}
             <span
-              className="text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px]"
+              className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full min-w-[20px]"
               style={{
                 backgroundColor: activeTab === tab.value ? 'color-mix(in srgb, var(--color-accentText) 20%, transparent)' : 'var(--color-background)',
                 color: activeTab === tab.value ? 'var(--color-accentText)' : 'var(--color-textMuted)',

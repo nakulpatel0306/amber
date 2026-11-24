@@ -11,25 +11,25 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = 'default', padding = 'md', hover = false, ...props }, ref) => {
     const variants = {
       default: 'bg-[var(--color-surface)] border border-[var(--color-border)]',
-      bordered: 'bg-[var(--color-surface)] border-2 border-[var(--color-border)]',
-      elevated: 'bg-[var(--color-surface)] border border-[var(--color-border)] shadow-soft',
+      bordered: 'bg-[var(--color-surface)] border border-[var(--color-border)]',
+      elevated: 'bg-[var(--color-surface)] border border-[var(--color-border)]',
     };
 
     const paddings = {
       none: '',
       sm: 'p-4',
-      md: 'p-6',
-      lg: 'p-8',
+      md: 'p-5',
+      lg: 'p-6',
     };
 
     return (
       <div
         ref={ref}
         className={cn(
-          'rounded-xl transition-[border-color,box-shadow,transform] duration-200 ease-out-strong',
+          'rounded-xl transition-colors duration-200 ease-out-strong',
           variants[variant],
           paddings[padding],
-          hover && 'hover:border-[var(--color-borderHover)] hover:shadow-soft cursor-pointer',
+          hover && 'hover:border-[var(--color-borderHover)] cursor-pointer',
           className
         )}
         {...props}
@@ -63,7 +63,7 @@ const CardTitle = forwardRef<HTMLHeadingElement, CardTitleProps>(
     <h3
       ref={ref}
       className={cn(
-        'text-lg font-semibold leading-none tracking-tight',
+        'text-heading',
         className
       )}
       style={{ color: 'var(--color-text)' }}
