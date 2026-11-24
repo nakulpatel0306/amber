@@ -460,7 +460,7 @@ export function JobSeekerDashboard() {
 
   return (
     <motion.div
-      className="max-w-7xl mx-auto px-6 py-6 space-y-5"
+      className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-5"
       variants={dashboardStagger}
       initial="hidden"
       animate="show"
@@ -491,8 +491,8 @@ export function JobSeekerDashboard() {
           accentBorder
           tags={avgMatchScore > 0 ? [
             { label: `Best ${bestMatchScore}%`, shade: 'light' as const },
-            { label: `${matchesAvailable} Roles Analyzed`, shade: 'medium' as const },
-            { label: `${uniqueCompanies} ${uniqueCompanies === 1 ? 'Company' : 'Companies'}`, shade: 'dark' as const },
+            { label: `${matchesAvailable} roles analyzed`, shade: 'medium' as const },
+            { label: `${uniqueCompanies} ${uniqueCompanies === 1 ? 'company' : 'companies'}`, shade: 'dark' as const },
           ] : hasCompletedAssessment ? [
             { label: 'Assessment complete', shade: 'light' as const },
             { label: 'Awaiting roles', shade: 'medium' as const },
@@ -512,8 +512,8 @@ export function JobSeekerDashboard() {
           }
           accentBorder
           tags={matchesAvailable > 0 ? [
-            { label: `${matchesAvailable} Active`, shade: 'light' as const },
-            { label: `${uniqueCompanies} ${uniqueCompanies === 1 ? 'Company' : 'Companies'}`, shade: 'medium' as const },
+            { label: `${matchesAvailable} active`, shade: 'light' as const },
+            { label: `${uniqueCompanies} ${uniqueCompanies === 1 ? 'company' : 'companies'}`, shade: 'medium' as const },
             { label: 'Explore', shade: 'dark' as const },
           ] : []}
           onClick={() => navigate('/app/roles')}
@@ -529,9 +529,9 @@ export function JobSeekerDashboard() {
           }
           accentBorder
           tags={(pendingChats + acceptedChats + completedChats) > 0 ? [
-            ...(pendingChats > 0 ? [{ label: `${pendingChats} Pending`, shade: 'light' as const }] : []),
-            ...(acceptedChats > 0 ? [{ label: `${acceptedChats} Scheduled`, shade: 'medium' as const }] : []),
-            ...(completedChats > 0 ? [{ label: `${completedChats} Completed`, shade: 'dark' as const }] : []),
+            ...(pendingChats > 0 ? [{ label: `${pendingChats} pending`, shade: 'light' as const }] : []),
+            ...(acceptedChats > 0 ? [{ label: `${acceptedChats} scheduled`, shade: 'medium' as const }] : []),
+            ...(completedChats > 0 ? [{ label: `${completedChats} completed`, shade: 'dark' as const }] : []),
           ] : [
             { label: 'Get started', shade: 'light' as const },
           ]}

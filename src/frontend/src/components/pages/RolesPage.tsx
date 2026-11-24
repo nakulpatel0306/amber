@@ -165,7 +165,7 @@ export function RolesPage() {
   if (showLoader) return <CoffeeBrewLoader variant="fullscreen" message="Loading roles..." />;
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-6 space-y-5">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-5">
       {/* Header */}
       <motion.div
         className="bento-card p-6"

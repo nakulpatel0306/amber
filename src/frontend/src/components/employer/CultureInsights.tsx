@@ -578,7 +578,7 @@ export function CultureInsights() {
   };
 
   return (
-    <div className="min-h-screen py-8 px-4" style={{ backgroundColor: 'var(--color-background)' }}>
+    <div className="min-h-screen py-6 px-4 sm:px-6" style={{ backgroundColor: 'var(--color-background)' }}>
       <div className="max-w-7xl mx-auto">
 
         {/* 1. Hero / Profile Header */}

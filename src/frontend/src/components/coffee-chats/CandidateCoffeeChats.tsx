@@ -168,7 +168,7 @@ export function CandidateCoffeeChats() {
 
   return (
     <motion.div
-      className="max-w-7xl mx-auto px-6 py-4"
+      className="max-w-7xl mx-auto px-4 sm:px-6 py-6"
       variants={pageEntrance}
       initial="hidden"
       animate="show"
