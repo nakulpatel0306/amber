@@ -299,7 +299,7 @@ export function SignupPage() {
                   type="text"
                   value={fullName}
                   onChange={e => setFullName(e.target.value)}
-                  placeholder="John Doe"
+                  placeholder="Your full name"
                   leftIcon={<User className="w-4 h-4" />}
                   error={errors.fullName}
                   disabled={isLoading}

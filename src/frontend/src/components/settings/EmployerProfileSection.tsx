@@ -343,7 +343,7 @@ export function EmployerProfileSection() {
           type="url"
           value={data.company_website}
           onChange={(e) => handleChange('company_website', e.target.value)}
-          placeholder="https://yourcompany.com"
+          placeholder="https://"
           leftIcon={<Globe className="w-4 h-4" />}
         />
       </div>

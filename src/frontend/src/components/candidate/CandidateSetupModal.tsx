@@ -628,7 +628,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
                   type="url"
                   value={data.portfolio_url}
                   onChange={(e) => setData({ ...data, portfolio_url: e.target.value })}
-                  placeholder="https://yourportfolio.com"
+                  placeholder="https://"
                   leftIcon={<LinkIcon className="w-4 h-4" />}
                 />
 

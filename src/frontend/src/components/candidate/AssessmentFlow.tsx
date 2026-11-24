@@ -179,7 +179,7 @@ export function AssessmentFlow() {
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  placeholder="jane doe"
+                  placeholder="Your name"
                   className="w-full px-4 py-3 rounded-xl border text-sm focus:outline-none focus:ring-2"
                   style={{
                     backgroundColor: 'var(--color-background)',

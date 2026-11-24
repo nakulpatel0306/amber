@@ -468,13 +468,13 @@ export function NetworkHub() {
                 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight"
                 style={{ color: 'var(--color-text)' }}
               >
-                Your local café
+                Network
               </h1>
               <p
                 className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
                 style={{ color: 'var(--color-textMuted)' }}
               >
-                Discover people through hobbies, interests & personality
+                People, companies and roles, with hobbies up front
               </p>
 
               {/* Stat pills */}

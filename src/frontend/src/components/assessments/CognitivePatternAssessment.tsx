@@ -114,7 +114,7 @@ export function CognitivePatternAssessment() {
         title="Cognitive style results"
         subtitle="Here's what your thinking style reveals about your cognitive approach"
         dimensions={dimensions}
-        enhancedMessage="Your cognitive patterns have been factored into your personality profile with a 10% weight, making your matches more nuanced."
+        enhancedMessage="Your cognitive patterns have been factored into your personality profile with an 11% weight, making your matches more nuanced."
         icon={<GraduationCap className="w-10 h-10 text-white" />}
         accentColor="#06B6D4"
       />

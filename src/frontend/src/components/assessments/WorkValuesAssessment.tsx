@@ -114,7 +114,7 @@ export function WorkValuesAssessment() {
         title="Drive & motivation results"
         subtitle="Here's what your work values reveal about your motivational drivers"
         dimensions={dimensions}
-        enhancedMessage="Your work values have been factored into your personality profile with a 15% weight, making your culture matches more accurate."
+        enhancedMessage="Your work values have been factored into your personality profile with a 12% weight, making your culture matches more accurate."
         icon={<Scale className="w-10 h-10 text-white" />}
         accentColor="#10B981"
       />

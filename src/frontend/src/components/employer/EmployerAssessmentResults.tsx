@@ -86,12 +86,11 @@ export function EmployerAssessmentResults() {
 
   return (
     <AssessmentResultsTemplate
-      title="Culture profile complete!"
+      title="Culture profile complete"
       subtitle="Your ideal candidate profile has been created"
       dimensions={dimensions}
-      enhancedMessage="Your culture profile is now active. Start discovering candidates who match your ideal culture fit."
+      enhancedMessage="Ember now ranks candidates against this profile. Set trait ranges on each role to sharpen the ranking."
       icon={<Building2 className="w-10 h-10 text-white" />}
-      accentColor="#8B5CF6"
       profileUrl="/app/employer/insights"
       matchesUrl="/app/employer/candidates"
       profileLabel="View insights"

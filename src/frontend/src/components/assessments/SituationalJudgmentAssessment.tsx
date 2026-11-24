@@ -114,7 +114,7 @@ export function SituationalJudgmentAssessment() {
         title="Social energy results"
         subtitle="Here's what your workplace responses reveal about your behavioral tendencies"
         dimensions={dimensions}
-        enhancedMessage="Your situational judgment responses have been factored into your personality profile with a 15% weight, improving the accuracy of your behavioral predictions."
+        enhancedMessage="Your situational judgment responses have been factored into your personality profile with a 12% weight, improving the accuracy of your behavioral predictions."
         icon={<Shield className="w-10 h-10 text-white" />}
         accentColor="#F59E0B"
       />

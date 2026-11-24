@@ -551,7 +551,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
                   type="url"
                   value={data.company_website}
                   onChange={(e) => setData({ ...data, company_website: e.target.value })}
-                  placeholder="https://yourcompany.com"
+                  placeholder="https://"
                   leftIcon={<Globe className="w-4 h-4" />}
                 />
 

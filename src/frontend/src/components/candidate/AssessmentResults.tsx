@@ -86,12 +86,11 @@ export function AssessmentResults() {
 
   return (
     <AssessmentResultsTemplate
-      title="Assessment complete!"
-      subtitle="Your personality profile has been created"
+      title="Assessment complete"
+      subtitle="Here is how you scored on the five OCEAN traits"
       dimensions={dimensions}
-      enhancedMessage="Your OCEAN profile is now active. Employers can discover you based on culture fit."
+      enhancedMessage="Ember now ranks every open role against these scores, and employers see you in their candidate lists."
       icon={<Brain className="w-10 h-10 text-white" />}
-      accentColor="#8B5CF6"
       profileUrl="/app/insights"
       matchesUrl="/app/matches"
       profileLabel="View insights"

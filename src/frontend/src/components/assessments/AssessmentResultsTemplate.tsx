@@ -78,8 +78,8 @@ export function AssessmentResultsTemplate({
           <motion.div
             className="w-20 h-20 rounded-3xl mx-auto mb-5 flex items-center justify-center"
             style={{ backgroundColor: accentColor }}
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.1, duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
           >
             {icon}
@@ -171,7 +171,7 @@ export function AssessmentResultsTemplate({
           </div>
         </motion.div>
 
-        {/* Profile Enhanced */}
+        {/* What the result changes */}
         <motion.div
           className="bento-card p-4 mb-6 flex items-start gap-3"
           initial={{ opacity: 0, y: 20 }}
@@ -180,13 +180,13 @@ export function AssessmentResultsTemplate({
         >
           <div
             className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-            style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)' }}
+            style={{ backgroundColor: 'color-mix(in srgb, var(--color-success) 12%, transparent)' }}
           >
-            <CheckCircle2 className="w-4 h-4" style={{ color: '#10B981' }} />
+            <CheckCircle2 className="w-4 h-4" style={{ color: 'var(--color-success)' }} />
           </div>
           <div>
             <p className="text-sm font-medium mb-1" style={{ color: 'var(--color-text)' }}>
-              Profile enhanced
+              Profile updated
             </p>
             <p className="text-xs" style={{ color: 'var(--color-textMuted)' }}>
               {enhancedMessage}
@@ -196,7 +196,7 @@ export function AssessmentResultsTemplate({
 
         {/* CTAs */}
         <motion.div
-          className="flex gap-3 justify-center"
+          className="flex flex-col-reverse sm:flex-row gap-3 justify-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.0 }}

@@ -374,7 +374,7 @@ export function CandidateProfileSection() {
           type="url"
           value={data.portfolio_url}
           onChange={(e) => handleChange('portfolio_url', e.target.value)}
-          placeholder="https://yourportfolio.com"
+          placeholder="https://"
         />
       </div>
 
