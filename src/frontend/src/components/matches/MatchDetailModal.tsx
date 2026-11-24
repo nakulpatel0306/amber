@@ -302,8 +302,7 @@ export function MatchDetailModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-8 px-4"
-      style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(4px)' }}
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-8 px-4 modal-backdrop"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div

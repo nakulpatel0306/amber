@@ -598,7 +598,7 @@ export function ProfileEditModal({ isOpen, onClose }: ProfileEditModalProps) {
 
       {/* Hobby Picker Sub-Modal */}
       {showHobbyPicker && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 modal-backdrop">
           <div
             className="w-full max-w-2xl max-h-[80vh] overflow-hidden rounded-2xl"
             style={{ backgroundColor: 'var(--color-surface)' }}

@@ -290,7 +290,7 @@ export function CandidateSetupModal({ isOpen, onClose, onComplete, redirectToAss
     <>
       {/* Backdrop with blur */}
       <div
-        className="fixed inset-0 z-40 bg-black/60 backdrop-blur-md"
+        className="fixed inset-0 z-40 modal-backdrop"
         aria-hidden="true"
       />
 

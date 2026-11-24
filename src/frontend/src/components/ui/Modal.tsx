@@ -114,7 +114,7 @@ export function Modal({
       <div
         ref={overlayRef}
         className={cn(
-          'fixed inset-0 z-50 bg-black/60 backdrop-blur-md',
+          'fixed inset-0 z-50 modal-backdrop',
           'animate-fade-in'
         )}
         onClick={closeOnOverlayClick ? onClose : undefined}

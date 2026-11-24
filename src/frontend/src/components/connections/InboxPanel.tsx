@@ -103,7 +103,7 @@ export function InboxPanel({ isOpen, onClose }: InboxPanelProps) {
   return (
     <>
       {/* Overlay */}
-      <div className="fixed inset-0 z-40 bg-black/30" onClick={onClose} />
+      <div className="fixed inset-0 z-40 modal-backdrop" onClick={onClose} />
 
       {/* Panel */}
       <div

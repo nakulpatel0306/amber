@@ -246,7 +246,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
       {mobileOpen && (
         <>
           <div
-            className="md:hidden fixed inset-0 z-40 bg-black/50"
+            className="md:hidden fixed inset-0 z-40 modal-backdrop"
             onClick={onMobileClose}
           />
           <aside

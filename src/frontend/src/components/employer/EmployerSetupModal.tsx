@@ -247,7 +247,7 @@ export function EmployerSetupModal({ isOpen, onClose, onComplete }: EmployerSetu
     <>
       {/* Backdrop with blur */}
       <div
-        className="fixed inset-0 z-40 bg-black/60 backdrop-blur-md"
+        className="fixed inset-0 z-40 modal-backdrop"
         aria-hidden="true"
       />
 

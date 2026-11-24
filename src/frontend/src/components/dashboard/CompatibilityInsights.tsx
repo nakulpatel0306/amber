@@ -304,12 +304,8 @@ export function CompatibilityInsights({ viewerRole = 'candidate' }: Compatibilit
           onClick={closeModal}
         >
           <div
-            className="absolute inset-0 transition-opacity duration-400"
-            style={{
-              backdropFilter: modalEntering ? 'blur(12px)' : 'blur(0px)',
-              WebkitBackdropFilter: modalEntering ? 'blur(12px)' : 'blur(0px)',
-              backgroundColor: modalEntering ? 'rgba(0,0,0,0.5)' : 'rgba(0,0,0,0)',
-            }}
+            className="absolute inset-0 modal-backdrop transition-opacity duration-300"
+            style={{ opacity: modalEntering ? 1 : 0 }}
           />
 
           <div

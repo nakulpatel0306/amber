@@ -884,6 +884,13 @@ input[type="range"].slider-thumb::-moz-range-thumb:active {
   animation: modalEnter 0.25s var(--ease-out) forwards;
 }
 
+/* One backdrop for every modal and drawer. A light blur keeps it cheap to paint. */
+.modal-backdrop {
+  background-color: rgb(0 0 0 / 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
 /* Floating coffee beans animation */
 @keyframes floatBean {
   0% {
