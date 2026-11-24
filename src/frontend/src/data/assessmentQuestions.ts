@@ -38,7 +38,7 @@ export const candidateQuestions: AssessmentQuestion[] = [
   {
     id: 'c1',
     type: 'scenario',
-    category: 'Work Style',
+    category: 'Work style',
     question: "It's Friday afternoon. A major client just called with an urgent request that could land a huge contract. Your team has plans for the weekend.",
     description: "What's your natural first instinct?",
     options: [
@@ -499,7 +499,7 @@ export const workValuesQuestions: AssessmentQuestion[] = [
   {
     id: 'wv2',
     type: 'scenario',
-    category: 'Work Style',
+    category: 'Work style',
     question: 'Imagine your ideal workday. Which sounds most appealing?',
     description: 'Pick the one that energizes you most.',
     options: [
@@ -938,7 +938,7 @@ export const cognitivePatternQuestions: AssessmentQuestion[] = [
   {
     id: 'cp1',
     type: 'scenario',
-    category: 'Problem Solving',
+    category: 'Problem solving',
     question: "You encounter a complex bug that's been stumping the team for days. How do you approach it?",
     description: 'Choose the approach that feels most natural to you.',
     options: [
@@ -974,7 +974,7 @@ export const cognitivePatternQuestions: AssessmentQuestion[] = [
   {
     id: 'cp2',
     type: 'scenario',
-    category: 'Learning Style',
+    category: 'Learning style',
     question: "You need to learn a completely new technology stack for an upcoming project. How do you start?",
     description: 'What does your learning process look like?',
     options: [
@@ -1010,7 +1010,7 @@ export const cognitivePatternQuestions: AssessmentQuestion[] = [
   {
     id: 'cp3',
     type: 'tradeoff',
-    category: 'Decision Making',
+    category: 'Decision making',
     question: "When making a decision with incomplete information, which approach do you lean toward?",
     description: 'Pick the option that resonates more with how you naturally decide.',
     options: [
@@ -1034,7 +1034,7 @@ export const cognitivePatternQuestions: AssessmentQuestion[] = [
   {
     id: 'cp4',
     type: 'scenario',
-    category: 'Thinking Style',
+    category: 'Thinking style',
     question: 'When explaining a complex concept to a colleague, which technique do you reach for first?',
     description: 'How do you make the abstract concrete?',
     options: [
@@ -1169,7 +1169,7 @@ export const employerQuestions: AssessmentQuestion[] = [
   {
     id: 'e1',
     type: 'scenario',
-    category: 'Hiring Values',
+    category: 'Hiring values',
     question: "Two final candidates: One has perfect skills but average culture fit. The other has great culture fit but needs some skill development.",
     options: [
       {
@@ -1239,7 +1239,7 @@ export const employerQuestions: AssessmentQuestion[] = [
   {
     id: 'e3',
     type: 'tradeoff',
-    category: 'Decision Making',
+    category: 'Decision making',
     question: 'When making important decisions, which do you prioritize?',
     options: [
       {
@@ -1654,7 +1654,7 @@ export const teamDynamicsQuestions: AssessmentQuestion[] = [
   {
     id: 'td2',
     type: 'slider',
-    category: 'Team Style',
+    category: 'Team style',
     question: 'Where does your team culture fall on the collaboration spectrum?',
     sliderConfig: {
       min: 0,
