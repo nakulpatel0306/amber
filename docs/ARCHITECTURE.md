@@ -204,7 +204,7 @@ layouts, guards, and the landing page load eagerly on the critical path.
 
 | Path | Contents |
 |------|----------|
-| `components/ui/` | Design system - `Button`, `Input`, `Card`, `Modal`, `Toast`, `Avatar`, charts (`RadarChart`, `OceanRadar`), loaders, `AmberLogo`, etc. All theme via CSS variables. |
+| `components/ui/` | Design system - `Button`, `Input`, `Card`, `Modal`, `Toast`, `Avatar`, charts (`RadarChart`, `OceanMindMap`), loaders, `AmberLogo`, etc. All theme via CSS variables. |
 | `components/auth/` | Login, signup, OAuth callback, role selection, onboarding, route guards (`ProtectedRoute`, `GuestRoute`) |
 | `components/layout/` | `AppLayout`, `PublicLayout`, `Sidebar`, `Navbar`, `ErrorBoundary`, `RouteTitleSync`, notification/bookmark dropdowns |
 | `components/landing/` | Case-study landing page: hero, product tour, matching explainer, architecture diagram |
