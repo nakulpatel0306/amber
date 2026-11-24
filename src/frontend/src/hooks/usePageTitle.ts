@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 
-const SUFFIX = 'Amber | Culture match';
+export const SITE_TITLE = 'Amber - Culture-first job matching';
 
-/**
- * Sets document.title to "Page · Amber | Culture match".
- * Pass an empty string to show just the suffix.
- */
+/** "Page · Amber", or the full site title for an empty string. */
+export function formatTitle(page: string): string {
+  return page ? `${page} · Amber` : SITE_TITLE;
+}
+
+/** Sets document.title for the lifetime of the calling component. */
 export function usePageTitle(page: string) {
   useEffect(() => {
     const prev = document.title;
-    document.title = page ? `${page} · ${SUFFIX}` : SUFFIX;
+    document.title = formatTitle(page);
     return () => {
       document.title = prev;
     };
