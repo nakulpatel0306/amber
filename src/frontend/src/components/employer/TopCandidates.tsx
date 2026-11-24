@@ -586,7 +586,7 @@ export function TopCandidates() {
             >
               Pipeline
               {(pipelineCounts.saved + pipelineCounts.pending + pipelineCounts.connected) > 0 && (
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: 'var(--color-surfaceHover)' }}>
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ backgroundColor: activeView === 'pipeline' ? 'color-mix(in srgb, var(--color-accentText) 20%, transparent)' : 'var(--color-surfaceHover)' }}>
                   {pipelineCounts.saved + pipelineCounts.pending + pipelineCounts.connected}
                 </span>
               )}

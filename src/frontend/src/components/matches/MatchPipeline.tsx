@@ -77,7 +77,7 @@ export function MatchPipeline({
             <span
               className="text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px]"
               style={{
-                backgroundColor: activeTab === tab.value ? 'var(--color-surfaceHover)' : 'var(--color-background)',
+                backgroundColor: activeTab === tab.value ? 'color-mix(in srgb, var(--color-accentText) 20%, transparent)' : 'var(--color-background)',
                 color: activeTab === tab.value ? 'var(--color-accentText)' : 'var(--color-textMuted)',
               }}
             >

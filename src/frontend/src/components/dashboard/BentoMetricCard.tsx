@@ -19,9 +19,9 @@ interface BentoMetricCardProps {
 }
 
 const tagStyles: Record<string, { bg: string; color: string }> = {
-  light: { bg: 'rgba(251, 191, 36, 0.10)', color: '#FBBF24' },
-  medium: { bg: 'rgba(245, 158, 11, 0.14)', color: '#F59E0B' },
-  dark: { bg: 'rgba(217, 119, 6, 0.16)', color: '#D97706' },
+  light: { bg: 'color-mix(in srgb, var(--color-accent) 18%, transparent)', color: 'var(--color-accentHover)' },
+  medium: { bg: 'color-mix(in srgb, var(--color-accent) 10%, transparent)', color: 'var(--color-accentHover)' },
+  dark: { bg: 'var(--color-surfaceHover)', color: 'var(--color-textSecondary)' },
 };
 
 export function BentoMetricCard({

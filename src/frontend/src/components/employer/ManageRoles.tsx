@@ -200,31 +200,31 @@ export function ManageRoles() {
 
         {/* Header */}
         <motion.div
-          className="bento-card p-6"
+          className="bento-card p-5 sm:p-6"
           variants={emberFadeUp}
           initial="hidden"
           animate="show"
         >
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-5 flex-1 min-w-0">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-5 flex-1 min-w-[min(100%,18rem)]">
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                className="hidden sm:flex w-14 h-14 rounded-xl items-center justify-center flex-shrink-0"
                 style={{ background: 'linear-gradient(135deg, #b45309, #d97706, #f59e0b)' }}
               >
-                <Briefcase className="w-5 h-5 text-white" />
+                <Briefcase className="w-7 h-7 text-white" />
               </div>
               <div className="min-w-0">
                 <h1
-                  className="text-2xl font-bold tracking-tight"
+                  className="text-3xl sm:text-4xl font-serif font-normal tracking-tight leading-none"
                   style={{ color: 'var(--color-text)' }}
                 >
                   Manage roles
                 </h1>
                 <p
-                  className="font-mono text-[10px] uppercase tracking-[0.25em] mt-1"
+                  className="font-mono text-[10px] uppercase tracking-[0.25em] mt-2"
                   style={{ color: 'var(--color-textMuted)' }}
                 >
-                  View and manage your job postings //
+                  Each role sets its own trait ranges
                 </p>
                 <div className="flex flex-wrap items-center gap-2.5 mt-3">
                   {([
@@ -347,9 +347,9 @@ export function ManageRoles() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.35, delay: Math.min(i * 0.04, 0.3) }}
                 >
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-3 mb-1.5">
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-1.5">
                         <h3
                           className="text-base font-bold tracking-tight"
                           style={{ color: 'var(--color-text)' }}
@@ -399,7 +399,7 @@ export function ManageRoles() {
                         )}
                       </div>
 
-                      <div className="flex items-center gap-4">
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                         <span
                           className="inline-flex items-center gap-1.5 text-xs font-medium"
                           style={{ color: 'var(--color-textSecondary)' }}
@@ -417,7 +417,7 @@ export function ManageRoles() {
                     </div>
 
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      <Link to={`/app/employer/ember`}>
+                      <Link to="/app/employer/top-candidates">
                         <Button variant="outline" size="sm">
                           View candidates
                         </Button>

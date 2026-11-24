@@ -373,12 +373,12 @@ export function EmployerCoffeeChats() {
       />
 
       {/* Tab bar */}
-      <div className="bento-card flex items-center gap-1 !p-1 mb-6">
+      <div className="bento-card flex items-center gap-1 !p-1 mb-6 overflow-x-auto">
         {tabs.map(tab => (
           <button
             key={tab.value}
             onClick={() => setActiveTab(tab.value)}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all"
+            className="flex-shrink-0 sm:flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all"
             style={{
               backgroundColor: activeTab === tab.value ? 'var(--color-accent)' : 'transparent',
               color: activeTab === tab.value ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
@@ -388,7 +388,7 @@ export function EmployerCoffeeChats() {
             <span
               className="text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px]"
               style={{
-                backgroundColor: activeTab === tab.value ? 'var(--color-surfaceHover)' : 'var(--color-background)',
+                backgroundColor: activeTab === tab.value ? 'color-mix(in srgb, var(--color-accentText) 20%, transparent)' : 'var(--color-background)',
                 color: activeTab === tab.value ? 'var(--color-accentText)' : 'var(--color-textMuted)',
               }}
             >
