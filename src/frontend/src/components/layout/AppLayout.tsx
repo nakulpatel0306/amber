@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { MobileTopBar } from './MobileTopBar';
 import { MessagePanelContainer } from '../messaging/MessagePanelContainer';
+import { IS_DEMO } from '../../demo/flag';
 
 const SIDEBAR_COLLAPSED_KEY = 'amber-sidebar-collapsed';
 
@@ -58,7 +59,8 @@ export function AppLayout() {
           }}
         >
           <MobileTopBar onMenuClick={() => setMobileMenuOpen(true)} />
-          <main className="flex-1 min-w-0">
+          {/* The demo pill floats over the bottom edge; leave room so the last controls stay clickable */}
+          <main className={IS_DEMO ? 'flex-1 min-w-0 pb-16' : 'flex-1 min-w-0'}>
             <Outlet />
           </main>
         </div>
