@@ -1,4 +1,5 @@
 import { useEffect, useRef, Fragment, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from '../../utils/cn';
 import { X } from 'lucide-react';
 
@@ -108,7 +109,7 @@ export function Modal({
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <Fragment>
       {/* Overlay */}
       <div
@@ -186,7 +187,9 @@ export function Modal({
           {children}
         </div>
       </div>
-    </Fragment>
+    </Fragment>,
+    // Portalled so the overlay covers the whole viewport, sidebar included, even under transformed parents
+    document.body
   );
 }
 
