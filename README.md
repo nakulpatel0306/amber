@@ -26,7 +26,7 @@ Amber matched candidates and companies on personality and culture fit instead of
 
 | Job seeker dashboard | Ember deep dive |
 |---|---|
-| ![Job seeker dashboard with archetype and match index](docs/screenshots/dashboard.png) | ![Per-trait breakdown of one match](docs/screenshots/deep-dive.png) |
+| ![Job seeker dashboard with archetype, average match and top matches](docs/screenshots/dashboard.png) | ![Per-trait breakdown of one match](docs/screenshots/deep-dive.png) |
 | **Employer: candidates ranked for a role** | **Coffee chat with an automatic demo reply** |
 | ![Top candidates ranked for the Customer Success Lead role](docs/screenshots/employer-candidates.png) | ![Coffee chat calendar and messaging panel](docs/screenshots/coffee-chat.png) |
 
