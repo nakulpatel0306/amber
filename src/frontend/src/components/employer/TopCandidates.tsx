@@ -562,7 +562,7 @@ export function TopCandidates() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
       {/* Header */}
-      <div className="border-b px-6 py-4" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
+      <div className="border-b px-4 sm:px-6 py-4" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
         <div className="max-w-7xl mx-auto">
           {/* View tabs */}
           <div className="flex items-center gap-1 mb-4 p-1 rounded-xl w-fit" style={{ backgroundColor: 'var(--color-background)', border: '1px solid var(--color-border)' }}>
@@ -593,8 +593,8 @@ export function TopCandidates() {
             </button>
           </div>
 
-          <div className="flex items-center justify-between mb-4">
-            <div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <div className="min-w-0">
               <h1 className="text-xl font-bold flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
                 <Trophy className="w-5 h-5" style={{ color: 'var(--color-accent)' }} />
                 {activeView === 'browse' ? 'Top candidates' : 'Your pipeline'}
@@ -612,14 +612,14 @@ export function TopCandidates() {
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {/* Role dropdown */}
               {roles.length > 0 && (
-                <div className="relative">
+                <div className="relative basis-full sm:basis-auto min-w-0">
                   <select
                     value={selectedRoleId || ''}
                     onChange={e => handleRoleChange(e.target.value || null)}
-                    className="appearance-none pl-8 pr-8 py-2 rounded-xl text-sm font-medium cursor-pointer"
+                    className="appearance-none w-full sm:w-auto sm:max-w-[16rem] truncate pl-8 pr-8 py-2 rounded-xl text-sm font-medium cursor-pointer"
                     style={{
                       backgroundColor: 'var(--color-surface)',
                       color: 'var(--color-textSecondary)',
@@ -635,11 +635,11 @@ export function TopCandidates() {
               )}
 
               {/* Sort */}
-              <div className="relative">
+              <div className="relative flex-1 sm:flex-none">
                 <select
                   value={sortBy}
                   onChange={e => setSortBy(e.target.value as SortOption)}
-                  className="appearance-none pl-8 pr-8 py-2 rounded-xl text-sm font-medium cursor-pointer"
+                  className="appearance-none w-full pl-8 pr-8 py-2 rounded-xl text-sm font-medium cursor-pointer"
                   style={{
                     backgroundColor: 'var(--color-surface)',
                     color: 'var(--color-textSecondary)',
@@ -661,7 +661,7 @@ export function TopCandidates() {
                 className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium transition-all"
                 style={{
                   backgroundColor: showFilters || activeFilterCount > 0 ? 'var(--color-accent)' : 'var(--color-surface)',
-                  color: showFilters || activeFilterCount > 0 ? 'white' : 'var(--color-textSecondary)',
+                  color: showFilters || activeFilterCount > 0 ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
                   border: showFilters || activeFilterCount > 0 ? 'none' : '1px solid var(--color-border)',
                 }}
               >
