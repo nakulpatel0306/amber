@@ -2,7 +2,7 @@
 -- Seed Full Test Data: 10 Candidates + 10 Employers
 -- All accounts fully populated with completed assessments
 -- Password for email auth accounts: TestPassword123!
--- Google accounts: nakul0306@gmail.com (candidate), arshpatel2121@gmail.com (employer)
+-- Google accounts (replace with your own): candidate@example.com (candidate), employer@example.com (employer)
 -- Run in Supabase SQL Editor
 -- ==========================================================
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
@@ -60,10 +60,10 @@ BEGIN
   pw := crypt('TestPassword123!', gen_salt('bf'));
 
   -- Look up existing Google OAuth accounts
-  SELECT id INTO nakul_id FROM auth.users WHERE email = 'nakul0306@gmail.com';
-  SELECT id INTO arsh_id FROM auth.users WHERE email = 'arshpatel2121@gmail.com';
-  IF nakul_id IS NULL THEN RAISE EXCEPTION 'Google account nakul0306@gmail.com not found in auth.users'; END IF;
-  IF arsh_id IS NULL THEN RAISE EXCEPTION 'Google account arshpatel2121@gmail.com not found in auth.users'; END IF;
+  SELECT id INTO nakul_id FROM auth.users WHERE email = 'candidate@example.com';
+  SELECT id INTO arsh_id FROM auth.users WHERE email = 'employer@example.com';
+  IF nakul_id IS NULL THEN RAISE EXCEPTION 'Google account candidate@example.com not found in auth.users'; END IF;
+  IF arsh_id IS NULL THEN RAISE EXCEPTION 'Google account employer@example.com not found in auth.users'; END IF;
 
   -- Clean up old seed test users (cascade deletes profiles, candidates, employers, assessments, etc.)
   DELETE FROM auth.users WHERE email IN (
@@ -128,7 +128,7 @@ BEGIN
   -- PROFILES for all 20 accounts
   -- ============================================
   INSERT INTO public.profiles (id,email,full_name,role,onboarding_completed,created_at,updated_at) VALUES
-  (nakul_id,'nakul0306@gmail.com','Nakul Patel','candidate',true,NOW(),NOW()),
+  (nakul_id,'candidate@example.com','Nakul Patel','candidate',true,NOW(),NOW()),
   (sarah_id,'sarah.johnson@test.com','Sarah Johnson','candidate',true,NOW(),NOW()),
   (marcus_id,'marcus.williams@test.com','Marcus Williams','candidate',true,NOW(),NOW()),
   (emily_id,'emily.rodriguez@test.com','Emily Rodriguez','candidate',true,NOW(),NOW()),
@@ -138,7 +138,7 @@ BEGIN
   (priya_id,'priya.sharma@test.com','Priya Sharma','candidate',true,NOW(),NOW()),
   (tyler_id,'tyler.brooks@test.com','Tyler Brooks','candidate',true,NOW(),NOW()),
   (maria_id,'maria.santos@test.com','Maria Santos','candidate',true,NOW(),NOW()),
-  (arsh_id,'arshpatel2121@gmail.com','Arsh Patel','employer',true,NOW(),NOW()),
+  (arsh_id,'employer@example.com','Arsh Patel','employer',true,NOW(),NOW()),
   (techstartup_id,'hr@techstartup.test','Alex Rivera','employer',true,NOW(),NOW()),
   (innovatecorp_id,'talent@innovatecorp.test','Jordan Smith','employer',true,NOW(),NOW()),
   (creativelabs_id,'hiring@creativelabs.test','Morgan Lee','employer',true,NOW(),NOW()),
@@ -165,7 +165,7 @@ BEGIN
   -- 1. Nakul Patel - The Strategist (Google account)
   INSERT INTO public.candidates (user_id,headline,bio,location,years_experience,openness_score,conscientiousness_score,extraversion_score,agreeableness_score,neuroticism_score,top_traits,assessment_status,assessment_completed_at,preferred_work_style,preferred_company_size,salary_expectation_min,salary_expectation_max,linkedin_url,setup_step,setup_completed_at,visual_perception_data,cognitive_patterns_data,situational_judgment_data,work_values_data) VALUES (
     nakul_id,'Full-Stack Developer | React & Node.js','Versatile full-stack developer with 6 years building scalable web apps. Strategic thinker who loves architecting clean solutions. Passionate about developer experience and team productivity.','San Francisco, CA',6,
-    75,85,68,72,28,ARRAY['The Strategist','The Architect'],'completed',NOW()-INTERVAL '2 days','hybrid','startup',120000,180000,'https://linkedin.com/in/nakulpatel',4,NOW(),
+    75,85,68,72,28,ARRAY['The Strategist','The Architect'],'completed',NOW()-INTERVAL '2 days','hybrid','startup',120000,180000,'https://linkedin.com/in/example-candidate',4,NOW(),
     '{"answers":{"vp1":"b","vp2":"a","vp3":"c","vp4":"b","vp5":"a"},"ocean_scores":{"openness":3,"conscientiousness":5,"extraversion":-2,"agreeableness":1,"neuroticism":-3},"completed_at":"2026-02-16T10:00:00Z"}'::jsonb,
     '{"answers":{"cp1":"c","cp2":"a","cp3":"b","cp4":"d","cp5":"a","cp6":"c","cp7":"b","cp8":"a"},"ocean_scores":{"openness":2,"conscientiousness":4,"extraversion":1,"agreeableness":-1,"neuroticism":-2},"completed_at":"2026-02-16T11:00:00Z"}'::jsonb,
     '{"answers":{"sj1":"b","sj2":"c","sj3":"a","sj4":"b","sj5":"d","sj6":"a","sj7":"c","sj8":"b"},"ocean_scores":{"openness":-1,"conscientiousness":3,"extraversion":2,"agreeableness":3,"neuroticism":-1},"completed_at":"2026-02-16T12:00:00Z"}'::jsonb,
@@ -776,7 +776,7 @@ BEGIN
 
   RAISE NOTICE 'Successfully seeded 20 test accounts (10 candidates + 10 employers)';
   RAISE NOTICE 'Email auth password: TestPassword123!';
-  RAISE NOTICE 'Google accounts: nakul0306@gmail.com (candidate), arshpatel2121@gmail.com (employer)';
+  RAISE NOTICE 'Google accounts: candidate@example.com (candidate), employer@example.com (employer)';
 
 END $$;
 

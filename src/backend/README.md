@@ -65,7 +65,6 @@ backend/
 │   └── questions.py                  # 10 assessment questions with category groupings and trait mappings
 ├── scripts/                          # One-time seed and utility scripts
 │   ├── seed_ember_data.py            # Populates test candidates with diverse OCEAN profiles
-│   ├── seed_arsh_nakul.py            # Seeds specific test profiles
 │   └── generate_parity_fixture.py    # Writes tests/fixtures/ember-parity.json for pytest and vitest
 ├── tests/                            # pytest: compatibility engine, Ember agent, TS parity fixture
 └── pyproject.toml                    # pytest and ruff configuration

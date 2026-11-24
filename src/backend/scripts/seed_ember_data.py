@@ -1,6 +1,6 @@
 """
 Seed script for Ember Agent - Populates candidate profiles, creates roles table, and adds job postings.
-Leaves Arsh and Nakul accounts untouched.
+Leaves the SKIP_EMAILS sign-in accounts untouched.
 """
 import json
 import os
@@ -79,7 +79,7 @@ candidate_map = {c['user_id']: c for c in candidates_data.data}
 employer_map = {e['user_id']: e for e in employers_data.data}
 
 # IDs we need
-SKIP_EMAILS = ['arshpatel2121@gmail.com', 'arsh4@icloud.com', 'nakul0306@gmail.com']
+SKIP_EMAILS = ['candidate@example.com', 'employer@example.com']  # your own sign-in accounts
 
 print(f"  Found {len(profiles.data)} profiles, {len(candidates_data.data)} candidates, {len(employers_data.data)} employers")
 

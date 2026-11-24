@@ -338,7 +338,6 @@ In addition to the SQL seed files, the backend has Python seed scripts in `src/b
 | Script | Purpose |
 |--------|---------|
 | `seed_ember_data.py` | Populates test candidates with diverse OCEAN personality profiles for testing the Ember matching engine |
-| `seed_arsh_nakul.py` | Seeds specific test profiles for the Arsh and Nakul accounts with predefined personality data |
 
 These scripts use the `SUPABASE_SERVICE_ROLE_KEY` environment variable and are intended as one-time development utilities.
 
