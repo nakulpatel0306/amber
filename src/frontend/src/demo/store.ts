@@ -123,6 +123,14 @@ export function addUser(user: DemoUser): void {
   persist();
 }
 
+export function updateUser(id: string, patch: Partial<DemoUser>): DemoUser | null {
+  const user = load().users.find((u) => u.id === id);
+  if (!user) return null;
+  Object.assign(user, patch);
+  persist();
+  return user;
+}
+
 export function sessionUserId(): string | null {
   return load().sessionUserId;
 }

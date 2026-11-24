@@ -15,6 +15,7 @@ import {
   setSessionUserId,
   subscribe,
   table,
+  updateUser,
   users,
   type Change,
   type DemoUser,
@@ -155,10 +156,12 @@ const auth = {
 
   async updateUser(attributes: { password?: string; data?: Record<string, unknown> }) {
     const id = sessionUserId();
-    const user = users().find((u) => u.id === id);
-    if (!user) return { data: { user: null }, error: authError('Auth session missing!') };
-    if (attributes.password) user.password = attributes.password;
-    if (attributes.data) user.user_metadata = { ...user.user_metadata, ...attributes.data };
+    const current = users().find((u) => u.id === id);
+    if (!id || !current) return { data: { user: null }, error: authError('Auth session missing!') };
+    const user = updateUser(id, {
+      ...(attributes.password ? { password: attributes.password } : {}),
+      ...(attributes.data ? { user_metadata: { ...current.user_metadata, ...attributes.data } } : {}),
+    })!;
     notify('USER_UPDATED');
     return { data: { user: toAuthUser(user) }, error: null };
   },

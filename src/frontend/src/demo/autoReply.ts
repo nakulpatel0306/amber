@@ -64,6 +64,8 @@ export function nextWeekdayMorning(daysAhead = 1): string {
 function onConnection(conn: Row): void {
   if (conn.status !== 'pending' || !isSeedUser(conn.receiver_id) || conn.sender_id !== sessionUserId()) return;
   setTimeout(async () => {
+    // A reset inside the delay wipes the request; there's nothing left to accept.
+    if (!findOne('connections', (c) => c.id === conn.id)) return;
     const invite = findOne('connection_meet_invites', (i) => i.connection_id === conn.id);
     const times = (invite?.proposed_times as string[] | undefined) ?? [];
     await acceptConnection(conn.receiver_id as string, conn.id, {
@@ -82,6 +84,7 @@ function onCoffeeChat(chat: Row): void {
   const initiatedByVisitor = partner && chat.initiated_by !== partner.role;
   if (!partner || !initiatedByVisitor) return;
   setTimeout(() => {
+    if (!findOne('coffee_chats', (c) => c.id === chat.id)) return;
     const dates = (chat.preferred_dates as string[] | null) ?? [];
     updateRow('coffee_chats', chat.id, { status: 'scheduled', scheduled_at: dates[0] ?? nextWeekdayMorning(2) });
     sendAutoMessage(chat.id, partner, OPENERS[replyCount++ % OPENERS.length]);

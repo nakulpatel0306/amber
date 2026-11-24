@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDemoClient } from './client';
 import { demoFetch } from './backend';
 import { parseSelect } from './query';
@@ -101,6 +101,19 @@ describe('demo auth', () => {
     expect((await supabase.auth.signInWithOAuth()).error).not.toBeNull();
     expect((await supabase.auth.signInWithPassword({ email: 'candidate@demo.example.com', password: 'nope' })).error).not.toBeNull();
     expect((await supabase.auth.signInWithPassword({ email: 'candidate@demo.example.com', password: 'pw' })).error).toBeNull();
+  });
+
+  it('saves a changed password so it survives a reload', async () => {
+    const id = await signUp('candidate');
+    const written = new Map<string, string>();
+    vi.stubGlobal('localStorage', { setItem: (k: string, v: string) => written.set(k, v) });
+    try {
+      await supabase.auth.updateUser({ password: 'new-pw' });
+    } finally {
+      vi.unstubAllGlobals();
+    }
+    const saved = JSON.parse(written.get('amber-demo-v1')!);
+    expect(saved.users.find((u: { id: string }) => u.id === id).password).toBe('new-pw');
   });
 });
 
