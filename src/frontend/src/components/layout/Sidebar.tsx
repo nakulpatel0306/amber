@@ -127,19 +127,22 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
               title={collapsed ? item.label : undefined}
               aria-current={isActive ? 'page' : undefined}
               className={cn(
-                'flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-[background-color,color] duration-150 ease-out-strong whitespace-nowrap overflow-hidden',
+                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-[background-color,color] duration-150 ease-out-strong whitespace-nowrap overflow-hidden',
                 collapsed && 'justify-center px-0',
                 isActive
-                  ? 'bg-[var(--color-accent)]'
+                  ? 'bg-[var(--color-surfaceHover)]'
                   : 'hover:bg-[var(--color-surfaceHover)]'
               )}
               style={{
                 color: isActive
-                  ? 'var(--color-accentText)'
+                  ? 'var(--color-text)'
                   : 'var(--color-textSecondary)',
               }}
             >
-              <item.icon className="w-[18px] h-[18px] flex-shrink-0" />
+              <item.icon
+                className="w-[18px] h-[18px] flex-shrink-0"
+                style={isActive ? { color: 'var(--color-accent)' } : undefined}
+              />
               {!collapsed && item.label}
             </Link>
           );
@@ -154,19 +157,22 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
           onClick={onMobileClose}
           title={collapsed ? 'Settings' : undefined}
           className={cn(
-            'flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-[background-color,color] duration-150 ease-out-strong whitespace-nowrap overflow-hidden',
+            'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-[background-color,color] duration-150 ease-out-strong whitespace-nowrap overflow-hidden',
             collapsed && 'justify-center px-0',
             location.pathname.startsWith('/app/settings')
-              ? 'bg-[var(--color-accent)]'
+              ? 'bg-[var(--color-surfaceHover)]'
               : 'hover:bg-[var(--color-surfaceHover)]'
           )}
           style={{
             color: location.pathname.startsWith('/app/settings')
-              ? 'var(--color-accentText)'
+              ? 'var(--color-text)'
               : 'var(--color-textSecondary)',
           }}
         >
-          <Settings className="w-[18px] h-[18px] flex-shrink-0" />
+          <Settings
+            className="w-[18px] h-[18px] flex-shrink-0"
+            style={location.pathname.startsWith('/app/settings') ? { color: 'var(--color-accent)' } : undefined}
+          />
           {!collapsed && 'Settings'}
         </Link>
       </nav>
@@ -214,7 +220,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
             'flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm transition-colors hover:bg-[var(--color-surfaceHover)] whitespace-nowrap overflow-hidden',
             collapsed && 'justify-center px-0'
           )}
-          style={{ color: 'var(--color-error)' }}
+          style={{ color: 'var(--color-textSecondary)' }}
         >
           {/* Match avatar width (32px) so icon aligns with avatar above */}
           <div className="w-8 h-8 flex items-center justify-center flex-shrink-0">
