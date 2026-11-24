@@ -46,12 +46,12 @@
 
   /* Text */
   --color-text: #0A0A0A;
-  --color-textSecondary: #666666;
-  --color-textMuted: #999999;
+  --color-textSecondary: #525252;
+  --color-textMuted: #737373;
 
   /* Brand */
-  --color-accent: #D97706;
-  --color-accentHover: #B45309;
+  --color-accent: #B45309;
+  --color-accentHover: #92400E;
   --color-accentText: #FFFFFF;
 
   /* Status */
@@ -62,9 +62,9 @@
 
   /* Score tiers (match quality) */
   --color-score-excellent: #16A34A;
-  --color-score-good: #D97706;
+  --color-score-good: #B45309;
   --color-score-fair: #3B82F6;
-  --color-score-low: #999999;
+  --color-score-low: #737373;
 
   /* OCEAN personality trait colors */
   --color-trait-openness: #A855F7;
@@ -189,7 +189,7 @@
   /* placeholder text */
   ::placeholder {
     color: var(--color-textMuted);
-    opacity: 0.7;
+    opacity: 1;
   }
 }
 
