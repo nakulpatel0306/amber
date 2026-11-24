@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft, Sparkles, Brain, Heart, Zap, MessageCircle, Coffee,
-  Bookmark, BookmarkCheck, GitCompareArrows, Share2, Lightbulb,
+  Bookmark, BookmarkCheck, GitCompareArrows, Lightbulb,
   AlertTriangle, CheckCircle2, HelpCircle, Target, ArrowUpRight,
   TrendingUp, ChevronRight, BarChart3, Users, Shield,
   MapPin, Briefcase, DollarSign, X, User,
@@ -377,7 +377,8 @@ export function DeepDive({
           </span>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex items-center gap-4 flex-1 min-w-0">
           {/* Avatar */}
           <div
             className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden flex-shrink-0"
@@ -446,6 +447,7 @@ export function DeepDive({
             )}
 
           </div>
+          </div>
 
           {/* Actions */}
           <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -465,9 +467,6 @@ export function DeepDive({
             )}
             <Button variant="outline" size="sm" onClick={onToggleSave}>
               {isSaved ? <BookmarkCheck className="w-3.5 h-3.5" /> : <Bookmark className="w-3.5 h-3.5" />}
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => { /* share */ }}>
-              <Share2 className="w-3.5 h-3.5" />
             </Button>
           </div>
         </div>
@@ -1329,12 +1328,6 @@ export function DeepDive({
               <Button variant="ghost" onClick={onCompare}>
                 <GitCompareArrows className="w-4 h-4 mr-1.5" />
                 Compare
-              </Button>
-            )}
-            {mode === 'candidate' && (
-              <Button variant="ghost" onClick={() => { /* share */ }}>
-                <Share2 className="w-4 h-4 mr-1.5" />
-                Share match
               </Button>
             )}
           </div>
