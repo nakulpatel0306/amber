@@ -5,8 +5,9 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { DEMO_LABEL, DEMO_PATH, REPO_URL } from './links';
 
 const SECTIONS = [
+  { href: '#tour', label: 'Product' },
   { href: '#matching', label: 'Matching' },
-  { href: '#architecture', label: 'Architecture' },
+  { href: '#roadmap', label: 'Roadmap' },
   { href: '#lessons', label: 'Lessons' },
   { href: '#team', label: 'Team' },
 ];

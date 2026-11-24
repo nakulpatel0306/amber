@@ -1,6 +1,7 @@
 /**
- * Site root: Amber as a case study. What it was, why it is shelved, how the
- * matching works, how it was built, and a way into the in-browser demo.
+ * Site root: Amber as a case study. The story runs problem, what we built
+ * (try it), how it works, where it was going, why we stopped, what we learned
+ * and who built it.
  */
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
@@ -11,19 +12,45 @@ import { LandingFooter } from './LandingFooter';
 import { FeatureBento } from './FeatureBento';
 import { MatchingExplainer } from './MatchingExplainer';
 import { ArchitectureDiagram } from './ArchitectureDiagram';
-import { DEMO_LABEL, DEMO_PATH, REPO_URL, TEAM } from './links';
+import { BLUEPRINT_URL, DEMO_LABEL, DEMO_PATH, REPO_URL, TEAM } from './links';
 import { ARCHETYPES } from '../../lib/archetypes';
 import { IS_DEMO } from '../../demo/flag';
 import { usePageTitle } from '../../hooks/usePageTitle';
 
-const STATUS = [
+const KRISTOF_BROWN = 'https://doi.org/10.1111/j.1744-6570.2005.00672.x';
+
+// From BLUEPRINT.md, "Where Amber Was Going (never built)"
+const ROADMAP = [
   {
-    title: 'Built',
-    body: 'From January to November 2026 we built both sides of the product: assessments, matching, culture profiles, connections, scheduling, realtime chat and billing.',
+    t: 'Conversational Ember AI',
+    d: 'Ember would have replaced the multiple-choice assessment with an open-ended interview, reading trait signals from how people answer, and stayed on afterwards as a career advisor.',
   },
   {
+    t: 'Team DNA mapping',
+    d: 'Employers would have mapped the personalities of an existing team, so matching could favor candidates who balance its gaps instead of matching the company as a whole.',
+  },
+  {
+    t: 'Culture verification',
+    d: "Current and former employees would have anonymously checked an employer's culture claims against the same OCEAN framework used for matching.",
+  },
+  {
+    t: 'Predictive retention',
+    d: 'A model would have estimated how likely a hire was to stay and do well, from patterns in personality and culture alignment.',
+  },
+  {
+    t: 'Passive culture signals',
+    d: 'Preliminary culture profiles generated from public data, so candidates would have seen companies before those companies ever signed up.',
+  },
+  {
+    t: 'Blind culture matching',
+    d: 'A mode that hid names, brands and pedigree, so both sides judged each other on culture and personality alone.',
+  },
+];
+
+const STATUS = [
+  {
     title: 'Paused',
-    body: 'The culture-fit hiring space filled up quickly. Competing would have meant raising money, and we decided not to. So Amber will not launch.',
+    body: 'The culture-fit hiring space filled up quickly. Competing would have meant raising money, and we decided not to. So Amber will not launch, and none of that roadmap will be built.',
   },
   {
     title: 'Kept',
@@ -127,8 +154,9 @@ export function CaseStudy() {
             Hiring that starts with how you work
           </h1>
           <p className="mt-6 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
-            Amber matched candidates and companies on personality and culture instead of resume keywords, then put a
-            short coffee chat before any application. Three of us built it through 2026 and took it close to launch.
+            Hiring matches on resumes and keywords, while culture fit only shows up after someone starts. Amber measured
+            how people work and compared it with a team's real culture, so both sides met over a coffee chat before
+            anyone applied. Three of us built it through 2026 and took it close to launch.
           </p>
           <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link to={DEMO_PATH} className={`w-full sm:w-auto ${primaryCta}`}>
@@ -146,7 +174,15 @@ export function CaseStudy() {
               Read the code
             </a>
           </div>
-          <p className="mt-5 text-xs" style={{ color: 'var(--color-textMuted)' }}>
+          <p className="mt-8 text-sm max-w-xl mx-auto leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+            Why measure fit early: in a meta-analysis, person-organization fit correlated .51 with organizational
+            commitment and -.35 with intent to quit (
+            <a className="underline underline-offset-2 hover:text-[var(--color-text)]" href={KRISTOF_BROWN} target="_blank" rel="noreferrer">
+              Kristof-Brown, Zimmerman and Johnson, 2005
+            </a>
+            ).
+          </p>
+          <p className="mt-3 text-xs" style={{ color: 'var(--color-textMuted)' }}>
             Shelved in 2026.{' '}
             {IS_DEMO
               ? 'The demo runs entirely in your browser: no signup, invented people and companies, nothing sent anywhere.'
@@ -155,40 +191,13 @@ export function CaseStudy() {
         </motion.div>
       </header>
 
-      <Section title="Why it's on the shelf">
-        <div className="grid gap-8 md:grid-cols-3">
-          {STATUS.map((s) => (
-            <Column key={s.title} title={s.title}>
-              {s.body}
-            </Column>
-          ))}
-        </div>
-      </Section>
-
-      {/* Product tour (animated recreations of the real screens) */}
+      {/* What we built: animated recreations of the real screens */}
       <FeatureBento />
 
       <Section
         id="matching"
-        title="Five traits, eight archetypes, one score you can read"
-        intro={
-          <>
-            Candidates answer scenario questions that map to the Big Five (OCEAN): openness, conscientiousness,
-            extraversion, agreeableness and neuroticism. Employers take a culture quiz that sets the scores they hope
-            for, pick culture values, and give each role an acceptable range per trait. The Ember engine compares the
-            two. Person-organization fit is worth measuring: in a meta-analysis, it correlated .51 with organizational
-            commitment and -.35 with intent to quit (
-            <a
-              className="underline underline-offset-2"
-              href="https://doi.org/10.1111/j.1744-6570.2005.00672.x"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Kristof-Brown, Zimmerman and Johnson, 2005
-            </a>
-            ).
-          </>
-        }
+        title="How it works"
+        intro="Five traits, eight archetypes and one score you can read. Candidates answer scenario questions that map to the Big Five (OCEAN): openness, conscientiousness, extraversion, agreeableness and neuroticism. Employers take a culture quiz that sets the scores they hope for, pick culture values, and give each role an acceptable range per trait. The Ember engine compares the two."
       >
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 mb-14">
           {WEIGHTS.map((w) => (
@@ -234,7 +243,47 @@ export function CaseStudy() {
         <ArchitectureDiagram />
       </Section>
 
-      <Section id="lessons" title="What we'd keep, and change">
+      <Section
+        id="roadmap"
+        title="Where it was going"
+        intro={
+          <>
+            None of this was built. It's the roadmap from our{' '}
+            <a className="underline underline-offset-2 hover:text-[var(--color-text)]" href={BLUEPRINT_URL} target="_blank" rel="noreferrer">
+              blueprint
+            </a>
+            : six phases that would have turned a matching product into a hiring intelligence system.
+          </>
+        }
+      >
+        <ol className="grid gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+          {ROADMAP.map((r, i) => (
+            <li key={r.t} className="border-t pt-5" style={{ borderColor: 'var(--color-border)' }}>
+              <p className="text-caption" style={{ color: 'var(--color-textMuted)' }}>
+                Phase {i + 1} · Not built
+              </p>
+              <h3 className="mt-1.5 text-base font-semibold" style={{ color: 'var(--color-text)' }}>
+                {r.t}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+                {r.d}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </Section>
+
+      <Section id="shelf" title="Why it's on the shelf">
+        <div className="grid gap-8 md:grid-cols-2">
+          {STATUS.map((s) => (
+            <Column key={s.title} title={s.title}>
+              {s.body}
+            </Column>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="lessons" title="What we learned">
         <div className="grid gap-x-10 gap-y-8 md:grid-cols-2">
           {LESSONS.map((l) => (
             <Column key={l.title} title={l.title}>
