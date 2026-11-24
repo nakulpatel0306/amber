@@ -126,7 +126,7 @@ export function LoginPage() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
             >
-              <AmberLogo size="xl" />
+              <AmberLogo size="xl" animate />
             </motion.div>
             <h1
               className="text-title"

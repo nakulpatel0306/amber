@@ -116,11 +116,12 @@ function AmberMark({ size, animate = false }: { size: number; animate?: boolean 
   );
 }
 
+// Static by default so app chrome never shows a half-drawn mark; the sign-in screens opt into the fade
 export function AmberLogo({
   size = 'md',
   variant = 'icon',
   className,
-  animate = true,
+  animate = false,
 }: AmberLogoProps) {
   const config = sizeMap[size];
 
