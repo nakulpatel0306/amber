@@ -1,1404 +1,593 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ArrowUpRight,
-  Brain,
-  Calendar,
-  Check,
-  Coffee,
-  Send,
-  Sparkles,
-  Target,
-  TrendingUp,
-  } from 'lucide-react';
+import { useState, useEffect, type CSSProperties, type ReactNode } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight, Lightbulb, X } from 'lucide-react';
 
-/* ─────────────────────────────────────────────
-   1. BIG CARD: 4-Step Process (real app flow)
-   ───────────────────────────────────────────── */
+/*
+ * Product tour: scaled-down recreations of four real screens. They reuse the
+ * app's tokens and layout (one card style, neutral bars, accent only for the
+ * primary action and selection) so the tour previews what the demo shows.
+ */
 
-const PROCESS_STEPS = [
-  {
-    number: '1',
-    label: 'Dashboard',
-    caption: 'Home base: your archetype, your matches and your chats.',
-    icon: Target,
-  },
-  {
-    number: '2',
-    label: 'Assessment',
-    caption: 'A 15-minute Big Five assessment built from workplace scenarios.',
-    icon: Sparkles,
-  },
-  {
-    number: '3',
-    label: 'Insights',
-    caption: 'Your archetype and a trait-by-trait breakdown of each match.',
-    icon: Brain,
-  },
-  {
-    number: '4',
-    label: 'Connect',
-    caption: 'Pick a match and propose times for a 15-minute coffee chat.',
-    icon: Coffee,
-  },
+const STEPS = [
+  { label: 'Dashboard', path: 'app/dashboard', caption: 'Home base: your archetype, your average match and your coffee chats.' },
+  { label: 'Assessment', path: 'app/personality', caption: 'A 15-minute Big Five assessment built from workplace scenarios.' },
+  { label: 'Deep dive', path: 'app/ember', caption: 'Every match breaks down trait by trait, against what the employer is looking for.' },
+  { label: 'Connect', path: 'app/ember', caption: 'Send a request with proposed times for a short coffee chat.' },
 ];
 
-const STEP_DURATION = 4000;
+const STEP_DURATION = 4500;
 
-/* ── Scene 1: Dashboard — mirrors /app/dashboard ── */
-function AnimatedScoreNumber({ value, suffix = '', delay = 0 }: { value: number; suffix?: string; delay?: number }) {
-  const [display, setDisplay] = useState(0);
+const text = { color: 'var(--color-text)' };
+const secondary = { color: 'var(--color-textSecondary)' };
+const muted = { color: 'var(--color-textMuted)' };
+const card: CSSProperties = { backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' };
+
+const TRAITS = [
+  { name: 'Openness', color: 'var(--color-trait-openness)', you: 68, them: 90 },
+  { name: 'Conscientiousness', color: 'var(--color-trait-conscientiousness)', you: 57, them: 55 },
+  { name: 'Extraversion', color: 'var(--color-trait-extraversion)', you: 66, them: 70 },
+  { name: 'Agreeableness', color: 'var(--color-trait-agreeableness)', you: 62, them: 70 },
+  { name: 'Stability', color: 'var(--color-trait-stability)', you: 51, them: 60 },
+];
+
+function CountUp({ value, suffix = '', delay = 0 }: { value: number; suffix?: string; delay?: number }) {
+  const reduce = useReducedMotion();
+  const [display, setDisplay] = useState(reduce ? value : 0);
   useEffect(() => {
-    const startTime = performance.now() + delay * 1000;
-    const duration = 900;
+    if (reduce) return;
+    const start = performance.now() + delay * 1000;
     let raf = 0;
     const tick = (now: number) => {
-      const elapsed = Math.max(0, now - startTime);
-      const p = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setDisplay(Math.round(eased * value));
+      const p = Math.min(Math.max(0, now - start) / 800, 1);
+      setDisplay(Math.round((1 - Math.pow(1 - p, 3)) * value));
       if (p < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [value, delay]);
+  }, [value, delay, reduce]);
   return (
     <span className="tabular-nums">
       {display}
-      {suffix && <span className="text-[10px]">{suffix}</span>}
+      {suffix}
     </span>
   );
 }
 
-// Letter tiles: the companies in these scenes are invented, so there are no logos to show
-function CompanyLogoTile({ fallback, size = 20 }: { domain?: string; fallback: string; size?: number }) {
+// The companies in the demo are invented, so the app shows a letter tile instead of a logo
+function LetterTile({ letter, size = 22 }: { letter: string; size?: number }) {
   return (
-    <div
-      className="rounded flex items-center justify-center flex-shrink-0 font-semibold"
+    <span
+      className="rounded-md flex items-center justify-center flex-shrink-0 font-medium"
       style={{
         width: size,
         height: size,
-        fontSize: Math.max(9, size * 0.42),
-        backgroundColor: 'color-mix(in srgb, var(--color-accent) 14%, var(--color-surface))',
-        color: 'var(--color-accent)',
-        border: '1px solid var(--color-border)',
+        fontSize: Math.max(9, size * 0.4),
+        backgroundColor: 'var(--color-surfaceHover)',
+        color: 'var(--color-textSecondary)',
       }}
     >
-      {fallback}
+      {letter}
+    </span>
+  );
+}
+
+function Bar({ value, color = 'var(--color-textSecondary)', delay = 0 }: { value: number; color?: string; delay?: number }) {
+  return (
+    <div className="h-1 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-border)' }}>
+      <motion.div
+        className="h-full rounded-full"
+        style={{ backgroundColor: color }}
+        initial={{ width: 0 }}
+        animate={{ width: `${value}%` }}
+        transition={{ duration: 0.8, delay, ease: [0.23, 1, 0.32, 1] }}
+      />
     </div>
   );
 }
 
-function SceneDashboard() {
-  const stats = [
-    { label: 'Match index', value: 83, suffix: '%', chip: 'Best 87%' },
-    { label: 'Available', value: 230, suffix: '', chip: '110 Co' },
-    { label: 'Chats', value: 4, suffix: '', chip: '3 Pending' },
-  ];
+function Rise({ delay = 0, className, style, children }: { delay?: number; className?: string; style?: CSSProperties; children: ReactNode }) {
+  return (
+    <motion.div
+      className={className}
+      style={style}
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay, ease: [0.23, 1, 0.32, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
-  const topMatches = [
-    { company: 'Kestrel Studio', domain: 'kestrel', role: 'Brand Designer', score: 94, fallback: 'K' },
-    { company: 'Brightline Labs', domain: 'brightline', role: 'Founding Engineer', score: 91, fallback: 'B' },
-    { company: 'Fernleaf Health', domain: 'fernleaf', role: 'Product Designer', score: 87, fallback: 'F' },
-    { company: 'Northwind Robotics', domain: 'northwind', role: 'Robotics Engineer', score: 83, fallback: 'N' },
+/* Dashboard: mirrors /app/dashboard */
+function SceneDashboard() {
+  const matches = [
+    { role: 'Brand Designer', company: 'Kestrel Studio', style: 'Hybrid', status: 'New match', score: 82 },
+    { role: 'Founding Engineer', company: 'Brightline Labs', style: 'Remote', status: 'Request sent', score: 80 },
+    { role: 'Developer Advocate', company: 'Brightline Labs', style: 'Remote', status: 'Request sent', score: 80 },
+    { role: 'Robotics Software Engineer', company: 'Northwind Robotics', style: 'Hybrid', status: 'New match', score: 79 },
   ];
 
   return (
-    <div className="w-full h-full p-3 flex flex-col gap-2.5 overflow-hidden">
-      {/* Hero greeting — consistent header pattern */}
-      <motion.div
-        className="rounded-lg border p-2 flex items-center gap-2"
-        style={{
-          backgroundColor: 'var(--color-surface)',
-          borderColor: 'var(--color-border)',
-        }}
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        <div
-          className="w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0"
-          style={{
-            background:
-              'linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 40%, transparent), color-mix(in srgb, var(--color-accent) 80%, transparent))',
-          }}
-        >
-          <Sparkles className="w-4 h-4" style={{ color: '#fff' }} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p
-            className="text-[13px] leading-none"
-            style={{ color: 'var(--color-text)' }}
-          >
-            Good evening,{' '}
-            <span style={{ color: 'var(--color-accent)' }}>
-              Alex
-            </span>
-          </p>
-          <div className="flex items-center gap-1 mt-1">
-            <motion.div
-              className="w-1 h-1 rounded-full"
-              style={{ backgroundColor: 'var(--color-accent)' }}
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
-            <p className="text-[8.5px] leading-none" style={{ color: 'var(--color-textMuted)' }}>
-              2 New Matches · Sat, Apr 18
-            </p>
-          </div>
-        </div>
-        {/* Archetype chip — standardized */}
-        <motion.div
-          className="flex items-center gap-1 px-2 py-0.5 rounded flex-shrink-0"
-          style={{
-            backgroundColor: 'color-mix(in srgb, var(--color-accent) 12%, transparent)',
-          }}
-          initial={{ opacity: 0, x: 4 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3 }}
-        >
-          <Brain className="w-2.5 h-2.5" style={{ color: 'var(--color-accent)' }} />
-          <span className="text-[9px]" style={{ color: 'var(--color-accent)' }}>
-            The Strategist
-          </span>
-        </motion.div>
-      </motion.div>
+    <div className="h-full p-4 sm:p-5 flex flex-col gap-3 overflow-hidden">
+      <Rise>
+        <p className="text-[15px] font-semibold leading-tight" style={text}>
+          Good evening, Alex
+        </p>
+        <p className="text-[10px] mt-0.5" style={secondary}>
+          Sat, Apr 18
+        </p>
+      </Rise>
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-3 gap-1.5">
-        {stats.map((m, i) => (
-          <motion.div
-            key={m.label}
-            className="rounded-lg border p-2 relative overflow-hidden flex flex-col"
-            style={{
-              backgroundColor: 'var(--color-surface)',
-              borderColor: 'var(--color-border)',
-            }}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.15 + i * 0.08 }}
-          >
-            <div
-              className="absolute inset-x-0 top-0 h-px"
-              style={{
-                background:
-                  'linear-gradient(90deg, transparent, var(--color-accent), transparent)',
-              }}
-            />
-            <div className="flex items-start justify-between">
-              <p
-                className="text-[8px]"
-                style={{ color: 'var(--color-textMuted)' }}
-              >
-                {m.label}
-              </p>
-              <ArrowUpRight
-                className="w-2.5 h-2.5"
-                style={{ color: 'var(--color-textMuted)' }}
-              />
-            </div>
-            <p
-              className="text-[20px] leading-none mt-1"
-              style={{ color: 'var(--color-text)' }}
-            >
-              <AnimatedScoreNumber value={m.value} suffix={m.suffix} delay={0.3 + i * 0.08} />
-            </p>
-            <span
-              className="text-[8px] font-semibold px-1 py-0.5 rounded mt-1 self-start"
-              style={{
-                backgroundColor: 'color-mix(in srgb, var(--color-accent) 14%, transparent)',
-                color: 'var(--color-accent)',
-              }}
-            >
-              {m.chip}
-            </span>
-          </motion.div>
-        ))}
+      <div className="grid grid-cols-3 gap-2">
+        <Rise delay={0.08} className="rounded-lg p-2.5 min-w-0" style={card}>
+          <p className="text-[9px]" style={secondary}>Your archetype</p>
+          <p className="mt-1 flex items-center gap-1 text-[12px] sm:text-[13px] font-semibold truncate" style={text}>
+            <Lightbulb className="w-3 h-3 flex-shrink-0" style={{ color: 'var(--color-accent)' }} />
+            <span className="truncate">The Innovator</span>
+          </p>
+          <p className="hidden sm:block mt-1 text-[9px] leading-snug" style={secondary}>
+            Thrives on new ideas and unconventional solutions
+          </p>
+        </Rise>
+        <Rise delay={0.14} className="rounded-lg p-2.5 min-w-0" style={card}>
+          <p className="text-[9px]" style={secondary}>Average match</p>
+          <p className="mt-1 text-[13px] font-semibold" style={text}>
+            <CountUp value={79} suffix="%" delay={0.3} />
+          </p>
+          <p className="hidden sm:block mt-1 text-[9px] leading-snug" style={secondary}>
+            Best 82% across 13 roles
+          </p>
+        </Rise>
+        <Rise delay={0.2} className="rounded-lg p-2.5 min-w-0" style={card}>
+          <p className="text-[9px]" style={secondary}>Coffee chats</p>
+          <p className="mt-1 text-[13px] font-semibold" style={text}>
+            <CountUp value={2} delay={0.36} />
+          </p>
+          <p className="hidden sm:block mt-1 text-[9px] leading-snug" style={secondary}>
+            1 pending
+          </p>
+        </Rise>
       </div>
 
-      {/* Top matches — fills remaining space with 4 rows */}
-      <motion.div
-        className="rounded-lg border p-2 flex-1 flex flex-col min-h-0"
-        style={{
-          backgroundColor: 'var(--color-surface)',
-          borderColor: 'var(--color-border)',
-        }}
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-      >
-        <div className="flex items-center justify-between mb-1.5">
-          <div className="flex items-center gap-1.5">
+      <Rise delay={0.28} className="flex-1 min-h-0 flex flex-col">
+        <p className="text-[11px] font-semibold mb-1.5" style={text}>
+          Top matches
+        </p>
+        <div className="rounded-lg overflow-hidden" style={card}>
+          {matches.map((m, i) => (
             <motion.div
-              className="w-1 h-1 rounded-full"
-              style={{ backgroundColor: 'var(--color-success)' }}
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 1.8, repeat: Infinity }}
-            />
-            <p className="text-[10px] font-semibold" style={{ color: 'var(--color-text)' }}>
-              Top personality matches
-            </p>
-          </div>
-          <span
-            className="text-[8px]"
-            style={{ color: 'var(--color-textMuted)' }}
-          >
-            This week
-          </span>
-        </div>
-        <div className="space-y-1 flex-1 flex flex-col justify-evenly">
-          {topMatches.map((m, i) => (
-            <motion.div
-              key={m.company}
-              className="flex items-center gap-2 px-2 py-1.5 rounded border"
-              style={{
-                borderColor: 'color-mix(in srgb, var(--color-border) 60%, transparent)',
-                backgroundColor: 'color-mix(in srgb, var(--color-background) 40%, transparent)',
-              }}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.55 + i * 0.08 }}
+              key={m.role}
+              className="flex items-center gap-2 px-2.5 py-2"
+              style={{ borderTop: i ? '1px solid var(--color-border)' : undefined }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 + i * 0.07 }}
             >
-              <CompanyLogoTile domain={m.domain} fallback={m.fallback} size={22} />
+              <LetterTile letter={m.company[0]} />
               <div className="flex-1 min-w-0">
-                <p
-                  className="text-[10px] font-semibold leading-tight truncate"
-                  style={{ color: 'var(--color-text)' }}
-                >
-                  {m.company}
-                </p>
-                <p
-                  className="text-[8px] truncate"
-                  style={{ color: 'var(--color-textMuted)' }}
-                >
-                  {m.role}
-                </p>
+                <p className="text-[10px] font-medium leading-tight truncate" style={text}>{m.role}</p>
+                <p className="text-[9px] truncate" style={secondary}>{m.company}</p>
               </div>
-              <div className="flex items-center gap-1.5 flex-shrink-0">
-                <div
-                  className="h-1 rounded-full w-8 overflow-hidden"
-                  style={{ backgroundColor: 'color-mix(in srgb, var(--color-border) 50%, transparent)' }}
-                >
-                  <motion.div
-                    className="h-full rounded-full"
-                    style={{ backgroundColor: 'var(--color-accent)' }}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${m.score}%` }}
-                    transition={{ duration: 0.8, delay: 0.8 + i * 0.08, ease: [0.23, 1, 0.32, 1] }}
-                  />
-                </div>
+              <span className="hidden sm:inline text-[9px] w-14" style={secondary}>{m.style}</span>
+              <span className="hidden sm:flex items-center gap-1 text-[9px] w-20" style={secondary}>
                 <span
-                  className="text-[11px] font-semibold tabular-nums"
-                  style={{ color: 'var(--color-accent)' }}
-                >
-                  <AnimatedScoreNumber value={m.score} suffix="%" delay={0.8 + i * 0.08} />
-                </span>
-              </div>
+                  className="w-1 h-1 rounded-full"
+                  style={{ backgroundColor: m.status === 'Request sent' ? 'var(--color-accent)' : 'var(--color-textMuted)' }}
+                />
+                {m.status}
+              </span>
+              <span className="text-[10px] font-semibold tabular-nums" style={text}>
+                {m.score}%
+              </span>
             </motion.div>
           ))}
         </div>
-      </motion.div>
+      </Rise>
     </div>
   );
 }
 
-/* ── Scene 2: Assessment — mirrors /app/personality ── */
-function TypedText({ text, delay = 0 }: { text: string; delay?: number }) {
-  const [shown, setShown] = useState(0);
-  useEffect(() => {
-    const startTime = performance.now() + delay * 1000;
-    const perChar = 18;
-    let raf = 0;
-    const tick = (now: number) => {
-      const elapsed = Math.max(0, now - startTime);
-      const count = Math.min(Math.floor(elapsed / perChar), text.length);
-      setShown(count);
-      if (count < text.length) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [text, delay]);
-  return <>{text.slice(0, shown)}</>;
-}
-
-function SceneAssessmentScene({ pickedIndex, hoverIndex }: { pickedIndex: number; hoverIndex: number }) {
+/* Assessment: mirrors /app/personality */
+function SceneAssessment({ hover, picked }: { hover: number; picked: number }) {
   const options = [
-    {
-      title: 'Take the leap',
-      desc: 'Growth happens outside comfort zones. The learning opportunity is worth the risk.',
-    },
-    {
-      title: 'Stay the course',
-      desc: 'Building mastery in your field is underrated. Depth over breadth.',
-    },
-    {
-      title: 'Negotiate a hybrid',
-      desc: 'Can you try it part-time first? Test before fully committing.',
-    },
-    {
-      title: 'Need more information',
-      desc: 'Too many unknowns. Research thoroughly before deciding.',
-    },
+    { title: 'Take the leap', desc: 'The learning is worth the risk.' },
+    { title: 'Stay the course', desc: 'Depth over breadth.' },
+    { title: 'Negotiate a hybrid', desc: 'Try it part-time before committing.' },
+    { title: 'Find out more first', desc: 'Too many unknowns to decide yet.' },
   ];
 
   return (
-    <div className="w-full h-full p-3 flex flex-col overflow-hidden">
-      {/* Amber progress bar at the very top edge */}
-      <div
-        className="absolute inset-x-0 top-0 h-0.5"
-        style={{ backgroundColor: 'color-mix(in srgb, var(--color-border) 50%, transparent)' }}
-      >
-        <div
-          className="h-full"
-          style={{
-            width: '69%',
-            background: 'linear-gradient(90deg, #16A34A, #F59E0B, var(--color-accent))',
-          }}
-        />
+    <div className="h-full px-4 sm:px-10 py-4 sm:py-5 flex flex-col overflow-hidden">
+      <p className="text-[12px] font-semibold" style={text}>
+        Personality assessment
+      </p>
+      <div className="mt-2.5 flex items-center justify-between text-[9px]">
+        <span style={secondary}>Question 11 of 16</span>
+        <span style={muted}>Growth</span>
+      </div>
+      <div className="mt-1.5 h-1 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-border)' }}>
+        <div className="h-full rounded-full" style={{ width: '69%', backgroundColor: 'var(--color-accent)' }} />
       </div>
 
-      {/* Header row — bordered container matching other scenes */}
-      <motion.div
-        className="rounded-lg border p-2 flex items-center gap-2 mb-2 mt-1"
-        style={{
-          backgroundColor: 'var(--color-surface)',
-          borderColor: 'var(--color-border)',
-        }}
-        initial={{ opacity: 0, y: -4 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <div
-          className="w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0"
-          style={{
-            background:
-              'linear-gradient(135deg, color-mix(in srgb, var(--color-accent) 40%, transparent), color-mix(in srgb, var(--color-accent) 80%, transparent))',
-          }}
-        >
-          <Brain className="w-4 h-4" style={{ color: '#fff' }} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p
-            className="text-[11px] font-semibold leading-none"
-            style={{ color: 'var(--color-text)' }}
-          >
-            Personality assessment
-          </p>
-          <div className="flex items-center gap-1.5 mt-1">
-            <p
-              className="text-[8.5px] leading-none"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Question 11 of 16
-            </p>
-            <span
-              className="w-[3px] h-[3px] rounded-full"
-              style={{ backgroundColor: 'var(--color-border)' }}
-            />
-            <p
-              className="text-[8.5px] leading-none"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Scenario
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-1.5 flex-shrink-0">
-          {/* Auto-save indicator — live pulse (label hidden on narrow widths) */}
-          <motion.div
-            className="flex items-center gap-1 text-[8px]"
-            style={{ color: 'var(--color-success)' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            <motion.div
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ backgroundColor: 'var(--color-success)' }}
-              animate={{ opacity: [0.4, 1, 0.4] }}
-              transition={{ duration: 1.8, repeat: Infinity }}
-            />
-            <span className="hidden sm:inline">Auto-saved</span>
-          </motion.div>
-          <span
-            className="text-[9px] font-semibold px-2 py-0.5 rounded"
-            style={{
-              backgroundColor: 'color-mix(in srgb, var(--color-accent) 12%, transparent)',
-              color: 'var(--color-accent)',
-            }}
-          >
-            Growth
-          </span>
-        </div>
-      </motion.div>
+      <Rise delay={0.05} className="mt-4">
+        <p className="text-[13px] sm:text-[14px] font-semibold leading-snug" style={text}>
+          You're offered a role in a new field. More money, but you'd start from scratch. What do you do?
+        </p>
+      </Rise>
 
-      {/* Scenario question — tighter with less empty space */}
-      <motion.div
-        className="text-[19px] leading-[1.25] tracking-tight mb-2"
-        style={{ color: 'var(--color-text)' }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.15 }}
-      >
-        <TypedText
-          text="You're offered a role in a completely new field. More money, but you'd be starting from scratch. Your current role has a "
-          delay={0.2}
-        />
-        <span style={{ color: 'var(--color-accent)' }}>
-          <TypedText text="clear promotion path." delay={2.4} />
-        </span>
-      </motion.div>
-
-      {/* 2×2 option cards — matches real /app/personality (radio + title + description) */}
-      <div className="grid grid-cols-2 gap-2 flex-1">
-        {options.map((opt, i) => {
-          const isPicked = i === pickedIndex;
-          const isHovered = i === hoverIndex && !isPicked;
+      <div className="mt-3 flex flex-col gap-1.5 flex-1 min-h-0">
+        {options.map((o, i) => {
+          const isPicked = i === picked;
+          const isHover = i === hover && !isPicked;
           return (
-            <motion.div
-              key={opt.title}
-              className="rounded-lg border p-3 flex items-start gap-2 transition-colors"
+            <Rise
+              key={o.title}
+              delay={0.12 + i * 0.05}
+              className="rounded-lg px-2.5 py-2 flex items-start gap-2 transition-colors duration-200"
               style={{
-                borderColor: isPicked
-                  ? 'var(--color-accent)'
-                  : isHovered
-                  ? 'color-mix(in srgb, var(--color-accent) 50%, var(--color-border))'
-                  : 'var(--color-border)',
+                border: `1px solid ${isPicked ? 'var(--color-accent)' : isHover ? 'var(--color-borderHover)' : 'var(--color-border)'}`,
                 backgroundColor: isPicked
-                  ? 'color-mix(in srgb, var(--color-accent) 10%, transparent)'
-                  : isHovered
-                  ? 'color-mix(in srgb, var(--color-accent) 4%, transparent)'
+                  ? 'color-mix(in srgb, var(--color-accent) 8%, var(--color-surface))'
                   : 'var(--color-surface)',
-                boxShadow: isPicked
-                  ? '0 0 0 1px var(--color-accent), 0 0 14px color-mix(in srgb, var(--color-accent) 25%, transparent)'
-                  : 'none',
               }}
-              initial={{ opacity: 0, y: 6 }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                scale: isPicked ? [1, 1.03, 1] : 1,
-              }}
-              transition={{ duration: 0.3, delay: 0.2 + i * 0.06 }}
             >
-              {/* Radio */}
-              <div
-                className="w-3 h-3 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+              <span
+                className="mt-px w-3 h-3 rounded-full flex items-center justify-center flex-shrink-0 transition-colors duration-200"
                 style={{
-                  border: `1.5px solid ${
-                    isPicked || isHovered ? 'var(--color-accent)' : 'var(--color-border)'
-                  }`,
+                  border: `1px solid ${isPicked ? 'var(--color-accent)' : 'var(--color-borderHover)'}`,
                   backgroundColor: isPicked ? 'var(--color-accent)' : 'transparent',
                 }}
               >
-                {isPicked && (
-                  <Check
-                    className="w-1.5 h-1.5"
-                    style={{ color: 'var(--color-accentText)' }}
-                    strokeWidth={3}
-                  />
-                )}
-              </div>
-              {/* Title + description */}
-              <div className="min-w-0 flex-1">
-                <p
-                  className="text-[13px] font-semibold leading-tight mb-1.5"
-                  style={{ color: 'var(--color-text)' }}
-                >
-                  {opt.title}
-                </p>
-                <p
-                  className="text-[11px] leading-snug"
-                  style={{ color: 'var(--color-textMuted)' }}
-                >
-                  {opt.desc}
-                </p>
-              </div>
-            </motion.div>
+                {isPicked && <Check className="w-2 h-2" strokeWidth={3} style={{ color: 'var(--color-accentText)' }} />}
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[10px] font-medium leading-tight" style={text}>{o.title}</span>
+                <span className="block text-[9px] mt-0.5 truncate" style={secondary}>{o.desc}</span>
+              </span>
+            </Rise>
           );
         })}
       </div>
 
-      {/* Footer: keyboard hint + progress dots + Back/Continue */}
-      <div className="flex items-center justify-between mt-2.5">
-        {/* Keyboard shortcut hint */}
-        <div className="flex items-center gap-1">
-          <span
-            className="text-[7.5px] px-1 py-0.5 rounded border flex items-center gap-0.5"
-            style={{
-              color: 'var(--color-textMuted)',
-              borderColor: 'var(--color-border)',
-              backgroundColor: 'var(--color-surface)',
-            }}
-          >
-            <kbd className="">1</kbd>
-            –
-            <kbd className="">4</kbd>
-          </span>
-          <span className="text-[7.5px]" style={{ color: 'var(--color-textMuted)' }}>
-            Pick
-          </span>
-          <span
-            className="w-[3px] h-[3px] rounded-full ml-1"
-            style={{ backgroundColor: 'var(--color-border)' }}
-          />
-          <span
-            className="text-[7.5px]"
-            style={{ color: 'var(--color-textMuted)' }}
-          >
-            ~2 Min Left
-          </span>
-        </div>
-        <div className="flex items-center gap-0.5">
-          {Array.from({ length: 16 }).map((_, i) => {
-            const completed = i < 10;
-            const current = i === 10;
-            return (
-              <div
-                key={i}
-                className="rounded-full transition-all"
-                style={{
-                  width: current ? 12 : 3,
-                  height: 3,
-                  backgroundColor: completed || current
-                    ? 'var(--color-accent)'
-                    : 'color-mix(in srgb, var(--color-border) 60%, transparent)',
-                }}
-              />
-            );
-          })}
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="text-[9px]" style={{ color: 'var(--color-textMuted)' }}>
-            ← Back
-          </span>
-          <span
-            className="text-[9px] font-semibold px-2.5 py-1 rounded-md flex items-center gap-0.5"
-            style={{
-              backgroundColor: 'var(--color-accent)',
-              color: 'var(--color-accentText)',
-            }}
-          >
-            Continue →
-          </span>
-        </div>
+      <div className="mt-3 flex items-center justify-between">
+        <span className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[9px] font-medium" style={{ ...card, ...text }}>
+          <ArrowLeft className="w-2.5 h-2.5" />
+          Back
+        </span>
+        <span
+          className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[9px] font-medium transition-opacity duration-200"
+          style={{
+            backgroundColor: 'var(--color-accent)',
+            color: 'var(--color-accentText)',
+            opacity: picked >= 0 ? 1 : 0.5,
+          }}
+        >
+          Next
+          <ArrowRight className="w-2.5 h-2.5" />
+        </span>
       </div>
     </div>
   );
 }
 
-/* ── Scene 3: Insights — mirrors Ember deep-dive with full capability showcase ── */
-function SceneInsights() {
+/* Deep dive: mirrors the Ember deep dive for one match */
+function SceneDeepDive() {
   const scores = [
-    { label: 'Trait', value: 93, color: '#A855F7', icon: 'T' },
-    { label: 'Culture', value: 76, color: '#10B981', icon: 'C' },
-    { label: 'Style', value: 75, color: '#F59E0B', icon: 'S' },
-    { label: 'Comms', value: 92, color: '#EC4899', icon: '✦' },
-  ];
-
-  const dimensions = [
-    { letter: 'O', label: 'Openness', you: 75, team: 80, color: '#A855F7', status: 'growth' },
-    { letter: 'C', label: 'Conscientious', you: 85, team: 82, color: '#10B981', status: 'aligned' },
-    { letter: 'E', label: 'Extraversion', you: 68, team: 72, color: '#F59E0B', status: 'near' },
-    { letter: 'A', label: 'Agreeableness', you: 72, team: 85, color: '#EC4899', status: 'growth' },
-    { letter: 'S', label: 'Stability', you: 72, team: 72, color: '#3B82F6', status: 'match' },
+    { label: 'Trait match', value: 89 },
+    { label: 'Culture fit', value: 69 },
+    { label: 'Work style', value: 75 },
+    { label: 'Communication', value: 94 },
   ];
 
   return (
-    <div className="w-full h-full p-3 flex flex-col gap-2 overflow-hidden">
-      {/* Profile header — consistent header pattern */}
-      <motion.div
-        className="rounded-lg border p-2 flex items-center gap-2"
-        style={{
-          backgroundColor: 'var(--color-surface)',
-          borderColor: 'var(--color-border)',
-        }}
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <CompanyLogoTile fallback="K" size={32} />
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5">
-            <p
-              className="text-[11px] font-semibold leading-none truncate"
-              style={{ color: 'var(--color-text)' }}
-            >
-              Jordan Park
-            </p>
-            <span
-              className="text-[9px] leading-none"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              · Kestrel Studio
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 mt-1">
-            <p
-              className="text-[8.5px] leading-none"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Ember › deep dive
-            </p>
-            <span
-              className="w-[3px] h-[3px] rounded-full"
-              style={{ backgroundColor: 'var(--color-border)' }}
-            />
-            <span
-              className="text-[9px] font-semibold px-2 py-0.5 rounded"
-              style={{
-                backgroundColor: 'color-mix(in srgb, var(--color-accent) 12%, transparent)',
-                color: 'var(--color-accent)',
-              }}
-            >
-              The Strategist
-            </span>
-          </div>
-        </div>
-        <div className="flex items-center gap-1.5 flex-shrink-0">
-          <p
-            className="text-[18px] leading-none tabular-nums"
-            style={{ color: 'var(--color-text)' }}
-          >
-            <AnimatedScoreNumber value={85} suffix="%" delay={0.3} />
+    <div className="h-full p-4 sm:p-5 flex flex-col gap-3 overflow-hidden">
+      <Rise className="flex items-center gap-2.5">
+        <LetterTile letter="J" size={30} />
+        <div className="min-w-0 flex-1">
+          <p className="text-[14px] font-semibold leading-tight truncate" style={text}>Jonah Whitfield</p>
+          <p className="text-[9px] mt-0.5 truncate" style={secondary}>
+            Kestrel Studio · The Innovator · <span className="font-medium" style={text}>81% match</span>
           </p>
-          <motion.div
-            className="text-[9px] font-semibold px-2 py-0.5 rounded flex items-center gap-0.5"
-            style={{
-              color: 'var(--color-success)',
-              backgroundColor: 'color-mix(in srgb, var(--color-success) 12%, transparent)',
-            }}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.7, duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
-          >
-            <TrendingUp className="w-2.5 h-2.5" />
-            Strong fit
-          </motion.div>
         </div>
-      </motion.div>
+        <span className="hidden sm:inline rounded-md px-2 py-1 text-[9px] font-medium" style={{ ...card, ...text }}>
+          Connect
+        </span>
+      </Rise>
 
-      {/* Score breakdown — 4 bigger colored tiles in a row */}
-      <motion.div
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15 }}
-      >
-        <div className="flex items-center justify-between mb-1.5">
-          <p
-            className="text-[8px]"
-            style={{ color: 'var(--color-textMuted)' }}
-          >
-            Score breakdown
-          </p>
-          <p
-            className="text-[8px]"
-            style={{ color: 'var(--color-textMuted)' }}
-          >
-            4 Dimensions
-          </p>
-        </div>
-        <div className="grid grid-cols-4 gap-2">
+      <Rise delay={0.08}>
+        <p className="text-[11px] font-semibold mb-1.5" style={text}>Score breakdown</p>
+        <div className="rounded-lg p-2.5 grid grid-cols-2 sm:grid-cols-4 gap-x-3 gap-y-2.5" style={card}>
           {scores.map((s, i) => (
-            <motion.div
-              key={s.label}
-              className="rounded-lg p-3 relative overflow-hidden"
-              style={{
-                backgroundColor: 'var(--color-surface)',
-                border: `1px solid color-mix(in srgb, ${s.color} 35%, var(--color-border))`,
-                boxShadow: `0 1px 0 color-mix(in srgb, ${s.color} 20%, transparent), 0 0 16px color-mix(in srgb, ${s.color} 10%, transparent)`,
-              }}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: 0.25 + i * 0.06 }}
-            >
-              <div
-                className="absolute inset-y-0 left-0 w-[3px]"
-                style={{ backgroundColor: s.color }}
-              />
-              <p
-                className="text-[8.5px] pl-1.5 mb-1"
-                style={{ color: 'var(--color-textMuted)' }}
-              >
-                {s.label}
+            <div key={s.label} className="min-w-0">
+              <p className="text-[9px] truncate" style={secondary}>{s.label}</p>
+              <p className="text-[14px] font-semibold leading-tight mt-0.5 mb-1" style={text}>
+                <CountUp value={s.value} suffix="%" delay={0.2 + i * 0.05} />
               </p>
-              <p
-                className="text-[24px] leading-none tabular-nums pl-1.5 mb-2"
-                style={{ color: 'var(--color-text)' }}
-              >
-                <AnimatedScoreNumber value={s.value} suffix="%" delay={0.4 + i * 0.06} />
-              </p>
-              <div
-                className="h-1 rounded-full overflow-hidden ml-1.5"
-                style={{
-                  backgroundColor: 'color-mix(in srgb, var(--color-border) 50%, transparent)',
-                }}
-              >
-                <motion.div
-                  className="h-full rounded-full"
-                  style={{ backgroundColor: s.color }}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${s.value}%` }}
-                  transition={{ duration: 0.8, delay: 0.5 + i * 0.06, ease: [0.23, 1, 0.32, 1] }}
-                />
-              </div>
-            </motion.div>
+              <Bar value={s.value} delay={0.25 + i * 0.05} />
+            </div>
           ))}
         </div>
-      </motion.div>
+      </Rise>
 
-      {/* Flavor Profile — OCEAN bars with letter icons + delta chips */}
-      <motion.div
-        className="rounded-md border p-2 flex-1 flex flex-col min-h-0"
-        style={{
-          backgroundColor: 'var(--color-surface)',
-          borderColor: 'var(--color-border)',
-        }}
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25 }}
-      >
+      <Rise delay={0.16} className="flex-1 min-h-0 flex flex-col">
         <div className="flex items-center justify-between mb-1.5">
-          <p
-            className="text-[7.5px]"
-            style={{ color: 'var(--color-textMuted)' }}
-          >
-            Flavor profile
-          </p>
-          <div className="flex items-center gap-2 text-[7px]" style={{ color: 'var(--color-textMuted)' }}>
-            <span className="flex items-center gap-0.5">
-              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-accent)' }} />
-              You
-            </span>
-            <span className="flex items-center gap-0.5">
-              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'color-mix(in srgb, var(--color-textMuted) 40%, transparent)' }} />
-              Team
-            </span>
-          </div>
+          <p className="text-[11px] font-semibold" style={text}>Flavor profile</p>
+          <p className="text-[9px]" style={muted}>4 of 5 traits aligned</p>
         </div>
-        <div className="space-y-1 flex-1 flex flex-col justify-between">
-          {dimensions.map((dim, i) => {
-            const delta = dim.you - dim.team;
-            const statusColor =
-              dim.status === 'match'
-                ? 'var(--color-success)'
-                : dim.status === 'aligned'
-                ? 'var(--color-success)'
-                : dim.status === 'near'
-                ? '#F59E0B'
-                : '#EC4899';
-            const statusLabel =
-              dim.status === 'match' ? 'Match' : dim.status === 'aligned' ? 'Aligned' : dim.status === 'near' ? 'Near' : 'Growth';
-            return (
-              <motion.div
-                key={dim.label}
-                className="flex items-center gap-1.5"
-                initial={{ opacity: 0, x: -6 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + i * 0.06 }}
-              >
-                <div
-                  className="w-4 h-4 rounded flex items-center justify-center text-[8px] font-semibold flex-shrink-0"
-                  style={{
-                    backgroundColor: `color-mix(in srgb, ${dim.color} 15%, transparent)`,
-                    color: dim.color,
-                  }}
-                >
-                  {dim.letter}
-                </div>
-                <span
-                  className="text-[8.5px] w-[72px] flex-shrink-0 truncate"
-                  style={{ color: 'var(--color-text)' }}
-                >
-                  {dim.label}
-                </span>
-                <div
-                  className="flex-1 h-1 rounded-full overflow-hidden relative"
-                  style={{ backgroundColor: 'color-mix(in srgb, var(--color-border) 50%, transparent)' }}
-                >
-                  <motion.div
-                    className="absolute inset-y-0 left-0 rounded-full"
-                    style={{ backgroundColor: 'color-mix(in srgb, var(--color-textMuted) 35%, transparent)' }}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${dim.team}%` }}
-                    transition={{ duration: 0.8, delay: 0.5 + i * 0.06, ease: [0.23, 1, 0.32, 1] }}
-                  />
-                  <motion.div
-                    className="absolute inset-y-0 left-0 rounded-full"
-                    style={{ backgroundColor: dim.color }}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${dim.you}%` }}
-                    transition={{ duration: 0.9, delay: 0.6 + i * 0.06, ease: [0.23, 1, 0.32, 1] }}
-                  />
-                </div>
-                <span
-                  className="text-[8px] tabular-nums flex-shrink-0 w-[28px] text-right"
-                  style={{ color: dim.color }}
-                >
-                  {dim.you}
-                  <span className="opacity-40">/{dim.team}</span>
-                </span>
-                <span
-                  className="text-[7px] font-semibold px-1 py-0.5 rounded flex-shrink-0 w-[44px] text-center"
-                  style={{
-                    color: statusColor,
-                    backgroundColor: `color-mix(in srgb, ${statusColor} 12%, transparent)`,
-                  }}
-                >
-                  {delta >= 0 ? '+' : ''}
-                  {delta} {statusLabel}
-                </span>
-              </motion.div>
-            );
-          })}
-        </div>
-      </motion.div>
-
-      {/* Ember's Take — AI-generated insight with strengths & discussion point */}
-      <motion.div
-        className="rounded-md border p-2 flex items-start gap-2"
-        style={{
-          backgroundColor: 'color-mix(in srgb, var(--color-accent) 6%, transparent)',
-          borderColor: 'color-mix(in srgb, var(--color-accent) 20%, transparent)',
-        }}
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.1 }}
-      >
-        <div
-          className="w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0"
-          style={{
-            background: 'linear-gradient(135deg, var(--color-accent), #F59E0B)',
-          }}
-        >
-          <Sparkles className="w-2.5 h-2.5" style={{ color: '#fff' }} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between mb-0.5">
-            <p
-              className="text-[7.5px]"
-              style={{ color: 'var(--color-accent)' }}
-            >
-              Ember's take
-            </p>
-            <div className="flex items-center gap-1">
-              <span
-                className="text-[7px] font-semibold px-1 py-px rounded"
-                style={{
-                  color: 'var(--color-success)',
-                  backgroundColor: 'color-mix(in srgb, var(--color-success) 12%, transparent)',
-                }}
-              >
-                2 Strengths
-              </span>
-              <span
-                className="text-[7px] font-semibold px-1 py-px rounded"
-                style={{
-                  color: '#F59E0B',
-                  backgroundColor: 'color-mix(in srgb, #F59E0B 12%, transparent)',
-                }}
-              >
-                1 to discuss
+        <div className="rounded-lg px-2.5 py-2 flex-1 flex flex-col justify-evenly" style={card}>
+          <div className="flex justify-end text-[8px]" style={muted}>You / employer</div>
+          {TRAITS.map((t, i) => (
+            <div key={t.name} className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: t.color }} />
+              <span className="text-[10px] w-[92px] flex-shrink-0 truncate" style={text}>{t.name}</span>
+              <div className="flex-1">
+                <Bar value={t.you} color={t.color} delay={0.3 + i * 0.05} />
+              </div>
+              <span className="text-[10px] tabular-nums w-11 text-right flex-shrink-0" style={text}>
+                {t.you}
+                <span style={muted}> / {t.them}</span>
               </span>
             </div>
-          </div>
-          <p
-            className="text-[9px] leading-snug"
-            style={{ color: 'var(--color-text)' }}
-          >
-            Strong conscientiousness alignment means compatible work ethics.{' '}
-            <span style={{ color: 'var(--color-textMuted)' }}>
-              Discuss how your openness complements their structured approach.
-            </span>
-          </p>
+          ))}
         </div>
-      </motion.div>
+      </Rise>
     </div>
   );
 }
 
-/* ── Scene 4: Connect — mirrors connection-request modal ── */
+/* Connect: mirrors the connection request modal with a coffee chat invite */
 function SceneConnect({ stage }: { stage: number }) {
-  const times = ['10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM', '1:00 PM'];
-  const pickedTime = 4; // 12:30 PM
   const durations = ['15m', '30m', '45m', '60m'];
-  const pickedDuration = '30m';
-
-  const durationPicked = stage >= 1;
+  const times = ['10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM'];
+  const picked = { dates: [21, 23], time: 5 };
+  const datesPicked = stage >= 1;
   const timePicked = stage >= 2;
-  const sendHovered = stage >= 3;
   const sent = stage >= 3;
 
-  const message =
-    "I'd love to chat about how our work styles align at Kestrel Studio.";
-
-  return (
-    <div className="w-full h-full p-3 flex flex-col gap-2 overflow-hidden">
-      {/* Target person+company card — consistent header pattern */}
-      <motion.div
-        className="rounded-lg border p-2 flex items-center gap-2"
-        style={{
-          backgroundColor: 'var(--color-surface)',
-          borderColor: 'var(--color-border)',
-        }}
-        initial={{ opacity: 0, y: -6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        <CompanyLogoTile fallback="K" size={32} />
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5">
-            <p
-              className="text-[11px] font-semibold leading-none truncate"
-              style={{ color: 'var(--color-text)' }}
-            >
-              Jordan Park
-            </p>
-            <span
-              className="text-[9px] leading-none"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              · Kestrel Studio
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 mt-1">
-            <p
-              className="text-[8.5px] leading-none"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              Senior product designer
-            </p>
-            <span
-              className="w-[3px] h-[3px] rounded-full"
-              style={{ backgroundColor: 'var(--color-border)' }}
-            />
-            <span
-              className="text-[9px] font-semibold px-2 py-0.5 rounded"
-              style={{
-                backgroundColor: 'color-mix(in srgb, var(--color-accent) 12%, transparent)',
-                color: 'var(--color-accent)',
-              }}
-            >
-              The Strategist
-            </span>
-          </div>
-        </div>
-        <div className="flex items-center gap-1.5 flex-shrink-0">
-          <p
-            className="text-[18px] leading-none tabular-nums"
-            style={{ color: 'var(--color-text)' }}
-          >
-            85%
-          </p>
-          <span
-            className="text-[9px] font-semibold px-2 py-0.5 rounded flex items-center gap-0.5"
-            style={{
-              color: 'var(--color-success)',
-              backgroundColor: 'color-mix(in srgb, var(--color-success) 12%, transparent)',
-            }}
-          >
-            <TrendingUp className="w-2.5 h-2.5" />
-            Strong fit
-          </span>
-        </div>
-      </motion.div>
-
-      {/* Duration pills row */}
-      <motion.div
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15 }}
-      >
-        <div
-          className="flex items-center gap-1 text-[8px] mb-1"
-          style={{ color: 'var(--color-textMuted)' }}
-        >
-          <Coffee className="w-2.5 h-2.5" />
-          Duration
-        </div>
-        <div className="grid grid-cols-4 gap-1">
-          {durations.map((d) => {
-            const picked = durationPicked && d === pickedDuration;
-            return (
-              <motion.span
-                key={d}
-                className="text-[10px] font-semibold py-1.5 rounded-md text-center"
-                style={{
-                  backgroundColor: picked ? 'var(--color-accent)' : 'var(--color-surface)',
-                  color: picked ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
-                  border: `1px solid ${picked ? 'var(--color-accent)' : 'var(--color-border)'}`,
-                }}
-                animate={picked ? { scale: [1, 1.1, 1] } : {}}
-                transition={{ duration: 0.3 }}
-              >
-                {d}
-              </motion.span>
-            );
-          })}
-        </div>
-      </motion.div>
-
-      {/* Mini calendar — full width, takes most vertical space */}
-      <motion.div
-        className="rounded-md border p-2 flex-1 flex flex-col min-h-0"
-        style={{
-          backgroundColor: 'var(--color-surface)',
-          borderColor: 'var(--color-border)',
-        }}
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25 }}
-      >
-        <div className="flex items-center justify-between mb-1.5">
-          <span
-            className="text-[10px] font-semibold"
-            style={{ color: 'var(--color-text)' }}
-          >
-            ◀ April 2026 ▶
-          </span>
-          <span
-            className="text-[8px]"
-            style={{ color: 'var(--color-textMuted)' }}
-          >
-            2/5 Dates Selected
-          </span>
-        </div>
-        {/* Day headers */}
-        <div className="grid grid-cols-7 gap-0.5 mb-0.5">
-          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d, i) => (
-            <div
-              key={i}
-              className="text-[8px] text-center"
-              style={{ color: 'var(--color-textMuted)' }}
-            >
-              {d}
-            </div>
-          ))}
-        </div>
-        {/* Calendar cells — April 2026: starts Wed Apr 1 */}
-        <div className="grid grid-cols-7 gap-0.5 flex-1 min-h-0">
-          {(() => {
-            type Cell = { day: number; inMonth: boolean; selected?: boolean; today?: boolean };
-            const cells: Cell[] = [];
-            cells.push({ day: 29, inMonth: false });
-            cells.push({ day: 30, inMonth: false });
-            cells.push({ day: 31, inMonth: false });
-            for (let d = 1; d <= 30; d++) {
-              cells.push({
-                day: d,
-                inMonth: true,
-                selected: d === 21 || d === 23,
-                today: d === 18,
-              });
-            }
-            cells.push({ day: 1, inMonth: false });
-            cells.push({ day: 2, inMonth: false });
-            return cells.map((c, i) => {
-              const isPicked = c.inMonth && c.selected && timePicked;
-              return (
-                <motion.div
-                  key={i}
-                  className="text-[9px] rounded flex items-center justify-center"
-                  style={{
-                    color: !c.inMonth
-                      ? 'color-mix(in srgb, var(--color-textMuted) 50%, transparent)'
-                      : isPicked
-                      ? 'var(--color-accentText)'
-                      : c.today
-                      ? 'var(--color-accent)'
-                      : 'var(--color-text)',
-                    backgroundColor: isPicked
-                      ? 'var(--color-accent)'
-                      : c.today
-                      ? 'color-mix(in srgb, var(--color-accent) 10%, transparent)'
-                      : 'transparent',
-                    border: c.today
-                      ? '1px solid color-mix(in srgb, var(--color-accent) 40%, transparent)'
-                      : 'none',
-                    fontWeight: isPicked || c.today ? 600 : 400,
-                  }}
-                  animate={isPicked ? { scale: [1, 1.15, 1] } : {}}
-                  transition={{ duration: 0.3 }}
-                >
-                  {c.day}
-                </motion.div>
-              );
-            });
-          })()}
-        </div>
-      </motion.div>
-
-      {/* Time slots row — single horizontal row below calendar */}
-      <motion.div
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
-      >
-        <div
-          className="flex items-center gap-1 text-[8px] mb-1"
-          style={{ color: 'var(--color-textMuted)' }}
-        >
-          <Calendar className="w-2.5 h-2.5" />
-          Preferred time · Thu Apr 23
-        </div>
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-1">
-          {times.map((t, i) => {
-            const isPicked = timePicked && i === pickedTime;
-            return (
-              <motion.div
-                key={t}
-                className="text-center text-[8.5px] font-medium rounded-md border py-1 flex items-center justify-center"
-                style={{
-                  borderColor: isPicked ? 'var(--color-accent)' : 'var(--color-border)',
-                  backgroundColor: isPicked ? 'var(--color-accent)' : 'var(--color-surface)',
-                  color: isPicked ? 'var(--color-accentText)' : 'var(--color-text)',
-                }}
-                animate={isPicked ? { scale: [1, 1.1, 1] } : {}}
-                transition={{ duration: 0.3 }}
-              >
-                {t}
-              </motion.div>
-            );
-          })}
-        </div>
-      </motion.div>
-
-      {/* Message preview — single compact row under the times */}
-      <motion.div
-        className="rounded-md border px-2 py-1.5 flex items-center gap-1.5"
-        style={{
-          backgroundColor: 'var(--color-surface)',
-          borderColor: 'var(--color-border)',
-        }}
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35 }}
-      >
-        <span
-          className="text-[7.5px] flex-shrink-0"
-          style={{ color: 'var(--color-textMuted)' }}
-        >
-          Message
-        </span>
-        <p
-          className="text-[9px] leading-none flex-1 min-w-0 truncate"
-          style={{ color: 'var(--color-text)' }}
-        >
-          <TypedText text={message} delay={0.5} />
-          <motion.span
-            className="inline-block w-0.5 h-2 ml-px align-middle"
-            style={{ backgroundColor: 'var(--color-accent)' }}
-            animate={{ opacity: [1, 0, 1] }}
-            transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
-          />
-        </p>
-        <span
-          className="text-[7.5px] flex-shrink-0"
-          style={{ color: 'var(--color-textMuted)' }}
-        >
-          11/100
-        </span>
-      </motion.div>
-
-      {/* Footer row: cancel + send request */}
-      <motion.div
-        className="flex items-center justify-end gap-2"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.45 }}
-      >
-        <span className="text-[9px]" style={{ color: 'var(--color-textMuted)' }}>
-          Cancel
-        </span>
-        <motion.div
-          className="text-[9.5px] font-semibold px-2.5 py-1.5 rounded-md flex items-center gap-1"
-          style={{
-            backgroundColor: 'var(--color-accent)',
-            color: 'var(--color-accentText)',
-            boxShadow: sendHovered
-              ? '0 0 0 2px color-mix(in srgb, var(--color-accent) 30%, transparent)'
-              : 'none',
-          }}
-          animate={sent ? { scale: [1, 1.08, 1] } : {}}
-          transition={{ duration: 0.3 }}
-        >
-          {sent ? (
-            <>
-              <Check className="w-3 h-3" strokeWidth={3} />
-              Sent
-            </>
-          ) : (
-            <>
-              <Send className="w-3 h-3" />
-              Send request
-            </>
-          )}
-        </motion.div>
-      </motion.div>
-    </div>
-  );
-}
-
-function ProcessCard() {
-  const [active, setActive] = useState(0);
-  const [_clicked, setClicked] = useState(false);
-  const [pickedIndex, setPickedIndex] = useState(-1);
-  const [hoverIndex, setHoverIndex] = useState(-1); // Scene 2: hover drift
-  const [connectStage, setConnectStage] = useState(0); // Scene 4: 0=idle, 1=duration picked, 2=time picked, 3=sent
-
-  useEffect(() => {
-    setClicked(false);
-    setPickedIndex(-1);
-    setHoverIndex(-1);
-    setConnectStage(0);
-
-    const timers: ReturnType<typeof setTimeout>[] = [];
-
-    if (active === 1) {
-      // Assessment: cursor drifts across 2–3 options, then picks top-left
-      timers.push(setTimeout(() => setHoverIndex(3), 600));
-      timers.push(setTimeout(() => setHoverIndex(1), 1200));
-      timers.push(setTimeout(() => setHoverIndex(0), 1800));
-      timers.push(setTimeout(() => setPickedIndex(0), 2300));
-    }
-    if (active === 3) {
-      // Connect: duration → time → send (3 stages)
-      timers.push(setTimeout(() => setConnectStage(1), 700));
-      timers.push(setTimeout(() => setConnectStage(2), 1500));
-      timers.push(setTimeout(() => setConnectStage(3), 2400));
-      timers.push(setTimeout(() => setClicked(true), 2600));
-    }
-
-    timers.push(
-      setTimeout(() => {
-        setActive((a) => (a + 1) % PROCESS_STEPS.length);
-      }, STEP_DURATION)
-    );
-
-    return () => timers.forEach(clearTimeout);
-  }, [active]);
-
-  const step = PROCESS_STEPS[active];
-
-  const scenes = [
-    <SceneDashboard />,
-    <SceneAssessmentScene pickedIndex={pickedIndex} hoverIndex={hoverIndex} />,
-    <SceneInsights />,
-    <SceneConnect stage={connectStage} />,
+  // April 2026 starts on a Wednesday
+  const cells = [
+    ...[29, 30, 31].map((day) => ({ day, inMonth: false })),
+    ...Array.from({ length: 30 }, (_, i) => ({ day: i + 1, inMonth: true })),
+    ...[1, 2].map((day) => ({ day, inMonth: false })),
   ];
 
   return (
     <div
-      className="relative rounded-xl p-5 sm:p-7 overflow-hidden flex flex-col"
-      style={{
-        backgroundColor: 'var(--color-surface)',
-        border: '1px solid var(--color-border)',
-      }}
+      className="h-full flex items-center justify-center p-3 sm:p-5 overflow-hidden"
+      style={{ backgroundColor: 'color-mix(in srgb, var(--color-background) 70%, #000 30%)' }}
     >
-      <div className="relative flex flex-col">
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={step.number}
-            className="text-sm leading-relaxed mb-5 max-w-md"
-            style={{ color: 'var(--color-textSecondary)' }}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.3 }}
-          >
-            {step.caption}
-          </motion.p>
-        </AnimatePresence>
+      <Rise className="w-full max-w-[440px] rounded-xl p-3 sm:p-4 flex flex-col gap-2.5" style={{ ...card, backgroundColor: 'var(--color-backgroundSecondary)' }}>
+        <div className="flex items-center gap-2">
+          <LetterTile letter="K" size={26} />
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-semibold leading-tight" style={text}>Kestrel Studio</p>
+            <p className="text-[9px] truncate" style={secondary}>Design agency · The Innovator</p>
+          </div>
+          <span className="text-[11px] font-semibold tabular-nums" style={text}>81%</span>
+          <X className="w-3 h-3 ml-1" style={muted} />
+        </div>
 
-        <div
-          className="relative rounded-lg overflow-hidden border mb-5"
-          style={{
-            borderColor: 'var(--color-border)',
-            backgroundColor: 'color-mix(in srgb, var(--color-background) 60%, transparent)',
-          }}
-        >
-          <div
-            className="flex items-center gap-1.5 px-3 py-1.5 border-b"
-            style={{
-              borderColor: 'var(--color-border)',
-              backgroundColor: 'var(--color-backgroundSecondary)',
-            }}
-          >
-            <div className="flex gap-1">
-              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#FF5F57' }} />
-              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#FEBC2E' }} />
-              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#28C840' }} />
+        <div className="rounded-md px-2 py-1.5 text-[10px] leading-snug" style={{ ...card, ...text }}>
+          I'd like to connect and discuss how our work styles align.
+        </div>
+
+        <div>
+          <p className="text-[10px] font-medium mb-1" style={text}>Duration</p>
+          <div className="grid grid-cols-4 gap-1">
+            {durations.map((d) => (
+              <span
+                key={d}
+                className="text-[9px] text-center rounded-md py-1"
+                style={{
+                  border: `1px solid ${d === '30m' ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                  color: d === '30m' ? 'var(--color-accent)' : 'var(--color-textSecondary)',
+                }}
+              >
+                {d}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <ChevronLeft className="w-2.5 h-2.5" style={muted} />
+              <span className="text-[10px] font-medium" style={text}>April 2026</span>
+              <ChevronRight className="w-2.5 h-2.5" style={muted} />
             </div>
-            <div className="flex-1 flex justify-center">
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={step.label}
-                  className="text-[8px] tracking-wider"
-                  style={{ color: 'var(--color-textMuted)' }}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  amber.app/{step.label.toLowerCase()}
-                </motion.span>
-              </AnimatePresence>
+            <div className="grid grid-cols-7 gap-y-0.5 text-center">
+              {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
+                <span key={d} className="text-[8px]" style={muted}>{d}</span>
+              ))}
+              {cells.map((c, i) => {
+                const on = datesPicked && c.inMonth && picked.dates.includes(c.day);
+                const available = c.inMonth && c.day >= 18;
+                return (
+                  <span
+                    key={i}
+                    className="text-[8.5px] leading-[15px] rounded transition-colors duration-200"
+                    style={{
+                      backgroundColor: on ? 'var(--color-accent)' : 'transparent',
+                      color: on ? 'var(--color-accentText)' : available ? 'var(--color-text)' : 'var(--color-textMuted)',
+                      fontWeight: on ? 600 : 400,
+                      opacity: c.inMonth ? 1 : 0.5,
+                    }}
+                  >
+                    {c.day}
+                  </span>
+                );
+              })}
             </div>
           </div>
+          <div className="hidden sm:block">
+            <p className="text-[10px] font-medium mb-1" style={text}>Preferred time</p>
+            <div className="grid grid-cols-2 gap-1">
+              {times.map((t, i) => {
+                const on = timePicked && i === picked.time;
+                return (
+                  <span
+                    key={t}
+                    className="text-[9px] text-center rounded-md py-1 transition-colors duration-200"
+                    style={{
+                      backgroundColor: on ? 'var(--color-accent)' : 'transparent',
+                      color: on ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
+                      border: `1px solid ${on ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                    }}
+                  >
+                    {t}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        </div>
 
-          {/* Fixed height: the scenes are absolutely positioned, so nothing else gives this box a size */}
-          <div className="relative w-full h-[440px] sm:h-[400px]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active}
-                className="absolute inset-0"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+        <div className="flex items-center justify-end gap-3 pt-2" style={{ borderTop: '1px solid var(--color-border)' }}>
+          <span className="text-[10px]" style={text}>Cancel</span>
+          <span
+            className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[10px] font-medium"
+            style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-accentText)' }}
+          >
+            {sent && <Check className="w-2.5 h-2.5" strokeWidth={3} />}
+            {sent ? 'Request sent' : 'Send request'}
+          </span>
+        </div>
+      </Rise>
+    </div>
+  );
+}
+
+function ProductTour() {
+  const reduce = useReducedMotion();
+  const [active, setActive] = useState(0);
+  const [hover, setHover] = useState(-1);
+  const [picked, setPicked] = useState(-1);
+  const [stage, setStage] = useState(0);
+
+  useEffect(() => {
+    setHover(-1);
+    setPicked(-1);
+    setStage(0);
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const at = (ms: number, fn: () => void) => timers.push(setTimeout(fn, ms));
+
+    if (active === 1) {
+      at(700, () => setHover(3));
+      at(1300, () => setHover(1));
+      at(1900, () => setHover(0));
+      at(2400, () => setPicked(0));
+    }
+    if (active === 3) {
+      at(900, () => setStage(1));
+      at(1800, () => setStage(2));
+      at(2800, () => setStage(3));
+    }
+    at(STEP_DURATION, () => setActive((a) => (a + 1) % STEPS.length));
+    return () => timers.forEach(clearTimeout);
+  }, [active]);
+
+  const step = STEPS[active];
+  const scenes = [
+    <SceneDashboard key="dashboard" />,
+    <SceneAssessment key="assessment" hover={hover} picked={picked} />,
+    <SceneDeepDive key="deep-dive" />,
+    <SceneConnect key="connect" stage={stage} />,
+  ];
+
+  // Both screens stay mounted while they crossfade, so there is never an empty frame
+  const fade = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+    transition: { duration: reduce ? 0 : 0.45, ease: [0.4, 0, 0.2, 1] as const },
+  };
+
+  return (
+    <div className="bento-card !p-4 sm:!p-6 lg:grid lg:grid-cols-[14rem_1fr] lg:gap-8">
+      {/* Wide screens: the steps and their captions sit beside the screen */}
+      <ol className="hidden lg:flex flex-col gap-1" aria-label="Tour steps">
+        {STEPS.map((s, i) => {
+          const isActive = i === active;
+          return (
+            <li key={s.label}>
+              <button
+                type="button"
+                aria-current={isActive ? 'step' : undefined}
+                onClick={() => setActive(i)}
+                className="relative w-full text-left rounded-md pl-4 pr-2 py-2.5 transition-colors hover:bg-[var(--color-surfaceHover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
               >
+                <span className="absolute left-0 top-2.5 bottom-2.5 w-0.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-border)' }}>
+                  {isActive && <StepProgress vertical reduce={!!reduce} />}
+                </span>
+                <span className="block text-label" style={{ color: isActive ? 'var(--color-text)' : 'var(--color-textSecondary)' }}>
+                  {s.label}
+                </span>
+                <span className="block mt-1 text-caption leading-snug" style={isActive ? secondary : muted}>
+                  {s.caption}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+
+      <div className="min-w-0">
+        <div className="grid lg:hidden mb-4 min-h-[2.75rem]">
+          <AnimatePresence initial={false}>
+            <motion.p key={active} {...fade} className="[grid-area:1/1] text-sm leading-relaxed" style={secondary}>
+              {step.caption}
+            </motion.p>
+          </AnimatePresence>
+        </div>
+
+        <div className="rounded-lg overflow-hidden" style={{ border: '1px solid var(--color-border)' }} aria-hidden="true">
+          <div
+            className="flex items-center gap-1.5 px-3 py-1.5"
+            style={{ borderBottom: '1px solid var(--color-border)', backgroundColor: 'var(--color-backgroundSecondary)' }}
+          >
+            <div className="flex gap-1">
+              {[0, 1, 2].map((i) => (
+                <span key={i} className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-border)' }} />
+              ))}
+            </div>
+            <span className="flex-1 text-center text-[9px] truncate" style={muted}>
+              nakulpatel0306.github.io/amber/{step.path}
+            </span>
+          </div>
+
+          {/* Fixed height: scenes are stacked absolutely so the outgoing and incoming screens overlap */}
+          <div className="relative h-[400px] sm:h-[380px]" style={{ backgroundColor: 'var(--color-background)' }}>
+            <AnimatePresence initial={false}>
+              <motion.div key={active} {...fade} className="absolute inset-0">
                 {scenes[active]}
               </motion.div>
             </AnimatePresence>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          {PROCESS_STEPS.map((s, i) => {
+        <div className="lg:hidden mt-4 grid grid-cols-4 gap-2" role="group" aria-label="Tour steps">
+          {STEPS.map((s, i) => {
             const isActive = i === active;
-            const isDone = i < active;
             return (
-              <div key={s.number} className="flex items-center gap-2 flex-1 min-w-0">
-                <div
-                  className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[10px] font-semibold tabular-nums transition-all"
-                  style={{
-                    backgroundColor:
-                      isActive || isDone ? 'var(--color-accent)' : 'transparent',
-                    border: `1px solid ${
-                      isActive || isDone ? 'var(--color-accent)' : 'var(--color-border)'
-                    }`,
-                    color:
-                      isActive || isDone
-                        ? 'var(--color-accentText)'
-                        : 'var(--color-textMuted)',
-                  }}
-                >
-                  {isDone ? <Check className="w-2.5 h-2.5" /> : s.number}
-                </div>
+              <button
+                key={s.label}
+                type="button"
+                aria-current={isActive ? 'step' : undefined}
+                onClick={() => setActive(i)}
+                className="text-left rounded-sm py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+              >
+                <span className="block h-0.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-border)' }}>
+                  {isActive && <StepProgress reduce={!!reduce} />}
+                </span>
                 <span
-                  className="text-label truncate hidden sm:inline"
-                  style={{
-                    color: isActive ? 'var(--color-text)' : 'var(--color-textMuted)',
-                    opacity: isActive ? 1 : 0.5,
-                  }}
+                  className="mt-2 block text-caption sm:text-label truncate"
+                  style={{ color: isActive ? 'var(--color-text)' : 'var(--color-textSecondary)' }}
                 >
                   {s.label}
                 </span>
-                {i < PROCESS_STEPS.length - 1 && (
-                  <div
-                    className="w-2 h-px flex-shrink-0 hidden sm:block"
-                    style={{ backgroundColor: 'var(--color-border)' }}
-                  />
-                )}
-              </div>
+              </button>
             );
           })}
         </div>
@@ -1407,19 +596,34 @@ function ProcessCard() {
   );
 }
 
+function StepProgress({ vertical = false, reduce }: { vertical?: boolean; reduce: boolean }) {
+  const prop = vertical ? 'height' : 'width';
+  return (
+    <motion.span
+      className={vertical ? 'block w-full' : 'block h-full'}
+      style={{ backgroundColor: 'var(--color-accent)' }}
+      initial={{ [prop]: reduce ? '100%' : '0%' }}
+      animate={{ [prop]: '100%' }}
+      transition={{ duration: reduce ? 0 : STEP_DURATION / 1000, ease: 'linear' }}
+    />
+  );
+}
+
 export function FeatureBento() {
   return (
-    <section className="px-4 sm:px-6 lg:px-8 py-14 sm:py-16">
+    <section id="tour" className="px-4 sm:px-6 lg:px-8 py-14 sm:py-16 scroll-mt-20">
       <div className="max-w-5xl mx-auto">
         <div className="max-w-2xl mb-10">
-          <h2 className="text-headline" style={{ color: 'var(--color-text)' }}>
-            A tour of the product
+          <h2 className="text-headline" style={text}>
+            What we built
           </h2>
-          <p className="mt-4 text-base sm:text-lg leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
-            Recreations of the four screens a job seeker moves through, from the dashboard to booking a coffee chat.
+          <p className="mt-4 text-base sm:text-lg leading-relaxed" style={secondary}>
+            Both sides of the product, from January to November 2026: assessments, matching, culture profiles,
+            connections, scheduling, realtime chat and billing. Below are recreations of four screens a job seeker moves
+            through; the demo runs the real app.
           </p>
         </div>
-        <ProcessCard />
+        <ProductTour />
       </div>
     </section>
   );
