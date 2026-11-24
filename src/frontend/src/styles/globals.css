@@ -29,11 +29,9 @@
   --radius-2xl: 1.25rem;
   --radius-full: 9999px;
 
-  /* Fonts — Cluely-inspired: Geist + Instrument Serif */
-  --font-display: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: 'Instrument Serif', Georgia, serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  /* Fonts — one sans family everywhere; mono only for code */
+  --font-body: 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 }
 
 /* === LAYER 2: SEMANTIC (purpose-based) === */
@@ -117,49 +115,25 @@
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: 'ss01' 1, 'cv11' 1;
+    /* Inter's open digits and straight-sided l read better in dense UI */
+    font-feature-settings: 'cv05' 1, 'cv08' 1;
+    font-optical-sizing: auto;
     transition: background-color 0.3s ease, color 0.3s ease;
     font-size: 15px;
     line-height: 1.55;
-    letter-spacing: -0.015em;
-    background-color: var(--color-background);
+    letter-spacing: -0.006em;
     min-height: 100vh;
   }
 
-  /* Serif display utility — for hero headings + editorial accents */
-  .font-serif, [class*="font-serif"] {
-    font-family: var(--font-serif);
-    letter-spacing: -0.02em;
+  h1, h2, h3, h4 {
+    text-wrap: balance;
   }
 
-  /* Subtle grain overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    pointer-events: none;
-    opacity: 0.015;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 256px 256px;
-  }
-
-  /* brand font - small caps style for uniform height */
-  .brand-font {
-    font-family: var(--font-display);
-    font-weight: 600;
-    text-transform: lowercase;
-    font-size: 0.875rem;
-    letter-spacing: 0.02em;
-  }
-
-  /* monospace font for code */
   code,
   pre,
   .font-mono {
-    font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
-    font-feature-settings: 'liga' 1, 'calt' 1;
+    font-family: var(--font-mono);
+    letter-spacing: 0;
   }
 
   /* custom scrollbar - subtle themed */
@@ -271,54 +245,26 @@
     border: 1px solid rgba(255, 255, 255, 0.06);
   }
 
-  /* bento box card */
+  /* The one card: surface, 1px border, 12px radius. Cards sit flat; only clickable ones respond. */
   .bento-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     padding: 1.25rem;
-    transition: border-color var(--duration-normal) var(--ease-out),
-                transform var(--duration-normal) var(--ease-out),
-                box-shadow var(--duration-normal) var(--ease-out);
-    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.04);
+    transition: border-color var(--duration-normal) var(--ease-out);
   }
 
-  .bento-card:hover {
-    border-color: var(--color-borderHover);
-    transform: translateY(-2px);
-    box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.04),
-                0 2px 8px -2px rgba(0, 0, 0, 0.08),
-                0 4px 16px -4px rgba(0, 0, 0, 0.04);
-  }
-
-  /* Interactive card — hover lift + border glow + shadow */
-  .card-interactive {
-    transition: transform var(--duration-normal) var(--ease-out),
-                box-shadow var(--duration-normal) var(--ease-out),
-                border-color var(--duration-normal) var(--ease-out);
-  }
-
-  .card-interactive:hover {
-    transform: translateY(-2px);
-    border-color: var(--color-borderHover);
-    box-shadow: 0 4px 16px -4px rgba(0, 0, 0, 0.1),
-                0 8px 32px -8px rgba(0, 0, 0, 0.08);
-  }
-
-  .bento-card-accent {
-    border-top: 2px solid var(--color-accent);
-  }
-
-  /* card hover effect */
+  .card-interactive,
   .card-hover {
-    transition: transform var(--duration-normal) var(--ease-out),
-                box-shadow var(--duration-normal) var(--ease-out),
-                border-color var(--duration-normal) var(--ease-out);
+    transition: border-color var(--duration-normal) var(--ease-out),
+                background-color var(--duration-normal) var(--ease-out);
   }
 
-  .card-hover:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+  .card-interactive:hover,
+  .card-hover:hover,
+  .bento-card.cursor-pointer:hover,
+  a.bento-card:hover,
+  button.bento-card:hover {
     border-color: var(--color-borderHover);
   }
 

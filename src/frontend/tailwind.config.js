@@ -42,14 +42,20 @@ export default {
           500: '#A8A093',
         },
       },
+      // One family for the whole product; mono is left to the system and kept for code only
       fontFamily: {
-        sans: ['Geist', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'system-ui', 'sans-serif'],
-        serif: ['Instrument Serif', 'Georgia', 'Times New Roman', 'serif'],
-        display: ['Geist', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', 'monospace'],
+        sans: ['Inter Variable', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'system-ui', 'sans-serif'],
+        mono: ['ui-monospace', 'SF Mono', 'Menlo', 'Consolas', 'monospace'],
       },
+      // Named type roles. Hierarchy comes from size, weight (400/500/600) and color, never from a second face.
       fontSize: {
-        '2xs': ['0.625rem', { lineHeight: '0.875rem' }],
+        '2xs': ['0.6875rem', { lineHeight: '1rem' }],
+        caption: ['0.75rem', { lineHeight: '1rem', letterSpacing: '0' }],
+        label: ['0.8125rem', { lineHeight: '1.25rem', letterSpacing: '-0.003em', fontWeight: '500' }],
+        heading: ['1.0625rem', { lineHeight: '1.5rem', letterSpacing: '-0.012em', fontWeight: '600' }],
+        title: ['1.625rem', { lineHeight: '2rem', letterSpacing: '-0.022em', fontWeight: '600' }],
+        headline: ['clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem)', { lineHeight: '1.15', letterSpacing: '-0.028em', fontWeight: '600' }],
+        display: ['clamp(2.5rem, 1.4rem + 3.6vw, 4.5rem)', { lineHeight: '1.04', letterSpacing: '-0.036em', fontWeight: '600' }],
       },
       borderRadius: {
         '4xl': '2rem',
