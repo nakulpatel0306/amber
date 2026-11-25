@@ -16,7 +16,7 @@
  * Code splitting: everything except the landing page, including the app layouts, is
  * lazy-loaded, so a visitor reading the case study doesn't download the app.
  */
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, type ReactNode } from 'react';
 import { MotionConfig } from 'framer-motion';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -108,6 +108,11 @@ const WorkEnvironmentAssessment = lazy(() => import('./components/assessments/Wo
 import './styles/fonts';
 import './styles/globals.css';
 
+// The demo has no real accounts, so its sign-in pages send visitors to the role picker instead
+function authPage(page: ReactNode) {
+  return IS_DEMO ? <Navigate to="/demo" replace /> : page;
+}
+
 // Same loader the pages use, so a route chunk loading doesn't flash a different spinner
 function PageLoader() {
   return <CoffeeBrewLoader variant="fullscreen" className="min-h-screen" message="Loading..." />;
@@ -141,23 +146,23 @@ function App() {
                 {/* Auth routes (guest only) */}
                 <Route
                   path="/auth/login"
-                  element={
+                  element={authPage(
                     <GuestRoute>
                       <LoginPage />
                     </GuestRoute>
-                  }
+                  )}
                 />
                 <Route
                   path="/auth/signup"
-                  element={
+                  element={authPage(
                     <GuestRoute>
                       <SignupPage />
                     </GuestRoute>
-                  }
+                  )}
                 />
-                <Route path="/auth/forgot-password" element={<PasswordResetPage />} />
-                <Route path="/auth/reset-password" element={<PasswordResetPage />} />
-                <Route path="/auth/verify-email" element={<EmailVerificationPage />} />
+                <Route path="/auth/forgot-password" element={authPage(<PasswordResetPage />)} />
+                <Route path="/auth/reset-password" element={authPage(<PasswordResetPage />)} />
+                <Route path="/auth/verify-email" element={authPage(<EmailVerificationPage />)} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route
                   path="/auth/select-role"

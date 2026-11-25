@@ -117,7 +117,7 @@ export function SignupPage() {
     },
     {
       id: 'employer' as const,
-      label: 'I\'m Hiring',
+      label: "I'm hiring",
       description: 'Find candidates who fit your company culture',
       icon: Building2,
     },
