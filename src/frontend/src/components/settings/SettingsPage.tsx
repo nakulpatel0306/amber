@@ -44,7 +44,7 @@ const allSections: SectionConfig[] = [
   { id: 'notifications', label: 'Notifications', icon: Bell, description: 'Email and push preferences' },
   { id: 'privacy', label: 'Privacy', icon: Shield, description: 'Control your visibility' },
   { id: 'appearance', label: 'Appearance', icon: Palette, description: 'Theme and display' },
-  { id: 'feedback', label: 'Feedback', icon: MessageSquare, description: 'Report bugs or suggest' },
+  { id: 'feedback', label: 'Feedback', icon: MessageSquare, description: 'Report bugs or suggest ideas' },
   { id: 'account', label: 'Account', icon: Settings, description: 'Password and security' },
 ];
 
