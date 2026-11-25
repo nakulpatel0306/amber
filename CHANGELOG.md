@@ -7,9 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Showcase (November 2026)
+## [1.0.0] - 2026-11-24
 
-Amber is shelved and will not launch; this work turns the repository into a case study.
+The case study. Amber is shelved and will not launch; this release turns the repository into a portfolio piece with a working demo at https://nakulpatel0306.github.io/amber/.
+
+#### Design
+- One typeface (Inter) with a defined type scale, one card and button system, sentence case throughout, and quieter screens: dashboards reduced to archetype, matches and coffee chats; decorative widgets, glows, serif and italic accents removed.
+- Landing page reorganized as a story: the problem, what we built (with a product tour), how matching works, where it was going, why it is shelved, what we learned and the team.
+- Link previews (Open Graph image and tags), a touch icon, page titles, a not-found page, and restyled sign-in pages.
+- Accessibility: labelled icon buttons, focus trapping in dialogs, reduced-motion support, and WCAG AA contrast for muted text and the accent in both themes.
+- Lazy-loaded layouts and split vendor chunks, so the landing page loads less JavaScript.
 
 #### Added
 - Browser-only demo mode (`VITE_DEMO=1`, `npm run build:demo`): in-browser stand-ins for supabase-js and the FastAPI client behind one seam, fictional seed data, automatic replies from seeded people, a demo banner with Reset, and a role picker at `/demo`.
@@ -62,5 +69,5 @@ Pre-release baseline built during 2026. All features below were implemented; the
 - **Payments**: Stripe checkout, customer portal, and webhook handling (with graceful demo-data fallback when unconfigured).
 - **Documentation**: root `README.md`, `BLUEPRINT.md`, `FEATURES.md`, and per-area READMEs under `src/frontend/`, `src/backend/`, and `supabase/`.
 
-[Unreleased]: https://github.com/nakulpatel0306/amber/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/nakulpatel0306/amber/releases/tag/v0.1.0
+[Unreleased]: https://github.com/nakulpatel0306/amber/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/nakulpatel0306/amber/releases/tag/v1.0.0
