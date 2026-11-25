@@ -104,12 +104,11 @@ export function TopCandidates() {
   const [modalCandidate, setModalCandidate] = useState<CandidateResult | null>(null);
 
   // Shortlist (now backed by Supabase)
-  const [shortlisted, setShortlisted] = useState<Set<string>>(new Set());
 
   // Pipeline
   const [activeView, setActiveView] = useState<'browse' | 'pipeline'>('browse');
   const [pipelineTab, setPipelineTab] = useState<PipelineTab>('saved');
-  const { savedMatches, unsave: unsaveMatch, counts: pipelineCounts } = useSavedMatches();
+  const { savedMatches, save: saveMatch, unsave: unsaveMatch, isSaved, getSavedMatch, counts: pipelineCounts } = useSavedMatches();
   const showLoader = useMinLoader(isLoading);
 
   // Raw candidates data (before scoring — allows re-scoring when role changes)
@@ -411,16 +410,27 @@ export function TopCandidates() {
 
   /* ---- Shortlist toggle ---- */
 
-  const toggleShortlist = (candidateId: string) => {
-    setShortlisted(prev => {
-      const next = new Set(prev);
-      if (next.has(candidateId)) {
-        next.delete(candidateId);
+  // The star saves to the same pipeline as Ember's bookmark, so the two views always agree
+  const toggleShortlist = async (candidate: CandidateResult) => {
+    const existing = getSavedMatch('candidate', candidate.candidateId);
+    try {
+      if (existing) {
+        await unsaveMatch(existing.id);
       } else {
-        next.add(candidateId);
+        await saveMatch({
+          target_type: 'candidate',
+          role_id: selectedRoleId || null,
+          employer_id: employer?.id || null,
+          candidate_id: candidate.candidateId,
+          candidate_name: candidate.name,
+          match_score: candidate.overallScore,
+          notes: null,
+          status: 'saved',
+        });
       }
-      return next;
-    });
+    } catch {
+      showError('Error', 'Failed to update your shortlist');
+    }
   };
 
   /* ---- Archetype filter toggle ---- */
@@ -487,7 +497,7 @@ export function TopCandidates() {
           <Facts
             items={[
               { label: 'Found', value: filteredCandidates.length },
-              { label: 'Shortlisted', value: shortlisted.size },
+              { label: 'Shortlisted', value: pipelineCounts.saved },
               { label: 'In pipeline', value: pipelineTotal },
             ]}
           />
@@ -721,7 +731,7 @@ export function TopCandidates() {
               ) : (
                 <ul>
                   {filteredCandidates.map((c, i) => {
-                    const isShortlisted = shortlisted.has(c.candidateId);
+                    const isShortlisted = isSaved('candidate', c.candidateId);
                     const place = [c.location, c.workStyle && c.workStyle.charAt(0).toUpperCase() + c.workStyle.slice(1)].filter(Boolean).join(' · ');
                     return (
                       <li
@@ -781,7 +791,7 @@ export function TopCandidates() {
                             Invite to chat
                           </Button>
                           <button
-                            onClick={() => toggleShortlist(c.candidateId)}
+                            onClick={() => toggleShortlist(c)}
                             aria-pressed={isShortlisted}
                             aria-label={isShortlisted ? 'Remove from shortlist' : 'Add to shortlist'}
                             title={isShortlisted ? 'Remove from shortlist' : 'Add to shortlist'}
