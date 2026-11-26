@@ -42,7 +42,7 @@ export function DemoBanner() {
         <span className="flex items-center gap-1 flex-shrink-0">
           <button
             onClick={restartDemo}
-            className="rounded-full px-2.5 py-1 font-medium text-white"
+            className="rounded-full px-2.5 py-1 font-medium text-[var(--color-accentText)]"
             style={{ backgroundColor: 'var(--color-accent)' }}
           >
             Reset

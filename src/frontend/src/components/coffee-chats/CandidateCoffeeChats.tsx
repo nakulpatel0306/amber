@@ -17,6 +17,21 @@ import { useConnections } from '../../contexts/ConnectionsContext';
 import { pageEntrance } from '../../utils/motion';
 import { apiFetch } from '../../utils/api';
 
+// Chats only store the company name; the person behind each employer account comes from their profile
+async function loadEmployerContacts(employerIds: string[]): Promise<Map<string, string>> {
+  const contacts = new Map<string, string>();
+  const ids = [...new Set(employerIds.filter(Boolean))];
+  if (ids.length === 0) return contacts;
+  const { data: employers } = await supabase.from('employers').select('id, user_id').in('id', ids);
+  if (!employers?.length) return contacts;
+  const { data: profiles } = await supabase.rpc('get_profiles_by_ids', { user_ids: employers.map((e) => e.user_id) });
+  const names = new Map(((profiles ?? []) as { id: string; full_name: string | null }[]).map((p) => [p.id, p.full_name]));
+  employers.forEach((e) => {
+    const name = names.get(e.user_id);
+    if (name) contacts.set(e.id, name);
+  });
+  return contacts;
+}
 
 export function CandidateCoffeeChats() {
   const { user } = useAuth();
@@ -40,9 +55,11 @@ export function CandidateCoffeeChats() {
   const handleMessage = useCallback((chatId: string, partnerName: string) => {
     const chat = chats.find(c => c.id === chatId);
     if (!chat) return;
+    // Talk to the person who hosts the chat, with their company underneath
     openChat(chatId, {
       id: chat.employer_id,
-      name: partnerName,
+      name: chat.partner_contact || partnerName,
+      subtitle: chat.partner_contact ? partnerName : undefined,
       avatarUrl: null,
       coffeeChatId: chatId,
     });
@@ -100,6 +117,7 @@ export function CandidateCoffeeChats() {
         .order('created_at', { ascending: false });
 
       if (chatData) {
+        const contacts = await loadEmployerContacts(chatData.map((c: any) => c.employer_id));
         const mapped: CoffeeChatData[] = chatData.map((c: any) => ({
           id: c.id,
           candidate_id: c.candidate_id,
@@ -116,6 +134,7 @@ export function CandidateCoffeeChats() {
           created_at: c.created_at,
           partner_name: c.company_name || 'Unknown',
           partner_company: c.company_name,
+          partner_contact: contacts.get(c.employer_id),
           match_score: c.match_score,
           role_title: c.role_title,
           preferred_dates: c.preferred_dates,

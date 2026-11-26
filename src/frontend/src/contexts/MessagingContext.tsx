@@ -17,6 +17,8 @@ export interface Message {
 export interface ChatPartner {
   id: string;
   name: string;
+  // Secondary line under the name, such as the person's company
+  subtitle?: string;
   avatarUrl: string | null;
   coffeeChatId: string;
 }

@@ -68,6 +68,7 @@ export function DatePicker({
               <button
                 type="button"
                 onClick={() => removeDate(date)}
+                aria-label={`Remove ${format(date, 'MMM d')}`}
                 className="hover:opacity-70"
               >
                 <X className="w-3 h-3" />
@@ -82,6 +83,7 @@ export function DatePicker({
         <button
           type="button"
           onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+          aria-label="Previous month"
           className="p-1 rounded-lg hover:opacity-70 transition-opacity"
           style={{ color: 'var(--color-textSecondary)' }}
         >
@@ -93,6 +95,7 @@ export function DatePicker({
         <button
           type="button"
           onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+          aria-label="Next month"
           className="p-1 rounded-lg hover:opacity-70 transition-opacity"
           style={{ color: 'var(--color-textSecondary)' }}
         >
