@@ -11,7 +11,7 @@ import type { CandidateOCEAN, OceanTrait } from '../../lib/ember/compatibility';
 import { ARCHETYPES } from '../../lib/archetypes';
 import { ARCHETYPE_ICONS } from './archetypeIcons';
 import { COMPANY, PRESETS, scoreAgainstKestrel } from './kestrel';
-import { TRAIT } from './Section';
+import { TRAIT, readable } from './Section';
 
 const AXES: { key: OceanTrait; label: string; color: string }[] = [
   { key: 'openness', label: 'Openness', color: TRAIT.o },
@@ -142,7 +142,7 @@ export function HeroRadar() {
           return (
             <text key={a.key} x={x} y={i === 0 ? y - 14 : y} textAnchor="middle" className="text-[13px]">
               <tspan x={x} style={{ fill: 'var(--color-textSecondary)' }}>{a.label}</tspan>
-              <tspan x={x} dy="15" className="font-semibold tabular-nums" style={{ fill: `color-mix(in srgb, ${a.color} 70%, var(--color-text))` }}>
+              <tspan x={x} dy="15" className="font-semibold tabular-nums" style={{ fill: readable(a.color, 55) }}>
                 {ocean[a.key]}
               </tspan>
             </text>

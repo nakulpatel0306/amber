@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, type CSSProperties } from 'react';
 import type { CandidateOCEAN, OceanTrait } from '../../lib/ember/compatibility';
 import { COMPANY, PRESETS, scoreAgainstKestrel } from './kestrel';
+import { WEIGHT_SHADES } from './Section';
 
 const TRAITS: { key: OceanTrait; label: string; color: string }[] = [
   { key: 'openness', label: 'Openness', color: 'var(--color-trait-openness)' },
@@ -11,10 +12,10 @@ const TRAITS: { key: OceanTrait; label: string; color: string }[] = [
 ];
 
 const WEIGHTS = [
-  { key: 'trait', label: 'Trait distance', weight: 40, color: 'var(--color-trait-openness)' },
-  { key: 'culture', label: 'Culture and role fit', weight: 30, color: 'var(--color-trait-conscientiousness)' },
-  { key: 'work', label: 'Work style', weight: 20, color: 'var(--color-trait-extraversion)' },
-  { key: 'comm', label: 'Communication', weight: 10, color: 'var(--color-trait-agreeableness)' },
+  { key: 'trait', label: 'Trait distance', weight: 40, color: WEIGHT_SHADES[0] },
+  { key: 'culture', label: 'Culture and role fit', weight: 30, color: WEIGHT_SHADES[1] },
+  { key: 'work', label: 'Work style', weight: 20, color: WEIGHT_SHADES[2] },
+  { key: 'comm', label: 'Communication', weight: 10, color: WEIGHT_SHADES[3] },
 ] as const;
 
 export function MatchingExplainer() {
@@ -56,21 +57,21 @@ export function MatchingExplainer() {
                     max={100}
                     value={ocean[trait.key]}
                     onChange={(e) => setOcean((prev) => ({ ...prev, [trait.key]: Number(e.target.value) }))}
-                    className="w-full"
-                    style={{ accentColor: trait.color }}
+                    className="trait-range"
+                    style={{ '--range-color': trait.color, '--range-frac': ocean[trait.key] / 100 } as CSSProperties}
                     aria-label={`${trait.label} score`}
                   />
                   <span
                     aria-hidden
-                    className="absolute -top-1 h-2 w-0.5 rounded"
-                    style={{ left: `calc(${target}% - 1px)`, backgroundColor: 'var(--color-textMuted)' }}
+                    className="pointer-events-none absolute -top-1.5 h-2 w-0.5 rounded"
+                    style={{ left: `calc(${target / 100} * (100% - 16px) + 7px)`, backgroundColor: 'var(--color-textMuted)' }}
                   />
                 </span>
               </label>
             );
           })}
         </div>
-        <p className="mt-5 text-xs leading-relaxed" style={{ color: 'var(--color-textMuted)' }}>
+        <p className="mt-5 text-xs leading-relaxed text-pretty" style={{ color: 'var(--color-textMuted)' }}>
           Against {COMPANY.name}'s {COMPANY.role.title} role: hybrid, openness 75 to 100, extraversion 50 to 90,
           values {COMPANY.values.join(', ')}.
         </p>
@@ -114,17 +115,38 @@ export function MatchingExplainer() {
           ))}
         </div>
 
-        <div className="mt-auto pt-6 text-sm tabular-nums leading-7" style={{ color: 'var(--color-textSecondary)' }}>
+        {/* Each term stays whole so the equation only breaks between terms, never before the result */}
+        <div className="mt-5 pt-4 border-t text-sm tabular-nums leading-7" style={{ borderColor: 'var(--color-border)', color: 'var(--color-textSecondary)' }}>
           <div>
-            0.4 × {parts.trait} + 0.3 × {parts.culture} + 0.2 × {parts.work} + 0.1 × {parts.comm} ={' '}
-            <span style={{ color: 'var(--color-text)' }}>{result.compat.overall_match_score}</span>
+            <span className="whitespace-nowrap">0.4 × {parts.trait} +</span>{' '}
+            <span className="whitespace-nowrap">0.3 × {parts.culture} +</span>{' '}
+            <span className="whitespace-nowrap">0.2 × {parts.work} +</span>{' '}
+            <span className="whitespace-nowrap">
+              0.1 × {parts.comm} = <span style={{ color: 'var(--color-text)' }}>{result.compat.overall_match_score}</span>
+            </span>
           </div>
           <div>
-            {result.archetype.name} with {COMPANY.archetype}: {result.bonus >= 0 ? '+' : ''}
-            {result.bonus} ={' '}
-            <span style={{ color: 'var(--color-accent)' }}>{result.ember}</span>
+            <span className="whitespace-nowrap">{result.compat.overall_match_score}</span>{' '}
+            <span className="whitespace-nowrap">
+              {result.bonus >= 0 ? '+' : '−'} {Math.abs(result.bonus)} archetype bonus
+            </span>{' '}
+            <span className="whitespace-nowrap">
+              = <span style={{ color: 'var(--color-accent)' }}>{result.ember}</span>
+            </span>
           </div>
         </div>
+
+        <p
+          className="mt-auto pt-5 text-xs leading-relaxed text-pretty"
+          style={{ color: 'var(--color-textMuted)' }}
+        >
+          <span style={{ color: 'var(--color-textSecondary)' }}>
+            {COMPANY.name}'s culture archetype: {COMPANY.archetype}.
+          </span>{' '}
+          Employers have eight culture archetypes of their own, and each pairing with a candidate archetype adds between
+          -8 and +10 points. {result.archetype.name} with {COMPANY.archetype} adds {result.bonus >= 0 ? '+' : ''}
+          {result.bonus}.
+        </p>
       </div>
     </div>
   );
