@@ -39,7 +39,6 @@ Copy `.env.example` to `.env` and configure the following:
 | `SUPABASE_ANON_KEY` | Yes | Supabase anonymous key for client-side operations |
 | `SUPABASE_SERVICE_ROLE_KEY` | Yes | Supabase service role key for server-side data access (bypasses RLS) |
 | `SUPABASE_JWT_SECRET` | No* | JWT secret for verifying Supabase auth tokens on protected routes |
-| `OPENAI_API_KEY` | No | OpenAI API key (reserved for future conversational AI features) |
 | `STRIPE_SECRET_KEY` | No | Stripe secret key for payment processing |
 | `STRIPE_WEBHOOK_SECRET` | No | Stripe webhook signing secret for event verification |
 
@@ -239,5 +238,5 @@ Update the `origins` list in `main.py` for production domains.
 - The assessment flow uses a local SQLite database in development. For production, this can be switched to Supabase by updating the database layer.
 - The frontend scores matches client-side with `src/frontend/src/lib/ember`, a TypeScript port of `engine/` and `agent/`; the parity fixture keeps the two identical.
 - Seed scripts in `scripts/` are one-time utilities for populating test data. They require the `SUPABASE_SERVICE_ROLE_KEY` to be set.
-- OpenAI (1.54.0), LangChain (0.3.0), and Ollama (0.4.3) are listed as dependencies but were never integrated into the Ember agent. They were reserved for Phase 1 of the roadmap (Conversational Ember AI), which was not built before the project was shelved. See [BLUEPRINT.md](../../BLUEPRINT.md) for details.
+- OpenAI, LangChain and Ollama were once listed as dependencies for Phase 1 of the roadmap (Conversational Ember AI). That phase was never built, so the Ember agent is rule-based and those packages were removed. See [BLUEPRINT.md](../../BLUEPRINT.md) for details.
 - Stripe returns demo subscription data when `STRIPE_SECRET_KEY` is not configured, allowing local development without a Stripe account.

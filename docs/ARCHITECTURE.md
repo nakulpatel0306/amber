@@ -53,7 +53,6 @@ Two important architectural notes:
 | Auth | Supabase Auth (Email, Google OAuth, GitHub OAuth); JWT verified server-side |
 | Payments | Stripe (checkout, customer portal, webhooks) |
 | Matching | Custom OCEAN compatibility engine + Ember agent |
-| AI/ML (reserved) | OpenAI, LangChain, Ollama: listed in `requirements.txt`, never wired in |
 
 ## Repository Layout
 

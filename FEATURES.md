@@ -188,7 +188,7 @@ Everything Amber shipped before it was shelved in 2026, followed by the features
 ### Phase 1: Conversational Ember AI
 Transform Ember from a scoring engine into a conversational AI agent that conducts natural, open-ended personality interviews instead of rigid multiple-choice quizzes.
 
-- Natural language personality interviews using OpenAI (already installed as dependency)
+- Natural language personality interviews using OpenAI
 - LangChain orchestration for multi-step trait extraction from conversation
 - Hybrid mode: candidates choose between the quick assessment or a full Ember conversation
 - Ongoing Ember interactions as a persistent career advisor (match explanations, pre-chat coaching)

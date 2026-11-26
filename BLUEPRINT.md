@@ -333,12 +333,8 @@ The case-study build settled on a quiet, single-family UI. Tokens live in `src/f
 | **Validation** | Pydantic | 2.10.0 | Request/response data validation |
 | **Database (Production)** | Supabase (PostgreSQL) | — | Auth, database, realtime, storage |
 | **Database (Development)** | SQLite | — | Local development without Supabase dependency |
-| **ORM** | SQLAlchemy | 2.0.36 | Database abstraction (available, not primary) |
 | **Auth** | Supabase Auth + PyJWT | 2.9.0 | JWT verification via JWKS |
 | **Payments** | Stripe | 11.4.1 | Subscriptions, checkout, customer portal |
-| **AI/ML (installed)** | OpenAI | 1.54.0 | Reserved for conversational AI features |
-| **AI/ML (installed)** | LangChain + OpenAI provider | 0.3.0 | Reserved for chain-of-thought personality analysis |
-| **AI/ML (installed)** | Ollama | 0.4.3 | Reserved for local LLM inference |
 | **HTTP Client** | httpx | — | Async HTTP requests |
 | **Code Formatting** | Prettier (frontend), Black (backend) | — | Consistent code style |
 | **Linting** | ESLint (frontend), Ruff (backend) | — | Code quality enforcement |
@@ -474,7 +470,7 @@ Nothing in this section was built. It is the roadmap as it stood when Amber was 
 
 ### Phase 1: Conversational Ember AI
 
-**Status:** Never built. The OpenAI, LangChain and Ollama dependencies were added to the backend, but no conversational flow was integrated.
+**Status:** Never built. OpenAI, LangChain and Ollama were added as backend dependencies early on but never wired in; they were removed when Amber became a case study.
 
 **The Problem:** The shipped multiple-choice assessment captured personality dimensions accurately, but the experience felt like a form. Users complete it and move on. There's no engagement, no memorability, no reason to tell anyone about it.
 
