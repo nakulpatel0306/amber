@@ -257,25 +257,44 @@ const CANDIDATES: SeedCandidate[] = [
   { name: 'Owen MacLeod', headline: 'Site Reliability Engineer', location: 'Halifax, NS', years: 9, workStyle: 'remote', size: 'large', ocean: [54, 84, 36, 46, 14], bio: 'Sleeps through the pager because the runbooks work.', hobbies: ['sailing', 'homelab'], traits: ['Calm Anchor', 'Steady Hand'] },
 ];
 
-const POST_CAPTIONS: { candidate: number; caption: string; tags: string[]; hue: number }[] = [
-  { candidate: 0, caption: 'Third attempt at a teapot. The spout finally pours instead of dribbling.', tags: ['pottery', 'personality:Creative'], hue: 24 },
-  { candidate: 2, caption: 'Shot a whole roll at the Stampede grounds before sunrise. Developing tonight.', tags: ['film photography'], hue: 280 },
-  { candidate: 4, caption: 'New episode up: we debugged a flaky test live and it fought back.', tags: ['podcasting', 'personality:Social'], hue: 200 },
-  { candidate: 6, caption: 'Choir concert this weekend. Altos carried, as usual.', tags: ['choir'], hue: 340 },
-  { candidate: 10, caption: 'The weekend robot can now pick up a sock. Laundry folding is next.', tags: ['3D printing', 'personality:Builder'], hue: 160 },
-  { candidate: 15, caption: 'Took the boat out past the lighthouse. No pages, no signal, perfect.', tags: ['sailing'], hue: 210 },
+// Lucide icon paths (ISC licence) on a 24-unit grid, inlined so the artwork is a self-contained image
+const HOBBY_ICONS = {
+  pottery: '<path d="M10 2v5.632c0 .424-.272.795-.653.982A6 6 0 0 0 6 14c.006 4 3 7 5 8"/><path d="M10 5H8a2 2 0 0 0 0 4h.68"/><path d="M14 2v5.632c0 .424.272.795.652.982A6 6 0 0 1 18 14c0 4-3 7-5 8"/><path d="M14 5h2a2 2 0 0 1 0 4h-.68"/><path d="M18 22H6"/><path d="M9 2h6"/>',
+  camera: '<path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z"/><circle cx="12" cy="13" r="3"/>',
+  mic: '<path d="M12 19v3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><rect x="9" y="2" width="6" height="13" rx="3"/>',
+  music: '<circle cx="8" cy="18" r="4"/><path d="M12 18V2l7 4"/>',
+  bot: '<path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/>',
+  sailboat: '<path d="M10 2v15"/><path d="M7 22a4 4 0 0 1-4-4 1 1 0 0 1 1-1h16a1 1 0 0 1 1 1 4 4 0 0 1-4 4z"/><path d="M9.159 2.46a1 1 0 0 1 1.521-.193l9.977 8.98A1 1 0 0 1 20 13H4a1 1 0 0 1-.824-1.567z"/>',
+};
+
+// The light theme's trait colors; an image can't read the theme's CSS variables
+const TRAIT_HEX = {
+  openness: '#A855F7',
+  conscientiousness: '#10B981',
+  extraversion: '#F59E0B',
+  agreeableness: '#EC4899',
+  stability: '#06B6D4',
+};
+
+const POST_CAPTIONS: { candidate: number; caption: string; tags: string[]; icon: keyof typeof HOBBY_ICONS; trait: keyof typeof TRAIT_HEX }[] = [
+  { candidate: 0, caption: 'Third attempt at a teapot. The spout finally pours instead of dribbling.', tags: ['pottery', 'personality:Creative'], icon: 'pottery', trait: 'openness' },
+  { candidate: 2, caption: 'Shot a whole roll at the Stampede grounds before sunrise. Developing tonight.', tags: ['photography'], icon: 'camera', trait: 'stability' },
+  { candidate: 4, caption: 'New episode up: we debugged a flaky test live and it fought back.', tags: ['podcasting', 'personality:Social'], icon: 'mic', trait: 'extraversion' },
+  { candidate: 6, caption: 'Choir concert this weekend. Altos carried, as usual.', tags: ['singing'], icon: 'music', trait: 'agreeableness' },
+  { candidate: 10, caption: 'The weekend robot can now pick up a sock. Laundry folding is next.', tags: ['robotics', '3d-printing', 'personality:Builder'], icon: 'bot', trait: 'conscientiousness' },
+  { candidate: 15, caption: 'Took the boat out past the lighthouse. No pages, no signal, perfect.', tags: ['sailing'], icon: 'sailboat', trait: 'openness' },
 ];
 
-/** Inline SVG artwork so seeded posts need no image hosting. */
-function artwork(hue: number, label: string): string {
+/** Inline SVG artwork (a hobby icon on its trait color) so seeded posts need no image hosting. */
+function artwork(icon: keyof typeof HOBBY_ICONS, trait: keyof typeof TRAIT_HEX): string {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600">
-<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-<stop offset="0" stop-color="hsl(${hue} 70% 72%)"/><stop offset="1" stop-color="hsl(${(hue + 40) % 360} 60% 45%)"/>
+<defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.28"/>
 </linearGradient></defs>
-<rect width="600" height="600" fill="url(#g)"/>
-<circle cx="420" cy="190" r="120" fill="hsl(${hue} 90% 92% / 0.35)"/>
-<circle cx="170" cy="430" r="170" fill="hsl(${(hue + 20) % 360} 80% 30% / 0.25)"/>
-<text x="40" y="560" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="40" font-weight="600" letter-spacing="-0.5" fill="white" fill-opacity="0.9">${label}</text>
+<rect width="600" height="600" fill="${TRAIT_HEX[trait]}"/>
+<rect width="600" height="600" fill="url(#s)"/>
+<g transform="translate(372 -60) scale(14)" fill="none" stroke="#fff" stroke-opacity="0.14" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${HOBBY_ICONS[icon]}</g>
+<g transform="translate(180 180) scale(10)" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${HOBBY_ICONS[icon]}</g>
 </svg>`;
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
 }
@@ -408,7 +427,7 @@ export function buildSeed(): Tables {
     posts.push({
       id: `seed-post-${i + 1}`,
       user_id: SEED_IDS.profile(`candidate-${post.candidate + 1}`),
-      image_url: artwork(post.hue, CANDIDATES[post.candidate].hobbies[0]),
+      image_url: artwork(post.icon, post.trait),
       caption: post.caption,
       hobby_tags: post.tags,
       like_count: 3 + ((i * 7) % 19),

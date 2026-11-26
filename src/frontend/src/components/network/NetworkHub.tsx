@@ -15,79 +15,6 @@ import { PostSkeleton } from './PostSkeleton';
 import { FilterBar, type FeedFilter, type LayoutMode } from './FilterBar';
 
 /* ------------------------------------------------------------------ */
-/*  Mock data — shown when the DB has no posts                         */
-/* ------------------------------------------------------------------ */
-
-const MOCK_POSTS: FeedPost[] = [
-  {
-    id: 'mock-1',
-    user: { user_id: 'm1', full_name: 'Priya Sharma', avatar_url: null, role: 'job_seeker', headline: 'Product Designer', location: 'San Francisco, CA', companyName: null },
-    images: ['https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=600&h=600&fit=crop&q=80'],
-    caption: 'Made pasta from scratch for the first time. Took forever but totally worth it. There\'s something meditative about kneading dough after a long day of wireframing.',
-    hobbyTags: ['cooking', 'personality:Creative'],
-    source: 'activity_post',
-    createdAt: new Date(Date.now() - 2 * 3600000).toISOString(),
-    likeCount: 24,
-    isLiked: false,
-  },
-  {
-    id: 'mock-2',
-    user: { user_id: 'm2', full_name: 'Marcus Johnson', avatar_url: null, role: 'job_seeker', headline: 'Software Engineer', location: 'Austin, TX', companyName: null },
-    images: ['https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&h=600&fit=crop&q=80'],
-    caption: 'Golden hour at the summit. 6 miles up, zero regrets. Nothing clears your head like a good hike after sprint planning.',
-    hobbyTags: ['hiking', 'personality:Adventurer'],
-    source: 'activity_post',
-    createdAt: new Date(Date.now() - 5 * 3600000).toISOString(),
-    likeCount: 42,
-    isLiked: false,
-  },
-  {
-    id: 'mock-3',
-    user: { user_id: 'm3', full_name: 'Anika Patel', avatar_url: null, role: 'employer', headline: 'Head of People', location: 'New York, NY', companyName: 'Shopify' },
-    images: ['https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=600&h=600&fit=crop&q=80'],
-    caption: 'Finally nailing this Chopin piece after weeks of practice. Music is the ultimate stress relief — our team actually has a jam session every Friday.',
-    hobbyTags: ['piano', 'personality:Strategist'],
-    source: 'activity_post',
-    createdAt: new Date(Date.now() - 8 * 3600000).toISOString(),
-    likeCount: 31,
-    isLiked: false,
-  },
-  {
-    id: 'mock-4',
-    user: { user_id: 'm4', full_name: 'Elena Voss', avatar_url: null, role: 'job_seeker', headline: 'UX Researcher', location: 'Seattle, WA', companyName: null },
-    images: ['https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&h=600&fit=crop&q=80'],
-    caption: 'Morning yoga before the city wakes up. This rooftop spot is everything. Finding balance is the real productivity hack.',
-    hobbyTags: ['yoga', 'personality:Architect'],
-    source: 'activity_post',
-    createdAt: new Date(Date.now() - 12 * 3600000).toISOString(),
-    likeCount: 18,
-    isLiked: false,
-  },
-  {
-    id: 'mock-5',
-    user: { user_id: 'm5', full_name: 'Kai Nakamura', avatar_url: null, role: 'employer', headline: 'Brand Strategist', location: 'Los Angeles, CA', companyName: 'Google' },
-    images: ['https://images.unsplash.com/photo-1452587925148-ce544e77e70d?w=600&h=600&fit=crop&q=80'],
-    caption: 'Street photography walk through the old quarter. Every corner tells a story. The best ideas come when you stop looking at screens.',
-    hobbyTags: ['photography', 'personality:Visionary'],
-    source: 'activity_post',
-    createdAt: new Date(Date.now() - 18 * 3600000).toISOString(),
-    likeCount: 56,
-    isLiked: false,
-  },
-  {
-    id: 'mock-6',
-    user: { user_id: 'm6', full_name: 'Jordan Okafor', avatar_url: null, role: 'job_seeker', headline: 'Full-Stack Developer', location: 'Chicago, IL', companyName: null },
-    images: ['https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&h=600&fit=crop&q=80'],
-    caption: 'Weekend hackathon with the crew. Built something wild in 48 hours. Nothing beats the energy of shipping something real with people who care.',
-    hobbyTags: ['coding', 'personality:Builder'],
-    source: 'activity_post',
-    createdAt: new Date(Date.now() - 24 * 3600000).toISOString(),
-    likeCount: 37,
-    isLiked: false,
-  },
-];
-
-/* ------------------------------------------------------------------ */
 /*  Helper: empty-state messages per filter                            */
 /* ------------------------------------------------------------------ */
 
@@ -338,8 +265,7 @@ export function NetworkHub() {
         }
       });
 
-      // Use mock data if DB is empty
-      const result = feedPosts.length > 0 ? feedPosts : MOCK_POSTS;
+      const result = feedPosts;
 
       // Filter
       let filtered = result;
@@ -365,7 +291,7 @@ export function NetworkHub() {
     } catch (err) {
       console.error('Error loading feed:', err);
       setHasError(true);
-      setPosts(MOCK_POSTS);
+      setPosts([]);
     } finally {
       setIsLoading(false);
     }
@@ -507,7 +433,7 @@ export function NetworkHub() {
           <div className="bento-card flex flex-wrap items-center gap-3 mb-6">
             <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--color-error)' }} />
             <p className="text-sm flex-1" style={{ color: 'var(--color-text)' }}>
-              Couldn't load the latest posts. Showing sample content.
+              Couldn't load the latest posts.
             </p>
             <Button size="sm" variant="outline" leftIcon={<RefreshCw className="w-3.5 h-3.5" />} onClick={loadFeed}>
               Retry

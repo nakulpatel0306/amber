@@ -42,6 +42,19 @@ function parseEmojiAvatar(src: string): { avatarId: string; colorId: string } | 
   return null;
 }
 
+const FALLBACK_TRAITS = ['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'stability'];
+
+// A tint picked from the name, so a list of people without photos doesn't read as one block of color
+function fallbackColors(name?: string): React.CSSProperties {
+  if (!name) return { backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-textSecondary)' };
+  const hash = [...name].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7);
+  const trait = `var(--color-trait-${FALLBACK_TRAITS[hash % FALLBACK_TRAITS.length]})`;
+  return {
+    backgroundColor: `color-mix(in srgb, ${trait} 22%, var(--color-surface))`,
+    color: `color-mix(in srgb, ${trait} 45%, var(--color-text))`,
+  };
+}
+
 const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
   ({ className, src, alt, fallback, size = 'md', ...props }, ref) => {
     const initials = fallback
@@ -90,10 +103,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           // Render fallback
           <div
             className="flex h-full w-full items-center justify-center font-medium"
-            style={{
-              backgroundColor: 'var(--color-accent)',
-              color: 'var(--color-accentText)',
-            }}
+            style={fallbackColors(fallback)}
           >
             {initials || <User className={iconSizeMap[size]} />}
           </div>
