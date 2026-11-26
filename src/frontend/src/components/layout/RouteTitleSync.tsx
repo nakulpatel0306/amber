@@ -34,7 +34,6 @@ const EXACT: Record<string, string> = {
   '/app/settings': 'Settings',
   '/app/pricing': 'Plans',
   '/app/employer': 'Dashboard',
-  '/app/employer/culture': 'Culture quiz',
   '/app/employer/culture-assessment': 'Culture assessment',
   '/app/employer/culture-results': 'Culture results',
   '/app/employer/insights': 'Culture insights',

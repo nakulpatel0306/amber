@@ -1,4 +1,3 @@
-export { CultureQuiz } from './CultureQuiz';
 export { CultureAssessment } from './CultureAssessment';
 export { CultureInsights } from './CultureInsights';
 export { EmployerAssessmentResults } from './EmployerAssessmentResults';
