@@ -276,14 +276,7 @@ export function applySampleCulture(userId: string): void {
     neuroticism_preference: ocean.neuroticism,
     culture_values: CULTURE_VALUES[key],
     // The Ember score adds the archetype-pair bonus only for employers with a stored archetype, as seeded ones have
-    archetype_name: determineEmployerArchetype({
-      innovation: ocean.openness,
-      collaboration: (ocean.extraversion + ocean.agreeableness) / 2,
-      results: ocean.conscientiousness,
-      warmth: ocean.agreeableness,
-      growth: (ocean.openness + ocean.conscientiousness) / 2,
-      excellence: ocean.conscientiousness,
-    }).primary.name,
+    archetype_name: determineEmployerArchetype(ocean).primary.name,
     culture_quiz_completed: true,
   });
 }
