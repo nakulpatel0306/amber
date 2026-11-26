@@ -1,7 +1,7 @@
 -- ==========================================================
 -- Seed Full Test Data: 10 Candidates + 10 Employers
 -- All accounts fully populated with completed assessments
--- Password for email auth accounts: TestPassword123!
+-- Placeholder password for every seeded email account: CHANGE_ME_local_seed_password (replace it before running)
 -- Google accounts (replace with your own): candidate@example.com (candidate), employer@example.com (employer)
 -- Run in Supabase SQL Editor
 -- ==========================================================
@@ -57,7 +57,7 @@ DECLARE
   maria_sj uuid := gen_random_uuid(); maria_wv uuid := gen_random_uuid();
   pw text;
 BEGIN
-  pw := crypt('TestPassword123!', gen_salt('bf'));
+  pw := crypt('CHANGE_ME_local_seed_password', gen_salt('bf'));
 
   -- Look up existing Google OAuth accounts
   SELECT id INTO nakul_id FROM auth.users WHERE email = 'candidate@example.com';
@@ -775,7 +775,7 @@ BEGIN
   ON CONFLICT (assessment_id, question_code) DO NOTHING;
 
   RAISE NOTICE 'Successfully seeded 20 test accounts (10 candidates + 10 employers)';
-  RAISE NOTICE 'Email auth password: TestPassword123!';
+  RAISE NOTICE 'Email auth password: CHANGE_ME_local_seed_password';
   RAISE NOTICE 'Google accounts: candidate@example.com (candidate), employer@example.com (employer)';
 
 END $$;

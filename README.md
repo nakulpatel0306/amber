@@ -6,7 +6,7 @@ Hiring matches on resumes and keywords, while culture fit only shows up after so
 
 Candidates took a Big Five (OCEAN) assessment and got one of 8 work archetypes, employers defined their culture and per-role trait ranges, and the Ember engine ranked both sides against each other. Matches met over a short coffee chat before any application.
 
-**Status:** shelved in 2026. Three of us built Amber from January to November 2026 and took it close to launch. The culture-fit hiring space filled up quickly, competing would have meant raising money, and we chose not to. The code stays open and the full stack still runs locally.
+**Status:** shelved in 2026. Three of us built Amber from January to November 2026 and took it close to launch. The culture-fit hiring space filled up quickly, competing would have meant raising money, and we chose not to. The code stays open. The demo runs in any browser; the full stack needs your own Supabase project, and two of its SQL files were rebuilt after we stopped and haven't been run against a live database.
 
 ![The case-study landing page](docs/screenshots/landing.png)
 
@@ -85,7 +85,7 @@ None of this was built. These are the six phases the team planned next, from [BL
 ## What We Learned
 
 - **Explainable math beat a black box.** Weighted distance plus a culture table was easy to trust, easy to debug and easy to talk about in a coffee chat.
-- **Client-side Supabase was fast to build on; RLS was the cost.** Authorization lived in policies, and policies that referenced each other recursed. The `supabase/fix-*-recursion.sql` scripts are what that taught us.
+- **Client-side Supabase was fast to build on; RLS was the cost.** Authorization lived in policies, and policies that referenced each other recursed. The `supabase/archive/fix-*-recursion.sql` scripts are what that taught us.
 - **Two implementations need one test.** The Python and TypeScript engines had drifted. The parity fixture caught a real mismatch the first time it ran.
 - **Two-sided products start cold twice.** Candidates want companies before investing fifteen minutes, and companies want candidates before defining a culture. The coffee-chat-first flow was the part people liked most, and the part that needs both sides present.
 
@@ -132,7 +132,7 @@ npm run dev:demo --workspace src/frontend    # http://localhost:5173/amber/
 
 Needs Node 18+, Python 3.11+ and a Supabase project.
 
-1. **Database:** in the Supabase SQL editor, run `supabase/schema.sql`, then `supabase/rls-policies.sql`, then the migrations. Enable Email, Google and GitHub auth. Full steps are in [supabase/README.md](supabase/README.md).
+1. **Database:** in the Supabase SQL editor, run `supabase/schema.sql`, then `supabase/rls-policies.sql`, then the migrations and RPC files in the order listed in [supabase/README.md](supabase/README.md). Enable Email, Google and GitHub auth. The matching RPCs (`supabase/rpc-matching.sql`) and the `employers.archetype_name` migration were reconstructed in November 2026 from the frontend and the demo stand-in, and are untested against a live project.
 2. **Env files:** copy `src/backend/.env.example` to `src/backend/.env`, and create `src/frontend/.env`. Fill in:
    - Frontend: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`; optionally `VITE_API_URL` (defaults to `http://localhost:8000`) and the `VITE_STRIPE_PRICE_*` plan IDs
    - Backend: `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_JWT_SECRET`

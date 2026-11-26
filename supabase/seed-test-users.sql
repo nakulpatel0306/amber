@@ -1,7 +1,7 @@
 -- Seed Test Users for Amber Platform
 -- Run this in Supabase SQL Editor to create 9 confirmed test users
 -- 4 Candidates + 5 Employers (Alex Chen already exists manually)
--- All users have password: TestPassword123!
+-- Placeholder password for every seeded account: CHANGE_ME_local_seed_password (replace it before running)
 --
 -- This script creates users directly in auth.users with confirmed emails
 -- and includes complete assessment responses
@@ -52,8 +52,8 @@ DECLARE
   -- Password hash
   password_hash text;
 BEGIN
-  -- Hash the password (TestPassword123!)
-  password_hash := crypt('TestPassword123!', gen_salt('bf'));
+  -- Hash the password (CHANGE_ME_local_seed_password)
+  password_hash := crypt('CHANGE_ME_local_seed_password', gen_salt('bf'));
 
   -- Delete existing test users if they exist (clean slate)
   DELETE FROM auth.users WHERE email IN (
@@ -906,7 +906,7 @@ BEGIN
   ON CONFLICT (assessment_id, question_code) DO NOTHING;
 
   RAISE NOTICE 'Successfully created 9 test users (4 candidates, 5 employers)';
-  RAISE NOTICE 'All users have password: TestPassword123!';
+  RAISE NOTICE 'All users have password: CHANGE_ME_local_seed_password';
   RAISE NOTICE 'Candidate emails: sarah.johnson@test.com, marcus.williams@test.com, emily.rodriguez@test.com, david.kim@test.com';
   RAISE NOTICE 'Employer emails: hr@techstartup.test, talent@innovatecorp.test, hiring@creativelabs.test, careers@financeplus.test, people@healthtech.test';
   RAISE NOTICE 'Note: Alex Chen should already exist as a manually created test account';
