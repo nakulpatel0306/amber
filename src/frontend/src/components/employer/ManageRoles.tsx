@@ -24,7 +24,7 @@ interface Role {
   salary_max: number | null;
   status: RoleStatus;
   created_at: string;
-  applicant_count: number;
+  chat_count: number;
 }
 
 // Enum values to labels: full_time -> Full time
@@ -73,20 +73,19 @@ export function ManageRoles() {
       if (error) throw error;
 
       const roleIds = (rolesData || []).map(r => r.id);
-      let appCounts: Record<string, number> = {};
+      // Amber matched people to a coffee chat before anyone applied, so a role's activity is its chats
+      const chatCounts: Record<string, number> = {};
 
       if (roleIds.length > 0) {
-        const { data: apps } = await supabase
-          .from('applications')
+        const { data: chats } = await supabase
+          .from('coffee_chats')
           .select('role_id')
-          .in('role_id', roleIds);
+          .in('role_id', roleIds)
+          .neq('status', 'cancelled');
 
-        if (apps) {
-          appCounts = apps.reduce((acc: Record<string, number>, app) => {
-            acc[app.role_id] = (acc[app.role_id] || 0) + 1;
-            return acc;
-          }, {});
-        }
+        (chats as { role_id: string }[] | null)?.forEach((chat) => {
+          chatCounts[chat.role_id] = (chatCounts[chat.role_id] || 0) + 1;
+        });
       }
 
       const formattedRoles: Role[] = (rolesData || []).map(r => ({
@@ -102,7 +101,7 @@ export function ManageRoles() {
         salary_max: r.salary_max,
         status: r.status as RoleStatus,
         created_at: r.created_at,
-        applicant_count: appCounts[r.id] || 0,
+        chat_count: chatCounts[r.id] || 0,
       }));
 
       setRoles(formattedRoles);
@@ -160,7 +159,7 @@ export function ManageRoles() {
   const stats = {
     active: roles.filter(r => r.status === 'active').length,
     paused: roles.filter(r => r.status === 'paused').length,
-    totalApplicants: roles.reduce((sum, r) => sum + r.applicant_count, 0),
+    totalChats: roles.reduce((sum, r) => sum + r.chat_count, 0),
     totalRoles: roles.length,
   };
 
@@ -188,7 +187,7 @@ export function ManageRoles() {
             items={[
               { label: 'Active', value: stats.active },
               { label: 'Paused', value: stats.paused },
-              { label: 'Applicants', value: stats.totalApplicants },
+              { label: 'Coffee chats', value: stats.totalChats },
               { label: 'Total', value: stats.totalRoles },
             ]}
           />
@@ -308,7 +307,7 @@ export function ManageRoles() {
                       {enumLabel(role.status)}
                     </span>
                     <span className="tabular-nums sm:w-24">
-                      {role.applicant_count} applicant{role.applicant_count !== 1 ? 's' : ''}
+                      {role.chat_count} chat{role.chat_count !== 1 ? 's' : ''}
                     </span>
                   </div>
 
