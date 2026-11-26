@@ -41,6 +41,19 @@ export function EmberAgent() {
   const [selectedEmployer, setSelectedEmployer] = useState<EmployerResult | null>(null);
   const [brewTarget, setBrewTarget] = useState<EmployerResult | null>(null);
   const [connectTarget, setConnectTarget] = useState<EmployerResult | null>(null);
+  const [chatEmployerIds, setChatEmployerIds] = useState<Set<string>>(new Set());
+
+  // An existing coffee chat means you're already talking, so the deep dive offers Message, not Connect
+  useEffect(() => {
+    if (!candidate) return;
+    supabase
+      .from('coffee_chats')
+      .select('employer_id, status')
+      .eq('candidate_id', candidate.id)
+      .then(({ data }) => {
+        setChatEmployerIds(new Set((data ?? []).filter(c => c.status !== 'cancelled').map(c => c.employer_id as string)));
+      });
+  }, [candidate]);
 
   // Handle deepdive URL param once employers load
   useEffect(() => {
@@ -332,12 +345,16 @@ export function EmberAgent() {
               communicationScore={Math.round((selectedEmployer.breakdown.extraversionFit + selectedEmployer.breakdown.agreeablenessFit) / 2)}
               dimensions={deepDiveDimensions}
               candidateOcean={candidateOcean}
+              candidateWorkStyle={candidate.preferred_work_style}
               employerOcean={selectedEmployer.employerOcean}
+              cultureValues={selectedEmployer.cultureValues}
+              employerArchetypeName={selectedEmployer.employerArchetypeName}
               candidateId={candidate.id}
               employerId={selectedEmployer.employerId}
               isSaved={savedIds.has(selectedEmployer.employerId)}
               avatarUrl={selectedEmployer.logoUrl}
               connectionStatus={getConnectionStatus(selectedEmployer.userId)}
+              onMessage={chatEmployerIds.has(selectedEmployer.employerId) ? () => navigate('/app/chats') : undefined}
               onBack={handleBackToGallery}
               onBrew={() => setBrewTarget(selectedEmployer)}
               onToggleSave={() => handleToggleSave(selectedEmployer)}
