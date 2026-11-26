@@ -172,9 +172,13 @@ When a coffee chat is scheduled, Ember generates a personality-based prep brief 
 
 #### Candidate Assessment
 
-**Core Assessment — 10 Questions**
+**Core Assessment — 16 Questions**
 
-Ten multiple-choice questions across three categories:
+The assessment candidates take (`candidateQuestions` in `src/frontend/src/data/assessmentQuestions.ts`) has 16 questions that reveal personality through situations rather than agree/disagree statements: 5 scenarios, 3 metaphors, 3 trade-offs, 3 sliders, a ranking and a short reflection. Each answer feeds facet scores that map onto the five OCEAN traits.
+
+**Older API Assessment — 10 Questions**
+
+An earlier flow, still served by the API's local SQLite store (`src/backend/engine/questions.py`), has ten multiple-choice questions across three categories:
 
 - **Work Style (4 questions):** How you receive feedback, how you start projects, your ideal environment, how you handle ambiguity
 - **Communication (3 questions):** Your communication style, how you handle disagreement, your approach to deadlines
@@ -203,7 +207,7 @@ Employer-side:
 
 #### Employer Culture Quiz
 
-7 questions covering:
+8 questions covering:
 1. Work style preferences (remote, hybrid, onsite)
 2. Communication norms (sync vs. async, formal vs. casual)
 3. Decision-making approach (top-down vs. consensus)
@@ -211,6 +215,9 @@ Employer-side:
 5. Feedback culture (direct vs. supportive)
 6. Core values (select from 20 predefined values)
 7. Work-life balance expectations
+8. Team dynamics
+
+A longer 16-question culture assessment (`employerQuestions`, at `/app/employer/culture-assessment`) uses the same scenario, metaphor, trade-off, slider, ranking and reflection formats as the candidate assessment.
 
 Results produce employer OCEAN preferences and a company archetype classification.
 
@@ -357,11 +364,11 @@ The case-study build settled on a quiet, single-family UI. Tokens live in `src/f
 #### Assessment
 | Method | Endpoint | Auth | Description |
 |--------|----------|------|-------------|
-| `POST` | `/api/assessment/start` | No | Start or resume a 10-question assessment session |
+| `POST` | `/api/assessment/start` | No | Start or resume a session of the older 10-question assessment |
 | `POST` | `/api/assessment/answer` | No | Submit answer, advance progress, trigger scoring on completion |
 | `GET` | `/api/assessment/results/{candidate_id}` | No | Retrieve computed OCEAN scores, top traits, culture fit |
 | `GET` | `/api/assessment/question/{question_id}` | No | Get a specific question by ID |
-| `GET` | `/api/assessment/questions` | No | Get all 10 questions |
+| `GET` | `/api/assessment/questions` | No | Get the older assessment's 10 questions |
 
 #### Candidates
 | Method | Endpoint | Auth | Description |
@@ -464,7 +471,7 @@ For local development without Supabase:
 
 ## Where Amber Was Going (never built)
 
-Nothing in this section was built. It is the roadmap as it stood when Amber was shelved: the path from a matching platform to a **hiring intelligence system**. It's kept in the conditional, as the plan it was.
+Nothing in this section was built. It is the roadmap as it stood when Amber was shelved: the path from a matching platform to a **hiring intelligence system**. It's kept in the conditional, as the plan it was. Any scores or percentages in the examples below are made up to show what a screen would have looked like; none of them are measurements.
 
 ---
 
@@ -494,7 +501,7 @@ Nothing in this section was built. It is the roadmap as it stood when Amber was 
    - The existing scoring engine remains the source of truth — the AI pipeline feeds into the same OCEAN score format, ensuring backward compatibility with all matching logic
 
 3. **Hybrid Mode**
-   - Candidates can choose: quick 10-question assessment (existing) or full Ember conversation (new)
+   - Candidates can choose: the existing 16-question assessment or full Ember conversation (new)
    - Conversational assessment produces higher-confidence scores (more data points) and unlocks richer insights
    - The structured assessment remains as a fallback and calibration tool
 
@@ -529,7 +536,7 @@ Nothing in this section was built. It is the roadmap as it stood when Amber was 
 #### How It Would Have Worked
 
 1. **Team Personality Mapping**
-   - Employers invite existing team members to take a lightweight personality assessment (5 minutes, not the full 10-question flow)
+   - Employers invite existing team members to take a lightweight personality assessment (5 minutes, not the full 16-question flow)
    - Or: employers manually input approximate OCEAN scores for team members based on their knowledge
    - The system aggregates individual scores into a **Team DNA Profile**: average OCEAN scores, score distribution, dominant archetypes, and identified gaps
 
@@ -544,7 +551,7 @@ Nothing in this section was built. It is the roadmap as it stood when Amber was 
    - Employers can toggle between "culture fit" mode (find someone who fits in) and "culture add" mode (find someone who brings what we're missing)
 
 4. **Team-Level Insights**
-   - "Your product team is 4 Architects and 2 Craftspeople. Adding an Innovator would increase your team's creative output potential by an estimated 35%."
+   - "Your product team is 4 Architects and 2 Craftspeople. Adding an Innovator would add the openness the team is missing."
    - "This candidate's Connector archetype would bridge the communication gap between your engineering and design sub-teams."
    - Friction warnings: "Adding another Catalyst to a team of 3 Catalysts may create leadership tension. Consider a Harmonizer to balance the dynamic."
 
@@ -643,9 +650,9 @@ Nothing in this section was built. It is the roadmap as it stood when Amber was 
 
 2. **Pattern Recognition**
    - As outcome data accumulates, build pattern models:
-     - "Candidates with high openness (80+) matched to low-openness cultures (<40) have a 72% chance of leaving within 12 months"
-     - "Connector archetypes in Stabilizer cultures report highest satisfaction when the team has at least one other Connector"
-     - "The strongest predictor of 2-year retention is culture values alignment score above 75, not overall match score"
+     - Whether candidates with high openness leave low-openness cultures sooner than others
+     - Whether Connector archetypes in Stabilizer cultures are happier when the team has at least one other Connector
+     - Whether culture values alignment predicts long-term retention better than the overall match score
    - These patterns feed back into the matching algorithm as **learned weights** — the system gets smarter with every hire and every outcome
 
 3. **Retention Risk Score**
@@ -664,7 +671,7 @@ Nothing in this section was built. It is the roadmap as it stood when Amber was 
    - After hire, if 30/60/90-day check-in scores drop below threshold:
      - Alert to HR: "Retention risk detected for [Employee]. Key friction: work style mismatch identified at hire."
      - Suggested interventions based on personality data: "This Explorer may benefit from more autonomous project ownership. Consider adjusting their role scope."
-   - Pre-hire: "This is a high match (85%) but has a 40% 12-month retention risk due to a known pattern: Catalyst archetypes in Nurturer cultures show high initial satisfaction but frequent burnout at 8–12 months."
+   - Pre-hire: "This is a high match, but it fits a pattern the model has flagged before: Catalyst archetypes in Nurturer cultures starting happy and burning out within the first year."
 
 #### Technical Implementation
 
@@ -676,9 +683,9 @@ Nothing in this section was built. It is the roadmap as it stood when Amber was 
 
 #### Why It Would Have Mattered
 
-- **Premium Revenue:** Retention prediction is the feature enterprise HR teams would have paid the most for. The ROI is immediately quantifiable: "Amber saved us $240K by flagging 3 high-risk hires that traditional interviews missed."
-- **Self-Improving System:** Every hire and every outcome makes the model better. After 1,000 tracked hires, Amber's predictions become genuinely hard to compete with.
-- **Market Positioning:** Moves Amber from "matching platform" to "hiring intelligence platform." Direct competitor to industrial-organizational psychology consulting firms charging $50K+ per engagement.
+- **Premium Revenue:** Retention prediction was the feature we expected enterprise HR teams to value most, because its payoff is measurable in hires that stay.
+- **Self-Improving System:** Every hire and every outcome would have made the model better, and that outcome data would have been hard for a competitor to copy.
+- **Market Positioning:** Moves Amber from "matching platform" to "hiring intelligence platform." It would have competed with industrial-organizational psychology consulting rather than job boards.
 
 ---
 
@@ -765,7 +772,7 @@ Nothing in this section was built. It is the roadmap as it stood when Amber was 
      - Do Blind Matches have higher coffee chat acceptance rates?
      - Do Blind Matches lead to more successful hires?
      - Do Blind Matches have better retention rates?
-   - Publish anonymized insights: "Blind Matches on Amber result in 40% higher 12-month retention than standard matches"
+   - Publish anonymized findings comparing blind and standard match outcomes, whatever they turned out to be
 
 #### Why It Would Have Mattered
 
