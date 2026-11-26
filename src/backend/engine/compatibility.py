@@ -2,13 +2,15 @@
 Compatibility Scoring Engine for Project Amber
 
 Calculates compatibility scores between candidates and employers/roles using the
-Big Five (OCEAN) personality model. The engine produces three score types:
+Big Five (OCEAN) personality model. The engine produces these score types:
 
   1. Trait Match Score — How closely a candidate's OCEAN scores align with the
-     employer's stated preferences, using weighted Euclidean distance.
+     employer's stated preferences, using unweighted Euclidean distance.
   2. Culture Match Score — A composite of work style compatibility (30%), culture
      values alignment via OCEAN proxy (50%), and role-specific fit (20%).
-  3. Overall Match Score — 50% trait match + 50% culture match.
+  3. Work Style Score — Candidate vs role work arrangement, from a small table.
+  4. Communication Score — Closeness on extraversion (55%) and agreeableness (45%).
+  5. Overall Match Score — 40% trait + 30% culture + 20% work style + 10% communication.
 
 All scores are normalized to a 0-100 scale where 100 is a perfect match.
 """
@@ -99,11 +101,10 @@ CULTURE_OCEAN_MAP = {
 
 def calculate_trait_match(candidate: CandidateOCEAN, employer: EmployerPreferences) -> tuple[float, dict]:
     """
-    Calculate trait match using weighted Euclidean distance,
-    normalized to 0-100 scale.
+    Calculate trait match using Euclidean distance, normalized to 0-100 scale.
 
-    Each OCEAN dimension contributes equally (20% each).
-    Score = 100 - (weighted_distance / max_possible_distance * 100)
+    Each OCEAN dimension counts equally (the distance is unweighted).
+    Score = 100 - (distance / max_possible_distance * 100)
 
     Returns:
         tuple: (match_score, breakdown_dict)
@@ -126,7 +127,7 @@ def calculate_trait_match(candidate: CandidateOCEAN, employer: EmployerPreferenc
         breakdown[f'{name}_fit'] = round(fit)
         sum_sq_diff += diff ** 2
 
-    # Weighted Euclidean distance (each dim 0-100 range)
+    # Unweighted Euclidean distance (each dim 0-100 range)
     max_possible = 5 * (100 ** 2)  # If every dimension is 100 apart
     distance_ratio = math.sqrt(sum_sq_diff) / math.sqrt(max_possible)
 

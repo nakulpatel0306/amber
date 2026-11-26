@@ -39,9 +39,11 @@ Everything lives in [`src/backend/engine/compatibility.py`](src/backend/engine/c
 | Part | Weight | How it's computed |
 |---|---|---|
 | Trait distance | 40% | Euclidean distance between candidate scores and the employer's preferred scores across all five traits, scaled so identical profiles score 100 |
-| Culture and role fit | 30% | Work style (30%), culture values mapped onto traits (50%, e.g. *innovation* leans on openness, *balance* on low neuroticism) and how many traits sit inside the role's ranges (20%) |
+| Culture and role fit | 30% | Work style (30%), culture values mapped onto traits (50%, e.g. *innovation* leans on openness, *balance* on low neuroticism) and role-range fit (20%): each trait inside the role's range scores 100, each one outside loses 2 points per point of distance from the nearest bound, averaged over the five traits. Without culture values or a role, the remaining parts are reweighted |
 | Work style | 20% | Remote, hybrid, onsite or flexible, from a small compatibility table |
 | Communication | 10% | Closeness on extraversion (55%) and agreeableness (45%) |
+
+Work style counts twice: once inside culture and role fit, and again as its own 20%.
 
 The Ember score then adds an archetype-pair bonus from an 8 by 8 table (`agent/archetype_compatibility.py`), between -10 and +10, clamped to 0 to 100. Because it's plain arithmetic, the UI can show exactly why two people match.
 
@@ -133,7 +135,7 @@ npm run dev:demo --workspace src/frontend    # http://localhost:5173/amber/
 Needs Node 20.19+ or 22.12+, Python 3.11+ and a Supabase project.
 
 1. **Database:** in the Supabase SQL editor, run `supabase/schema.sql`, then `supabase/rls-policies.sql`, then the migrations and RPC files in the order listed in [supabase/README.md](supabase/README.md). Enable Email, Google and GitHub auth. The matching RPCs (`supabase/rpc-matching.sql`) and the `employers.archetype_name` migration were reconstructed in November 2026 from the frontend and the demo stand-in, and are untested against a live project.
-2. **Env files:** copy `src/backend/.env.example` to `src/backend/.env`, and create `src/frontend/.env`. Fill in:
+2. **Env files:** copy `src/backend/.env.example` to `src/backend/.env` and `src/frontend/.env.example` to `src/frontend/.env`. Fill in:
    - Frontend: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`; optionally `VITE_API_URL` (defaults to `http://localhost:8000`) and the `VITE_STRIPE_PRICE_*` plan IDs
    - Backend: `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_JWT_SECRET`
    - Backend, optional: `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `LOGO_DEV_API_KEY` (company logos), `FRONTEND_URL`

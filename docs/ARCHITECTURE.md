@@ -126,7 +126,7 @@ normalize to 0–100.
 
 **Score components:**
 
-- **Trait match** - weighted Euclidean distance between candidate OCEAN and
+- **Trait match** - unweighted Euclidean distance between candidate OCEAN and
   employer preferences, normalized so 100 = identical.
 - **Culture match** - a weighted composite: work-style compatibility (30%),
   culture-values alignment (50%), and role-specific fit (20%).
@@ -136,7 +136,8 @@ normalize to 0–100.
   better; negative weight → lower score is better (e.g. `balance` favors low
   neuroticism).
 - **Role fit** - checks whether candidate traits fall inside the role's declared
-  min/max ranges; out-of-range traits are penalized proportionally.
+  min/max ranges; in-range traits score 100, out-of-range traits lose 2 points
+  per point of distance from the nearest bound, averaged over the five traits.
 - **Work style** - categorical compatibility between remote/hybrid/onsite/flexible.
 - **Communication fit** - derived from extraversion + agreeableness alignment.
 - **Overall** - `40% trait + 30% culture + 20% work style + 10% communication`.

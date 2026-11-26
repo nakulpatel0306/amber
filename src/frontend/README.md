@@ -191,14 +191,14 @@ Context-based hooks (accessed via their respective contexts):
 
 ## Environment Variables
 
-Create `src/frontend/.env` and set:
+Copy `src/frontend/.env.example` to `src/frontend/.env` and set:
 
 | Variable | Purpose |
 |----------|---------|
 | `VITE_SUPABASE_URL` | Your Supabase project URL |
 | `VITE_SUPABASE_ANON_KEY` | Your Supabase anonymous key |
-
 | `VITE_API_URL` | FastAPI base URL (default `http://localhost:8000`) |
+| `VITE_STRIPE_PRICE_*` | Optional Stripe price IDs for the eight paid plan and interval combinations |
 
 The demo build needs no environment variables.
 

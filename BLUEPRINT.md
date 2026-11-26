@@ -50,7 +50,7 @@ The compatibility engine is the mathematical backbone of Amber. It lives in `src
 
 **1. Trait Match Score (40% of overall)**
 
-Measures how closely a candidate's Big Five (OCEAN) scores align with the employer's stated personality preferences. Uses weighted Euclidean distance across all five dimensions:
+Measures how closely a candidate's Big Five (OCEAN) scores align with the employer's stated personality preferences. Uses unweighted Euclidean distance across all five dimensions:
 
 - Each OCEAN dimension (Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism) is scored 0–100
 - The engine computes the absolute difference per dimension, then calculates the Euclidean distance across all five
