@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useConnections } from '../../contexts/ConnectionsContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
+import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
 import { ScheduleModal } from '../coffee-chats/ScheduleModal';
 import type { Connection } from '../../types/connections.types';
@@ -61,6 +62,8 @@ export function InboxPanel({ isOpen, onClose }: InboxPanelProps) {
         ? `Meeting scheduled with ${conn.sender_name || 'this user'}`
         : `You're now connected with ${conn.sender_name || 'this user'}`
       );
+      // The new chat is on the page behind; a drawer left open would just be empty
+      onClose();
     } catch {
       showError('Error', 'Failed to accept connection');
     } finally {
@@ -154,7 +157,6 @@ export function InboxPanel({ isOpen, onClose }: InboxPanelProps) {
             <ul>
               {pendingReceived.map((conn, i) => {
                 const senderName = conn.sender_name || 'Unknown';
-                const initial = senderName.charAt(0).toUpperCase();
                 const hasMeetInvite = conn.meet_invite && conn.meet_invite.status === 'pending';
                 const proposedTimes = hasMeetInvite ? conn.meet_invite!.proposed_times : [];
                 const timePicked = selectedTimeIdx[conn.id] !== undefined;
@@ -166,12 +168,7 @@ export function InboxPanel({ isOpen, onClose }: InboxPanelProps) {
                     style={{ borderTop: i > 0 ? '1px solid var(--color-border)' : undefined }}
                   >
                     <div className="flex items-start gap-3">
-                      <div
-                        className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-medium"
-                        style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-textSecondary)' }}
-                      >
-                        {initial}
-                      </div>
+                      <Avatar fallback={senderName} size="md" className="w-9 h-9 text-sm" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-baseline justify-between gap-2">
                           <p className="text-sm font-semibold truncate" style={{ color: 'var(--color-text)' }}>

@@ -6,7 +6,7 @@ import { Button } from '../components/ui/Button';
 import { useAuth } from '../contexts/AuthContext';
 import { usePageTitle } from '../hooks/usePageTitle';
 import { resetDemo } from './store';
-import { applySampleCulture, fillSampleAssessment, prepareVisitor, VISITOR_NAME, visitorEmail, type DemoRole } from './visitor';
+import { applySampleCulture, completeSampleAssessment, prepareVisitor, VISITOR_NAME, visitorEmail, type DemoRole } from './visitor';
 
 const ROLES: {
   id: DemoRole;
@@ -49,8 +49,8 @@ export function DemoStart() {
     }
     prepareVisitor(created.id, role);
     if (role === 'candidate') {
-      if (skip) fillSampleAssessment(created.id);
-      navigate('/app/personality');
+      if (skip) completeSampleAssessment(created.id);
+      navigate(skip ? '/app/personality/results' : '/app/personality');
     } else {
       if (skip) applySampleCulture(created.id);
       navigate(skip ? '/app/employer/culture-results' : '/app/employer/culture-assessment');
@@ -129,12 +129,12 @@ export function DemoStart() {
                   disabled={busy !== null}
                   leftIcon={<FastForward className="w-4 h-4" />}
                 >
-                  {busy === `${role.id}-true` ? 'Setting up...' : 'Skip with sample answers'}
+                  {busy === `${role.id}-true` ? 'Setting up...' : 'Skip with a sample profile'}
                 </Button>
                 <p className="text-xs text-center mt-1" style={{ color: 'var(--color-textMuted)' }}>
                   {role.id === 'candidate'
-                    ? 'Skipping pre-fills all but the last question with a random persona.'
-                    : 'Skipping answers the quiz with a random persona.'}
+                    ? 'Skipping gives you a random sample personality profile.'
+                    : 'Skipping gives your company a random sample culture.'}
                 </p>
               </div>
             </section>

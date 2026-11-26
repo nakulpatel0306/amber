@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Modal, ModalFooter } from '../ui/Modal';
+import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
 import { DatePicker } from '../ui/DatePicker';
 
@@ -42,7 +43,6 @@ export function ConnectModal({
   const [preferredDates, setPreferredDates] = useState<Date[]>([]);
   const [preferredTime, setPreferredTime] = useState('10:00 AM');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const initial = name.charAt(0).toUpperCase();
 
   const minDate = new Date();
   minDate.setDate(minDate.getDate() + 1);
@@ -90,18 +90,9 @@ export function ConnectModal({
       {/* Side by side from sm up; on phones the scheduling panel stacks under the message */}
       <div className="flex flex-col sm:flex-row gap-0">
         <div className={`flex-1 min-w-0 ${showCalendar ? 'sm:pr-5' : ''}`}>
-          {/* Header */}
-          <div className="flex items-center gap-3 mb-3">
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0"
-              style={{ backgroundColor: avatarUrl ? undefined : 'var(--color-surfaceHover)' }}
-            >
-              {avatarUrl ? (
-                <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
-              ) : (
-                <span className="text-sm font-medium" style={{ color: 'var(--color-textSecondary)' }}>{initial}</span>
-              )}
-            </div>
+          {/* Header; the right padding keeps the score clear of the modal's close button */}
+          <div className={`flex items-center gap-3 mb-3 ${showCalendar ? 'pr-10 sm:pr-0' : 'pr-10'}`}>
+            <Avatar src={avatarUrl} alt={name} fallback={name} size="md" className="text-sm" />
             <div className="flex-1 min-w-0">
               <div className="flex items-baseline justify-between gap-2">
                 <h3 className="font-semibold text-sm truncate" style={{ color: 'var(--color-text)' }}>{name}</h3>

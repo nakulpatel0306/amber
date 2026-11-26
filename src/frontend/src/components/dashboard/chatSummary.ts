@@ -33,10 +33,11 @@ export function chatSummary(chats: UpcomingChat[], { pending, accepted, schedule
     .sort((a, b) => new Date(a.scheduledAt!).getTime() - new Date(b.scheduledAt!).getTime())[0];
   if (next) return `Next with ${next.person}, ${format(new Date(next.scheduledAt!), 'EEE MMM d, h:mm a')}`;
 
+  // With nothing ahead, any scheduled chat has already happened and is only waiting for feedback
   const parts = [
     pending > 0 && `${pending} pending`,
     accepted > 0 && `${accepted} to schedule`,
-    scheduled > 0 && `${scheduled} booked`,
+    scheduled > 0 && `${scheduled} awaiting feedback`,
     completed > 0 && `${completed} completed`,
   ].filter(Boolean);
   return parts.length > 0 ? parts.join(' · ') : 'No chats yet';

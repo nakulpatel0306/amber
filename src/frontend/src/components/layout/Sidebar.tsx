@@ -8,6 +8,7 @@ import {
   Sparkles,
   Flame,
   Globe,
+  Briefcase,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Avatar } from '../ui/Avatar';
@@ -63,6 +64,7 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
 
   const employerNavItems = [
     { path: '/app/employer', label: 'Dashboard', icon: LayoutDashboard },
+    { path: '/app/employer/roles', label: 'Roles', icon: Briefcase, nested: true },
     { path: '/app/employer/insights', label: 'Insights', icon: Sparkles },
     { path: '/app/employer/ember', label: 'Ember', icon: Flame },
     { path: '/app/network', label: 'Network', icon: Globe },
@@ -120,7 +122,8 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
       {/* Nav Items */}
       <nav aria-label="Main navigation" className="flex-1 px-3 py-4 space-y-1 overflow-y-auto overflow-x-hidden">
         {navItems.map(item => {
-          const isActive = location.pathname === item.path;
+          // Nested items stay highlighted on their sub-pages, like creating a new role
+          const isActive = location.pathname === item.path || ('nested' in item && location.pathname.startsWith(`${item.path}/`));
           return (
             <Link
               key={item.path}

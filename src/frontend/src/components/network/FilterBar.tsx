@@ -10,8 +10,8 @@ interface FilterBarProps {
   onLayoutChange: (l: LayoutMode) => void;
 }
 
-const FILTER_TABS: { value: FeedFilter; label: string }[] = [
-  { value: 'all', label: 'All posts' },
+const FILTER_TABS: { value: FeedFilter; label: string; short?: string }[] = [
+  { value: 'all', label: 'All posts', short: 'All' },
   { value: 'job_seekers', label: 'Job seekers' },
   { value: 'employers', label: 'Employers' },
   { value: 'connections', label: 'Connections' },
@@ -32,7 +32,7 @@ export function FilterBar({
 }: FilterBarProps) {
   return (
     <div
-      className="sticky top-0 z-30 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 backdrop-blur-xl border-b"
+      className="sticky top-14 md:top-0 z-20 -mx-4 sm:-mx-6 px-4 sm:px-6 py-3 backdrop-blur-xl border-b"
       style={{
         backgroundColor: 'color-mix(in srgb, var(--color-background) 80%, transparent)',
         borderColor: 'var(--color-border)',
@@ -40,7 +40,7 @@ export function FilterBar({
     >
       <div className="flex items-center gap-3 overflow-x-auto scrollbar-hidden">
         {/* Filter tabs: a quiet selected state, the accent stays on "New post" */}
-        <div className="flex items-center gap-1 flex-shrink-0">
+        <div className="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
           {FILTER_TABS.map(tab => {
             const isActive = filter === tab.value;
             return (
@@ -48,13 +48,20 @@ export function FilterBar({
                 key={tab.value}
                 onClick={() => onFilterChange(tab.value)}
                 aria-pressed={isActive}
-                className="px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors hover:text-[var(--color-text)]"
+                className="px-2.5 sm:px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors hover:text-[var(--color-text)]"
                 style={{
                   backgroundColor: isActive ? 'var(--color-surfaceHover)' : 'transparent',
                   color: isActive ? 'var(--color-text)' : 'var(--color-textSecondary)',
                 }}
               >
-                {tab.label}
+                {tab.short ? (
+                  <>
+                    <span className="sm:hidden">{tab.short}</span>
+                    <span className="hidden sm:inline">{tab.label}</span>
+                  </>
+                ) : (
+                  tab.label
+                )}
               </button>
             );
           })}

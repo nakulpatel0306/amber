@@ -1,16 +1,15 @@
 /**
  * Visitor setup for the demo: fills in the new account's profile, gives it a
- * little history to explore (a past coffee chat to rate, an incoming request
- * to answer), and provides the "skip with sample answers" shortcuts.
+ * little history to explore (a past coffee chat to rate, one coming up, an incoming request
+ * to answer), and provides the "skip with a sample profile" shortcuts.
  */
-import {
-  candidateQuestions,
-  employerQuestions,
-  type AssessmentQuestion,
-} from '../data/assessmentQuestions';
-import { cultureEngine, personalityEngine, type AssessmentResponse } from '../lib/personalityEngine';
+import { PRESETS } from '../components/landing/kestrel';
+import { determineEmployerArchetype } from '../data/employerArchetypes';
+import { determineArchetype } from '../lib/ember/agent';
+import type { CandidateOCEAN } from '../lib/ember/compatibility';
+import { cultureEngine, personalityEngine } from '../lib/personalityEngine';
 import { createConnection } from './backend';
-import { nextWeekdayMorning, sendAutoMessage } from './autoReply';
+import { nextWeekdayMorning, sendAutoMessage, weekdayAt } from './autoReply';
 import { SEED_IDS } from './seed';
 import { findOne, insertRow, updateRow, type Row } from './store';
 
@@ -23,24 +22,24 @@ export function visitorEmail(role: DemoRole): string {
   return `${role === 'candidate' ? 'seeker' : 'team'}.${Math.random().toString(36).slice(2, 6)}@example.com`;
 }
 
-const hoursAgo = (h: number) => new Date(Date.now() - h * 3600_000).toISOString();
-
 function profileOf(key: string): Row {
   return findOne('profiles', (p) => p.id === SEED_IDS.profile(key)) as Row;
 }
 
-function pastChat(values: Record<string, unknown>, partner: Row, lines: [string, string][]): void {
+/**
+ * A scheduled chat with one of the seeded people. One in the past is still
+ * waiting for the visitor's feedback; one ahead shows up as upcoming.
+ */
+function seedChat(scheduledAt: string, values: Record<string, unknown>, partner: Row, partnerMessage: string): void {
   const chat = insertRow('coffee_chats', {
     status: 'scheduled',
-    scheduled_at: hoursAgo(26),
+    scheduled_at: scheduledAt,
     duration_minutes: 30,
     meeting_link: null,
-    created_at: hoursAgo(80),
+    created_at: new Date(new Date(scheduledAt).getTime() - 4 * 24 * 3600_000).toISOString(),
     ...values,
   });
-  lines.forEach(([who, text]) => {
-    if (who === 'partner') sendAutoMessage(chat.id, partner, text);
-  });
+  sendAutoMessage(chat.id, partner, partnerMessage);
 }
 
 /** Fill in the new candidate account and give it something to explore. */
@@ -58,8 +57,8 @@ function prepareCandidate(userId: string): void {
     setup_completed_at: new Date().toISOString(),
   });
 
-  const fernleaf = profileOf('fernleaf');
-  pastChat(
+  seedChat(
+    weekdayAt(-3, 14),
     {
       candidate_id: candidate.id,
       employer_id: SEED_IDS.employer('fernleaf'),
@@ -70,8 +69,24 @@ function prepareCandidate(userId: string): void {
       role_id: 'seed-role-fernleaf-1',
       role_title: 'Product Designer',
     },
-    fernleaf,
-    [['partner', 'Thanks again for the chat yesterday! If you have a minute, leave feedback on how it went.']],
+    profileOf('fernleaf'),
+    'Thanks again for our chat! If you have a minute, leave feedback on how it went.',
+  );
+
+  seedChat(
+    weekdayAt(1, 14),
+    {
+      candidate_id: candidate.id,
+      employer_id: SEED_IDS.employer('kestrel'),
+      initiated_by: 'candidate',
+      message: 'Your studio work is lovely. I would like to hear how designers and producers split the work.',
+      company_name: 'Kestrel Studio',
+      candidate_name: VISITOR_NAME,
+      role_id: 'seed-role-kestrel-1',
+      role_title: 'Brand Designer',
+    },
+    profileOf('kestrel'),
+    'Booked! I will bring a couple of recent briefs so you can see how a project moves through the studio.',
   );
 
   void createConnection(SEED_IDS.profile('brightline'), {
@@ -105,7 +120,7 @@ function prepareEmployer(userId: string): void {
     ['Senior Frontend Engineer', 'hybrid', { required_openness_min: 60, required_openness_max: 95, required_conscientiousness_min: 65, required_conscientiousness_max: 95 }],
     ['Customer Success Lead', 'remote', { required_extraversion_min: 60, required_extraversion_max: 100, required_agreeableness_min: 70, required_agreeableness_max: 100 }],
   ];
-  roles.forEach(([title, workStyle, ranges], i) => {
+  const [frontendRole] = roles.map(([title, workStyle, ranges], i) =>
     insertRow('roles', {
       employer_id: employer.id,
       title,
@@ -129,11 +144,12 @@ function prepareEmployer(userId: string): void {
       required_conscientiousness_min: null,
       required_conscientiousness_max: null,
       ...ranges,
-    });
-  });
+    }),
+  );
 
   const owen = profileOf('candidate-16');
-  pastChat(
+  seedChat(
+    weekdayAt(-3, 14),
     {
       candidate_id: SEED_IDS.candidate(15),
       employer_id: employer.id,
@@ -141,9 +157,26 @@ function prepareEmployer(userId: string): void {
       message: 'Hi! I would love to hear how your team handles on-call.',
       company_name: 'Lumen Works',
       candidate_name: owen.full_name,
+      role_id: frontendRole.id,
+      role_title: frontendRole.title,
     },
     owen,
-    [['partner', 'Thanks for the time yesterday. Curious what you thought!']],
+    'Thanks for the time the other day. Curious what you thought!',
+  );
+
+  const samir = profileOf('candidate-14');
+  seedChat(
+    weekdayAt(1, 14),
+    {
+      candidate_id: SEED_IDS.candidate(13),
+      employer_id: employer.id,
+      initiated_by: 'employer',
+      message: 'Your one-pager habit caught our eye. Coffee to talk about how we plan?',
+      company_name: 'Lumen Works',
+      candidate_name: samir.full_name,
+    },
+    samir,
+    'Sounds good, see you then. I will come with questions about how roadmaps get decided.',
   );
 
   void createConnection(SEED_IDS.profile('candidate-1'), {
@@ -165,104 +198,93 @@ export function prepareVisitor(userId: string, role: DemoRole): void {
   else prepareEmployer(userId);
 }
 
+const OCEAN_KEYS = ['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism'] as const;
+
 /**
- * A random persona: a set of facet traits it leans into. Picking answers that
- * favour those facets gives a distinct profile, where uniformly random answers
- * would average out near 50 on every trait.
+ * A sample persona: one of the landing's archetype profiles with a little
+ * jitter. Random answers scored through the engine average out near 60 on
+ * every trait, which makes every match look alike; a profile with clear peaks
+ * shows the spread the matching is meant to produce.
  */
-function makePersona(questions: AssessmentQuestion[], random: () => number): Set<string> {
-  const facets = new Set<string>();
-  questions.forEach((q) => {
-    q.options?.forEach((o) => Object.keys(o.traitScores).forEach((t) => facets.add(t)));
-    if (q.sliderConfig) facets.add(q.sliderConfig.trait);
+function samplePersona(keys: string[]): { key: string; ocean: CandidateOCEAN } {
+  const pool = PRESETS.filter((p) => keys.includes(p.key));
+  const preset = pool[Math.floor(Math.random() * pool.length)];
+  const ocean = { ...preset.ocean };
+  OCEAN_KEYS.forEach((k) => {
+    ocean[k] = Math.max(0, Math.min(100, ocean[k] + Math.round(Math.random() * 6 - 3)));
   });
-  return new Set([...facets].filter(() => random() < 0.4));
+  return { key: preset.key, ocean };
 }
 
-function sampleResponse(question: AssessmentQuestion, random: () => number, persona: Set<string>): AssessmentResponse {
-  const response: AssessmentResponse = { questionId: question.id, timestamp: Date.now() };
-  const options = question.options ?? [];
-  const appeal = (o: (typeof options)[number]) =>
-    Object.entries(o.traitScores).reduce((sum, [trait, score]) => sum + (persona.has(trait) ? score : 0), 0) + random() * 20;
+// The other archetype profiles either top out below a strong (80+) match with every seeded company (Catalyst,
+// Connector, Craftsperson) or score them all within a few points of each other (Explorer)
+const CANDIDATE_PERSONAS = ['the_innovator', 'the_architect', 'the_harmonizer', 'the_strategist'];
 
-  if (question.type === 'slider') {
-    const leansIn = persona.has(question.sliderConfig?.trait ?? '');
-    response.sliderValue = Math.round(leansIn ? 70 + random() * 25 : 10 + random() * 30);
-  } else if (question.type === 'ranking') {
-    response.rankingOrder = [...options].sort((a, b) => appeal(b) - appeal(a)).map((o) => o.id);
-  } else if (question.type === 'reflection') {
-    response.reflectionText = 'A sample answer written by the demo, standing in for your own words.';
-  } else {
-    response.answerId = [...options].sort((a, b) => appeal(b) - appeal(a))[0]?.id;
-  }
-  return response;
-}
-
-function seededRandom(seed: number): () => number {
-  let s = seed % 2147483647 || 1;
-  return () => (s = (s * 16807) % 2147483647) / 2147483647;
-}
-
-function toAnswer(response: AssessmentResponse): Record<string, unknown> {
-  if (response.sliderValue !== undefined) return { value: response.sliderValue };
-  if (response.rankingOrder) return { order: response.rankingOrder };
-  if (response.reflectionText) return { text: response.reflectionText };
-  return { selected: response.answerId };
-}
-
-/**
- * Pre-answer every question but the last with a random persona. The real
- * assessment page resumes in-progress sessions, so the visitor lands on the
- * final question and finishing it runs the normal scoring and save path.
- */
-export function fillSampleAssessment(userId: string): void {
-  const random = seededRandom(Date.now());
-  const persona = makePersona(candidateQuestions, random);
-  const assessment = insertRow('assessments', {
+/** Complete the assessment with a sample persona, saving the fields the assessment page saves on finish. */
+export function completeSampleAssessment(userId: string): void {
+  const { ocean } = samplePersona(CANDIDATE_PERSONAS);
+  const now = new Date().toISOString();
+  insertRow('assessments', {
     user_id: userId,
     assessment_type: 'candidate_personality',
-    started_at: new Date().toISOString(),
-    completed_at: null,
+    responses: {},
+    started_at: now,
+    completed_at: now,
   });
-  candidateQuestions.slice(0, -1).forEach((question) => {
-    insertRow('assessment_responses', {
-      assessment_id: assessment.id,
-      user_id: userId,
-      question_code: question.id,
-      answer: toAnswer(sampleResponse(question, random, persona)),
-      answered_at: new Date().toISOString(),
-    });
+  const candidate = findOne('candidates', (c) => c.user_id === userId) as Row;
+  updateRow('candidates', candidate.id, {
+    openness_score: ocean.openness,
+    conscientiousness_score: ocean.conscientiousness,
+    extraversion_score: ocean.extraversion,
+    agreeableness_score: ocean.agreeableness,
+    neuroticism_score: ocean.neuroticism,
+    top_traits: [determineArchetype(ocean).name],
+    assessment_status: 'completed',
+    assessment_completed_at: now,
   });
 }
 
-/** Answer the culture quiz with a random persona and save it like CultureAssessment does. */
-export function applySampleCulture(userId: string): void {
-  const random = seededRandom(Date.now());
-  const persona = makePersona(employerQuestions, random);
-  cultureEngine.reset();
-  const responses: Record<string, AssessmentResponse> = {};
-  employerQuestions.forEach((question) => {
-    const response = sampleResponse(question, random, persona);
-    responses[question.id] = response;
-    cultureEngine.processResponse(response, { type: question.type, options: question.options, sliderConfig: question.sliderConfig });
-  });
-  const profile = cultureEngine.generateCultureProfile(userId);
+// The culture quiz ranks these six values; each persona keeps the three that fit it. A Catalyst culture is left
+// out because no seeded candidate reaches a strong match with it
+const CULTURE_VALUES: Record<string, string[]> = {
+  the_innovator: ['innovation', 'growth', 'collaboration'],
+  the_connector: ['collaboration', 'integrity', 'growth'],
+  the_architect: ['excellence', 'integrity', 'results'],
+  the_harmonizer: ['collaboration', 'integrity', 'excellence'],
+  the_craftsperson: ['excellence', 'integrity', 'results'],
+  the_explorer: ['innovation', 'growth', 'excellence'],
+  the_strategist: ['excellence', 'growth', 'results'],
+};
 
+/** Give the employer a sample culture, saved to the fields CultureAssessment saves. */
+export function applySampleCulture(userId: string): void {
+  const { key, ocean } = samplePersona(Object.keys(CULTURE_VALUES));
+  const now = new Date().toISOString();
   insertRow('assessments', {
     user_id: userId,
     assessment_type: 'employer_culture',
-    responses,
-    started_at: new Date().toISOString(),
-    completed_at: new Date().toISOString(),
+    responses: {},
+    started_at: now,
+    completed_at: now,
   });
   const employer = findOne('employers', (e) => e.user_id === userId) as Row;
   updateRow('employers', employer.id, {
-    openness_preference: profile.idealCandidateOCEAN.openness,
-    conscientiousness_preference: profile.idealCandidateOCEAN.conscientiousness,
-    extraversion_preference: profile.idealCandidateOCEAN.extraversion,
-    agreeableness_preference: profile.idealCandidateOCEAN.agreeableness,
-    neuroticism_preference: profile.idealCandidateOCEAN.neuroticism,
-    culture_values: profile.valuesPriority,
+    openness_preference: ocean.openness,
+    conscientiousness_preference: ocean.conscientiousness,
+    extraversion_preference: ocean.extraversion,
+    agreeableness_preference: ocean.agreeableness,
+    neuroticism_preference: ocean.neuroticism,
+    culture_values: CULTURE_VALUES[key],
+    // The Ember score adds the archetype-pair bonus only for employers with a stored archetype, as seeded ones have
+    archetype_name: determineEmployerArchetype({
+      innovation: ocean.openness,
+      collaboration: (ocean.extraversion + ocean.agreeableness) / 2,
+      results: ocean.conscientiousness,
+      warmth: ocean.agreeableness,
+      growth: (ocean.openness + ocean.conscientiousness) / 2,
+      excellence: ocean.conscientiousness,
+    }).primary.name,
     culture_quiz_completed: true,
   });
 }
+

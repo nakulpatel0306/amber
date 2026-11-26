@@ -20,6 +20,7 @@ export interface CoffeeChatData {
   // Joined data
   partner_name: string;
   partner_company?: string;
+  partner_contact?: string;
   partner_location?: string;
   match_score?: number;
   role_title?: string;

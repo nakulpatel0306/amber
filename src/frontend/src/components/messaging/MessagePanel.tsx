@@ -1,9 +1,15 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { X, Minus, Send, User } from 'lucide-react';
+import { X, Minus, Send } from 'lucide-react';
+import { Avatar } from '../ui/Avatar';
 import { Button } from '../ui/Button';
+import { IS_DEMO } from '../../demo/flag';
+import { splitAutoReply } from '../../demo/autoReplyLabel';
 import { useAuth } from '../../contexts/AuthContext';
 import { useMessaging, type Message, type ChatPartner } from '../../contexts/MessagingContext';
 import { format, isToday, isYesterday, isSameDay } from 'date-fns';
+
+// The demo's reset pill floats at the bottom of the screen; open chats sit above it so the message box stays usable
+const PANEL_BOTTOM = IS_DEMO ? 'bottom-16' : 'bottom-2 sm:bottom-4';
 
 interface MessagePanelProps {
   coffeeChatId: string;
@@ -112,7 +118,7 @@ export function MessagePanel({
     return (
       <button
         onClick={() => maximizeChat(coffeeChatId)}
-        className="fixed bottom-4 right-2 sm:right-[var(--panel-right)] flex items-center gap-2 px-3 py-2 rounded-full shadow-lg transition-colors hover:bg-[var(--color-accentHover)]"
+        className={`fixed ${IS_DEMO ? 'bottom-16' : 'bottom-4'} right-2 sm:right-[var(--panel-right)] flex items-center gap-2 px-3 py-2 rounded-full shadow-lg transition-colors hover:bg-[var(--color-accentHover)]`}
         style={{
           ...offsetStyle,
           backgroundColor: 'var(--color-accent)',
@@ -120,16 +126,7 @@ export function MessagePanel({
           zIndex: 50,
         }}
       >
-        {partner.avatarUrl ? (
-          <img src={partner.avatarUrl} alt="" className="w-6 h-6 rounded-full object-cover" />
-        ) : (
-          <div
-            className="w-6 h-6 rounded-full flex items-center justify-center"
-            style={{ backgroundColor: 'var(--color-surfaceHover)' }}
-          >
-            <User className="w-3.5 h-3.5" />
-          </div>
-        )}
+        <Avatar src={partner.avatarUrl} fallback={partner.name} size="xs" className="text-2xs" />
         <span className="text-sm font-medium max-w-[120px] truncate">{partner.name}</span>
         {unreadCount > 0 && (
           <span
@@ -145,10 +142,10 @@ export function MessagePanel({
 
   return (
     <div
-      className="fixed bottom-2 inset-x-2 sm:bottom-4 sm:left-auto sm:right-[var(--panel-right)] sm:w-96 rounded-xl shadow-2xl overflow-hidden flex flex-col"
+      className={`fixed ${PANEL_BOTTOM} inset-x-2 sm:left-auto sm:right-[var(--panel-right)] sm:w-96 rounded-xl shadow-2xl overflow-hidden flex flex-col`}
       style={{
         ...offsetStyle,
-        height: 'min(460px, calc(100dvh - 1rem))',
+        height: `min(460px, calc(100dvh - ${IS_DEMO ? '5rem' : '1rem'}))`,
         backgroundColor: 'var(--color-surface)',
         border: '1px solid var(--color-border)',
         zIndex: 50,
@@ -159,21 +156,17 @@ export function MessagePanel({
         style={{ backgroundColor: 'var(--color-surface)', borderBottom: '1px solid var(--color-border)' }}
       >
         <div className="flex items-center gap-3 min-w-0">
-          <div className="flex-shrink-0">
-            {partner.avatarUrl ? (
-              <img src={partner.avatarUrl} alt="" className="w-8 h-8 rounded-full object-cover" />
-            ) : (
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: 'var(--color-surfaceHover)' }}
-              >
-                <User className="w-4 h-4" style={{ color: 'var(--color-textMuted)' }} />
-              </div>
+          <Avatar src={partner.avatarUrl} fallback={partner.name} size="sm" className="text-xs" />
+          <div className="min-w-0">
+            <p className="text-sm font-semibold truncate" style={{ color: 'var(--color-text)' }}>
+              {partner.name}
+            </p>
+            {partner.subtitle && (
+              <p className="text-caption truncate" style={{ color: 'var(--color-textMuted)' }}>
+                {partner.subtitle}
+              </p>
             )}
           </div>
-          <p className="text-sm font-semibold truncate min-w-0" style={{ color: 'var(--color-text)' }}>
-            {partner.name}
-          </p>
         </div>
         <div className="flex items-center gap-0.5">
           <button
@@ -218,6 +211,7 @@ export function MessagePanel({
             if (item.type === 'message' && item.msg) {
               const msg = item.msg;
               const isOwn = msg.sender_id === user?.id;
+              const { isAutoReply, text } = IS_DEMO ? splitAutoReply(msg.content) : { isAutoReply: false, text: msg.content };
               return (
                 <div
                   key={msg.id}
@@ -225,18 +219,7 @@ export function MessagePanel({
                 >
                   <div className={`flex gap-2 max-w-[80%] ${isOwn ? 'flex-row-reverse' : ''}`}>
                     {!isOwn && item.showAvatar && (
-                      <div className="flex-shrink-0 mt-1">
-                        {msg.sender_avatar_url ? (
-                          <img src={msg.sender_avatar_url} alt="" className="w-6 h-6 rounded-full object-cover" />
-                        ) : (
-                          <div
-                            className="w-6 h-6 rounded-full flex items-center justify-center"
-                            style={{ backgroundColor: 'var(--color-border)' }}
-                          >
-                            <User className="w-3 h-3" style={{ color: 'var(--color-textMuted)' }} />
-                          </div>
-                        )}
-                      </div>
+                      <Avatar src={msg.sender_avatar_url} fallback={msg.sender_name || partner.name} size="xs" className="mt-1 text-2xs" />
                     )}
                     {!isOwn && !item.showAvatar && <div className="w-6 flex-shrink-0" />}
                     <div>
@@ -248,14 +231,19 @@ export function MessagePanel({
                           border: isOwn ? 'none' : '1px solid var(--color-border)',
                         }}
                       >
-                        {msg.content}
+                        {text}
                       </div>
-                      {item.showAvatar && (
+                      {(item.showAvatar || isAutoReply) && (
                         <p
-                          className={`text-2xs tabular-nums mt-0.5 ${isOwn ? 'text-right' : ''}`}
+                          className={`flex items-center gap-1.5 text-2xs tabular-nums mt-0.5 ${isOwn ? 'justify-end' : ''}`}
                           style={{ color: 'var(--color-textMuted)' }}
                         >
-                          {formatMessageTime(msg.created_at)}
+                          {item.showAvatar && formatMessageTime(msg.created_at)}
+                          {isAutoReply && (
+                            <span className="px-1.5 rounded-full" style={{ border: '1px solid var(--color-border)' }}>
+                              Demo auto-reply
+                            </span>
+                          )}
                         </p>
                       )}
                     </div>

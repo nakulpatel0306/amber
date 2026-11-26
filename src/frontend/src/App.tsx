@@ -67,7 +67,6 @@ const AssessmentResults = lazy(() => import('./components/candidate/AssessmentRe
 const PersonalityInsights = lazy(() => import('./components/candidate/PersonalityInsights').then(m => ({ default: m.PersonalityInsights })));
 
 // Lazy-loaded employer components
-const CultureQuiz = lazy(() => import('./components/employer/CultureQuiz').then(m => ({ default: m.CultureQuiz })));
 const CultureAssessment = lazy(() => import('./components/employer/CultureAssessment').then(m => ({ default: m.CultureAssessment })));
 const CultureInsights = lazy(() => import('./components/employer/CultureInsights').then(m => ({ default: m.CultureInsights })));
 const EmployerAssessmentResults = lazy(() => import('./components/employer/EmployerAssessmentResults').then(m => ({ default: m.EmployerAssessmentResults })));
@@ -302,7 +301,8 @@ function App() {
                       </ProtectedRoute>
                     }
                   />
-                  <Route path="employer/culture" element={<CultureQuiz />} />
+                  {/* Older links to the culture quiz land on the real assessment */}
+                  <Route path="employer/culture" element={<Navigate to="/app/employer/culture-assessment" replace />} />
                   <Route
                     path="employer/culture-assessment"
                     element={
