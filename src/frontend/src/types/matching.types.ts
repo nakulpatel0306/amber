@@ -14,6 +14,7 @@ export interface CandidateData {
   neuroticism_score: number;
   top_traits: string[];
   work_style: string | null;
+  preferred_work_style?: string | null;
   headline: string | null;
   location: string | null;
   archetype_name: string | null;
@@ -34,6 +35,7 @@ export interface EmployerData {
   agreeableness_preference: number;
   neuroticism_preference: number;
   culture_values: string[];
+  archetype_name?: string | null;
   description: string;
   industry: string;
   company_size: string;
@@ -162,6 +164,7 @@ export interface EmployerResult {
     neuroticismFit: number;
   };
   employerOcean: OCEANScores;
+  employerArchetypeName: string | null;
   cultureValues: string[];
   createdAt?: string;
 }

@@ -10,7 +10,7 @@ import { Button } from '../ui/Button';
 import { CoffeeBrewLoader, useMinLoader } from '../ui/CoffeeBrewLoader';
 import { CandidateSetupModal } from '../candidate/CandidateSetupModal';
 import { supabase } from '../../lib/supabase';
-import { calculateCompatibility } from '../../lib/compatibilityScoring';
+import { employerOceanFromRow, roleRequirementsFromRow, scoreMatch } from '../../lib/matchScore';
 
 import { DashboardHeader } from './DashboardHeader';
 import { SummaryCard } from './SummaryCard';
@@ -18,6 +18,7 @@ import { MatchingTable } from './MatchingTable';
 import { ArchetypeStrip } from './ArchetypeStrip';
 
 import { chatSummary, totalChats, type UpcomingChat } from './chatSummary';
+import { greetingFirstName, timeOfDayGreeting } from './greeting';
 
 interface PersonalityScores {
   openness: number;
@@ -56,7 +57,7 @@ interface TopMatch {
 
 export function JobSeekerDashboard() {
   const { profile, user } = useAuth();
-  const [greeting, setGreeting] = useState('');
+  const greeting = timeOfDayGreeting(new Date().getHours());
   const [hasCompletedAssessment, setHasCompletedAssessment] = useState<boolean | null>(null);
   const [hasCompletedProfile, setHasCompletedProfile] = useState<boolean | null>(null);
   const [showSetupModal, setShowSetupModal] = useState(false);
@@ -67,6 +68,7 @@ export function JobSeekerDashboard() {
   const [_profileCompletion, setProfileCompletion] = useState(0);
   const [matchesAvailable, setMatchesAvailable] = useState(0);
   const [avgMatchScore, setAvgMatchScore] = useState(0);
+  const [bestCompanyScore, setBestCompanyScore] = useState(0);
   const [pendingChats, setPendingChats] = useState(0);
   const [_connectionsCount, setConnectionsCount] = useState(0);
   const [acceptedChats, setAcceptedChats] = useState(0);
@@ -84,14 +86,6 @@ export function JobSeekerDashboard() {
   const [topMatches, setTopMatches] = useState<TopMatch[]>([]);
   const [matchPage, setMatchPage] = useState(0);
   const [upcomingChats, setUpcomingChats] = useState<UpcomingChat[]>([]);
-
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) setGreeting('Good morning');
-    else if (hour >= 12 && hour < 17) setGreeting('Good afternoon');
-    else if (hour >= 17 && hour < 21) setGreeting('Good evening');
-    else setGreeting('Hey there');
-  }, []);
 
   // Check profile and assessment completion status from candidates table
   useEffect(() => {
@@ -157,7 +151,7 @@ export function JobSeekerDashboard() {
     sessionStorage.setItem('profile_setup_skipped', 'true');
   };
 
-  const firstName = profile?.full_name?.split(' ')[0] || 'There';
+  const firstName = greetingFirstName(profile?.full_name);
 
   // Load chats, connections, and pending invites (independent of assessment)
   useEffect(() => {
@@ -285,10 +279,10 @@ export function JobSeekerDashboard() {
           }
         }
 
-        // Fetch candidate record for chat status lookup
+        // Fetch candidate record for chat status lookup and work-style scoring
         const { data: candRecord } = await supabase
           .from('candidates')
-          .select('id')
+          .select('id, preferred_work_style')
           .eq('user_id', user.id)
           .single();
 
@@ -333,34 +327,21 @@ export function JobSeekerDashboard() {
 
         setTotalRoles(roles.length);
 
+        const scoreFor = (emp: Record<string, unknown> | undefined, role?: Record<string, unknown>) =>
+          scoreMatch({
+            candidate: personalityScores,
+            candidateWorkStyle: candRecord?.preferred_work_style,
+            employer: employerOceanFromRow(emp ?? {}),
+            cultureValues: emp?.culture_values as string[] | undefined,
+            employerArchetypeName: emp?.archetype_name as string | undefined,
+            role: role ? roleRequirementsFromRow(role) : null,
+          }).overallMatchScore;
+
         const matches = roles
           .map(role => {
             const emp = employerMap.get(role.employer_id) as Record<string, unknown> | undefined;
-
-            const result = calculateCompatibility({
-              candidateOCEAN: personalityScores,
-              employerPreferences: {
-                openness: (emp?.openness_preference as number) || 50,
-                conscientiousness: (emp?.conscientiousness_preference as number) || 50,
-                extraversion: (emp?.extraversion_preference as number) || 50,
-                agreeableness: (emp?.agreeableness_preference as number) || 50,
-                neuroticism: (emp?.neuroticism_preference as number) || 50,
-                cultureValues: (emp?.culture_values as string[]) || [],
-              },
-              roleRequirements: {
-                required_openness_min: role.required_openness_min ?? null,
-                required_openness_max: role.required_openness_max ?? null,
-                required_conscientiousness_min: role.required_conscientiousness_min ?? null,
-                required_conscientiousness_max: role.required_conscientiousness_max ?? null,
-                required_extraversion_min: role.required_extraversion_min ?? null,
-                required_extraversion_max: role.required_extraversion_max ?? null,
-                required_agreeableness_min: role.required_agreeableness_min ?? null,
-                required_agreeableness_max: role.required_agreeableness_max ?? null,
-                required_neuroticism_min: role.required_neuroticism_min ?? null,
-                required_neuroticism_max: role.required_neuroticism_max ?? null,
-                work_style: role.work_style ?? null,
-              },
-            });
+            // Each row is a role, so it shows that role's fit
+            const roleScore = scoreFor(emp, role);
 
             const rawChatStatus = chatStatusMap.get(role.employer_id) || 'none';
 
@@ -370,7 +351,7 @@ export function JobSeekerDashboard() {
               name: (empUserId && empProfileMap.get(empUserId)) || (emp?.company_name as string) || 'Unknown',
               company: (emp?.company_name as string) || 'Unknown',
               role: role.title,
-              matchScore: result.overallMatchScore,
+              matchScore: roleScore,
               location: role.location || (emp?.location as string) || 'Remote',
               workStyle: role.work_style || null,
               logoUrl: (emp?.company_logo_url as string) || null,
@@ -386,39 +367,13 @@ export function JobSeekerDashboard() {
         setMatchPage(0);
         setTopMatches(matches.slice(0, 5));
         setMatchesAvailable(roles.length);
-        setUniqueCompanies(new Set(roles.map(r => r.employer_id)).size);
 
-        // Compute average across ALL roles, not just top 5
-        const allScores = roles.map(role => {
-          const emp = employerMap.get(role.employer_id) as Record<string, unknown> | undefined;
-          return calculateCompatibility({
-            candidateOCEAN: personalityScores,
-            employerPreferences: {
-              openness: (emp?.openness_preference as number) || 50,
-              conscientiousness: (emp?.conscientiousness_preference as number) || 50,
-              extraversion: (emp?.extraversion_preference as number) || 50,
-              agreeableness: (emp?.agreeableness_preference as number) || 50,
-              neuroticism: (emp?.neuroticism_preference as number) || 50,
-              cultureValues: (emp?.culture_values as string[]) || [],
-            },
-            roleRequirements: {
-              required_openness_min: role.required_openness_min ?? null,
-              required_openness_max: role.required_openness_max ?? null,
-              required_conscientiousness_min: role.required_conscientiousness_min ?? null,
-              required_conscientiousness_max: role.required_conscientiousness_max ?? null,
-              required_extraversion_min: role.required_extraversion_min ?? null,
-              required_extraversion_max: role.required_extraversion_max ?? null,
-              required_agreeableness_min: role.required_agreeableness_min ?? null,
-              required_agreeableness_max: role.required_agreeableness_max ?? null,
-              required_neuroticism_min: role.required_neuroticism_min ?? null,
-              required_neuroticism_max: role.required_neuroticism_max ?? null,
-              work_style: role.work_style ?? null,
-            },
-          }).overallMatchScore;
-        });
-
-        if (allScores.length > 0) {
-          setAvgMatchScore(Math.round(allScores.reduce((s, score) => s + score, 0) / allScores.length));
+        // Company-level scores over the companies Ember ranks, so the average and best agree with it
+        const companyScores = employersArr.filter(e => e.openness_preference !== null).map(e => scoreFor(e));
+        setUniqueCompanies(companyScores.length);
+        if (companyScores.length > 0) {
+          setAvgMatchScore(Math.round(companyScores.reduce((sum, score) => sum + score, 0) / companyScores.length));
+          setBestCompanyScore(Math.max(...companyScores));
         }
       } catch (err) {
         console.error('Error loading matches:', err);
@@ -444,9 +399,6 @@ export function JobSeekerDashboard() {
     setMatchPage(nextPage);
     setTopMatches(page);
   };
-
-  // Best match score
-  const bestMatchScore = topMatches.length > 0 ? topMatches[0].matchScore : 0;
 
   const showLoader = useMinLoader(!matchesLoaded || !chatsLoaded, 1500);
 
@@ -497,7 +449,7 @@ export function JobSeekerDashboard() {
           value={avgMatchScore > 0 ? `${avgMatchScore}%` : '–'}
           detail={
             avgMatchScore > 0
-              ? `Best ${bestMatchScore}% across ${matchesAvailable} ${matchesAvailable === 1 ? 'role' : 'roles'} at ${uniqueCompanies} ${uniqueCompanies === 1 ? 'company' : 'companies'}`
+              ? `Best ${bestCompanyScore}% across ${uniqueCompanies} ${uniqueCompanies === 1 ? 'company' : 'companies'} · ${matchesAvailable} open ${matchesAvailable === 1 ? 'role' : 'roles'}`
               : hasCompletedAssessment
               ? 'No open roles yet'
               : 'Unlocks after the assessment'

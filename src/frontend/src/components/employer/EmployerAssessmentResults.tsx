@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
-import { determineEmployerArchetype } from '../../data/employerArchetypes';
+import { employerCultureArchetype, type EmployerArchetype } from '../../data/employerArchetypes';
 import { Button } from '../ui/Button';
 import { PageBanner } from '../ui/PageBanner';
 import { GradientProgressBar } from '../ui/GradientProgressBar';
@@ -30,6 +30,7 @@ export function EmployerAssessmentResults() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [scores, setScores] = useState<CultureScores | null>(null);
+  const [archetype, setArchetype] = useState<EmployerArchetype | null>(null);
   const showLoader = useMinLoader(loading);
 
   useEffect(() => {
@@ -42,7 +43,7 @@ export function EmployerAssessmentResults() {
       try {
         const { data, error } = await supabase
           .from('employers')
-          .select('openness_preference, conscientiousness_preference, extraversion_preference, agreeableness_preference, neuroticism_preference, culture_quiz_completed')
+          .select('*')
           .eq('user_id', user.id)
           .single();
 
@@ -58,6 +59,7 @@ export function EmployerAssessmentResults() {
           agreeableness: data.agreeableness_preference || 50,
           neuroticism: 100 - (data.neuroticism_preference || 50), // Invert for "Stability"
         });
+        setArchetype(employerCultureArchetype(data));
       } catch (err) {
         console.error('Error fetching results:', err);
         navigate('/app/employer/culture-assessment');
@@ -75,19 +77,10 @@ export function EmployerAssessmentResults() {
     );
   }
 
-  if (!scores) {
+  if (!scores || !archetype) {
     return null;
   }
 
-  // Same mapping the culture insights page uses, so both pages name the same archetype
-  const archetype = determineEmployerArchetype({
-    innovation: scores.openness,
-    collaboration: (scores.extraversion + scores.agreeableness) / 2,
-    results: scores.conscientiousness,
-    warmth: scores.agreeableness,
-    growth: (scores.openness + scores.conscientiousness) / 2,
-    excellence: scores.conscientiousness,
-  }).primary;
 
   const dimensions = Object.entries(DIMENSION_CONFIG)
     .map(([key, config]) => ({ key, ...config, value: scores[key as keyof CultureScores] }))
