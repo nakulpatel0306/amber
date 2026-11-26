@@ -119,7 +119,7 @@ None of this was built. These are the six phases the team planned next, from [BL
 
 ### Demo mode (no setup)
 
-Needs Node 18+.
+Needs Node 20.19+ or 22.12+ (what Vite 7 supports).
 
 ```bash
 git clone https://github.com/nakulpatel0306/amber.git
@@ -130,7 +130,7 @@ npm run dev:demo --workspace src/frontend    # http://localhost:5173/amber/
 
 ### Full stack
 
-Needs Node 18+, Python 3.11+ and a Supabase project.
+Needs Node 20.19+ or 22.12+, Python 3.11+ and a Supabase project.
 
 1. **Database:** in the Supabase SQL editor, run `supabase/schema.sql`, then `supabase/rls-policies.sql`, then the migrations and RPC files in the order listed in [supabase/README.md](supabase/README.md). Enable Email, Google and GitHub auth. The matching RPCs (`supabase/rpc-matching.sql`) and the `employers.archetype_name` migration were reconstructed in November 2026 from the frontend and the demo stand-in, and are untested against a live project.
 2. **Env files:** copy `src/backend/.env.example` to `src/backend/.env`, and create `src/frontend/.env`. Fill in:
