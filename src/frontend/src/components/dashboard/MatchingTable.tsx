@@ -51,7 +51,8 @@ export function MatchingTable({ matches, hasCompletedAssessment, onRowClick, onR
 
   return (
     <RankedList
-      title="Top matches"
+      title="Top roles"
+      note="Role fit, including each role's trait ranges and work style"
       locked={!hasCompletedAssessment}
       lockedMessage="Take the personality assessment to see the roles that fit you."
       onRowClick={(i) => onRowClick?.(sorted[i])}

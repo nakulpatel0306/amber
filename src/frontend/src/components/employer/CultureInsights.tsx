@@ -11,7 +11,7 @@ import { GradientProgressBar } from '../ui/GradientProgressBar';
 import { ArchetypeCard } from '../ui/ArchetypeCard';
 import { PageBanner } from '../ui/PageBanner';
 import { Facts } from '../ui/Facts';
-import { determineEmployerArchetype } from '../../data/employerArchetypes';
+import { employerCultureArchetypes } from '../../data/employerArchetypes';
 import { calculateCombinedEmployerOCEAN, type OCEANScores } from '../../lib/personalityEngine';
 
 interface CultureData {
@@ -22,6 +22,7 @@ interface CultureData {
   agreeableness_preference: number | null;
   neuroticism_preference: number | null;
   culture_values: string[] | null;
+  archetype_name?: string | null;
   culture_quiz_completed: boolean;
   updated_at: string | null;
   team_dynamics_data: Record<string, unknown> | null;
@@ -193,47 +194,6 @@ const DIMENSION_INFO: Record<string, {
   },
 };
 
-function generateCultureTagline(scores: Record<string, number>): string {
-  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-  const top = sorted[0][0];
-  const second = sorted[1][0];
-
-  const taglines: Record<string, Record<string, string>> = {
-    openness: {
-      conscientiousness: 'A culture that channels creative energy into structured innovation.',
-      extraversion: 'A vibrant culture that celebrates bold ideas and open collaboration.',
-      agreeableness: 'An empathetic culture that nurtures creativity and human connection.',
-      neuroticism: 'A resilient culture that stays grounded while pushing boundaries.',
-    },
-    conscientiousness: {
-      openness: 'A methodical culture that brings discipline to innovation.',
-      extraversion: 'A driven culture that rallies teams toward clear, ambitious goals.',
-      agreeableness: 'A reliable culture that values people and process equally.',
-      neuroticism: 'A composed culture that delivers consistently under any conditions.',
-    },
-    extraversion: {
-      openness: 'A dynamic culture that energizes through exploration and connection.',
-      conscientiousness: 'An execution-focused culture that leads by example and energy.',
-      agreeableness: 'A warm, connected culture that builds bridges between people and ideas.',
-      neuroticism: 'A resilient culture that stays positive and engaged through challenges.',
-    },
-    agreeableness: {
-      openness: 'A compassionate culture that sees the best in people and possibilities.',
-      conscientiousness: 'A thoughtful culture that puts people at the center of every decision.',
-      extraversion: 'A warm culture that creates belonging and community.',
-      neuroticism: 'A supportive culture that brings calm and care to every challenge.',
-    },
-    neuroticism: {
-      openness: 'A grounded culture that combines stability with curiosity.',
-      conscientiousness: 'A composed culture that thrives under pressure and uncertainty.',
-      extraversion: 'A steady culture that leads with calm confidence.',
-      agreeableness: 'A reliable culture that brings peace and support to its teams.',
-    },
-  };
-
-  return taglines[top]?.[second] || 'A unique culture built on a distinctive blend of values.';
-}
-
 export function CultureInsights() {
   const { user } = useAuth();
   const { error: showError } = useToast();
@@ -252,7 +212,7 @@ export function CultureInsights() {
     const loadData = async () => {
       const { data: employer } = await supabase
         .from('employers')
-        .select('company_name, openness_preference, conscientiousness_preference, extraversion_preference, agreeableness_preference, neuroticism_preference, culture_values, culture_quiz_completed, updated_at')
+        .select('*')
         .eq('user_id', user.id)
         .single();
 
@@ -416,17 +376,8 @@ export function CultureInsights() {
     navigate(`/app/employer/assessments/${assessmentId}`);
   };
 
-  const archetypeScores = {
-    innovation: preferences.openness,
-    collaboration: (preferences.extraversion + preferences.agreeableness) / 2,
-    results: preferences.conscientiousness,
-    warmth: preferences.agreeableness,
-    growth: (preferences.openness + preferences.conscientiousness) / 2,
-    excellence: preferences.conscientiousness,
-  };
-
-  const archetypes = determineEmployerArchetype(archetypeScores);
-  const tagline = generateCultureTagline(preferences);
+  // The stored profile, not the combined one, so this matches the dashboard and Ember
+  const archetypes = employerCultureArchetypes(cultureData ?? {});
 
   const formatCooldown = (ms: number) => {
     const days = Math.ceil(ms / (1000 * 60 * 60 * 24));
@@ -508,7 +459,7 @@ export function CultureInsights() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
       <PageBanner
         title={archetypes.primary.name}
-        subtitle={tagline}
+        subtitle={archetypes.primary.description}
         belowSubtitle={
           <Facts
             items={[

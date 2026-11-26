@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
-import { calculateCompatibility, type OCEANScores } from '../lib/compatibilityScoring';
+import type { OCEANScores } from '../lib/compatibilityScoring';
 import { determineArchetype, type Archetype } from '../lib/archetypes';
+import { candidateOceanFromRow, employerOceanFromRow, scoreMatchFromRows } from '../lib/matchScore';
+import { employerCultureArchetype, type EmployerArchetype } from '../data/employerArchetypes';
 import type {
   CandidateData,
   EmployerData,
@@ -30,7 +32,7 @@ interface UseEmployerMatchDataReturn {
   candidates: CandidateResult[];
   rawCandidates: any[];
   roles: RoleOption[];
-  archetype: (Archetype & { confidence: number }) | null;
+  archetype: EmployerArchetype | null;
   insights: EmberInsights | null;
   pendingChats: number;
   isLoading: boolean;
@@ -77,13 +79,7 @@ export function useCandidateMatchData(): UseCandidateMatchDataReturn {
 
         setCandidate(cand);
 
-        const candidateOcean: OCEANScores = {
-          openness: cand.openness_score || 50,
-          conscientiousness: cand.conscientiousness_score || 50,
-          extraversion: cand.extraversion_score || 50,
-          agreeableness: cand.agreeableness_score || 50,
-          neuroticism: cand.neuroticism_score || 50,
-        };
+        const candidateOcean: OCEANScores = candidateOceanFromRow(cand);
 
         const arch = determineArchetype(candidateOcean);
         setArchetype(arch);
@@ -129,24 +125,8 @@ export function useCandidateMatchData(): UseCandidateMatchDataReturn {
         const employerResults: EmployerResult[] = employersData
           .filter((emp: EmployerData) => emp.openness_preference !== null) // Only employers with preferences set
           .map((emp: EmployerData) => {
-            const employerOcean: OCEANScores = {
-              openness: emp.openness_preference || 50,
-              conscientiousness: emp.conscientiousness_preference || 50,
-              extraversion: emp.extraversion_preference || 50,
-              agreeableness: emp.agreeableness_preference || 50,
-              neuroticism: emp.neuroticism_preference || 50,
-            };
-
-            const result = calculateCompatibility({
-              candidateOCEAN: candidateOcean,
-              employerPreferences: {
-                ...employerOcean,
-                cultureValues: emp.culture_values || [],
-              },
-              candidateWorkStyle: cand.preferred_work_style || undefined,
-            });
-
-            const empArchetype = determineArchetype(employerOcean);
+            const result = scoreMatchFromRows(cand, emp);
+            const empArchetype = employerCultureArchetype(emp);
 
             const empProfile = employerProfileMap.get(emp.user_id);
 
@@ -160,7 +140,12 @@ export function useCandidateMatchData(): UseCandidateMatchDataReturn {
               location: emp.location || '',
               companySize: emp.company_size || '',
               logoUrl: emp.logo_url || null,
-              archetype: { name: empArchetype.name, key: empArchetype.key, description: empArchetype.description, strengths: empArchetype.strengths },
+              archetype: {
+                name: empArchetype.name,
+                key: empArchetype.name.toLowerCase().replace(/\s+/g, '_'),
+                description: empArchetype.description,
+                strengths: empArchetype.strengths,
+              },
               overallScore: result.overallMatchScore,
               traitScore: result.traitMatchScore,
               cultureScore: result.cultureMatchScore,
@@ -172,7 +157,8 @@ export function useCandidateMatchData(): UseCandidateMatchDataReturn {
                 agreeablenessFit: result.breakdown.agreeablenessFit,
                 neuroticismFit: result.breakdown.neuroticismFit,
               },
-              employerOcean,
+              employerOcean: employerOceanFromRow(emp),
+              employerArchetypeName: emp.archetype_name ?? null,
               cultureValues: emp.culture_values || [],
               createdAt: (emp as any).created_at || undefined,
             };
@@ -226,7 +212,7 @@ export function useEmployerMatchData(): UseEmployerMatchDataReturn {
   const [rawCandidates, setRawCandidates] = useState<any[]>([]);
   const [roles, setRoles] = useState<RoleOption[]>([]);
   const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
-  const [archetype, setArchetype] = useState<(Archetype & { confidence: number }) | null>(null);
+  const [archetype, setArchetype] = useState<EmployerArchetype | null>(null);
   const [insights, setInsights] = useState<EmberInsights | null>(null);
   const [pendingChats, setPendingChats] = useState(0);
 
@@ -235,50 +221,9 @@ export function useEmployerMatchData(): UseEmployerMatchDataReturn {
     emp: EmployerData,
     role: RoleOption | null,
   ) => {
-    const employerOcean: OCEANScores = {
-      openness: emp.openness_preference || 50,
-      conscientiousness: emp.conscientiousness_preference || 50,
-      extraversion: emp.extraversion_preference || 50,
-      agreeableness: emp.agreeableness_preference || 50,
-      neuroticism: emp.neuroticism_preference || 50,
-    };
-
     const results: CandidateResult[] = candidatesData.map((c: any) => {
-      const candidateOcean: OCEANScores = {
-        openness: c.openness_score || 50,
-        conscientiousness: c.conscientiousness_score || 50,
-        extraversion: c.extraversion_score || 50,
-        agreeableness: c.agreeableness_score || 50,
-        neuroticism: c.neuroticism_score || 50,
-      };
-
-      const compatInput: any = {
-        candidateOCEAN: candidateOcean,
-        employerPreferences: {
-          ...employerOcean,
-          cultureValues: emp.culture_values || [],
-        },
-        candidateWorkStyle: c.preferred_work_style || undefined,
-      };
-
-      if (role) {
-        compatInput.roleWorkStyle = role.work_style || undefined;
-        compatInput.roleRequirements = {
-          required_openness_min: role.required_openness_min,
-          required_openness_max: role.required_openness_max,
-          required_conscientiousness_min: role.required_conscientiousness_min,
-          required_conscientiousness_max: role.required_conscientiousness_max,
-          required_extraversion_min: role.required_extraversion_min,
-          required_extraversion_max: role.required_extraversion_max,
-          required_agreeableness_min: role.required_agreeableness_min,
-          required_agreeableness_max: role.required_agreeableness_max,
-          required_neuroticism_min: role.required_neuroticism_min,
-          required_neuroticism_max: role.required_neuroticism_max,
-          work_style: role.work_style,
-        };
-      }
-
-      const result = calculateCompatibility(compatInput);
+      const candidateOcean = candidateOceanFromRow(c);
+      const result = scoreMatchFromRows(c, emp, role);
       const arch = determineArchetype(candidateOcean);
 
       return {
@@ -333,16 +278,7 @@ export function useEmployerMatchData(): UseEmployerMatchDataReturn {
         }
         setEmployer(emp);
 
-        const employerOcean: OCEANScores = {
-          openness: emp.openness_preference || 50,
-          conscientiousness: emp.conscientiousness_preference || 50,
-          extraversion: emp.extraversion_preference || 50,
-          agreeableness: emp.agreeableness_preference || 50,
-          neuroticism: emp.neuroticism_preference || 50,
-        };
-
-        const arch = determineArchetype(employerOcean);
-        setArchetype(arch);
+        setArchetype(employerCultureArchetype(emp));
 
         // Step 2: Fetch employer's own roles
         const { data: rolesData } = await supabase

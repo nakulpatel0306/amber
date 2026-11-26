@@ -7,7 +7,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import { Button } from '../ui/Button';
 import { EmployerSetupModal } from '../employer/EmployerSetupModal';
 import { supabase } from '../../lib/supabase';
-import { calculateCompatibility } from '../../lib/compatibilityScoring';
+import { scoreMatchFromRows } from '../../lib/matchScore';
+import { employerCultureArchetype, type EmployerArchetype } from '../../data/employerArchetypes';
 import { CoffeeBrewLoader, useMinLoader } from '../ui/CoffeeBrewLoader';
 
 import { DashboardHeader } from './DashboardHeader';
@@ -16,14 +17,7 @@ import { EmployerArchetypeStrip } from './EmployerArchetypeStrip';
 import { EmployerCandidateTable } from './EmployerCandidateTable';
 
 import { chatSummary, totalChats, type UpcomingChat } from './chatSummary';
-
-interface CulturePreferences {
-  openness: number;
-  conscientiousness: number;
-  extraversion: number;
-  agreeableness: number;
-  neuroticism: number;
-}
+import { greetingFirstName, timeOfDayGreeting } from './greeting';
 
 interface CandidateRow {
   candidateId: string;
@@ -45,6 +39,7 @@ interface EmployerData {
   agreeableness_preference: number | null;
   neuroticism_preference: number | null;
   culture_values: string[] | null;
+  archetype_name?: string | null;
   updated_at: string | null;
   setup_completed_at: string | null;
 }
@@ -52,11 +47,11 @@ interface EmployerData {
 export function EmployerDashboard() {
   const { profile, user } = useAuth();
   const navigate = useNavigate();
-  const [greeting, setGreeting] = useState('');
+  const greeting = timeOfDayGreeting(new Date().getHours());
   const [hasCompletedProfile, setHasCompletedProfile] = useState<boolean | null>(null);
   const [hasCompletedCultureQuiz, setHasCompletedCultureQuiz] = useState<boolean | null>(null);
   const [showSetupModal, setShowSetupModal] = useState(false);
-  const [culturePreferences, setCulturePreferences] = useState<CulturePreferences | null>(null);
+  const [cultureArchetype, setCultureArchetype] = useState<EmployerArchetype | null>(null);
 
   // Stats
   const [activeRolesCount, setActiveRolesCount] = useState(0);
@@ -77,14 +72,6 @@ export function EmployerDashboard() {
   const [candidatePage, setCandidatePage] = useState(0);
   const [upcomingChats, setUpcomingChats] = useState<UpcomingChat[]>([]);
 
-  useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) setGreeting('Good morning');
-    else if (hour >= 12 && hour < 17) setGreeting('Good afternoon');
-    else if (hour >= 17 && hour < 21) setGreeting('Good evening');
-    else setGreeting('Hey there');
-  }, []);
-
   // Check profile and culture assessment completion status
   useEffect(() => {
     if (!user) return;
@@ -92,7 +79,7 @@ export function EmployerDashboard() {
     const checkCompletionStatus = async () => {
       const { data: employer } = await supabase
         .from('employers')
-        .select('company_name, description, culture_quiz_completed, openness_preference, conscientiousness_preference, extraversion_preference, agreeableness_preference, neuroticism_preference, culture_values, updated_at')
+        .select('*')
         .eq('user_id', user.id)
         .single();
 
@@ -117,14 +104,7 @@ export function EmployerDashboard() {
       setHasCompletedCultureQuiz(cultureComplete);
 
       if (cultureComplete && typedEmployer) {
-        setCulturePreferences({
-          openness: typedEmployer.openness_preference || 0,
-          conscientiousness: typedEmployer.conscientiousness_preference || 0,
-          extraversion: typedEmployer.extraversion_preference || 0,
-          agreeableness: typedEmployer.agreeableness_preference || 0,
-          neuroticism: typedEmployer.neuroticism_preference || 0,
-        });
-
+        setCultureArchetype(employerCultureArchetype(typedEmployer));
       }
     };
 
@@ -142,7 +122,7 @@ export function EmployerDashboard() {
     sessionStorage.setItem('employer_setup_skipped', 'true');
   };
 
-  const firstName = profile?.full_name?.split(' ')[0] || 'There';
+  const firstName = greetingFirstName(profile?.full_name);
 
   // Load chats (independent of culture quiz)
   useEffect(() => {
@@ -211,7 +191,7 @@ export function EmployerDashboard() {
   // Load dashboard stats + candidates
   useEffect(() => {
     if (!user) return;
-    if (!hasCompletedCultureQuiz || !culturePreferences) {
+    if (!hasCompletedCultureQuiz || !cultureArchetype) {
       // If culture quiz not done, we know the final values already
       if (hasCompletedCultureQuiz === false) {
         setStatsLoaded(true);
@@ -224,7 +204,7 @@ export function EmployerDashboard() {
       try {
         const { data: employer } = await supabase
           .from('employers')
-          .select('id, openness_preference, conscientiousness_preference, extraversion_preference, agreeableness_preference, neuroticism_preference, culture_values')
+          .select('*')
           .eq('user_id', user.id)
           .single();
 
@@ -292,26 +272,8 @@ export function EmployerDashboard() {
         const candidateRows: CandidateRow[] = candidatesData
           .filter((c) => c.openness_score !== null && c.openness_score !== undefined)
           .map((c) => {
-            const candidateOCEAN = {
-              openness: (c.openness_score as number) || 50,
-              conscientiousness: (c.conscientiousness_score as number) || 50,
-              extraversion: (c.extraversion_score as number) || 50,
-              agreeableness: (c.agreeableness_score as number) || 50,
-              neuroticism: (c.neuroticism_score as number) || 50,
-            };
-
-            const result = calculateCompatibility({
-              candidateOCEAN,
-              employerPreferences: {
-                openness: employer.openness_preference || 50,
-                conscientiousness: employer.conscientiousness_preference || 50,
-                extraversion: employer.extraversion_preference || 50,
-                agreeableness: employer.agreeableness_preference || 50,
-                neuroticism: employer.neuroticism_preference || 50,
-                cultureValues: employer.culture_values || [],
-              },
-              roleRequirements: {},
-            });
+            // Company-level score, the same one Ember shows with no role selected
+            const result = scoreMatchFromRows(c, employer);
 
             const candidateId = (c.id as string) || '';
             const rawChatStatus = chatStatusMap.get(candidateId) || 'none';
@@ -347,7 +309,7 @@ export function EmployerDashboard() {
     };
 
     loadDashboardData();
-  }, [user, hasCompletedCultureQuiz, culturePreferences]);
+  }, [user, hasCompletedCultureQuiz, cultureArchetype]);
 
   const handleRefreshCandidates = () => {
     if (allCandidates.length <= 5) return;
@@ -374,7 +336,7 @@ export function EmployerDashboard() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
       <DashboardHeader
-        greeting={hasCompletedCultureQuiz ? greeting : `${firstName}, ready to define your culture?`}
+        greeting={hasCompletedCultureQuiz ? greeting : firstName ? `${firstName}, ready to define your culture?` : 'Ready to define your culture?'}
         firstName={hasCompletedCultureQuiz ? firstName : ''}
       />
 
@@ -403,8 +365,8 @@ export function EmployerDashboard() {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {hasCompletedCultureQuiz && culturePreferences && (
-          <EmployerArchetypeStrip culturePreferences={culturePreferences} />
+        {hasCompletedCultureQuiz && cultureArchetype && (
+          <EmployerArchetypeStrip archetype={cultureArchetype} />
         )}
         <SummaryCard
           label="Average culture match"

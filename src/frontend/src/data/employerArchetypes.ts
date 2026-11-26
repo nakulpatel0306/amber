@@ -1,4 +1,4 @@
-interface Archetype {
+export interface EmployerArchetype {
   name: string;
   description: string;
   strengths: string[];
@@ -14,12 +14,21 @@ interface Archetype {
 }
 
 interface ArchetypeResult {
-  primary: Archetype;
-  secondary: Archetype;
-  tertiary: Archetype;
+  primary: EmployerArchetype;
+  secondary: EmployerArchetype;
+  tertiary: EmployerArchetype;
 }
 
-const EMPLOYER_ARCHETYPES: Archetype[] = [
+/** OCEAN preferences on the stored scale: neuroticism, not stability. */
+export interface CulturePreferences {
+  openness: number;
+  conscientiousness: number;
+  extraversion: number;
+  agreeableness: number;
+  neuroticism: number;
+}
+
+const EMPLOYER_ARCHETYPES: EmployerArchetype[] = [
   {
     name: 'The Innovator',
     description: 'Thrives on creativity and pushing boundaries. Values experimentation and embraces calculated risks.',
@@ -135,15 +144,15 @@ const EMPLOYER_ARCHETYPES: Archetype[] = [
 ];
 
 function calculateArchetypeScore(
-  archetype: Archetype,
-  scores: Record<string, number>
+  archetype: EmployerArchetype,
+  scores: CulturePreferences
 ): number {
   let totalScore = 0;
-  const traits = ['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism'];
+  const traits = ['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism'] as const;
 
   for (const trait of traits) {
-    const score = scores[trait] || 50;
-    const [min, max] = archetype.traits[trait as keyof typeof archetype.traits];
+    const score = scores[trait];
+    const [min, max] = archetype.traits[trait];
     const midpoint = (min + max) / 2;
     const range = (max - min) / 2;
 
@@ -162,24 +171,52 @@ function calculateArchetypeScore(
   return totalScore / traits.length;
 }
 
-export function determineEmployerArchetype(
-  scores: Record<string, number>
-): ArchetypeResult {
-  const archetypeScores = EMPLOYER_ARCHETYPES.map((archetype) => ({
-    archetype,
-    score: calculateArchetypeScore(archetype, scores),
-  }));
-
-  // Sort by score descending
-  archetypeScores.sort((a, b) => b.score - a.score);
-
-  return {
-    primary: archetypeScores[0].archetype,
-    secondary: archetypeScores[1].archetype,
-    tertiary: archetypeScores[2].archetype,
-  };
+function rankEmployerArchetypes(scores: CulturePreferences): EmployerArchetype[] {
+  return EMPLOYER_ARCHETYPES.map((archetype) => ({ archetype, score: calculateArchetypeScore(archetype, scores) }))
+    .sort((a, b) => b.score - a.score)
+    .map((entry) => entry.archetype);
 }
 
-export function getAllArchetypes(): Archetype[] {
+export function determineEmployerArchetype(scores: CulturePreferences): ArchetypeResult {
+  const [primary, secondary, tertiary] = rankEmployerArchetypes(scores);
+  return { primary, secondary, tertiary };
+}
+
+export function getAllArchetypes(): EmployerArchetype[] {
   return EMPLOYER_ARCHETYPES;
+}
+
+export function getEmployerArchetypeByName(name: string | null | undefined): EmployerArchetype | null {
+  return EMPLOYER_ARCHETYPES.find((a) => a.name === name) ?? null;
+}
+
+interface EmployerCultureRow {
+  archetype_name?: string | null;
+  openness_preference?: number | null;
+  conscientiousness_preference?: number | null;
+  extraversion_preference?: number | null;
+  agreeableness_preference?: number | null;
+  neuroticism_preference?: number | null;
+}
+
+/**
+ * The culture archetypes to show for an employer, best first. A stored
+ * archetype leads because it is the one the Ember score's archetype bonus
+ * reads; the rest follow the classifier's ranking of the stored preferences.
+ */
+export function employerCultureArchetypes(row: EmployerCultureRow): ArchetypeResult {
+  const ranked = rankEmployerArchetypes({
+    openness: row.openness_preference || 50,
+    conscientiousness: row.conscientiousness_preference || 50,
+    extraversion: row.extraversion_preference || 50,
+    agreeableness: row.agreeableness_preference || 50,
+    neuroticism: row.neuroticism_preference || 50,
+  });
+  const stored = getEmployerArchetypeByName(row.archetype_name);
+  const [primary, secondary, tertiary] = stored ? [stored, ...ranked.filter((a) => a !== stored)] : ranked;
+  return { primary, secondary, tertiary };
+}
+
+export function employerCultureArchetype(row: EmployerCultureRow): EmployerArchetype {
+  return employerCultureArchetypes(row).primary;
 }

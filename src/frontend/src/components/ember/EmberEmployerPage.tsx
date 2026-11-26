@@ -47,6 +47,19 @@ export function EmberEmployerPage() {
   const [brewTarget, setBrewTarget] = useState<CandidateResult | null>(null);
   const [connectTarget, setConnectTarget] = useState<CandidateResult | null>(null);
   const [compareIds, setCompareIds] = useState<Set<string>>(new Set());
+  const [chatCandidateIds, setChatCandidateIds] = useState<Set<string>>(new Set());
+
+  // An existing coffee chat means you're already talking, so the deep dive offers Message, not Connect
+  useEffect(() => {
+    if (!employer) return;
+    supabase
+      .from('coffee_chats')
+      .select('candidate_id, status')
+      .eq('employer_id', employer.id)
+      .then(({ data }) => {
+        setChatCandidateIds(new Set((data ?? []).filter(c => c.status !== 'cancelled').map(c => c.candidate_id as string)));
+      });
+  }, [employer]);
 
   // Handle deepdive URL param once candidates load
   useEffect(() => {
@@ -332,12 +345,16 @@ export function EmberEmployerPage() {
               communicationScore={Math.round((selectedCandidate.breakdown.extraversionFit + selectedCandidate.breakdown.agreeablenessFit) / 2)}
               dimensions={deepDiveDimensions}
               candidateOcean={selectedCandidate.candidateOcean}
+              candidateWorkStyle={selectedCandidate.workStyle || null}
               employerOcean={employerOcean}
+              cultureValues={employer.culture_values || []}
+              employerArchetypeName={employer.archetype_name ?? null}
               candidateId={selectedCandidate.candidateId}
               employerId={employer.id}
               roleId={selectedRoleId || undefined}
               isSaved={savedIds.has(selectedCandidate.candidateId)}
               connectionStatus={getConnectionStatus(selectedCandidate.userId)}
+              onMessage={chatCandidateIds.has(selectedCandidate.candidateId) ? () => navigate('/app/employer/chats') : undefined}
               onBack={handleBackToGallery}
               onBrew={() => setBrewTarget(selectedCandidate)}
               onToggleSave={() => handleToggleSave(selectedCandidate)}

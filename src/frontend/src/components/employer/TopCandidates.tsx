@@ -8,7 +8,8 @@ import { CoffeeBrewLoader, useMinLoader } from '../ui/CoffeeBrewLoader';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import { supabase } from '../../lib/supabase';
-import { calculateCompatibility, OCEANScores } from '../../lib/compatibilityScoring';
+import type { OCEANScores } from '../../lib/compatibilityScoring';
+import { candidateOceanFromRow, scoreMatchFromRows } from '../../lib/matchScore';
 import { determineArchetype } from '../../lib/archetypes';
 import { MatchDetailModal, type MatchDetailData } from '../matches/MatchDetailModal';
 import { MatchPipeline } from '../matches/MatchPipeline';
@@ -223,51 +224,9 @@ export function TopCandidates() {
     emp: EmployerData,
     role: RoleOption | null,
   ) => {
-    const employerOcean: OCEANScores = {
-      openness: emp.openness_preference || 50,
-      conscientiousness: emp.conscientiousness_preference || 50,
-      extraversion: emp.extraversion_preference || 50,
-      agreeableness: emp.agreeableness_preference || 50,
-      neuroticism: emp.neuroticism_preference || 50,
-    };
-
     const results: CandidateResult[] = candidatesData.map((c: any) => {
-      const candidateOcean: OCEANScores = {
-        openness: c.openness_score || 50,
-        conscientiousness: c.conscientiousness_score || 50,
-        extraversion: c.extraversion_score || 50,
-        agreeableness: c.agreeableness_score || 50,
-        neuroticism: c.neuroticism_score || 50,
-      };
-
-      const compatInput: any = {
-        candidateOCEAN: candidateOcean,
-        employerPreferences: {
-          ...employerOcean,
-          cultureValues: emp.culture_values || [],
-        },
-        candidateWorkStyle: c.work_style || undefined,
-      };
-
-      // If a role is selected, include role requirements
-      if (role) {
-        compatInput.roleWorkStyle = role.work_style || undefined;
-        compatInput.roleRequirements = {
-          required_openness_min: role.required_openness_min,
-          required_openness_max: role.required_openness_max,
-          required_conscientiousness_min: role.required_conscientiousness_min,
-          required_conscientiousness_max: role.required_conscientiousness_max,
-          required_extraversion_min: role.required_extraversion_min,
-          required_extraversion_max: role.required_extraversion_max,
-          required_agreeableness_min: role.required_agreeableness_min,
-          required_agreeableness_max: role.required_agreeableness_max,
-          required_neuroticism_min: role.required_neuroticism_min,
-          required_neuroticism_max: role.required_neuroticism_max,
-          work_style: role.work_style,
-        };
-      }
-
-      const result = calculateCompatibility(compatInput);
+      const candidateOcean = candidateOceanFromRow(c);
+      const result = scoreMatchFromRows(c, emp, role);
       const arch = determineArchetype(candidateOcean);
 
       return {
@@ -275,7 +234,7 @@ export function TopCandidates() {
         name: c.profiles?.full_name || 'Unknown',
         headline: c.headline || arch.name,
         location: c.location || '',
-        workStyle: c.work_style || '',
+        workStyle: c.preferred_work_style || '',
         archetype: { name: arch.name, key: arch.key, description: arch.description, strengths: arch.strengths },
         overallScore: result.overallMatchScore,
         traitScore: result.traitMatchScore,

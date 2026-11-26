@@ -360,15 +360,8 @@ export function PersonalityInsights() {
 
   // Archetype name for header
   const primaryArchetype = personalityData?.top_traits?.[0] || 'The Explorer';
-  // Generate tagline
-  const taglineMap: Record<string, string> = {
-    openness: 'Creative mind who sees possibilities everywhere',
-    conscientiousness: 'Organized achiever who delivers with precision',
-    extraversion: 'Dynamic communicator who energizes every room',
-    agreeableness: 'Empathetic connector who builds lasting bonds',
-    neuroticism: 'Resilient anchor who stays steady under pressure',
-  };
-  const tagline = taglineMap[dominantDimension] || 'A unique blend of traits that makes you distinctively you';
+  // Same tagline the results page shows for this archetype
+  const tagline = getArchetypeByName(primaryArchetype)?.description || 'A unique blend of traits that makes you distinctively you';
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">

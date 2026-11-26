@@ -15,6 +15,8 @@ export interface RankedRow {
 
 interface RankedListProps {
   title: string;
+  /** What the scores measure, when that isn't obvious from the title. */
+  note?: string;
   rows: RankedRow[];
   locked: boolean;
   lockedMessage: string;
@@ -23,17 +25,24 @@ interface RankedListProps {
 }
 
 // The dashboard's ranked matches: one card, divided rows, score on the right
-export function RankedList({ title, rows, locked, lockedMessage, onRowClick, onRefresh }: RankedListProps) {
+export function RankedList({ title, note, rows, locked, lockedMessage, onRowClick, onRefresh }: RankedListProps) {
   return (
     <section>
       <div className="mb-3 flex items-center justify-between gap-2">
-        <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>
-          {title}
-        </h2>
+        <div className="min-w-0">
+          <h2 className="text-heading" style={{ color: 'var(--color-text)' }}>
+            {title}
+          </h2>
+          {note && (
+            <p className="mt-0.5 text-label font-normal" style={{ color: 'var(--color-textSecondary)' }}>
+              {note}
+            </p>
+          )}
+        </div>
         {onRefresh && !locked && rows.length > 0 && (
           <button
             onClick={onRefresh}
-            className="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-label transition-colors hover:bg-[var(--color-surfaceHover)]"
+            className="flex flex-shrink-0 items-center gap-1.5 whitespace-nowrap rounded-lg px-2.5 py-1.5 text-label transition-colors hover:bg-[var(--color-surfaceHover)]"
             style={{ color: 'var(--color-textSecondary)' }}
           >
             <RefreshCw className="w-3.5 h-3.5" />
