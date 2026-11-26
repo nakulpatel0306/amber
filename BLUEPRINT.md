@@ -313,7 +313,7 @@ The case-study build settled on a quiet, single-family UI. Tokens live in `src/f
 - **Type:** Inter only, at weights 400, 500 and 600, with named roles (caption, label, heading, title, headline, display). Hierarchy comes from size, weight and color, not a second face.
 - **Color:** neutral surfaces with one amber accent for primary actions, selection and links (`#B45309` in light, `#F09030` in dark, both chosen to pass WCAG AA). Five trait colors mark the OCEAN dimensions in charts and bars.
 - **Themes:** light and dark, following the operating system until the user picks one in Settings or the header toggle.
-- **Components:** one card style (`.bento-card`), `Button` with fixed sizes, `PageBanner` for page headers and `Facts` for label/value lists, plus `Input`, `Modal`, `Toast`, `Avatar`, `Badge`, `Dropdown`, `DatePicker`, `LocationPicker`, `ScoreRing`, `RadarChart`, `Skeleton` and the `CoffeeBrewLoader`, all in `src/frontend/src/components/ui/`.
+- **Components:** one card style (`.bento-card`), `Button` with fixed sizes, `PageBanner` for page headers and `Facts` for label/value lists, plus `Input`, `Modal`, `Toast`, `Avatar`, `DatePicker`, `LocationPicker`, `RadarChart` and the `CoffeeBrewLoader`, all in `src/frontend/src/components/ui/`.
 - **Motion:** Framer Motion for short fades and progress, never decorative. Everything honors `prefers-reduced-motion`.
 - **Responsive:** mobile-first Tailwind breakpoints; the sidebar becomes a top bar with a menu on phones.
 
@@ -325,14 +325,13 @@ The case-study build settled on a quiet, single-family UI. Tokens live in `src/f
 |-------|-----------|---------|---------|
 | **Frontend Framework** | React | 19.1.0 | Functional components with hooks |
 | **Language** | TypeScript | 5.8.3 | Type safety across entire frontend |
-| **Build Tool** | Vite | 7.0.4 | Fast dev server and production bundling |
+| **Build Tool** | Vite | 7.3.1 | Fast dev server and production bundling |
 | **Styling** | Tailwind CSS | 3.4.19 | Utility-first styling with custom theme |
-| **Styling Plugins** | @tailwindcss/forms, @tailwindcss/typography | 0.5.x | Form reset and prose styling |
+| **Styling Plugins** | @tailwindcss/forms | 0.5.x | Form reset |
 | **Animation** | Framer Motion | 12.34.2 | Declarative animations and transitions |
 | **Icons** | Lucide React | 0.562.0 | Consistent icon set |
 | **Routing** | React Router | 7.12.0 | Client-side routing with nested layouts |
 | **State** | React Context API | — | Global state (auth, theme, toast, messaging, connections) |
-| **State (declared)** | Zustand | 5.0.10 | Declared in dependencies, reserved for future use |
 | **Date Utilities** | date-fns | 2.30.0 | Date formatting and manipulation |
 | **Class Utilities** | clsx + tailwind-merge | 2.1.1 / 3.4.0 | Conditional and merged class names |
 | **Backend Framework** | FastAPI | 0.115.0 | Async Python API with automatic OpenAPI docs |

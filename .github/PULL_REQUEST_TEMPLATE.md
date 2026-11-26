@@ -1,5 +1,7 @@
 # Pull Request
 
+<!-- Amber is shelved and kept as a case study. Fixes for bugs in the demo or mistakes in the docs are welcome; new features won't be merged. -->
+
 ## Summary
 
 <!-- One or two sentences: what changes, and why. -->

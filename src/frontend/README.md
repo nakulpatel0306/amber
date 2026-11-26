@@ -33,11 +33,11 @@ React Router is configured in `App.tsx`. Routes are organized into three groups:
 
 ### Theming
 
-`ThemeContext` manages light/dark mode using CSS variables defined in `styles/globals.css`. The selected theme is persisted in the `user_settings` table when the user is logged in, and falls back to local storage for unauthenticated users.
+`ThemeContext` manages light/dark mode by setting the theme's color tokens as CSS variables on `:root`. The selected theme is remembered in local storage.
 
 Two built-in themes:
-- **Amber Light** — Cream background (`#F5F3EF`) with warm amber accents
-- **Amber Dark** — Stone background (`#1C1917`) with amber highlights
+- **Amber Light** — near-white background (`#FAFAFA`) with amber accents
+- **Amber Dark** — black background (`#000000`) with amber highlights
 
 ### API Communication
 
@@ -70,27 +70,29 @@ All components are organized by feature domain. There are no loose files at the 
 
 ```
 components/
-├── ui/               # Reusable design system primitives (31+ components)
-│                     # Button, Input, Card, Modal, Toast, Avatar, AvatarPicker,
-│                     # Badge, Dropdown, DatePicker, Spinner, Skeleton, SearchInput,
-│                     # GradientProgressBar, LocationPicker, ArchetypeCard,
-│                     # CoffeeBrewLoader, GlitchMascot, PageBanner, AmberLogo, SplashScreen
+├── ui/               # Design system primitives
+│                     # Button, Input, Modal, Toast, Avatar, AvatarPicker,
+│                     # DatePicker, LocationPicker, GradientProgressBar,
+│                     # RadarChart, ArchetypeCard, PersonalitySnapshotCard,
+│                     # PageBanner, Facts, CoffeeBrewLoader, SplashScreen, AmberLogo
 │
 ├── auth/             # Authentication flow
-│                     # LoginPage, SignupPage, AuthCallback, PasswordResetPage,
-│                     # EmailVerificationPage, RoleSelectionPage, Onboarding,
-│                     # ProtectedRoute, GuestRoute
+│                     # LoginPage, SignupPage, AuthShell, AuthCallback,
+│                     # PasswordResetPage, EmailVerificationPage,
+│                     # RoleSelectionPage, Onboarding, ProtectedRoute (and GuestRoute)
 │
 ├── landing/          # Case-study landing page
-│                     # CaseStudy, LandingNav, LandingFooter, FeatureBento,
-│                     # MatchingExplainer, ArchitectureDiagram, AnimatedBlobs
+│                     # CaseStudy, HeroRadar, FeatureBento, MatchingExplainer,
+│                     # ArchitectureDiagram, Section, LandingNav, LandingFooter
 │
 ├── layout/           # App shell
-│                     # AppLayout, PublicLayout, Sidebar, MobileTopBar, ErrorBoundary
+│                     # AppLayout, PublicLayout, Sidebar, MobileTopBar,
+│                     # NotificationDropdown, BookmarkDropdown, ErrorBoundary,
+│                     # RouteTitleSync
 │
 ├── candidate/        # Job seeker features
 │                     # Assessment, AssessmentFlow, AssessmentResults,
-│                     # PersonalityInsights, PracticeCoffeeChat
+│                     # PersonalityInsights, CandidateSetupModal
 │
 ├── employer/         # Employer features
 │                     # CultureQuiz, CultureAssessment, CultureInsights,
@@ -98,64 +100,54 @@ components/
 │                     # TopCandidates, EmployerSetupModal
 │
 ├── dashboard/        # Role-specific dashboards
-│                     # JobSeekerDashboard: DashboardHeader, QuickActions,
-│                     #   DashboardTopMatches, MatchingTable, StreakTracker,
-│                     #   CompatibilityInsights, ScheduleWidget, ArchetypeStrip,
-│                     #   CandidateSetupModal, BentoMetricCard, DashboardCalendar
-│                     # EmployerDashboard: EmployerQuickActions,
-│                     #   EmployerCandidateTable, EmployerArchetypeStrip,
-│                     #   EmployerSetupModal
+│                     # JobSeekerDashboard, EmployerDashboard, DashboardHeader,
+│                     # ArchetypeStrip, EmployerArchetypeStrip, MatchingTable,
+│                     # EmployerCandidateTable, RankedList, SummaryCard
 │
-├── ember/            # Ember AI agent interface (11 components)
-│                     # EmberAgent (gallery/carousel with filters and sort),
-│                     # EmberEmployerPage, PlayerCardGrid, GalleryFilterBar,
-│                     # DeepDive, CoffeeBrewModal, TopMatchCard,
-│                     # MatchActivityFeed, EmberIdentityCard, EmberBrain,
-│                     # EmberFirefly (animated mascot with mood states)
+├── ember/            # Ember agent interface
+│                     # EmberAgent (match gallery), EmberEmployerPage,
+│                     # TopMatchCard, EmberFirefly (mascot),
+│                     # gallery/: PlayerCard, PlayerCardGrid, GalleryFilterBar,
+│                     # DeepDive, CompareView, CoffeeBrewModal
 │
-├── assessments/      # Supplementary assessment types (8 components)
-│                     # VisualPerceptionAssessment, WorkValuesAssessment,
-│                     # SituationalJudgmentAssessment, CognitivePatternAssessment,
-│                     # TeamDynamicsAssessment, LeadershipStyleAssessment,
-│                     # GrowthPhilosophyAssessment, WorkEnvironmentAssessment
+├── assessments/      # Supplementary assessments
+│                     # VisualPerception, WorkValues, SituationalJudgment,
+│                     # CognitivePattern (candidate); TeamDynamics,
+│                     # LeadershipStyle, GrowthPhilosophy, WorkEnvironment
+│                     # (employer); shared QuestionParts and results template
 │
-├── coffee-chats/     # Coffee chat scheduling and management (13 components)
+├── coffee-chats/     # Coffee chat scheduling and management
 │                     # CandidateCoffeeChats, EmployerCoffeeChats,
 │                     # CoffeeChatsCalendar, CoffeeChatCard, CoffeeChatDetailModal,
-│                     # CoffeeChatFollowUp, CoffeeChatPrep, ScheduleModal,
-│                     # FeedbackModal, AcceptWithDateModal
+│                     # CoffeeChatPrep, CoffeeChatFollowUp, ScheduleModal,
+│                     # AcceptWithDateModal, FeedbackModal, RequestsButton
 │
-├── connections/      # Connection system (3 components)
-│                     # InboxPanel (pending requests with actions),
-│                     # ConnectModal (send request with optional meet invite),
-│                     # ConnectButton (CTA to initiate connection)
+├── connections/      # Connection system
+│                     # InboxPanel, ConnectModal, ConnectButton
 │
-├── network/          # Network hub and discovery (14 components)
-│                     # NetworkHub (tabbed discovery interface),
-│                     # NetworkRoles, NetworkPeople, NetworkCompanies,
-│                     # NetworkDiscover, NetworkProfile, ProfileSidebar,
-│                     # ProfileEditModal, FilterBar, NewPostModal, PostCard,
-│                     # PostSkeleton
+├── network/          # Network hub
+│                     # NetworkHub, FilterBar, PostCard, PostSkeleton,
+│                     # NewPostModal, ProfileEditModal, PracticeCoffeeChat
 │
-├── matches/          # Match display components
-│                     # Match-related display and interaction components
+├── matches/          # Saved-match pipeline
+│                     # MatchPipeline, PipelineCard, MatchDetailModal
 │
 ├── messaging/        # Real-time messaging
-│                     # MessagePanelContainer (floating chat panel manager)
+│                     # MessagePanelContainer (floating panel manager), MessagePanel
 │
-├── pricing/          # Subscription and pricing
-│                     # PricingPage (plans, Stripe checkout integration)
+├── pricing/          # Subscription and billing
+│                     # PricingPage, BillingSuccessPage, BillingCancelPage
 │
-├── pages/            # RolesPage (app-routed at /app/roles)
+├── pages/            # RolesPage (/app/roles), NotFoundPage
 │
-└── settings/         # User settings sections (9 components)
-                      # SettingsPage, AccountSection, CandidateProfileSection,
-                      # EmployerProfileSection, AppearanceSection,
-                      # NotificationSection, PrivacySection, SubscriptionSection,
-                      # FeedbackSection
+└── settings/         # Settings sections
+                      # SettingsPage, ProfileSection, AccountSection,
+                      # CandidateProfileSection, EmployerProfileSection,
+                      # AppearanceSection, NotificationSection, PrivacySection,
+                      # SubscriptionSection, FeedbackSection
 ```
 
-Each feature folder has an `index.ts` barrel file that re-exports its public components.
+Components are imported from their own files. A few folders (`auth`, `landing` and others) also have an `index.ts` barrel.
 
 ## Hooks
 
@@ -164,12 +156,11 @@ Custom hooks in `src/hooks/`:
 | Hook | Purpose |
 |------|---------|
 | `useMatchData` (`useMatchData.ts`) | Load candidate or employer match data with compatibility calculations. Fetches profiles from Supabase and runs scoring. |
-| `useNetworkData` (`useNetworkData.ts`) | Load network hub discovery data (roles, people, companies) with filters |
 | `useSavedMatches` (`useSavedMatches.ts`) | Load, save, and manage bookmarked matches with status tracking |
-| `useLocalStorage` (`useLocalStorage.ts`) | Typed localStorage hook with JSON serialization |
-| `useScrollAnimation` (`useScrollAnimation.ts`) | Intersection Observer hook for scroll-triggered animations |
-| `useMinLoader` (`useMinLoader.ts`) | Minimum loader display time to prevent UI flashing (<300ms) |
-| `useToast` (`useToast.ts`) | Access toast notification context (show success/error/info) |
+| `usePageTitle` (`usePageTitle.ts`) | Set the document title for a page |
+| `useDialogFocus` (`useDialogFocus.ts`) | Dialog keyboard behavior: focus trap, Escape to close, focus return |
+
+`useMinLoader`, which keeps a loader on screen long enough to avoid a flash, lives next to the loader in `components/ui/CoffeeBrewLoader.tsx`.
 
 Context-based hooks (accessed via their respective contexts):
 | Hook | Context | Purpose |
@@ -185,8 +176,8 @@ Context-based hooks (accessed via their respective contexts):
 | `contexts/` | 5 React context providers: Auth, Theme, Toast, Messaging, Connections |
 | `lib/` | Supabase client initialization (`supabase.ts`, which returns the demo stand-in in demo builds), TypeScript port of the scoring engine and Ember agent (`ember/`), personality engine (`personalityEngine.ts`), compatibility scoring (`compatibilityScoring.ts`), archetype definitions (`archetypes.ts`), archetype compatibility matrix (`archetypeCompatibility.ts`), Stripe configuration (`stripe/`) |
 | `types/` | TypeScript type definitions: `auth.types.ts` (user, session), `matching.types.ts` (OCEAN scores, compatibility), `connections.types.ts` (connection, meet invite), `database.types.ts` (Supabase table shapes) |
-| `utils/` | `api.ts` (backend HTTP client with auth headers), `cn.ts` (class name utility using clsx + tailwind-merge), `constants.ts` (app-wide constants), `motion.ts` (Framer Motion presets: emberFadeUp, emberStagger), `matchHelpers.ts` (match score formatting), `coffeeChatStatus.ts` (status labels and colors), `seedTestData.ts` (development data seeding) |
-| `data/` | Assessment question definitions with trait mappings and scoring weights |
+| `utils/` | `api.ts` (backend HTTP client with auth headers), `cn.ts` (class name utility using clsx + tailwind-merge), `constants.ts` (app-wide constants), `motion.ts` (Framer Motion presets: emberFadeUp, emberStagger), `matchHelpers.ts` (match score formatting), `coffeeChatStatus.ts` (status labels and colors) |
+| `data/` | Assessment question definitions with trait mappings and scoring weights, employer archetypes, hobbies |
 | `styles/` | Global CSS with Tailwind directives and CSS variable definitions for theming (light/dark) |
 
 ## Environment Variables
@@ -222,21 +213,19 @@ The demo build needs no environment variables.
 
 ## Design Conventions
 
-- **Tailwind CSS** is used for all styling, with CSS variables defined in `styles/globals.css` for theme-aware colors.
-- **Title Case UI copy** is used for in-app labels and headings.
-- The `components/ui/` folder is the source of truth for all primitive UI components (buttons, inputs, cards, etc.). Always use these instead of creating one-off styled elements.
-- New components should be placed in the appropriate feature folder and re-exported from its `index.ts` barrel file.
+- **Tailwind CSS** is used for all styling, with theme-aware colors read from the CSS variables `ThemeContext` sets.
+- **Sentence case** for in-app labels and headings, Inter as the only typeface, and the named type scale in `tailwind.config.js`.
+- Cards use the `.bento-card` class and buttons use `ui/Button`. The `components/ui/` folder holds the other primitives; use them instead of one-off styled elements.
+- New components go in the appropriate feature folder.
 - **Framer Motion** is used for all animations. Shared presets are defined in `utils/motion.ts` (`emberFadeUp`, `emberStagger`, etc.).
 
 ## Ember Agent
 
-The Ember agent UI (`components/ember/`) provides the frontend interface for the AI-powered personality matching engine:
+The Ember agent UI (`components/ember/`) provides the frontend interface for the matching engine:
 
-- **Animated Flame Mascot** — `EmberFirefly` renders the Ember character with mood-based animations (thinking, happy, neutral).
-- **Typing Animation** — Simulates real-time analysis while waiting for backend results.
-- **Circular Score Rings** — Visual compatibility score displays with animated fill.
+- **Animated Flame Mascot** — `EmberFirefly` renders the Ember character with mood-based animations (neutral, happy, thinking, excited).
 - **Dimension Bars** — Side-by-side comparison of candidate vs. employer OCEAN scores.
-- **Gallery Views** — Grid and carousel views with filter/sort controls (by score, culture, work style, recency).
+- **Gallery** — A card grid with filter and sort controls (best match, culture fit, work style, recent), plus `CompareView` for side-by-side matches.
 - **Deep Dive Modals** — `CoffeeBrewModal` and `DeepDive` for detailed match analysis with trait breakdowns and insights.
 - **Candidate View** (`EmberAgent`) — Ranked employer/role matches with compatibility insights.
 - **Employer View** (`EmberEmployerPage`) — Ranked candidate matches with culture fit analysis.
