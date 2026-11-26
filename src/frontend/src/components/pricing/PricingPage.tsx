@@ -24,7 +24,7 @@ const tierIcons: Record<string, React.ElementType> = {
 };
 
 const tierAccent: Record<string, string> = {
-  free: '#E8E0D6',
+  free: '#78716C',
   pro: '#E8A849',
   premium: '#D97706',
 };
@@ -45,11 +45,6 @@ export function PricingPage() {
   const dashboardPath = isEmployer ? '/app/employer' : '/app/dashboard';
 
   const handleSubscribe = async (plan: PricingPlan) => {
-    if (IS_DEMO && plan.tier !== 'free') {
-      showSuccess('Checkout is off in the demo', 'The real product billed this plan as a Stripe subscription.');
-      return;
-    }
-
     if (!user) {
       navigate('/auth/signup');
       return;
@@ -129,25 +124,27 @@ export function PricingPage() {
           className="text-title mb-4"
           style={{ color: 'var(--color-text)' }}
         >
-          Find your perfect plan
+          {IS_DEMO ? 'Planned pricing' : 'Find your perfect plan'}
         </h1>
         <p
-          className="text-sm sm:text-base max-w-2xl leading-relaxed"
+          className="text-sm sm:text-base max-w-2xl leading-relaxed text-pretty"
           style={{ color: 'var(--color-textSecondary)' }}
         >
-          From casual networking to serious hiring, pick the plan that fits.
-          Every plan starts free so you can explore before you commit. Use connects to
-          reach out to matches, and upgrade when you are ready for more.
+          {IS_DEMO ? (
+            <>
+              These are the plans Amber planned to launch with. Every plan was going to start free, with
+              connects for reaching out to matches and paid tiers for more. Paid plans were built as Stripe
+              subscriptions (Checkout, Customer Portal and webhooks), but Amber never launched, so the demo
+              doesn't sell anything.
+            </>
+          ) : (
+            <>
+              From casual networking to serious hiring, pick the plan that fits.
+              Every plan starts free so you can explore before you commit. Use connects to
+              reach out to matches, and upgrade when you are ready for more.
+            </>
+          )}
         </p>
-        {IS_DEMO && (
-          <p
-            className="mt-4 text-sm max-w-2xl rounded-xl border px-4 py-3"
-            style={{ borderColor: 'var(--color-border)', color: 'var(--color-textSecondary)', backgroundColor: 'var(--color-surface)' }}
-          >
-            These are the plans Amber planned to launch with. In the real product, paid plans were Stripe
-            subscriptions (Checkout, Customer Portal and webhooks); the demo doesn't take payments.
-          </p>
-        )}
 
         {/* Toggles */}
         <div className="flex flex-col items-start gap-3 mt-8">
@@ -161,7 +158,7 @@ export function PricingPage() {
               className="px-5 py-2 rounded-lg text-sm font-medium transition-all"
               style={{
                 backgroundColor: activeTab === 'candidate' ? 'var(--color-accent)' : 'transparent',
-                color: activeTab === 'candidate' ? 'white' : 'var(--color-textSecondary)',
+                color: activeTab === 'candidate' ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
               }}
             >
               Job seekers
@@ -171,7 +168,7 @@ export function PricingPage() {
               className="px-5 py-2 rounded-lg text-sm font-medium transition-all"
               style={{
                 backgroundColor: activeTab === 'employer' ? 'var(--color-accent)' : 'transparent',
-                color: activeTab === 'employer' ? 'white' : 'var(--color-textSecondary)',
+                color: activeTab === 'employer' ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
               }}
             >
               Employers
@@ -237,15 +234,6 @@ export function PricingPage() {
                     : '1px solid var(--color-border)',
                 }}
               >
-                {plan.popular && (
-                  <div
-                    className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-xs font-semibold"
-                    style={{ backgroundColor: accent, color: 'white' }}
-                  >
-                    Most popular
-                  </div>
-                )}
-
                 {/* Plan header */}
                 <div className="mb-4">
                   <div
@@ -285,23 +273,32 @@ export function PricingPage() {
                   )}
                 </div>
 
-                {/* CTA */}
-                <Button
-                  className="w-full mb-4"
-                  size="sm"
-                  variant={plan.popular ? 'primary' : 'outline'}
-                  onClick={() => handleSubscribe(plan)}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <span className="inline-flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Redirecting...
-                    </span>
-                  ) : (
-                    plan.cta
-                  )}
-                </Button>
+                {/* The demo shows what each plan was going to be; it doesn't sell it */}
+                {IS_DEMO ? (
+                  <p
+                    className="mb-4 rounded-lg border px-3 py-2 text-center text-caption"
+                    style={{ borderColor: 'var(--color-border)', color: 'var(--color-textMuted)' }}
+                  >
+                    {plan.tier === 'free' ? 'Planned free tier' : 'Planned Stripe subscription'}
+                  </p>
+                ) : (
+                  <Button
+                    className="w-full mb-4"
+                    size="sm"
+                    variant={plan.popular ? 'primary' : 'outline'}
+                    onClick={() => handleSubscribe(plan)}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <span className="inline-flex items-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Redirecting...
+                      </span>
+                    ) : (
+                      plan.cta
+                    )}
+                  </Button>
+                )}
 
                 {/* Features */}
                 <div className="flex-1">
@@ -332,33 +329,13 @@ export function PricingPage() {
         </div>
       </div>
 
-      {/* Divider */}
-      <div className="border-t" style={{ borderColor: 'var(--color-border)' }} />
-
-      {/* Bottom note */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div
-          className="rounded-2xl p-8 text-center"
-          style={{
-            background: 'var(--color-surface)',
-            border: '1px solid var(--color-border)',
-          }}
-        >
-          <p className="text-sm" style={{ color: 'var(--color-textSecondary)' }}>
-            All plans include a 14-day free trial. Cancel anytime. No credit card required for free plans.
-          </p>
-          {!isPublic && isWelcome && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="mt-4"
-              onClick={handleSkip}
-            >
-              Continue with free plan
-            </Button>
-          )}
+      {!isPublic && isWelcome && (
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 text-center">
+          <Button variant="ghost" size="sm" onClick={handleSkip}>
+            Continue with free plan
+          </Button>
         </div>
-      </div>
+      )}
     </div>
   );
 }
