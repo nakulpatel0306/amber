@@ -2,8 +2,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDemoClient } from './client';
 import { demoFetch } from './backend';
 import { parseSelect } from './query';
-import { SEED_IDS } from './seed';
-import { resetDemo, subscribe } from './store';
+import { buildSeed, SEED_IDS } from './seed';
+import { findOne, resetDemo, subscribe, table } from './store';
+import { applySampleCulture, completeSampleAssessment, prepareVisitor } from './visitor';
+import { calculateCompatibility } from '../lib/compatibilityScoring';
 
 const supabase = createDemoClient();
 
@@ -184,5 +186,79 @@ describe('demo backend', () => {
     await new Promise((r) => setTimeout(r, 0));
     stop();
     expect(tables).toContain('feedback');
+  });
+});
+
+describe('demo visitor', () => {
+  const score = (c: Record<string, unknown>, e: Record<string, unknown>) =>
+    calculateCompatibility({
+      candidateOCEAN: {
+        openness: c.openness_score as number,
+        conscientiousness: c.conscientiousness_score as number,
+        extraversion: c.extraversion_score as number,
+        agreeableness: c.agreeableness_score as number,
+        neuroticism: c.neuroticism_score as number,
+      },
+      employerPreferences: {
+        openness: e.openness_preference as number,
+        conscientiousness: e.conscientiousness_preference as number,
+        extraversion: e.extraversion_preference as number,
+        agreeableness: e.agreeableness_preference as number,
+        neuroticism: e.neuroticism_preference as number,
+        cultureValues: e.culture_values as string[],
+      },
+      candidateWorkStyle: (c.preferred_work_style as string) ?? undefined,
+    }).overallMatchScore;
+
+  it('completes the skipped assessment with a profile that spreads the company scores', async () => {
+    for (let run = 0; run < 10; run++) {
+      resetDemo();
+      const userId = await signUp('candidate');
+      prepareVisitor(userId, 'candidate');
+      completeSampleAssessment(userId);
+      const candidate = findOne('candidates', (c) => c.user_id === userId)!;
+      expect(candidate.assessment_status).toBe('completed');
+      expect((candidate.top_traits as string[])[0]).toMatch(/^The /);
+      const scores = buildSeed().employers.map((e) => score(candidate, e));
+      expect(Math.max(...scores)).toBeGreaterThanOrEqual(80);
+      expect(Math.max(...scores) - Math.min(...scores)).toBeGreaterThanOrEqual(8);
+      await supabase.auth.signOut();
+    }
+  });
+
+  it('gives the skipped culture quiz a culture that spreads the candidate scores', async () => {
+    for (let run = 0; run < 10; run++) {
+      resetDemo();
+      const userId = await signUp('employer');
+      applySampleCulture(userId);
+      const employer = findOne('employers', (e) => e.user_id === userId)!;
+      expect(employer.culture_quiz_completed).toBe(true);
+      expect(employer.archetype_name).toMatch(/^The /);
+      const scores = buildSeed().candidates.map((c) => score(c, employer));
+      expect(Math.max(...scores)).toBeGreaterThanOrEqual(80);
+      expect(Math.max(...scores) - Math.min(...scores)).toBeGreaterThanOrEqual(10);
+      await supabase.auth.signOut();
+    }
+  });
+
+  it('seeds one past chat awaiting feedback and one upcoming chat in business hours', async () => {
+    for (const role of ['candidate', 'employer'] as const) {
+      resetDemo();
+      const userId = await signUp(role);
+      prepareVisitor(userId, role);
+      const times = table('coffee_chats')
+        .filter((c) => c.status === 'scheduled')
+        .map((c) => new Date(c.scheduled_at as string));
+      const past = times.filter((t) => t.getTime() < Date.now());
+      const upcoming = times.filter((t) => t.getTime() > Date.now());
+      expect(past).toHaveLength(1);
+      expect(upcoming).toHaveLength(1);
+      times.forEach((t) => {
+        expect([0, 6]).not.toContain(t.getDay());
+        expect(t.getHours()).toBeGreaterThanOrEqual(9);
+        expect(t.getHours()).toBeLessThan(17);
+      });
+      await supabase.auth.signOut();
+    }
   });
 });

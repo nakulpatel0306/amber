@@ -4,10 +4,9 @@
  * time and answers messages with canned lines that are labelled as automatic.
  * Only seeded accounts ever reply; nothing leaves the browser.
  */
+import { AUTO_REPLY_LABEL } from './autoReplyLabel';
 import { isSeedUser } from './seed';
 import { findOne, insertRow, sessionUserId, subscribe, updateRow, type Row } from './store';
-
-export const AUTO_REPLY_LABEL = '(Demo auto-reply)';
 
 const REPLY_DELAY_MS = 2200;
 
@@ -51,13 +50,22 @@ export function sendAutoMessage(chatId: string, partner: Row, text: string): voi
   });
 }
 
-/** Next weekday at 10:00 local time, so auto-scheduled chats land somewhere sensible. */
-export function nextWeekdayMorning(daysAhead = 1): string {
+/**
+ * A weekday at the given local hour, `days` from today (negative for the
+ * past), stepping past weekends in the same direction, so seeded and
+ * auto-scheduled chats land in business hours.
+ */
+export function weekdayAt(days: number, hour: number): string {
+  const step = days < 0 ? -1 : 1;
   const date = new Date();
-  date.setDate(date.getDate() + daysAhead);
-  while (date.getDay() === 0 || date.getDay() === 6) date.setDate(date.getDate() + 1);
-  date.setHours(10, 0, 0, 0);
+  date.setDate(date.getDate() + days);
+  while (date.getDay() === 0 || date.getDay() === 6) date.setDate(date.getDate() + step);
+  date.setHours(hour, 0, 0, 0);
   return date.toISOString();
+}
+
+export function nextWeekdayMorning(daysAhead = 1): string {
+  return weekdayAt(daysAhead, 10);
 }
 
 function onConnection(conn: Row): void {
