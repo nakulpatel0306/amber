@@ -56,7 +56,6 @@ These files handle incremental schema changes, data fixes, and RLS policy update
 | `seed-employer-assessments.sql` | Seeds employer assessment questions |
 | `seed-sample-jobs.sql` | Seeds sample job listings |
 | `seed-full-test-data.sql` | Comprehensive test data seed |
-| `update-real-companies.sql` | Updates test employers with real company data |
 
 ## Database Schema
 
