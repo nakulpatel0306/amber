@@ -10,27 +10,19 @@ import {
   ArrowRight,
   Archive,
   Bot,
-  Brain,
   Building2,
   ClipboardList,
   Coffee,
-  Compass,
   EyeOff,
   Github,
-  Heart,
   Laptop,
-  Layers,
-  Lightbulb,
   MessageCircle,
-  Music,
   PauseCircle,
   Radar,
   ShieldCheck,
   Sparkles,
-  Target,
   TrendingUp,
   Users,
-  Zap,
   type LucideIcon,
 } from 'lucide-react';
 import { LandingNav } from './LandingNav';
@@ -38,23 +30,14 @@ import { LandingFooter } from './LandingFooter';
 import { FeatureBento } from './FeatureBento';
 import { MatchingExplainer } from './MatchingExplainer';
 import { ArchitectureDiagram } from './ArchitectureDiagram';
-import { HeroVisual } from './HeroVisual';
+import { HeroRadar } from './HeroRadar';
+import { ARCHETYPE_ICONS } from './archetypeIcons';
 import { Section, TintCard, TRAIT } from './Section';
 import { BLUEPRINT_URL, DEMO_LABEL, DEMO_PATH, REPO_URL, TEAM } from './links';
 import { ARCHETYPES } from '../../lib/archetypes';
 import { IS_DEMO } from '../../demo/flag';
 import { usePageTitle } from '../../hooks/usePageTitle';
 
-const ARCHETYPE_ICONS: Record<string, LucideIcon> = {
-  lightbulb: Lightbulb,
-  layers: Layers,
-  heart: Heart,
-  zap: Zap,
-  target: Target,
-  music: Music,
-  compass: Compass,
-  brain: Brain,
-};
 const PALETTE = [TRAIT.o, TRAIT.c, TRAIT.e, TRAIT.a, TRAIT.n];
 
 // Trait colors are tuned for fills; as text they lean toward the text color so yellow and cyan stay legible on white
@@ -160,35 +143,6 @@ function IconBadge({ icon: Icon, color, size = 'md' }: { icon: LucideIcon; color
   );
 }
 
-function ArchetypeMarquee() {
-  const items = Object.values(ARCHETYPES);
-  return (
-    <div className="marquee overflow-hidden py-6 border-y" style={{ borderColor: 'var(--color-border)' }} aria-hidden>
-      <div className="marquee-track flex w-max gap-3">
-        {[...items, ...items].map((a, i) => {
-          const Icon = ARCHETYPE_ICONS[a.emoji] ?? Lightbulb;
-          const color = PALETTE[i % PALETTE.length];
-          return (
-            <span
-              key={`${a.key}-${i}`}
-              className="inline-flex items-center gap-2 h-10 pl-2 pr-4 rounded-full border text-sm font-medium whitespace-nowrap"
-              style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
-            >
-              <span
-                className="w-7 h-7 rounded-full inline-flex items-center justify-center"
-                style={{ backgroundColor: `color-mix(in srgb, ${color} 18%, transparent)`, color }}
-              >
-                <Icon className="w-4 h-4" />
-              </span>
-              {a.name}
-            </span>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
 export function CaseStudy() {
   usePageTitle('');
 
@@ -196,61 +150,68 @@ export function CaseStudy() {
     <div className="min-h-screen [overflow-x:clip]" style={{ backgroundColor: 'var(--color-background)' }}>
       <LandingNav />
 
-      <header className="relative px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 pb-16 sm:pb-20">
+      <header className="relative px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-16 sm:pb-20">
         <div className="hero-backdrop" aria-hidden>
           <span className="hero-blob w-[420px] h-[420px] -top-24 left-[8%]" style={{ backgroundColor: TRAIT.e }} />
           <span className="hero-blob w-[380px] h-[380px] top-10 right-[6%]" style={{ backgroundColor: TRAIT.a, animationDelay: '-6s' }} />
           <span className="hero-blob w-[340px] h-[340px] top-[420px] left-[30%]" style={{ backgroundColor: TRAIT.o, animationDelay: '-12s' }} />
         </div>
 
-        <motion.div
-          className="relative max-w-4xl mx-auto text-center"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-        >
-          <span
-            className="inline-flex items-center gap-2 h-8 px-3.5 rounded-full border text-caption font-medium"
-            style={{ borderColor: 'var(--color-border)', backgroundColor: 'color-mix(in srgb, var(--color-surface) 70%, transparent)', color: 'var(--color-textSecondary)' }}
+        <div className="relative max-w-6xl mx-auto grid gap-14 lg:gap-10 lg:grid-cols-[1.1fr_1fr] items-center">
+          <motion.div
+            className="relative min-w-0 text-center lg:text-left"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
           >
-            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: TRAIT.e }} />
-            A startup we built in 2026, now shelved and open source
-          </span>
-          <h1 className="mt-6 text-display" style={{ color: 'var(--color-text)' }}>
-            Hiring that starts with <span className="text-gradient-warm">how you work</span>
-          </h1>
-          <p className="mt-6 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
-            Hiring matches on resumes and keywords, while culture fit only shows up after someone starts. Amber measured
-            how people work and compared it with a team's real culture, so both sides met over a coffee chat before
-            anyone applied. Three of us built it through 2026 and took it close to launch.
-          </p>
-          <div className="mt-9 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link to={DEMO_PATH} className={`w-full sm:w-auto ${primaryCta}`}>
-              {DEMO_LABEL}
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-            <a
-              href={REPO_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-6 rounded-lg text-sm font-medium border transition-colors hover:bg-[var(--color-surfaceHover)]"
-              style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)', backgroundColor: 'color-mix(in srgb, var(--color-surface) 70%, transparent)' }}
+            <span
+              className="inline-flex items-center gap-2 h-8 px-3.5 rounded-full border text-caption font-medium"
+              style={{ borderColor: 'var(--color-border)', backgroundColor: 'color-mix(in srgb, var(--color-surface) 70%, transparent)', color: 'var(--color-textSecondary)' }}
             >
-              <Github className="w-4 h-4" />
-              Read the code
-            </a>
-          </div>
-          <p className="mt-5 text-xs" style={{ color: 'var(--color-textMuted)' }}>
-            {IS_DEMO
-              ? 'The demo runs entirely in your browser: no signup, invented people and companies, nothing sent anywhere.'
-              : 'This build talks to your own Supabase project and FastAPI server.'}
-          </p>
-        </motion.div>
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: TRAIT.e }} />
+              A startup we built in 2026, now shelved and open source
+            </span>
+            <h1 className="mt-6 text-display" style={{ color: 'var(--color-text)' }}>
+              Hiring that starts with <span className="text-gradient-warm">how you work</span>
+            </h1>
+            <p className="mt-6 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+              Hiring matches on resumes and keywords, while culture fit only shows up after someone starts. Amber measured
+              how people work and compared it with a team's real culture, so both sides met over a coffee chat before
+              anyone applied. Three of us built it through 2026 and took it close to launch.
+            </p>
+            <div className="mt-9 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+              <Link to={DEMO_PATH} className={`w-full sm:w-auto ${primaryCta}`}>
+                {DEMO_LABEL}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <a
+                href={REPO_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-11 px-6 rounded-lg text-sm font-medium border transition-colors hover:bg-[var(--color-surfaceHover)]"
+                style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)', backgroundColor: 'color-mix(in srgb, var(--color-surface) 70%, transparent)' }}
+              >
+                <Github className="w-4 h-4" />
+                Read the code
+              </a>
+            </div>
+            <p className="mt-5 text-xs" style={{ color: 'var(--color-textMuted)' }}>
+              {IS_DEMO
+                ? 'The demo runs in your browser: no signup, invented people and companies, nothing sent anywhere.'
+                : 'This build talks to your own Supabase project and FastAPI server.'}
+            </p>
+          </motion.div>
 
-        <HeroVisual />
+          <motion.div
+            className="relative min-w-0"
+            initial={{ opacity: 0, scale: 0.96 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.15, ease: [0.23, 1, 0.32, 1] }}
+          >
+            <HeroRadar />
+          </motion.div>
+        </div>
       </header>
-
-      <ArchetypeMarquee />
 
       {/* What we built: animated recreations of the real screens */}
       <FeatureBento />
@@ -295,7 +256,7 @@ export function CaseStudy() {
           </p>
           <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {Object.values(ARCHETYPES).map((a, i) => {
-              const Icon = ARCHETYPE_ICONS[a.emoji] ?? Lightbulb;
+              const Icon = ARCHETYPE_ICONS[a.emoji] ?? ARCHETYPE_ICONS.lightbulb;
               const color = PALETTE[i % PALETTE.length];
               return (
                 <div

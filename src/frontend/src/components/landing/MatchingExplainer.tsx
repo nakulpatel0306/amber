@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
-import { calculateCompatibility, type CandidateOCEAN, type OceanTrait } from '../../lib/ember/compatibility';
-import { determineArchetype } from '../../lib/ember/agent';
-import { getArchetypeCompatibility } from '../../lib/archetypeCompatibility';
+import type { CandidateOCEAN, OceanTrait } from '../../lib/ember/compatibility';
+import { COMPANY, PRESETS, scoreAgainstKestrel } from './kestrel';
 
 const TRAITS: { key: OceanTrait; label: string; color: string }[] = [
   { key: 'openness', label: 'Openness', color: 'var(--color-trait-openness)' },
@@ -11,15 +10,6 @@ const TRAITS: { key: OceanTrait; label: string; color: string }[] = [
   { key: 'neuroticism', label: 'Neuroticism', color: 'var(--color-trait-stability)' },
 ];
 
-// One of the invented demo companies, so the numbers match what the demo shows
-const COMPANY = {
-  name: 'Kestrel Studio',
-  archetype: 'The Collaborator',
-  values: ['creativity', 'collaboration', 'diversity', 'innovation'],
-  prefs: { openness: 90, conscientiousness: 55, extraversion: 70, agreeableness: 70, neuroticism: 40 },
-  role: { title: 'Brand Designer', work_style: 'hybrid', required_openness_min: 75, required_openness_max: 100, required_extraversion_min: 50, required_extraversion_max: 90 },
-};
-
 const WEIGHTS = [
   { key: 'trait', label: 'Trait distance', weight: 40, color: 'var(--color-trait-openness)' },
   { key: 'culture', label: 'Culture and role fit', weight: 30, color: 'var(--color-trait-conscientiousness)' },
@@ -28,32 +18,9 @@ const WEIGHTS = [
 ] as const;
 
 export function MatchingExplainer() {
-  const [ocean, setOcean] = useState<CandidateOCEAN>({
-    openness: 82,
-    conscientiousness: 48,
-    extraversion: 64,
-    agreeableness: 70,
-    neuroticism: 35,
-  });
+  const [ocean, setOcean] = useState<CandidateOCEAN>(PRESETS[0].ocean);
 
-  const result = useMemo(() => {
-    const compat = calculateCompatibility(
-      ocean,
-      {
-        openness_preference: COMPANY.prefs.openness,
-        conscientiousness_preference: COMPANY.prefs.conscientiousness,
-        extraversion_preference: COMPANY.prefs.extraversion,
-        agreeableness_preference: COMPANY.prefs.agreeableness,
-        neuroticism_preference: COMPANY.prefs.neuroticism,
-        culture_values: COMPANY.values,
-      },
-      'hybrid',
-      COMPANY.role,
-    );
-    const archetype = determineArchetype(ocean);
-    const bonus = getArchetypeCompatibility(archetype.key, COMPANY.archetype).bonus;
-    return { compat, archetype, bonus, ember: Math.max(0, Math.min(100, compat.overall_match_score + bonus)) };
-  }, [ocean]);
+  const result = useMemo(() => scoreAgainstKestrel(ocean), [ocean]);
 
   const parts = {
     trait: result.compat.trait_match_score,
