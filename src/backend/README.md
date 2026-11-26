@@ -226,12 +226,10 @@ The scoring engine converts raw assessment responses into personality scores and
 ## CORS Configuration
 
 CORS is configured to allow requests from:
-- `tauri://localhost` — Tauri desktop app
-- `http://localhost:1420` — Tauri dev server
 - `http://localhost:5173` — Vite dev server (default)
 - `http://localhost:3000` — Alternative dev server
 
-Update the `origins` list in `main.py` for production domains.
+Update the `allow_origins` list in `main.py` for production domains.
 
 ## Notes
 

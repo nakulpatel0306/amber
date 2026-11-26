@@ -11,9 +11,12 @@ configured, functions return None or empty lists instead of raising errors,
 allowing the app to run in a degraded mode during local development.
 """
 
+import logging
 import os
 from typing import Optional
 from dotenv import load_dotenv
+
+logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
@@ -36,10 +39,10 @@ def get_supabase():
             from supabase import create_client
             _client = create_client(SUPABASE_URL, SUPABASE_KEY)
         except ImportError:
-            print("Warning: supabase-py not installed. Run: pip install supabase")
+            logger.warning("supabase-py not installed. Run: pip install supabase")
             return None
         except Exception as e:
-            print(f"Warning: Could not connect to Supabase: {e}")
+            logger.warning(f"Could not connect to Supabase: {e}")
             return None
     return _client
 
@@ -58,7 +61,7 @@ def get_candidate_by_id(candidate_id: str) -> Optional[dict]:
         result = client.table('candidates').select('*, profiles!inner(full_name, email)').eq('id', candidate_id).limit(1).execute()
         return _first_or_none(result)
     except Exception as e:
-        print(f"Error fetching candidate: {e}")
+        logger.error(f"Error fetching candidate: {e}")
         return None
 
 
@@ -71,7 +74,7 @@ def get_candidate_by_user_id(user_id: str) -> Optional[dict]:
         result = client.table('candidates').select('*, profiles!inner(full_name, email)').eq('user_id', user_id).limit(1).execute()
         return _first_or_none(result)
     except Exception as e:
-        print(f"Error fetching candidate: {e}")
+        logger.error(f"Error fetching candidate: {e}")
         return None
 
 
@@ -84,7 +87,7 @@ def get_employer_by_id(employer_id: str) -> Optional[dict]:
         result = client.table('employers').select('*').eq('id', employer_id).limit(1).execute()
         return _first_or_none(result)
     except Exception as e:
-        print(f"Error fetching employer: {e}")
+        logger.error(f"Error fetching employer: {e}")
         return None
 
 
@@ -97,7 +100,7 @@ def get_employer_by_user_id(user_id: str) -> Optional[dict]:
         result = client.table('employers').select('*').eq('user_id', user_id).limit(1).execute()
         return _first_or_none(result)
     except Exception as e:
-        print(f"Error fetching employer: {e}")
+        logger.error(f"Error fetching employer: {e}")
         return None
 
 
@@ -110,7 +113,7 @@ def get_role(role_id: str) -> Optional[dict]:
         result = client.table('roles').select('*, employers!inner(*)').eq('id', role_id).limit(1).execute()
         return _first_or_none(result)
     except Exception as e:
-        print(f"Error fetching role: {e}")
+        logger.error(f"Error fetching role: {e}")
         return None
 
 
@@ -125,7 +128,7 @@ def get_all_candidates_with_scores() -> list[dict]:
         ).not_.is_('openness_score', 'null').execute()
         return result.data or []
     except Exception as e:
-        print(f"Error fetching candidates: {e}")
+        logger.error(f"Error fetching candidates: {e}")
         return []
 
 
@@ -140,7 +143,7 @@ def get_all_active_roles() -> list[dict]:
         ).eq('status', 'active').execute()
         return result.data or []
     except Exception as e:
-        print(f"Error fetching roles: {e}")
+        logger.error(f"Error fetching roles: {e}")
         return []
 
 
@@ -153,7 +156,7 @@ def get_roles_by_employer_id(employer_id: str) -> list[dict]:
         result = client.table('roles').select('*').eq('employer_id', employer_id).execute()
         return result.data or []
     except Exception as e:
-        print(f"Error fetching roles: {e}")
+        logger.error(f"Error fetching roles: {e}")
         return []
 
 
@@ -169,7 +172,7 @@ def upsert_application(data: dict) -> Optional[dict]:
         ).execute()
         return result.data[0] if result.data else None
     except Exception as e:
-        print(f"Error upserting application: {e}")
+        logger.error(f"Error upserting application: {e}")
         return None
 
 
@@ -198,7 +201,7 @@ def get_applications_for_role(role_id: str) -> list[dict]:
         ).eq('role_id', role_id).order('overall_match_score', desc=True).execute()
         return result.data or []
     except Exception as e:
-        print(f"Error fetching applications: {e}")
+        logger.error(f"Error fetching applications: {e}")
         return []
 
 
@@ -213,7 +216,7 @@ def get_applications_for_candidate(candidate_id: str) -> list[dict]:
         ).eq('candidate_id', candidate_id).order('overall_match_score', desc=True).execute()
         return result.data or []
     except Exception as e:
-        print(f"Error fetching applications: {e}")
+        logger.error(f"Error fetching applications: {e}")
         return []
 
 
@@ -223,15 +226,15 @@ def create_coffee_chat(data: dict) -> Optional[dict]:
     """Create a new coffee chat request."""
     client = get_supabase()
     if not client:
-        print("Error creating coffee chat: Supabase client not available")
+        logger.error("Error creating coffee chat: Supabase client not available")
         return None
     try:
-        print(f"[create_coffee_chat] inserting: {list(data.keys())}")
+        logger.debug(f"[create_coffee_chat] inserting: {list(data.keys())}")
         result = client.table('coffee_chats').insert(data).execute()
-        print(f"[create_coffee_chat] success: {result.data[0]['id'] if result.data else 'no data'}")
+        logger.debug(f"[create_coffee_chat] success: {result.data[0]['id'] if result.data else 'no data'}")
         return result.data[0] if result.data else None
     except Exception as e:
-        print(f"Error creating coffee chat: {type(e).__name__}: {e}")
+        logger.error(f"Error creating coffee chat: {type(e).__name__}: {e}")
         return None
 
 
@@ -246,7 +249,7 @@ def get_coffee_chats_for_candidate(candidate_id: str) -> list[dict]:
         ).eq('candidate_id', candidate_id).order('created_at', desc=True).execute()
         return result.data or []
     except Exception as e:
-        print(f"Error fetching candidate coffee chats: {e}")
+        logger.error(f"Error fetching candidate coffee chats: {e}")
         return []
 
 
@@ -261,7 +264,7 @@ def get_coffee_chats_for_employer(employer_id: str) -> list[dict]:
         ).eq('employer_id', employer_id).order('created_at', desc=True).execute()
         return result.data or []
     except Exception as e:
-        print(f"Error fetching employer coffee chats: {e}")
+        logger.error(f"Error fetching employer coffee chats: {e}")
         return []
 
 
@@ -274,7 +277,7 @@ def update_coffee_chat(chat_id: str, data: dict) -> Optional[dict]:
         result = client.table('coffee_chats').update(data).eq('id', chat_id).execute()
         return result.data[0] if result.data else None
     except Exception as e:
-        print(f"Error updating coffee chat: {e}")
+        logger.error(f"Error updating coffee chat: {e}")
         return None
 
 
@@ -287,7 +290,7 @@ def get_coffee_chat_by_id(chat_id: str) -> Optional[dict]:
         result = client.table('coffee_chats').select('*').eq('id', chat_id).limit(1).execute()
         return _first_or_none(result)
     except Exception as e:
-        print(f"Error fetching coffee chat: {e}")
+        logger.error(f"Error fetching coffee chat: {e}")
         return None
 
 
@@ -297,15 +300,15 @@ def create_connection(data: dict) -> Optional[dict]:
     """Create a new connection request."""
     client = get_supabase()
     if not client:
-        print("Error creating connection: Supabase client not available")
+        logger.error("Error creating connection: Supabase client not available")
         return None
     try:
-        print(f"[create_connection] inserting: sender_id={data.get('sender_id')}, receiver_id={data.get('receiver_id')}, sender_role={data.get('sender_role')}")
+        logger.debug(f"[create_connection] inserting: sender_id={data.get('sender_id')}, receiver_id={data.get('receiver_id')}, sender_role={data.get('sender_role')}")
         result = client.table('connections').insert(data).execute()
-        print(f"[create_connection] success: {result.data[0]['id'] if result.data else 'no data'}")
+        logger.debug(f"[create_connection] success: {result.data[0]['id'] if result.data else 'no data'}")
         return result.data[0] if result.data else None
     except Exception as e:
-        print(f"Error creating connection: {type(e).__name__}: {e}")
+        logger.error(f"Error creating connection: {type(e).__name__}: {e}")
         return None
 
 
@@ -319,7 +322,7 @@ def get_connections_for_user(user_id: str) -> list[dict]:
         received = client.table('connections').select('*').eq('receiver_id', user_id).execute()
         return (sent.data or []) + (received.data or [])
     except Exception as e:
-        print(f"Error fetching connections: {e}")
+        logger.error(f"Error fetching connections: {e}")
         return []
 
 
@@ -332,7 +335,7 @@ def get_connection_by_id(connection_id: str) -> Optional[dict]:
         result = client.table('connections').select('*').eq('id', connection_id).limit(1).execute()
         return _first_or_none(result)
     except Exception as e:
-        print(f"Error fetching connection: {e}")
+        logger.error(f"Error fetching connection: {e}")
         return None
 
 
@@ -345,7 +348,7 @@ def update_connection(connection_id: str, data: dict) -> Optional[dict]:
         result = client.table('connections').update(data).eq('id', connection_id).execute()
         return result.data[0] if result.data else None
     except Exception as e:
-        print(f"Error updating connection: {e}")
+        logger.error(f"Error updating connection: {e}")
         return None
 
 
@@ -369,7 +372,7 @@ def get_connection_between(user_a: str, user_b: str) -> Optional[dict]:
             return result.data[0]
         return None
     except Exception as e:
-        print(f"Error fetching connection between users: {e}")
+        logger.error(f"Error fetching connection between users: {e}")
         return None
 
 
@@ -382,7 +385,7 @@ def create_meet_invite(data: dict) -> Optional[dict]:
         result = client.table('connection_meet_invites').insert(data).execute()
         return result.data[0] if result.data else None
     except Exception as e:
-        print(f"Error creating meet invite: {e}")
+        logger.error(f"Error creating meet invite: {e}")
         return None
 
 
@@ -395,7 +398,7 @@ def update_meet_invite(invite_id: str, data: dict) -> Optional[dict]:
         result = client.table('connection_meet_invites').update(data).eq('id', invite_id).execute()
         return result.data[0] if result.data else None
     except Exception as e:
-        print(f"Error updating meet invite: {e}")
+        logger.error(f"Error updating meet invite: {e}")
         return None
 
 
@@ -410,7 +413,7 @@ def get_coffee_chat_by_connection(connection_id: str) -> Optional[dict]:
         ).order('created_at', desc=True).limit(1).execute()
         return result.data[0] if result.data else None
     except Exception as e:
-        print(f"Error fetching coffee chat by connection: {e}")
+        logger.error(f"Error fetching coffee chat by connection: {e}")
         return None
 
 
@@ -425,5 +428,5 @@ def get_meet_invite_by_connection(connection_id: str) -> Optional[dict]:
         ).order('created_at', desc=True).limit(1).execute()
         return result.data[0] if result.data else None
     except Exception as e:
-        print(f"Error fetching meet invite: {e}")
+        logger.error(f"Error fetching meet invite: {e}")
         return None

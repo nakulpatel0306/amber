@@ -14,6 +14,7 @@ Provides two layers of authentication:
 When SUPABASE_JWT_SECRET is not configured, auth is disabled entirely (dev mode).
 """
 
+import logging
 from typing import Optional, List, Callable
 
 from fastapi import Request, HTTPException, status, Depends
@@ -24,6 +25,8 @@ from starlette.responses import JSONResponse
 import jwt as pyjwt
 
 from .supabase_auth import get_current_user, AuthUser, is_auth_configured
+
+logger = logging.getLogger(__name__)
 
 
 # HTTP Bearer token security scheme
@@ -140,7 +143,7 @@ async def get_current_user_dependency(
                         user_metadata=user_metadata,
                     )
             except Exception as e:
-                print(f"[dev-mode] Could not decode token: {e}")
+                logger.debug(f"[dev-mode] Could not decode token: {e}")
         return None
 
     if not credentials:
