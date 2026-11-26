@@ -86,7 +86,7 @@ const STATUS = [
     title: 'Kept',
     icon: FolderGit2,
     color: TRAIT.c,
-    body: 'The code stays open under MIT, the full stack still runs locally, and this page ships a demo of the real app with invented data so anyone can try it.',
+    body: 'The code stays open under MIT, the full stack can be set up against your own Supabase project, and this page ships a demo of the real app with invented data so anyone can try it.',
   },
 ];
 
@@ -114,7 +114,7 @@ const LESSONS = [
     body: (
       <>
         Talking to Postgres directly from React let three people ship both sides of the product. It also meant Row Level
-        Security carried authorization, and policies that referenced each other recursed. The <Code>supabase/</Code> folder
+        Security carried authorization, and policies that referenced each other recursed. The <Code>supabase/archive/</Code> folder
         still has the <Code>fix-*-recursion</Code> scripts that taught us.
       </>
     ),

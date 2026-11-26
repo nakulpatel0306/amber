@@ -21,9 +21,4 @@ export default tseslint.config(
       'no-console': ['error', { allow: ['warn', 'error'] }],
     },
   },
-  {
-    // Still has [Ember] debug logs; remove them and drop this override
-    files: ['src/hooks/useMatchData.ts'],
-    rules: { 'no-console': 'off' },
-  },
 );

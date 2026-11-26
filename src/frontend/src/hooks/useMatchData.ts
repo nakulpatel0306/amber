@@ -93,7 +93,6 @@ export function useCandidateMatchData(): UseCandidateMatchDataReturn {
           console.error('[Ember] Employers fetch error:', empErr.message);
         }
 
-        console.log('[Ember] Employers found:', employersData?.length || 0);
 
         if (!employersData || employersData.length === 0) {
           console.warn('[Ember] No employers returned. Make sure get_employers_for_candidate RPC function exists.');
@@ -166,7 +165,6 @@ export function useCandidateMatchData(): UseCandidateMatchDataReturn {
 
         employerResults.sort((a, b) => b.overallScore - a.overallScore);
         setEmployers(employerResults);
-        console.log('[Ember] Employer matches computed:', employerResults.length);
 
         const { count } = await supabase
           .from('coffee_chats')
@@ -299,7 +297,6 @@ export function useEmployerMatchData(): UseEmployerMatchDataReturn {
           console.error('[Ember] Candidates fetch error:', candidatesErr.message);
         }
 
-        console.log('[Ember] Candidates found:', candidatesData?.length || 0);
 
         if (!candidatesData || candidatesData.length === 0) {
           console.warn('[Ember] No candidates returned. Make sure get_candidates_for_employer RPC function exists.');
@@ -328,7 +325,6 @@ export function useEmployerMatchData(): UseEmployerMatchDataReturn {
           console.warn('[Ember] Profile lookup failed, using fallback names');
         }
 
-        console.log('[Ember] Profiles found:', profilesData.length);
 
         // Step 5: Merge profile names into candidate data
         const profileMap = new Map((profilesData || []).map((p: any) => [p.id, p]));
@@ -339,7 +335,6 @@ export function useEmployerMatchData(): UseEmployerMatchDataReturn {
 
         setRawCandidates(enrichedCandidates);
         scoreCandidates(enrichedCandidates, emp, null);
-        console.log('[Ember] Candidates scored:', enrichedCandidates.length);
 
         const { count } = await supabase
           .from('coffee_chats')
