@@ -1,6 +1,7 @@
 import { useState, useEffect, type CSSProperties, type ReactNode } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight, Lightbulb, X } from 'lucide-react';
+import { Eyebrow, TRAIT } from './Section';
 
 /*
  * Product tour: scaled-down recreations of four real screens. They reuse the
@@ -611,9 +612,10 @@ function StepProgress({ vertical = false, reduce }: { vertical?: boolean; reduce
 
 export function FeatureBento() {
   return (
-    <section id="tour" className="px-4 sm:px-6 lg:px-8 py-14 sm:py-16 scroll-mt-20">
+    <section id="tour" className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20 scroll-mt-20">
       <div className="max-w-5xl mx-auto">
         <div className="max-w-2xl mb-10">
+          <Eyebrow color={TRAIT.e}>The product</Eyebrow>
           <h2 className="text-headline" style={text}>
             What we built
           </h2>

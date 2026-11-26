@@ -21,10 +21,10 @@ const COMPANY = {
 };
 
 const WEIGHTS = [
-  { key: 'trait', label: 'Trait distance', weight: 40 },
-  { key: 'culture', label: 'Culture and role fit', weight: 30 },
-  { key: 'work', label: 'Work style', weight: 20 },
-  { key: 'comm', label: 'Communication', weight: 10 },
+  { key: 'trait', label: 'Trait distance', weight: 40, color: 'var(--color-trait-openness)' },
+  { key: 'culture', label: 'Culture and role fit', weight: 30, color: 'var(--color-trait-conscientiousness)' },
+  { key: 'work', label: 'Work style', weight: 20, color: 'var(--color-trait-extraversion)' },
+  { key: 'comm', label: 'Communication', weight: 10, color: 'var(--color-trait-agreeableness)' },
 ] as const;
 
 export function MatchingExplainer() {
@@ -141,7 +141,7 @@ export function MatchingExplainer() {
                 </span>
               </div>
               <div className="mt-1 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--color-border)' }}>
-                <div className="h-full rounded-full transition-[width] duration-300" style={{ width: `${parts[w.key]}%`, backgroundColor: 'var(--color-accent)' }} />
+                <div className="h-full rounded-full transition-[width] duration-300" style={{ width: `${parts[w.key]}%`, backgroundColor: w.color }} />
               </div>
             </div>
           ))}
