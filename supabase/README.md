@@ -18,14 +18,14 @@ Run the following files in order in the Supabase SQL Editor for your project:
 | 8 | `migrate-activity-posts.sql` | Creates the `activity_posts` table for the network hub feed. |
 | 9 | `migrate-coffee-chats.sql` | Adds extended columns to `coffee_chats` (role context, partner names, preferred dates). |
 | 10 | `rpc-get-employer-with-roles.sql` | RPC for the coffee chat detail view: an employer and its active roles in one call. |
-| 11 | `rpc-matching.sql` | RPCs the dashboards call to load matches: `get_employers_for_candidate`, `get_candidates_for_employer` and `get_profiles_by_ids`. |
-| 12 | `migrations/add-employer-archetype.sql` | Adds `employers.archetype_name`, kept in sync by a trigger, so the Ember archetype-pair bonus applies outside the demo. |
+| 11 | `migrations/add-employer-archetype.sql` | Adds `employers.archetype_name`, kept in sync by a trigger, so the Ember archetype-pair bonus applies outside the demo. |
+| 12 | `rpc-matching.sql` | RPCs the dashboards call to load matches: `get_employers_for_candidate`, `get_candidates_for_employer` and `get_profiles_by_ids`. Each checks the caller's role and returns only the columns the matching UI reads (no emails, salaries, contact links or raw assessment JSON). |
 | 13 | `seed-questions.sql` | (Optional) Seeds the assessment questions table. Only needed if your app stores questions in Supabase rather than in the backend code. |
 | 14 | `seed-test-users.sql` | (Optional) Creates test user accounts with pre-filled profiles, candidate data, and employer data. Replace the placeholder password first. |
 | 15 | `seed-test-responses.sql` | (Optional) Populates test assessment responses and personality scores for the test users. |
 | 16 | `seed-test-roles.sql` | (Optional) Creates test job roles with personality requirements. |
 
-Steps 11 and 12 were reconstructed in November 2026, after the project was shelved. The original matching RPCs lived only in the team's Supabase project and never made it into the repo, and `archetype_name` was never added to `schema.sql`. They were rebuilt from the frontend callers and the demo stand-in (`src/frontend/src/demo/client.ts`) and parse as valid Postgres, but they have not been run against a live Supabase project.
+Steps 11 and 12 were reconstructed in November 2026, after the project was shelved. The original matching RPCs lived only in the team's Supabase project and never made it into the repo, and `archetype_name` was never added to `schema.sql`. They were rebuilt from the frontend callers and the demo stand-in (`src/frontend/src/demo/client.ts`) and parse as valid Postgres, but they have not been run against a live Supabase project. The role check in `rpc-matching.sql` relies on `profiles.role`, which users set themselves (the own-profile update policy allows it), so the column lists are what actually limit exposure.
 
 ### Additional Migration and Seed Files
 
