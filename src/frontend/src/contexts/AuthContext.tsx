@@ -120,8 +120,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('Auth state change:', event);
-
         if (event === 'SIGNED_IN' && session?.user) {
           // Small delay to allow database trigger to create profile
           setTimeout(async () => {

@@ -80,16 +80,13 @@ export function SignupPage() {
       }
 
       const result = await signUpWithEmail(email, password, role, { full_name: fullName });
-      console.log('Signup result:', result);
 
       if (result.session) {
         // User is logged in immediately, navigate to appropriate dashboard
         const dashboardPath = role === 'employer' ? '/app/employer' : '/app/dashboard';
-        console.log('Navigating to:', dashboardPath);
         navigate(dashboardPath, { replace: true });
       } else {
         // Email verification required - redirect to verify email page
-        console.log('Email verification required, redirecting to verify-email');
         navigate('/auth/verify-email', { state: { email } });
       }
     } catch (err) {

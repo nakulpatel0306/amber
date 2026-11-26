@@ -15,16 +15,12 @@ export function AuthCallback() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        console.log('AuthCallback: Starting...');
-
         // Check URL hash for different callback types
         const hashParams = new URLSearchParams(window.location.hash.slice(1));
         const type = hashParams.get('type') || searchParams.get('type');
-        console.log('AuthCallback: type =', type);
 
         // Get the session from URL hash
         const { data: { session }, error } = await supabase.auth.getSession();
-        console.log('AuthCallback: session =', session ? 'exists' : 'null');
 
         if (error) {
           throw error;
@@ -41,14 +37,12 @@ export function AuthCallback() {
         }
 
         if (!session) {
-          console.log('AuthCallback: No session, redirecting to login');
           navigate('/auth/login', { replace: true });
           return;
         }
 
         // Check for role from localStorage (OAuth signup from signup page)
         const storedRole = localStorage.getItem('amber-signup-role');
-        console.log('AuthCallback: storedRole =', storedRole);
 
         // Helper function to get the dashboard path based on role
         const getDashboardPath = (role: string | null) => {
@@ -57,32 +51,22 @@ export function AuthCallback() {
 
         // Wait for the database trigger to create the profile
         let profile = null;
-        let queryError = null;
         let attempts = 0;
         const maxAttempts = 10;
 
-        console.log('AuthCallback: Fetching profile for user:', session.user.id);
-
         while (!profile && attempts < maxAttempts) {
           await new Promise(resolve => setTimeout(resolve, 500));
-          const { data, error } = await supabase
+          const { data } = await supabase
             .from('profiles')
             .select('role')
             .eq('id', session.user.id)
             .single();
 
-          if (error) {
-            console.log('AuthCallback: Profile query attempt', attempts + 1, 'error:', error.message, error.code);
-            queryError = error;
-          }
-
           if (data) {
             profile = data;
-            queryError = null;
           }
           attempts++;
         }
-        console.log('AuthCallback: profile =', profile, 'queryError =', queryError?.message);
 
         // If we have a stored role from signup flow
         if (storedRole && (storedRole === 'candidate' || storedRole === 'employer')) {
@@ -97,7 +81,6 @@ export function AuthCallback() {
             await refreshProfile();
             // Small delay to ensure React state updates
             await new Promise(resolve => setTimeout(resolve, 100));
-            console.log('AuthCallback: Navigating to', getDashboardPath(profile.role));
             navigate(getDashboardPath(profile.role), { replace: true });
           } else {
             // New user - save the role
@@ -124,7 +107,6 @@ export function AuthCallback() {
               success('Welcome!', 'Your account has been created successfully.');
             }
             // New user — show pricing options first
-            console.log('AuthCallback: New user, showing pricing');
             navigate('/app/pricing?welcome=true', { replace: true });
           }
         } else if (profile?.role) {
@@ -135,11 +117,9 @@ export function AuthCallback() {
           await new Promise(resolve => setTimeout(resolve, 100));
 
           // No toast for returning users - they already see "Welcome back" on the login page
-          console.log('AuthCallback: Navigating to', getDashboardPath(profile.role));
           navigate(getDashboardPath(profile.role), { replace: true });
         } else {
           // No role assigned yet - new user needs to choose
-          console.log('AuthCallback: No role, redirecting to role selection');
           navigate('/auth/select-role', { replace: true });
         }
       } catch (err) {

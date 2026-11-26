@@ -18,6 +18,12 @@ export default tseslint.config(
       // The codebase leans on `any` for untyped Supabase rows; tsc strict mode guards the rest
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      'no-console': ['error', { allow: ['warn', 'error'] }],
     },
+  },
+  {
+    // Still has [Ember] debug logs; remove them and drop this override
+    files: ['src/hooks/useMatchData.ts'],
+    rules: { 'no-console': 'off' },
   },
 );
