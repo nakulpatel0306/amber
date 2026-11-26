@@ -42,7 +42,7 @@ const STATUS_LABEL: Record<MatchRow['chatStatus'], string> = {
   completed: 'Chat done',
   scheduled: 'Chat booked',
   accepted: 'Accepted',
-  pending: 'Request sent',
+  pending: 'Request pending',
   none: 'New match',
 };
 

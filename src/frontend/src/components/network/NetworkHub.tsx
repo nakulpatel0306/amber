@@ -271,7 +271,7 @@ export function NetworkHub() {
       let filtered = result;
       switch (filter) {
         case 'job_seekers':
-          filtered = result.filter(p => p.user.role === 'job_seeker');
+          filtered = result.filter(p => p.user.role === 'candidate');
           break;
         case 'employers':
           filtered = result.filter(p => p.user.role === 'employer');

@@ -21,7 +21,7 @@ interface EmployerCandidateTableProps {
 const STATUS_LABEL: Record<CandidateRow['chatStatus'], string> = {
   completed: 'Chat done',
   accepted: 'Chat booked',
-  pending: 'Request sent',
+  pending: 'Request pending',
   none: 'New match',
 };
 

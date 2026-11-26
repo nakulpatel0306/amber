@@ -158,7 +158,7 @@ Everything Amber shipped before it was shelved in 2026, followed by the features
 
 ### Case Study and Demo
 - **Case-study landing page** - What Amber was, why it is shelved, an animated tour of the real screens, an interactive explainer that runs the actual scoring engine, the architecture, lessons learned and the team.
-- **Browser demo** - A `VITE_DEMO=1` build for GitHub Pages that swaps Supabase and the FastAPI client for in-browser stand-ins with invented people and companies. Visitors pick job seeker or employer, take the real assessment or skip with sample answers, and seeded people reply on their own (labelled as automatic). State stays in `localStorage` with a Reset control.
+- **Browser demo** - A `VITE_DEMO=1` build for GitHub Pages that swaps Supabase and the FastAPI client for in-browser stand-ins with invented people and companies. Visitors pick job seeker or employer, take the real assessment or skip with a sample profile, and seeded people reply on their own (labelled as automatic). State stays in `localStorage` with a Reset control.
 - **Theme** - Amber Light and Amber Dark, following the operating system until the visitor picks one.
 
 ### Ember Agent (AI Matching Engine)

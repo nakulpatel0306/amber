@@ -19,7 +19,7 @@ export interface PostUser {
   user_id: string;
   full_name: string;
   avatar_url: string | null;
-  role: 'job_seeker' | 'employer' | null;
+  role: 'candidate' | 'employer' | null;
   headline: string | null;
   location: string | null;
   companyName: string | null;
@@ -87,7 +87,7 @@ export function PostCard({ post, isOwn, onLike, onDelete }: PostCardProps) {
   // Which side of the table, said in the meta line instead of a colored badge
   const roleLabel = post.user.role === 'employer'
     ? post.user.companyName ?? 'Employer'
-    : post.user.role === 'job_seeker'
+    : post.user.role === 'candidate'
       ? 'Job seeker'
       : null;
   const meta = [roleLabel, post.user.location, post.createdAt ? timeAgo(post.createdAt) : null]
