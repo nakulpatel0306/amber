@@ -2,7 +2,7 @@
   "name": "amber-web",
   "private": true,
   "version": "1.0.0",
-  "description": "Amber - Culture-first job matching platform",
+  "description": "Amber - Culture-First Job Matching",
   "type": "module",
   "scripts": {
     "dev": "vite",
