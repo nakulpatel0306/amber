@@ -80,7 +80,7 @@ export function BookmarkDropdown() {
         {savedCandidates.length > 0 && (
           <span
             aria-hidden="true"
-            className="absolute -top-0.5 -right-0.5 flex items-center justify-center rounded-full text-[10px] font-semibold text-white"
+            className="absolute -top-0.5 -right-0.5 flex items-center justify-center rounded-full text-[10px] font-semibold text-[var(--color-accentText)]"
             style={{
               backgroundColor: 'var(--color-accent)',
               minWidth: '18px',
@@ -153,7 +153,7 @@ export function BookmarkDropdown() {
                         backgroundColor: 'var(--color-accent)',
                       }}
                     >
-                      <User className="w-5 h-5 text-white" />
+                      <User className="w-5 h-5 text-[var(--color-accentText)]" />
                     </div>
 
                     <div className="flex-1 min-w-0">

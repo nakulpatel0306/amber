@@ -143,7 +143,7 @@ export function AvatarPicker({ selectedAvatar, selectedColor, onSelect, onClose 
           className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
           style={{
             backgroundColor: 'var(--color-accent)',
-            color: 'white',
+            color: 'var(--color-accentText)',
           }}
         >
           Save avatar

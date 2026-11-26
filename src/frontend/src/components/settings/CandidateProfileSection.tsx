@@ -273,7 +273,7 @@ export function CandidateProfileSection() {
                 className={cn(
                   'px-4 py-2 rounded-lg text-sm font-medium transition-all',
                   data.preferred_work_style === style.id
-                    ? 'bg-[var(--color-accent)] text-white'
+                    ? 'bg-[var(--color-accent)] text-[var(--color-accentText)]'
                     : 'bg-[var(--color-surface)] border border-[var(--color-border)]'
                 )}
                 style={{
@@ -302,7 +302,7 @@ export function CandidateProfileSection() {
                 className={cn(
                   'px-4 py-2 rounded-lg text-sm font-medium transition-all',
                   data.preferred_company_size === size.id
-                    ? 'bg-[var(--color-accent)] text-white'
+                    ? 'bg-[var(--color-accent)] text-[var(--color-accentText)]'
                     : 'bg-[var(--color-surface)] border border-[var(--color-border)]'
                 )}
                 style={{

@@ -115,7 +115,7 @@ export function ProfileSection() {
         className="w-full h-full flex items-center justify-center text-2xl font-medium"
         style={{
           backgroundColor: 'var(--color-accent)',
-          color: 'white',
+          color: 'var(--color-accentText)',
         }}
       >
         {(formData.full_name || user?.email || '?')[0].toUpperCase()}
@@ -159,7 +159,7 @@ export function ProfileSection() {
             className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center transition-transform hover:scale-105"
             style={{
               backgroundColor: 'var(--color-accent)',
-              color: 'white',
+              color: 'var(--color-accentText)',
             }}
           >
             <Pencil className="w-4 h-4" />

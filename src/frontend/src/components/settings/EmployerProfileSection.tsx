@@ -306,7 +306,7 @@ export function EmployerProfileSection() {
               className={cn(
                 'px-4 py-2 rounded-lg text-sm font-medium transition-all',
                 data.company_size === size.id
-                  ? 'bg-[var(--color-accent)] text-white'
+                  ? 'bg-[var(--color-accent)] text-[var(--color-accentText)]'
                   : 'bg-[var(--color-surface)] border border-[var(--color-border)]'
               )}
               style={{

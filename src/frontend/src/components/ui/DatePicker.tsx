@@ -62,7 +62,7 @@ export function DatePicker({
             <span
               key={idx}
               className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium"
-              style={{ backgroundColor: 'var(--color-accent)', color: 'white' }}
+              style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-accentText)' }}
             >
               {format(date, 'MMM d')}
               <button
@@ -134,7 +134,7 @@ export function DatePicker({
               `}
               style={{
                 backgroundColor: selected ? 'var(--color-accent)' : 'transparent',
-                color: selected ? 'white' : 'var(--color-text)',
+                color: selected ? 'var(--color-accentText)' : 'var(--color-text)',
               }}
             >
               {format(day, 'd')}
