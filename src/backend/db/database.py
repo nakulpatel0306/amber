@@ -2,10 +2,13 @@
 Amber - Database setup and management
 """
 
+import logging
 import sqlite3
 import os
 from typing import Optional, List, Dict, Any
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 DATABASE_PATH = os.path.join(os.path.dirname(__file__), "database.db")
 
@@ -84,7 +87,7 @@ def init_database():
 
     conn.commit()
     conn.close()
-    print("database initialized successfully")
+    logger.info("database initialized successfully")
 
 
 # Candidate operations
@@ -189,7 +192,7 @@ def save_assessment_response(candidate_id: int, question_id: int, answer: str) -
         conn.commit()
         return True
     except Exception as e:
-        print(f"error saving response: {e}")
+        logger.error(f"error saving response: {e}")
         return False
     finally:
         conn.close()
@@ -233,7 +236,7 @@ def complete_assessment(candidate_id: int) -> bool:
         conn.commit()
         return True
     except Exception as e:
-        print(f"error completing assessment: {e}")
+        logger.error(f"error completing assessment: {e}")
         return False
     finally:
         conn.close()
@@ -268,7 +271,7 @@ def save_scores(
         conn.commit()
         return True
     except Exception as e:
-        print(f"error saving scores: {e}")
+        logger.error(f"error saving scores: {e}")
         return False
     finally:
         conn.close()
@@ -297,7 +300,7 @@ def save_feedback(message: str, user_type: str = "candidate", page: str = "unkno
         conn.commit()
         return True
     except Exception as e:
-        print(f"error saving feedback: {e}")
+        logger.error(f"error saving feedback: {e}")
         return False
     finally:
         conn.close()

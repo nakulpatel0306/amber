@@ -2,7 +2,7 @@
 -- Migration: Add Cross-Visibility RLS for Ember Matching
 -- ============================================================
 --
--- Run this AFTER fix-rls-no-recursion.sql (Arsh's cleanup).
+-- Run this AFTER archive/fix-rls-no-recursion.sql (Arsh's cleanup).
 --
 -- WHY THIS IS NEEDED:
 -- The Ember gallery needs candidates to see employer data and

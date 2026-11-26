@@ -1,6 +1,6 @@
 # Supabase (Database and Authentication)
 
-SQL schema, Row Level Security policies, migrations, and seed files for the Amber Supabase project. Supabase serves as the source of truth for **authentication** and **application data** (profiles, candidates, employers, roles, applications, coffee chats, connections, messages, assessments, and more). The backend also uses a local SQLite database for the assessment flow during development.
+SQL schema, Row Level Security policies, migrations, and seed files for the Amber Supabase project. Supabase serves as the source of truth for **authentication** and **application data** (profiles, candidates, employers, roles, applications, coffee chats, connections, messages, assessments, and more). The backend also has a local SQLite helper (`src/backend/db/database.py`) for the assessment flow during development.
 
 ## Setup Instructions
 
@@ -14,49 +14,44 @@ Run the following files in order in the Supabase SQL Editor for your project:
 | 4 | `migrate-messages.sql` | Creates the `messages` table for real-time coffee chat messaging. |
 | 5 | `migrate-stripe-subscriptions.sql` | Adds Stripe billing columns (`stripe_customer_id`, `subscription_plan`, etc.) to the `profiles` table. |
 | 6 | `migrate-saved-matches.sql` | Creates the `saved_matches` table for bookmarking roles and candidates. |
-| 7 | `migrate-activity-posts.sql` | Creates the `activity_posts` table for the network hub feed. |
-| 8 | `migrate-coffee-chats.sql` | Adds extended columns to `coffee_chats` (role context, partner names, preferred dates). |
-| 9 | `seed-questions.sql` | (Optional) Seeds the assessment questions table. Only needed if your app stores questions in Supabase rather than in the backend code. |
-| 10 | `seed-test-users.sql` | (Optional) Creates test user accounts with pre-filled profiles, candidate data, and employer data. |
-| 11 | `seed-test-responses.sql` | (Optional) Populates test assessment responses and personality scores for the test users. |
-| 12 | `seed-test-roles.sql` | (Optional) Creates test job roles with personality requirements. |
+| 7 | `migrations/add-catalog-columns.sql` | Adds the `hobbies` and `catalog_photos` columns and the `profile-photos` storage bucket used by the network hub. |
+| 8 | `migrate-activity-posts.sql` | Creates the `activity_posts` table for the network hub feed. |
+| 9 | `migrate-coffee-chats.sql` | Adds extended columns to `coffee_chats` (role context, partner names, preferred dates). |
+| 10 | `rpc-get-employer-with-roles.sql` | RPC for the coffee chat detail view: an employer and its active roles in one call. |
+| 11 | `migrations/add-employer-archetype.sql` | Adds `employers.archetype_name`, kept in sync by a trigger, so the Ember archetype-pair bonus applies outside the demo. |
+| 12 | `rpc-matching.sql` | RPCs the dashboards call to load matches: `get_employers_for_candidate`, `get_candidates_for_employer` and `get_profiles_by_ids`. Each checks the caller's role and returns only the columns the matching UI reads (no emails, salaries, contact links or raw assessment JSON). |
+| 13 | `seed-questions.sql` | (Optional) Seeds the assessment questions table. Only needed if your app stores questions in Supabase rather than in the backend code. |
+| 14 | `seed-test-users.sql` | (Optional) Creates test user accounts with pre-filled profiles, candidate data, and employer data. Replace the placeholder password first. |
+| 15 | `seed-test-responses.sql` | (Optional) Populates test assessment responses and personality scores for the test users. |
+| 16 | `seed-test-roles.sql` | (Optional) Creates test job roles with personality requirements. |
 
-### Additional Migration and Fix Files
+Steps 11 and 12 were reconstructed in November 2026, after the project was shelved. The original matching RPCs lived only in the team's Supabase project and never made it into the repo, and `archetype_name` was never added to `schema.sql`. They were rebuilt from the frontend callers and the demo stand-in (`src/frontend/src/demo/client.ts`) and parse as valid Postgres, but they have not been run against a live Supabase project. The role check in `rpc-matching.sql` relies on `profiles.role`, which users set themselves (the own-profile update policy allows it), so the column lists are what actually limit exposure.
 
-These files handle incremental schema changes, data fixes, and RLS policy updates. Only run them if needed for your specific database state:
+### Additional Migration and Seed Files
+
+These files handle incremental schema changes and extra seed data. Only run them if needed for your specific database state:
 
 | File | Purpose |
 |------|---------|
 | `migrations/coffee-chats-full-columns.sql` | Full column set for coffee chats (alternative to incremental migration) |
 | `migrations/activity-posts.sql` | Activity posts migration (alternative location) |
-| `migrations/fix-coffee-chats-status.sql` | Fixes coffee chat status constraints |
-| `migrations/fix-match-score-type.sql` | Fixes match score column type |
+| `migrations/fix-coffee-chats-status.sql` | Adds `scheduled` to the coffee chat status constraint. **Also truncates `coffee_chats`, `connections` and `connection_meet_invites`.** |
+| `migrations/fix-match-score-type.sql` | Changes `coffee_chats.match_score` to NUMERIC |
 | `migrate-assessment-responses.sql` | Migrates `assessment_responses` to the new schema format |
 | `migrate-rls-cross-visibility.sql` | Updates RLS for cross-role visibility in matching |
 | `migrate-matching-cross-visibility.sql` | Extended cross-visibility for matching engine |
 | `migrate-new-assessments.sql` | Schema for supplementary assessment types |
 | `migrate-employer-assessments.sql` | Schema for employer-side assessments |
-| `fix-test-data.sql` | Fixes inconsistencies in test user data |
-| `fix-rls-policies.sql` | General RLS policy fixes |
-| `fix-rls-complete.sql` | Comprehensive RLS fix |
-| `fix-rls-final.sql` | Final RLS policy corrections |
-| `fix-rls-no-recursion.sql` | Fixes RLS infinite recursion issues |
-| `fix-all-recursion.sql` | Comprehensive recursion fix across all tables |
-| `fix-infinite-recursion.sql` | Targeted infinite recursion fix |
-| `fix-candidate-assessment-status.sql` | Fixes candidate assessment status tracking |
-| `fix-existing-candidate-scores.sql` | Backfills scores for existing candidates |
-| `fix-candidate-coffee-chat-insert.sql` | Fixes RLS for candidate coffee chat creation |
-| `revert-candidate-view-employer.sql` | Reverts a specific RLS policy change |
-| `diagnose-rls-issue.sql` | Diagnostic queries for RLS debugging |
-| `test-rls-as-user.sql` | Test RLS policies by impersonating a user |
-| `rpc-get-employer-with-roles.sql` | RPC function to get employer with roles (avoids RLS join issues) |
 | `add-photo-captions.sql` | Adds photo caption columns |
 | `seed-catalog-data.sql` | Seeds catalog/hobby data for network features |
 | `seed-new-assessments.sql` | Seeds supplementary assessment questions |
 | `seed-employer-assessments.sql` | Seeds employer assessment questions |
 | `seed-sample-jobs.sql` | Seeds sample job listings |
-| `seed-full-test-data.sql` | Comprehensive test data seed |
-| `update-real-companies.sql` | Updates test employers with real company data |
+| `seed-full-test-data.sql` | Comprehensive test data seed with fictional companies. Replace the placeholder password first. |
+
+### Archived fix scripts
+
+[`archive/`](archive/) holds the one-off RLS and data fixes the team ran while building, including the `fix-*-recursion.sql` scripts. They are not part of setup; [`archive/README.md`](archive/README.md) explains what each one tried.
 
 ## Database Schema
 
@@ -112,6 +107,7 @@ One row per employer user. Stores company information, culture values, and OCEAN
 | `culture_values` | TEXT[] | Top 5 selected culture values |
 | `openness_preference` ... `neuroticism_preference` | INTEGER (0–100) | Ideal candidate OCEAN scores |
 | `culture_quiz_completed` | BOOLEAN | Whether the employer has completed the culture quiz |
+| `archetype_name` | TEXT | Culture archetype such as `The Innovator`, set by a trigger (added via `migrations/add-employer-archetype.sql`) |
 | `setup_step` | INTEGER (0–4) | Tracks onboarding progress |
 
 #### `roles`
@@ -289,7 +285,7 @@ RLS is enabled on all tables. The key policies are:
 
 ### Candidates and Employers
 - Users can read, insert, and update their own candidate or employer record.
-- Cross-role visibility (employers viewing candidates and vice versa) is handled through the backend API using the service role key to avoid RLS recursion issues.
+- Cross-role visibility (employers viewing candidates and vice versa) goes through the `SECURITY DEFINER` RPCs in `rpc-matching.sql` and the backend API's service role key, to avoid RLS recursion issues.
 
 ### Roles (Job Listings)
 - Anyone can view roles with `status = 'active'`.

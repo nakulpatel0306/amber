@@ -1,5 +1,7 @@
 # Contributing to Amber
 
+> **Amber is shelved.** The team stopped work in 2026 and keeps the repo as a case study with a browser-only demo. Issues and pull requests that fix bugs in the demo or mistakes in the docs are welcome; new features won't be merged.
+
 Thanks for your interest in contributing. This guide covers the development workflow, code style, and review expectations for the project.
 
 ## Getting Started
@@ -40,13 +42,13 @@ Prefixes like `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:` are encou
 
 ## Code Style
 
-The project follows the conventions in [`.cursorrules`](./.cursorrules). Highlights:
+Highlights:
 
-- **UI copy**: match the screen you're editing; in-app labels and headings use Title Case.
+- **UI copy**: sentence case for in-app labels and headings; Inter is the only typeface, with the named type scale in `tailwind.config.js`.
 - **React**: functional components, hooks over class patterns.
 - **Python**: type hints on function signatures; small, focused functions.
-- **Theming**: use the CSS variables defined in `src/frontend/src/styles/globals.css` — do not hardcode colors.
-- **Components**: follow the patterns in `src/frontend/src/components/ui/` (Button, Input, Card).
+- **Theming**: use the theme CSS variables that `src/frontend/src/contexts/ThemeContext.tsx` sets on `:root` — do not hardcode colors.
+- **Components**: use `ui/Button` for buttons, the `.bento-card` class for cards, and the other primitives in `src/frontend/src/components/ui/`.
 - **RBAC**: every new route or data read must respect candidate vs. employer scoping.
 
 ### Linting and Formatting

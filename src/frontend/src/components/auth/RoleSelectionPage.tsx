@@ -28,8 +28,6 @@ export function RoleSelectionPage() {
 
       // Use upsert to handle both new and existing profiles
       // This avoids race conditions with the database trigger and duplicate key errors
-      console.log('RoleSelectionPage: Upserting profile for user:', user.id);
-
       const { error: upsertError } = await supabase
         .from('profiles')
         .upsert(
@@ -48,8 +46,6 @@ export function RoleSelectionPage() {
         console.error('Profile upsert error:', upsertError);
         throw new Error('Unable to save profile. Please try again.');
       }
-
-      console.log('RoleSelectionPage: Profile upserted successfully with role:', role);
 
       // Ensure the role-specific record exists (use upsert to avoid conflicts)
       if (role === 'candidate') {

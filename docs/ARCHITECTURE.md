@@ -45,7 +45,7 @@ Two important architectural notes:
 |-------|-----------|
 | Frontend | React 19, TypeScript, Vite 7 |
 | Styling | Tailwind CSS 3, Framer Motion 12, Lucide icons |
-| Frontend state | React Context (Auth, Theme, Toast, Messaging, Connections); Zustand available |
+| Frontend state | React Context (Auth, Theme, Toast, Messaging, Connections) |
 | Routing | React Router 7 (lazy-loaded routes, code splitting) |
 | Backend | Python 3.11+, FastAPI, Uvicorn, Pydantic |
 | Database | Supabase (PostgreSQL) with Row Level Security |
@@ -95,7 +95,7 @@ connections, feedback, and Stripe.
 | `auth/middleware.py` | `AuthMiddleware`, `require_auth`, `require_role` dependencies |
 | `db/supabase_client.py` | Supabase (service-role) client - production data access (candidates, employers, roles, applications, coffee chats, connections, meet invites) |
 | `db/database.py` | Local SQLite used for the assessment flow in development |
-| `scripts/` | Seed scripts for test candidates and specific demo profiles |
+| `scripts/` | Seed script for test candidates and the parity fixture generator |
 
 ### Two data paths
 
@@ -126,7 +126,7 @@ normalize to 0–100.
 
 **Score components:**
 
-- **Trait match** - weighted Euclidean distance between candidate OCEAN and
+- **Trait match** - unweighted Euclidean distance between candidate OCEAN and
   employer preferences, normalized so 100 = identical.
 - **Culture match** - a weighted composite: work-style compatibility (30%),
   culture-values alignment (50%), and role-specific fit (20%).
@@ -136,7 +136,8 @@ normalize to 0–100.
   better; negative weight → lower score is better (e.g. `balance` favors low
   neuroticism).
 - **Role fit** - checks whether candidate traits fall inside the role's declared
-  min/max ranges; out-of-range traits are penalized proportionally.
+  min/max ranges; in-range traits score 100, out-of-range traits lose 2 points
+  per point of distance from the nearest bound, averaged over the five traits.
 - **Work style** - categorical compatibility between remote/hybrid/onsite/flexible.
 - **Communication fit** - derived from extraversion + agreeableness alignment.
 - **Overall** - `40% trait + 30% culture + 20% work style + 10% communication`.
@@ -203,28 +204,28 @@ layouts, guards, and the landing page load eagerly on the critical path.
 
 | Path | Contents |
 |------|----------|
-| `components/ui/` | Design system - `Button`, `Input`, `Card`, `Modal`, `Toast`, `Avatar`, charts (`RadarChart`, `OceanMindMap`), loaders, `AmberLogo`, etc. All theme via CSS variables. |
+| `components/ui/` | Design system - `Button`, `Input`, `Modal`, `Toast`, `Avatar`, `RadarChart`, `PageBanner`, `Facts`, pickers, loaders, `AmberLogo`, etc. Cards use the `.bento-card` class. All theme via CSS variables. |
 | `components/auth/` | Login, signup, OAuth callback, role selection, onboarding, route guards (`ProtectedRoute`, `GuestRoute`) |
-| `components/layout/` | `AppLayout`, `PublicLayout`, `Sidebar`, `Navbar`, `ErrorBoundary`, `RouteTitleSync`, notification/bookmark dropdowns |
+| `components/layout/` | `AppLayout`, `PublicLayout`, `Sidebar`, `MobileTopBar`, `ErrorBoundary`, `RouteTitleSync`, notification/bookmark dropdowns |
 | `components/landing/` | Case-study landing page: hero, product tour, matching explainer, architecture diagram |
 | `components/candidate/` | Assessment flow, personality insights, results, matching |
 | `components/employer/` | Culture quiz/assessment, culture insights, role create/manage, candidate browsing |
-| `components/dashboard/` | Job-seeker and employer dashboards and their widgets (stats, calendars, radars, carousels) |
-| `components/ember/` | Ember agent UI - gallery, deep dive, identity card, match feed |
+| `components/dashboard/` | Job-seeker and employer dashboards: header, archetype strips, ranked match tables, summary cards |
+| `components/ember/` | Ember agent UI - match gallery, player cards, deep dive, compare view, mascot |
 | `components/assessments/` | Supplementary assessments (visual perception, work values, team dynamics, leadership, etc.) |
 | `components/coffee-chats/` | Scheduling, calendar, cards, prep, feedback |
 | `components/connections/` | Connection requests, inbox panel, connect modal |
 | `components/network/` | Network hub - roles, people, companies, discover, posts |
 | `components/matches/` | Match pipeline and detail views |
 | `components/messaging/` | Realtime message panel |
-| `components/pricing/`, `components/settings/`, `components/pages/` | Billing, user settings sections, and the app's roles page |
+| `components/pricing/`, `components/settings/`, `components/pages/` | Billing, user settings sections, the app's roles page and the 404 page |
 | `demo/` | In-browser Supabase and FastAPI stand-ins, seed data, demo banner and role picker (demo builds only) |
 | `contexts/` | `AuthContext`, `ThemeContext`, `ToastContext`, `MessagingContext`, `ConnectionsContext` |
-| `hooks/` | Data + UI hooks (`useMatchData`, `useNetworkData`, `useSavedMatches`, `useLocalStorage`, `useReducedMotion`, `usePageTitle`, …) |
+| `hooks/` | Data + UI hooks (`useMatchData`, `useSavedMatches`, `usePageTitle`, `useDialogFocus`) |
 | `lib/` | `supabase.ts` (typed client), `personalityEngine.ts`, `compatibilityScoring.ts`, `archetypes.ts`, `archetypeCompatibility.ts`, `stripe/` |
 | `types/` | TypeScript types (`auth`, `matching`, `connections`, `database`) |
 | `utils/` | `api.ts` (typed backend client), `cn.ts`, `constants.ts`, `matchHelpers.ts`, `motion.ts`, `coffeeChatStatus.ts` |
-| `data/` | Static content - assessment questions, employer archetypes, hobbies, personality facts |
+| `data/` | Static content - assessment questions, employer archetypes, hobbies |
 | `styles/` | `globals.css` with theme CSS variables |
 
 ### Client-side libraries of note
@@ -244,8 +245,10 @@ layouts, guards, and the landing page load eagerly on the critical path.
 The database is defined and evolved entirely through SQL files run in the
 Supabase SQL editor. `schema.sql` is the base; `rls-policies.sql` defines Row
 Level Security; incremental changes live in `migrations/` and the various
-`migrate-*.sql` files; `seed-*.sql` and `fix-*.sql` provide test data and
-targeted patches.
+`migrate-*.sql` files; `rpc-*.sql` define the `SECURITY DEFINER` functions the
+app calls to read across sides; `seed-*.sql` provide test data. The one-off
+`fix-*.sql` patches the team ran while building are kept in `supabase/archive/`.
+[`supabase/README.md`](../supabase/README.md) lists the setup order.
 
 ### Core tables (`schema.sql`)
 
@@ -278,9 +281,9 @@ Stripe subscription state is stored as columns on `profiles`
 RLS is central to Amber's authorization model: users read/write only their own
 rows; employers see candidates who have completed assessments; candidates see
 active roles; applications, connections, and coffee-chat messages are visible
-only to the parties involved. A number of `fix-*recursion*.sql` files exist
+only to the parties involved. The `supabase/archive/fix-*recursion*.sql` files exist
 because RLS policies that self-reference tables can trigger infinite recursion —
-consult those before editing policies.
+read [`supabase/archive/README.md`](../supabase/archive/README.md) before editing policies.
 
 ## Cross-Cutting Concerns
 

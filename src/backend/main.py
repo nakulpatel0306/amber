@@ -15,6 +15,7 @@ request/response models. Routes are organized into sections:
   - Stripe payments
 """
 
+import logging
 import os
 import re
 import time
@@ -24,6 +25,9 @@ import httpx
 from dotenv import load_dotenv
 
 load_dotenv()
+
+logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+logger = logging.getLogger("amber")
 
 from fastapi import FastAPI, HTTPException, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -104,16 +108,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# CORS: Allow requests from the frontend dev servers and Tauri desktop app.
+# CORS: Allow requests from the local frontend dev servers.
 # Update these origins for production deployments.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:1420",    # Tauri dev server
         "http://localhost:5173",    # Vite dev server (default)
         "http://localhost:3000",    # Alternative dev server
-        "http://tauri.localhost",   # Tauri production
-        "tauri://localhost"         # Tauri protocol
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -1359,14 +1360,14 @@ async def create_connection_endpoint(
     user: Optional[AuthUser] = Depends(get_current_user_dependency)
 ):
     """Create a connection request, optionally with a bundled meet invite."""
-    print(f"\n[POST /api/connections] user={user.id if user else None}, receiver={request.receiver_id}, role={request.sender_role}, has_meet={request.meet_invite is not None}")
+    logger.debug(f"[POST /api/connections] user={user.id if user else None}, receiver={request.receiver_id}, role={request.sender_role}, has_meet={request.meet_invite is not None}")
     if not user:
         raise HTTPException(status_code=401, detail="Authentication required")
 
     # Check for existing connection
     existing = get_connection_between(user.id, request.receiver_id)
     if existing:
-        print(f"[POST /api/connections] existing connection found: {existing['id']}, status={existing['status']}")
+        logger.debug(f"[POST /api/connections] existing connection found: {existing['id']}, status={existing['status']}")
         raise HTTPException(status_code=409, detail="Connection already exists")
 
     conn = create_connection({
@@ -1397,12 +1398,12 @@ async def create_connection_endpoint(
             is_candidate_sender = request.sender_role == 'candidate'
             candidate_id_val = user.id if is_candidate_sender else request.receiver_id
             employer_id_val = request.receiver_id if is_candidate_sender else user.id
-            print(f"[create_connection] Resolving entities: candidate_user={candidate_id_val}, employer_user={employer_id_val}")
+            logger.debug(f"[create_connection] Resolving entities: candidate_user={candidate_id_val}, employer_user={employer_id_val}")
 
             # Resolve candidate/employer entity IDs from user IDs
             candidate_entity = get_candidate_by_user_id(candidate_id_val)
             employer_entity = get_employer_by_user_id(employer_id_val)
-            print(f"[create_connection] Resolved: candidate_entity={candidate_entity.get('id') if candidate_entity else None}, employer_entity={employer_entity.get('id') if employer_entity else None}")
+            logger.debug(f"[create_connection] Resolved: candidate_entity={candidate_entity.get('id') if candidate_entity else None}, employer_entity={employer_entity.get('id') if employer_entity else None}")
 
             if candidate_entity and employer_entity:
                 chat_data = {
@@ -1420,17 +1421,17 @@ async def create_connection_endpoint(
                     'role_id': request.role_id,
                     'role_title': request.role_title,
                 }
-                print(f"[create_connection] Creating coffee_chat with preferred_dates={chat_data['preferred_dates']}")
+                logger.debug(f"[create_connection] Creating coffee_chat with preferred_dates={chat_data['preferred_dates']}")
                 result = create_coffee_chat(chat_data)
                 if not result:
-                    print(f"Warning: coffee_chat creation returned None for connection {conn['id']}")
+                    logger.warning(f"coffee_chat creation returned None for connection {conn['id']}")
                 else:
-                    print(f"[create_connection] coffee_chat created successfully: {result.get('id')}")
+                    logger.debug(f"[create_connection] coffee_chat created successfully: {result.get('id')}")
             else:
-                print(f"Warning: could not resolve entities — candidate={candidate_entity is not None}, employer={employer_entity is not None}")
+                logger.warning(f"could not resolve entities — candidate={candidate_entity is not None}, employer={employer_entity is not None}")
         except Exception as e:
             # Log but don't fail the connection request
-            print(f"Error creating coffee chat for connection {conn.get('id')}: {e}")
+            logger.error(f"Error creating coffee chat for connection {conn.get('id')}: {e}")
 
     return conn
 
@@ -1499,7 +1500,7 @@ async def accept_connection_endpoint(
                     chat_data['scheduled_at'] = request.confirmed_time
                 create_coffee_chat(chat_data)
             else:
-                print(f"Warning: could not resolve entities for coffee_chat — candidate={candidate_entity is not None}, employer={employer_entity is not None}")
+                logger.warning(f"could not resolve entities for coffee_chat — candidate={candidate_entity is not None}, employer={employer_entity is not None}")
 
     return result
 
@@ -1570,8 +1571,7 @@ async def get_my_connections(
 # these endpoints return a demo-mode response instead of failing.
 #
 # Price-ID → plan mapping (must stay in sync with the frontend plans.ts):
-import logging
-logger = logging.getLogger("amber.stripe")
+stripe_logger = logging.getLogger("amber.stripe")
 
 STRIPE_PRICE_TO_PLAN: dict[str, dict[str, str]] = {
     "price_1T2oVzHXKhBQCJWjU2CJciW7": {"plan": "smooth_talker", "interval": "monthly"},
@@ -1589,7 +1589,7 @@ def _get_stripe():
     try:
         import stripe
     except ImportError:
-        logger.error("stripe package not installed. Run: pip install stripe")
+        stripe_logger.error("stripe package not installed. Run: pip install stripe")
         return None
     stripe.api_key = stripe_key
     return stripe
@@ -1605,13 +1605,13 @@ def _update_profile_subscription(user_id: str, updates: dict):
     from db.supabase_client import get_supabase
     client = get_supabase()
     if not client:
-        logger.warning("Supabase not configured — cannot update profile for %s", user_id)
+        stripe_logger.warning("Supabase not configured — cannot update profile for %s", user_id)
         return
     try:
         client.table("profiles").update(updates).eq("id", user_id).execute()
-        logger.info("Updated profile %s: %s", user_id, updates)
+        stripe_logger.info("Updated profile %s: %s", user_id, updates)
     except Exception as e:
-        logger.error("Failed to update profile %s: %s", user_id, e)
+        stripe_logger.error("Failed to update profile %s: %s", user_id, e)
 
 
 class CreateCheckoutRequest(BaseModel):
@@ -1680,7 +1680,7 @@ async def create_checkout_session(
             )
             return {"url": portal_session.url}
         except Exception as e:
-            logger.error("Portal session creation for upgrade failed: %s", e)
+            stripe_logger.error("Portal session creation for upgrade failed: %s", e)
             raise HTTPException(status_code=500, detail=str(e))
 
     try:
@@ -1698,7 +1698,7 @@ async def create_checkout_session(
         session = stripe.checkout.Session.create(**checkout_params)
         return {"url": session.url}
     except Exception as e:
-        logger.error("Checkout session creation failed: %s", e)
+        stripe_logger.error("Checkout session creation failed: %s", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -1740,7 +1740,7 @@ async def create_portal_session(
         except HTTPException:
             raise
         except Exception as e:
-            logger.error("Stripe customer search failed: %s", e)
+            stripe_logger.error("Stripe customer search failed: %s", e)
             raise HTTPException(status_code=500, detail=str(e))
 
     try:
@@ -1751,7 +1751,7 @@ async def create_portal_session(
         )
         return {"url": session.url}
     except Exception as e:
-        logger.error("Portal session creation failed: %s", e)
+        stripe_logger.error("Portal session creation failed: %s", e)
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -1782,7 +1782,7 @@ async def get_subscription_status(
             "has_stripe_customer": bool(data.get("stripe_customer_id")),
         }
     except Exception as e:
-        logger.error("Failed to fetch subscription for %s: %s", user_id, e)
+        stripe_logger.error("Failed to fetch subscription for %s: %s", user_id, e)
         return {"plan": "free", "status": "inactive", "interval": None, "has_stripe_customer": False}
 
 
@@ -1809,21 +1809,21 @@ async def stripe_webhook(request: Request):
     try:
         event = stripe.Webhook.construct_event(raw_body, sig_header, webhook_secret)
     except stripe.error.SignatureVerificationError as e:
-        logger.warning("Webhook signature verification failed: %s", e)
+        stripe_logger.warning("Webhook signature verification failed: %s", e)
         raise HTTPException(status_code=400, detail="Invalid signature")
     except Exception as e:
-        logger.error("Webhook construction error: %s", e)
+        stripe_logger.error("Webhook construction error: %s", e)
         raise HTTPException(status_code=400, detail=str(e))
 
     event_type = event["type"]
     data_object = event["data"]["object"]
-    logger.info("Stripe webhook received: %s (id=%s)", event_type, event.get("id"))
+    stripe_logger.info("Stripe webhook received: %s (id=%s)", event_type, event.get("id"))
 
     # ------ checkout.session.completed ------
     if event_type == "checkout.session.completed":
         user_id = data_object.get("client_reference_id") or data_object.get("metadata", {}).get("user_id")
         if not user_id:
-            logger.warning("checkout.session.completed without user_id")
+            stripe_logger.warning("checkout.session.completed without user_id")
             return {"status": "ok"}
 
         customer_id = data_object.get("customer")
@@ -1838,7 +1838,7 @@ async def stripe_webhook(request: Request):
                     price_id = sub["items"]["data"][0]["price"]["id"]
                     plan_info = _resolve_plan_from_price(price_id)
             except Exception as e:
-                logger.error("Failed to retrieve subscription %s: %s", subscription_id, e)
+                stripe_logger.error("Failed to retrieve subscription %s: %s", subscription_id, e)
 
         _update_profile_subscription(user_id, {
             "stripe_customer_id": customer_id,
@@ -1876,7 +1876,7 @@ async def stripe_webhook(request: Request):
                             pass
                     _update_profile_subscription(result.data["id"], updates)
             except Exception as e:
-                logger.error("invoice.paid: failed to update profile for customer %s: %s", customer_id, e)
+                stripe_logger.error("invoice.paid: failed to update profile for customer %s: %s", customer_id, e)
 
     # ------ invoice.payment_failed ------
     elif event_type == "invoice.payment_failed":
@@ -1894,7 +1894,7 @@ async def stripe_webhook(request: Request):
                         "subscription_status": "past_due",
                     })
             except Exception as e:
-                logger.error("invoice.payment_failed: failed to update profile for customer %s: %s", customer_id, e)
+                stripe_logger.error("invoice.payment_failed: failed to update profile for customer %s: %s", customer_id, e)
 
     # ------ customer.subscription.deleted ------
     elif event_type == "customer.subscription.deleted":
@@ -1915,7 +1915,7 @@ async def stripe_webhook(request: Request):
                         "stripe_subscription_id": None,
                     })
             except Exception as e:
-                logger.error("subscription.deleted: failed to update profile for customer %s: %s", customer_id, e)
+                stripe_logger.error("subscription.deleted: failed to update profile for customer %s: %s", customer_id, e)
 
     return {"status": "ok"}
 
@@ -2005,8 +2005,7 @@ async def get_logo(domain: str, request: Request):
 # ============ Main Entry Point ============
 
 if __name__ == "__main__":
-    print("starting Amber backend...")
-    print("api docs: http://127.0.0.1:8000/docs")
+    logger.info("API docs: http://127.0.0.1:8000/docs")
 
     uvicorn.run(
         "main:app",

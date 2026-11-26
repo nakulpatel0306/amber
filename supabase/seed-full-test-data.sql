@@ -1,7 +1,7 @@
 -- ==========================================================
 -- Seed Full Test Data: 10 Candidates + 10 Employers
 -- All accounts fully populated with completed assessments
--- Password for email auth accounts: TestPassword123!
+-- Placeholder password for every seeded email account: CHANGE_ME_local_seed_password (replace it before running)
 -- Google accounts (replace with your own): candidate@example.com (candidate), employer@example.com (employer)
 -- Run in Supabase SQL Editor
 -- ==========================================================
@@ -57,7 +57,7 @@ DECLARE
   maria_sj uuid := gen_random_uuid(); maria_wv uuid := gen_random_uuid();
   pw text;
 BEGIN
-  pw := crypt('TestPassword123!', gen_salt('bf'));
+  pw := crypt('CHANGE_ME_local_seed_password', gen_salt('bf'));
 
   -- Look up existing Google OAuth accounts
   SELECT id INTO nakul_id FROM auth.users WHERE email = 'candidate@example.com';
@@ -268,61 +268,61 @@ BEGIN
 
   -- 1. Arsh Patel - Ember Labs (Google account)
   INSERT INTO public.employers (user_id,company_name,company_website,company_size,industry,description,location,culture_values,openness_preference,conscientiousness_preference,extraversion_preference,agreeableness_preference,neuroticism_preference,culture_quiz_completed,setup_step,setup_completed_at) VALUES (
-    arsh_id,'Ember Labs','https://emberlabs.dev','1-10','Technology','Early-stage startup building AI-powered developer tools. We move fast, experiment boldly, and value creative problem-solving.','San Francisco, CA',
+    arsh_id,'Ember Labs','https://emberlabs.example.com','1-10','Technology','Early-stage startup building AI-powered developer tools. We move fast, experiment boldly, and value creative problem-solving.','San Francisco, CA',
     ARRAY['Innovation','Speed','Autonomy','Creativity','Impact'],88,70,80,75,35,true,4,NOW()
   ) ON CONFLICT (user_id) DO UPDATE SET company_name=EXCLUDED.company_name,company_website=EXCLUDED.company_website,company_size=EXCLUDED.company_size,industry=EXCLUDED.industry,description=EXCLUDED.description,location=EXCLUDED.location,culture_values=EXCLUDED.culture_values,openness_preference=EXCLUDED.openness_preference,conscientiousness_preference=EXCLUDED.conscientiousness_preference,extraversion_preference=EXCLUDED.extraversion_preference,agreeableness_preference=EXCLUDED.agreeableness_preference,neuroticism_preference=EXCLUDED.neuroticism_preference,culture_quiz_completed=EXCLUDED.culture_quiz_completed,setup_step=EXCLUDED.setup_step,setup_completed_at=EXCLUDED.setup_completed_at;
 
-  -- 2. Anthropic (AI safety company)
+  -- 2. Lumen Research (AI research lab)
   INSERT INTO public.employers (user_id,company_name,company_website,company_logo_url,company_size,industry,description,location,culture_values,openness_preference,conscientiousness_preference,extraversion_preference,agreeableness_preference,neuroticism_preference,culture_quiz_completed,setup_step,setup_completed_at) VALUES (
-    techstartup_id,'Anthropic','https://anthropic.com','https://logo.clearbit.com/anthropic.com','51-200','Artificial Intelligence','AI safety company building reliable, interpretable, and steerable AI systems. Anthropic is the creator of Claude, focusing on AI research that prioritizes safety and beneficial outcomes for humanity.','San Francisco, CA',
+    techstartup_id,'Lumen Research','https://lumen.example.com',NULL,'51-200','Artificial Intelligence','Research lab building careful, well-tested machine learning tools. We publish what we learn and take our time on hard problems.','San Francisco, CA',
     ARRAY['Safety','Research','Innovation','Integrity','Impact'],92,88,65,78,30,true,4,NOW()
   ) ON CONFLICT (user_id) DO UPDATE SET company_name=EXCLUDED.company_name,company_website=EXCLUDED.company_website,company_logo_url=EXCLUDED.company_logo_url,company_size=EXCLUDED.company_size,industry=EXCLUDED.industry,description=EXCLUDED.description,location=EXCLUDED.location,culture_values=EXCLUDED.culture_values,openness_preference=EXCLUDED.openness_preference,conscientiousness_preference=EXCLUDED.conscientiousness_preference,extraversion_preference=EXCLUDED.extraversion_preference,agreeableness_preference=EXCLUDED.agreeableness_preference,neuroticism_preference=EXCLUDED.neuroticism_preference,culture_quiz_completed=EXCLUDED.culture_quiz_completed,setup_step=EXCLUDED.setup_step,setup_completed_at=EXCLUDED.setup_completed_at;
 
-  -- 3. Shopify (e-commerce platform)
+  -- 3. Cartwheel Commerce (e-commerce platform)
   INSERT INTO public.employers (user_id,company_name,company_website,company_logo_url,company_size,industry,description,location,culture_values,openness_preference,conscientiousness_preference,extraversion_preference,agreeableness_preference,neuroticism_preference,culture_quiz_completed,setup_step,setup_completed_at) VALUES (
-    innovatecorp_id,'Shopify','https://shopify.com','https://logo.clearbit.com/shopify.com','51-200','E-Commerce','Shopify is a leading global commerce company powering millions of businesses worldwide. We make commerce better for everyone with a platform and services engineered for reliability and scale.','Ottawa, ON (Remote-first)',
+    innovatecorp_id,'Cartwheel Commerce','https://cartwheel.example.com',NULL,'51-200','E-Commerce','Storefront software for independent shops. Small teams own whole problems and ship to merchants every week.','Ottawa, ON (Remote-first)',
     ARRAY['Entrepreneurship','Collaboration','Growth','Impact','Trust'],80,82,72,85,28,true,4,NOW()
   ) ON CONFLICT (user_id) DO UPDATE SET company_name=EXCLUDED.company_name,company_website=EXCLUDED.company_website,company_logo_url=EXCLUDED.company_logo_url,company_size=EXCLUDED.company_size,industry=EXCLUDED.industry,description=EXCLUDED.description,location=EXCLUDED.location,culture_values=EXCLUDED.culture_values,openness_preference=EXCLUDED.openness_preference,conscientiousness_preference=EXCLUDED.conscientiousness_preference,extraversion_preference=EXCLUDED.extraversion_preference,agreeableness_preference=EXCLUDED.agreeableness_preference,neuroticism_preference=EXCLUDED.neuroticism_preference,culture_quiz_completed=EXCLUDED.culture_quiz_completed,setup_step=EXCLUDED.setup_step,setup_completed_at=EXCLUDED.setup_completed_at;
 
-  -- 4. Apple (design-led technology)
+  -- 4. Quarry Design Co. (design-led hardware)
   INSERT INTO public.employers (user_id,company_name,company_website,company_logo_url,company_size,industry,description,location,culture_values,openness_preference,conscientiousness_preference,extraversion_preference,agreeableness_preference,neuroticism_preference,culture_quiz_completed,setup_step,setup_completed_at) VALUES (
-    creativelabs_id,'Apple','https://apple.com','https://logo.clearbit.com/apple.com','51-200','Technology','Apple designs, manufactures, and markets smartphones, personal computers, tablets, wearables, and accessories. Known worldwide for design excellence, innovation, and products that enrich people''s lives.','Cupertino, CA',
+    creativelabs_id,'Quarry Design Co.','https://quarry.example.com',NULL,'51-200','Technology','Designs and builds a small line of home hardware. Obsessive about materials, finish and the details nobody asks about.','Portland, OR',
     ARRAY['Design','Innovation','Craft','Excellence','Simplicity'],85,95,55,65,25,true,4,NOW()
   ) ON CONFLICT (user_id) DO UPDATE SET company_name=EXCLUDED.company_name,company_website=EXCLUDED.company_website,company_logo_url=EXCLUDED.company_logo_url,company_size=EXCLUDED.company_size,industry=EXCLUDED.industry,description=EXCLUDED.description,location=EXCLUDED.location,culture_values=EXCLUDED.culture_values,openness_preference=EXCLUDED.openness_preference,conscientiousness_preference=EXCLUDED.conscientiousness_preference,extraversion_preference=EXCLUDED.extraversion_preference,agreeableness_preference=EXCLUDED.agreeableness_preference,neuroticism_preference=EXCLUDED.neuroticism_preference,culture_quiz_completed=EXCLUDED.culture_quiz_completed,setup_step=EXCLUDED.setup_step,setup_completed_at=EXCLUDED.setup_completed_at;
 
-  -- 5. Goldman Sachs (financial services)
+  -- 5. Ledgerline Capital (financial services)
   INSERT INTO public.employers (user_id,company_name,company_website,company_logo_url,company_size,industry,description,location,culture_values,openness_preference,conscientiousness_preference,extraversion_preference,agreeableness_preference,neuroticism_preference,culture_quiz_completed,setup_step,setup_completed_at) VALUES (
-    financeplus_id,'Goldman Sachs','https://goldmansachs.com','https://logo.clearbit.com/goldmansachs.com','51-200','Financial Services','The Goldman Sachs Group is a leading global financial institution delivering a broad range of financial services across investment banking, securities, asset management, and consumer banking.','New York, NY',
+    financeplus_id,'Ledgerline Capital','https://ledgerline.example.com',NULL,'51-200','Financial Services','Advisory and asset management firm for mid-size companies. Long hours in busy seasons, high standards, clear ownership.','New York, NY',
     ARRAY['Excellence','Integrity','Client Focus','Teamwork','Leadership'],55,95,70,60,20,true,4,NOW()
   ) ON CONFLICT (user_id) DO UPDATE SET company_name=EXCLUDED.company_name,company_website=EXCLUDED.company_website,company_logo_url=EXCLUDED.company_logo_url,company_size=EXCLUDED.company_size,industry=EXCLUDED.industry,description=EXCLUDED.description,location=EXCLUDED.location,culture_values=EXCLUDED.culture_values,openness_preference=EXCLUDED.openness_preference,conscientiousness_preference=EXCLUDED.conscientiousness_preference,extraversion_preference=EXCLUDED.extraversion_preference,agreeableness_preference=EXCLUDED.agreeableness_preference,neuroticism_preference=EXCLUDED.neuroticism_preference,culture_quiz_completed=EXCLUDED.culture_quiz_completed,setup_step=EXCLUDED.setup_step,setup_completed_at=EXCLUDED.setup_completed_at;
 
-  -- 6. Epic Systems (healthcare technology)
+  -- 6. Meridian Health Software (healthcare technology)
   INSERT INTO public.employers (user_id,company_name,company_website,company_logo_url,company_size,industry,description,location,culture_values,openness_preference,conscientiousness_preference,extraversion_preference,agreeableness_preference,neuroticism_preference,culture_quiz_completed,setup_step,setup_completed_at) VALUES (
-    healthtech_id,'Epic Systems','https://epic.com','https://logo.clearbit.com/epic.com','51-200','Healthcare Technology','Epic Systems develops software for mid-size and large medical groups, hospitals, and integrated healthcare organizations. Our software is used by over 300 million patients worldwide to improve healthcare outcomes.','Verona, WI',
+    healthtech_id,'Meridian Health Software','https://meridian.example.com',NULL,'51-200','Healthcare Technology','Builds scheduling and records software for community clinics. Careful, mission-driven work where quality matters more than speed.','Madison, WI',
     ARRAY['Mission','Quality','Innovation','Integrity','Collaboration'],72,90,65,88,22,true,4,NOW()
   ) ON CONFLICT (user_id) DO UPDATE SET company_name=EXCLUDED.company_name,company_website=EXCLUDED.company_website,company_logo_url=EXCLUDED.company_logo_url,company_size=EXCLUDED.company_size,industry=EXCLUDED.industry,description=EXCLUDED.description,location=EXCLUDED.location,culture_values=EXCLUDED.culture_values,openness_preference=EXCLUDED.openness_preference,conscientiousness_preference=EXCLUDED.conscientiousness_preference,extraversion_preference=EXCLUDED.extraversion_preference,agreeableness_preference=EXCLUDED.agreeableness_preference,neuroticism_preference=EXCLUDED.neuroticism_preference,culture_quiz_completed=EXCLUDED.culture_quiz_completed,setup_step=EXCLUDED.setup_step,setup_completed_at=EXCLUDED.setup_completed_at;
 
-  -- 7. Tesla (clean energy & automotive)
+  -- 7. Voltgrove Energy (clean energy)
   INSERT INTO public.employers (user_id,company_name,company_website,company_logo_url,company_size,industry,description,location,culture_values,openness_preference,conscientiousness_preference,extraversion_preference,agreeableness_preference,neuroticism_preference,culture_quiz_completed,setup_step,setup_completed_at) VALUES (
-    greenenergy_id,'Tesla','https://tesla.com','https://logo.clearbit.com/tesla.com','51-200','Clean Energy & Automotive','Tesla''s mission is to accelerate the world''s transition to sustainable energy. We design, manufacture, and sell electric vehicles, battery energy storage, solar panels, and related products and services.','Austin, TX',
+    greenenergy_id,'Voltgrove Energy','https://voltgrove.example.com',NULL,'51-200','Clean Energy','Designs battery storage for small solar installations. Fast-moving hardware team with ambitious goals and short iteration cycles.','Austin, TX',
     ARRAY['Innovation','Sustainability','Speed','Impact','Excellence'],92,78,75,60,35,true,4,NOW()
   ) ON CONFLICT (user_id) DO UPDATE SET company_name=EXCLUDED.company_name,company_website=EXCLUDED.company_website,company_logo_url=EXCLUDED.company_logo_url,company_size=EXCLUDED.company_size,industry=EXCLUDED.industry,description=EXCLUDED.description,location=EXCLUDED.location,culture_values=EXCLUDED.culture_values,openness_preference=EXCLUDED.openness_preference,conscientiousness_preference=EXCLUDED.conscientiousness_preference,extraversion_preference=EXCLUDED.extraversion_preference,agreeableness_preference=EXCLUDED.agreeableness_preference,neuroticism_preference=EXCLUDED.neuroticism_preference,culture_quiz_completed=EXCLUDED.culture_quiz_completed,setup_step=EXCLUDED.setup_step,setup_completed_at=EXCLUDED.setup_completed_at;
 
-  -- 8. Snowflake (cloud data platform)
+  -- 8. Glacier Data (cloud data platform)
   INSERT INTO public.employers (user_id,company_name,company_website,company_logo_url,company_size,industry,description,location,culture_values,openness_preference,conscientiousness_preference,extraversion_preference,agreeableness_preference,neuroticism_preference,culture_quiz_completed,setup_step,setup_completed_at) VALUES (
-    dataflow_id,'Snowflake','https://snowflake.com','https://logo.clearbit.com/snowflake.com','51-200','Cloud Computing','Snowflake delivers the AI Data Cloud — a global network enabling organizations to mobilize their data with near-unlimited scale, concurrency, and performance. Built for engineering excellence and enterprise reliability.','Bozeman, MT',
+    dataflow_id,'Glacier Data','https://glacier.example.com',NULL,'51-200','Cloud Computing','Data warehouse tooling for analytics teams. Engineering-led culture that values reliability, written design docs and accountability.','Boulder, CO',
     ARRAY['Engineering Excellence','Integrity','Customer Success','Innovation','Accountability'],72,92,62,70,25,true,4,NOW()
   ) ON CONFLICT (user_id) DO UPDATE SET company_name=EXCLUDED.company_name,company_website=EXCLUDED.company_website,company_logo_url=EXCLUDED.company_logo_url,company_size=EXCLUDED.company_size,industry=EXCLUDED.industry,description=EXCLUDED.description,location=EXCLUDED.location,culture_values=EXCLUDED.culture_values,openness_preference=EXCLUDED.openness_preference,conscientiousness_preference=EXCLUDED.conscientiousness_preference,extraversion_preference=EXCLUDED.extraversion_preference,agreeableness_preference=EXCLUDED.agreeableness_preference,neuroticism_preference=EXCLUDED.neuroticism_preference,culture_quiz_completed=EXCLUDED.culture_quiz_completed,setup_step=EXCLUDED.setup_step,setup_completed_at=EXCLUDED.setup_completed_at;
 
-  -- 9. Airbnb (travel & hospitality)
+  -- 9. Hearth Stays (travel & hospitality)
   INSERT INTO public.employers (user_id,company_name,company_website,company_logo_url,company_size,industry,description,location,culture_values,openness_preference,conscientiousness_preference,extraversion_preference,agreeableness_preference,neuroticism_preference,culture_quiz_completed,setup_step,setup_completed_at) VALUES (
-    artisan_id,'Airbnb','https://airbnb.com','https://logo.clearbit.com/airbnb.com','51-200','Travel & Hospitality','Airbnb is a community-based platform for listing, discovering, and booking unique accommodations and experiences around the world. We believe in creating a world where anyone can belong anywhere.','San Francisco, CA',
+    artisan_id,'Hearth Stays','https://hearth.example.com',NULL,'51-200','Travel & Hospitality','Booking platform for small, independently run guesthouses. Warm, community-minded team that cares about design and belonging.','San Francisco, CA',
     ARRAY['Belonging','Creativity','Community','Design','Inclusivity'],92,75,82,88,30,true,4,NOW()
   ) ON CONFLICT (user_id) DO UPDATE SET company_name=EXCLUDED.company_name,company_website=EXCLUDED.company_website,company_logo_url=EXCLUDED.company_logo_url,company_size=EXCLUDED.company_size,industry=EXCLUDED.industry,description=EXCLUDED.description,location=EXCLUDED.location,culture_values=EXCLUDED.culture_values,openness_preference=EXCLUDED.openness_preference,conscientiousness_preference=EXCLUDED.conscientiousness_preference,extraversion_preference=EXCLUDED.extraversion_preference,agreeableness_preference=EXCLUDED.agreeableness_preference,neuroticism_preference=EXCLUDED.neuroticism_preference,culture_quiz_completed=EXCLUDED.culture_quiz_completed,setup_step=EXCLUDED.setup_step,setup_completed_at=EXCLUDED.setup_completed_at;
 
-  -- 10. Stripe (fintech / payments)
+  -- 10. Tillpoint Payments (fintech / payments)
   INSERT INTO public.employers (user_id,company_name,company_website,company_logo_url,company_size,industry,description,location,culture_values,openness_preference,conscientiousness_preference,extraversion_preference,agreeableness_preference,neuroticism_preference,culture_quiz_completed,setup_step,setup_completed_at) VALUES (
-    metrobank_id,'Stripe','https://stripe.com','https://logo.clearbit.com/stripe.com','51-200','Fintech','Stripe is a financial infrastructure platform for businesses. Millions of companies — from startups to Fortune 500s — use Stripe to accept payments, grow their revenue, and accelerate new business opportunities.','San Francisco, CA',
+    metrobank_id,'Tillpoint Payments','https://tillpoint.example.com',NULL,'51-200','Fintech','Payments infrastructure for small businesses. Rigorous, craft-focused engineering where trust is the product.','San Francisco, CA',
     ARRAY['Rigor','Craftsmanship','Trust','User Focus','Innovation'],78,90,65,72,22,true,4,NOW()
   ) ON CONFLICT (user_id) DO UPDATE SET company_name=EXCLUDED.company_name,company_website=EXCLUDED.company_website,company_logo_url=EXCLUDED.company_logo_url,company_size=EXCLUDED.company_size,industry=EXCLUDED.industry,description=EXCLUDED.description,location=EXCLUDED.location,culture_values=EXCLUDED.culture_values,openness_preference=EXCLUDED.openness_preference,conscientiousness_preference=EXCLUDED.conscientiousness_preference,extraversion_preference=EXCLUDED.extraversion_preference,agreeableness_preference=EXCLUDED.agreeableness_preference,neuroticism_preference=EXCLUDED.neuroticism_preference,culture_quiz_completed=EXCLUDED.culture_quiz_completed,setup_step=EXCLUDED.setup_step,setup_completed_at=EXCLUDED.setup_completed_at;
 
@@ -775,7 +775,7 @@ BEGIN
   ON CONFLICT (assessment_id, question_code) DO NOTHING;
 
   RAISE NOTICE 'Successfully seeded 20 test accounts (10 candidates + 10 employers)';
-  RAISE NOTICE 'Email auth password: TestPassword123!';
+  RAISE NOTICE 'Email auth password: CHANGE_ME_local_seed_password';
   RAISE NOTICE 'Google accounts: candidate@example.com (candidate), employer@example.com (employer)';
 
 END $$;

@@ -2,9 +2,19 @@
   "name": "amber",
   "version": "1.0.0",
   "private": true,
-  "description": "culture-first job matching platform",
-  "author": "nakul patel",
+  "description": "Amber - Culture-First Job Matching",
+  "author": "Nakul Patel",
+  "contributors": [
+    { "name": "Nakul Patel", "url": "https://github.com/nakulpatel0306" },
+    { "name": "Arsh Patel", "url": "https://github.com/Arshpatel10" },
+    { "name": "Neel", "url": "https://github.com/neelp04" }
+  ],
   "license": "MIT",
+  "homepage": "https://nakulpatel0306.github.io/amber/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nakulpatel0306/amber.git"
+  },
   "workspaces": [
     "src/frontend"
   ],
@@ -26,7 +36,7 @@
     "concurrently": "^8.2.2"
   },
   "engines": {
-    "node": ">=18.0.0",
+    "node": "^20.19.0 || >=22.12.0",
     "npm": ">=9.0.0"
   },
   "keywords": [

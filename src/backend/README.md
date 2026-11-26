@@ -41,6 +41,8 @@ Copy `.env.example` to `.env` and configure the following:
 | `SUPABASE_JWT_SECRET` | No* | JWT secret for verifying Supabase auth tokens on protected routes |
 | `STRIPE_SECRET_KEY` | No | Stripe secret key for payment processing |
 | `STRIPE_WEBHOOK_SECRET` | No | Stripe webhook signing secret for event verification |
+| `LOGO_DEV_API_KEY` | No | logo.dev token for the `/api/logo` company logo proxy |
+| `FRONTEND_URL` | No | Where Stripe Checkout and the Customer Portal return users (default `http://localhost:5173`) |
 
 \*Without `SUPABASE_JWT_SECRET`, the API runs in **development mode** and skips authentication on protected routes. This is useful for local development and testing without needing to configure OAuth.
 
@@ -117,7 +119,7 @@ Two database backends are available:
 The scoring engine converts raw assessment responses into personality scores and computes compatibility:
 
 - **`compatibility.py`** — The full OCEAN-based compatibility algorithm:
-  - **Trait Match** (40% of overall): Weighted Euclidean distance across 5 OCEAN dimensions, normalized to 0–100
+  - **Trait Match** (40% of overall): Unweighted Euclidean distance across 5 OCEAN dimensions, normalized to 0–100
   - **Culture Match** (30% of overall): Composite of work style compatibility (30%), culture values alignment via 20-value OCEAN correlation map (50%), and role-specific fit (20%)
   - **Work Style** (20% of overall): Direct comparison of candidate/role work style preferences
   - **Communication Fit** (10% of overall): Extraversion (55%) + agreeableness (45%) alignment
@@ -226,12 +228,10 @@ The scoring engine converts raw assessment responses into personality scores and
 ## CORS Configuration
 
 CORS is configured to allow requests from:
-- `tauri://localhost` — Tauri desktop app
-- `http://localhost:1420` — Tauri dev server
 - `http://localhost:5173` — Vite dev server (default)
 - `http://localhost:3000` — Alternative dev server
 
-Update the `origins` list in `main.py` for production domains.
+Update the `allow_origins` list in `main.py` for production domains.
 
 ## Notes
 
