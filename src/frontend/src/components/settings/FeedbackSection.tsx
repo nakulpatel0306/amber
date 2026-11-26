@@ -270,7 +270,7 @@ export function FeedbackSection() {
                     ? status === 'all' ? 'var(--color-accent)' : statusConfig[status as FeatureStatus]?.color + '20'
                     : 'var(--color-surface)',
                   color: statusFilter === status
-                    ? status === 'all' ? 'white' : statusConfig[status as FeatureStatus]?.color
+                    ? status === 'all' ? 'var(--color-accentText)' : statusConfig[status as FeatureStatus]?.color
                     : 'var(--color-textMuted)',
                   borderColor: statusFilter === status
                     ? status === 'all' ? 'var(--color-accent)' : statusConfig[status as FeatureStatus]?.color
@@ -314,7 +314,7 @@ export function FeedbackSection() {
                         ? 'var(--color-accent)'
                         : 'var(--color-background)',
                       color: feature.userVoted
-                        ? 'white'
+                        ? 'var(--color-accentText)'
                         : 'var(--color-textMuted)',
                     }}
                   >

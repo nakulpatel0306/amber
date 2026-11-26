@@ -1,7 +1,8 @@
 import { useState, useEffect, type CSSProperties, type ReactNode } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight, Lightbulb, X } from 'lucide-react';
-import { Eyebrow, TRAIT } from './Section';
+import { Eyebrow, SECTION_CLASS, TRAIT } from './Section';
+import { COMPANY, PRESETS, scoreAgainstKestrel } from './kestrel';
 
 /*
  * Product tour: scaled-down recreations of four real screens. They reuse the
@@ -23,13 +24,21 @@ const secondary = { color: 'var(--color-textSecondary)' };
 const muted = { color: 'var(--color-textMuted)' };
 const card: CSSProperties = { backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' };
 
+// Alex is the hero's Innovator profile, so the tour shows the same Kestrel score the hero and explainer compute
+const ALEX = PRESETS[0].ocean;
+const KESTREL = scoreAgainstKestrel(ALEX);
+const { breakdown } = KESTREL.compat;
+
+// The app shows neuroticism inverted, as stability
 const TRAITS = [
-  { name: 'Openness', color: 'var(--color-trait-openness)', you: 68, them: 90 },
-  { name: 'Conscientiousness', color: 'var(--color-trait-conscientiousness)', you: 57, them: 55 },
-  { name: 'Extraversion', color: 'var(--color-trait-extraversion)', you: 66, them: 70 },
-  { name: 'Agreeableness', color: 'var(--color-trait-agreeableness)', you: 62, them: 70 },
-  { name: 'Stability', color: 'var(--color-trait-stability)', you: 51, them: 60 },
+  { name: 'Openness', color: 'var(--color-trait-openness)', you: ALEX.openness, them: COMPANY.prefs.openness, fit: breakdown.openness_fit },
+  { name: 'Conscientiousness', color: 'var(--color-trait-conscientiousness)', you: ALEX.conscientiousness, them: COMPANY.prefs.conscientiousness, fit: breakdown.conscientiousness_fit },
+  { name: 'Extraversion', color: 'var(--color-trait-extraversion)', you: ALEX.extraversion, them: COMPANY.prefs.extraversion, fit: breakdown.extraversion_fit },
+  { name: 'Agreeableness', color: 'var(--color-trait-agreeableness)', you: ALEX.agreeableness, them: COMPANY.prefs.agreeableness, fit: breakdown.agreeableness_fit },
+  { name: 'Stability', color: 'var(--color-trait-stability)', you: 100 - ALEX.neuroticism, them: 100 - COMPANY.prefs.neuroticism, fit: breakdown.neuroticism_fit },
 ];
+// Same threshold as the deep dive's "traits aligned" count
+const ALIGNED = TRAITS.filter((t) => t.fit >= 80).length;
 
 function CountUp({ value, suffix = '', delay = 0 }: { value: number; suffix?: string; delay?: number }) {
   const reduce = useReducedMotion();
@@ -103,7 +112,7 @@ function Rise({ delay = 0, className, style, children }: { delay?: number; class
 /* Dashboard: mirrors /app/dashboard */
 function SceneDashboard() {
   const matches = [
-    { role: 'Brand Designer', company: 'Kestrel Studio', style: 'Hybrid', status: 'New match', score: 82 },
+    { role: COMPANY.role.title, company: COMPANY.name, style: 'Hybrid', status: 'New match', score: KESTREL.ember },
     { role: 'Founding Engineer', company: 'Brightline Labs', style: 'Remote', status: 'Request sent', score: 80 },
     { role: 'Developer Advocate', company: 'Brightline Labs', style: 'Remote', status: 'Request sent', score: 80 },
     { role: 'Robotics Software Engineer', company: 'Northwind Robotics', style: 'Hybrid', status: 'New match', score: 79 },
@@ -115,37 +124,37 @@ function SceneDashboard() {
         <p className="text-[15px] font-semibold leading-tight" style={text}>
           Good evening, Alex
         </p>
-        <p className="text-[10px] mt-0.5" style={secondary}>
+        <p className="text-[11px] mt-0.5" style={secondary}>
           Sat, Apr 18
         </p>
       </Rise>
 
       <div className="grid grid-cols-3 gap-2">
         <Rise delay={0.08} className="rounded-lg p-2.5 min-w-0" style={card}>
-          <p className="text-[9px]" style={secondary}>Your archetype</p>
+          <p className="text-[11px]" style={secondary}>Your archetype</p>
           <p className="mt-1 flex items-center gap-1 text-[12px] sm:text-[13px] font-semibold truncate" style={text}>
             <Lightbulb className="w-3 h-3 flex-shrink-0" style={{ color: 'var(--color-accent)' }} />
-            <span className="truncate">The Innovator</span>
+            <span className="truncate">{KESTREL.archetype.name}</span>
           </p>
-          <p className="hidden sm:block mt-1 text-[9px] leading-snug" style={secondary}>
+          <p className="hidden sm:block mt-1 text-[11px] leading-snug" style={secondary}>
             Thrives on new ideas and unconventional solutions
           </p>
         </Rise>
         <Rise delay={0.14} className="rounded-lg p-2.5 min-w-0" style={card}>
-          <p className="text-[9px]" style={secondary}>Average match</p>
+          <p className="text-[11px]" style={secondary}>Average match</p>
           <p className="mt-1 text-[13px] font-semibold" style={text}>
             <CountUp value={79} suffix="%" delay={0.3} />
           </p>
-          <p className="hidden sm:block mt-1 text-[9px] leading-snug" style={secondary}>
-            Best 82% across 13 roles
+          <p className="hidden sm:block mt-1 text-[11px] leading-snug" style={secondary}>
+            Best {KESTREL.ember}% across 13 roles
           </p>
         </Rise>
         <Rise delay={0.2} className="rounded-lg p-2.5 min-w-0" style={card}>
-          <p className="text-[9px]" style={secondary}>Coffee chats</p>
+          <p className="text-[11px]" style={secondary}>Coffee chats</p>
           <p className="mt-1 text-[13px] font-semibold" style={text}>
             <CountUp value={2} delay={0.36} />
           </p>
-          <p className="hidden sm:block mt-1 text-[9px] leading-snug" style={secondary}>
+          <p className="hidden sm:block mt-1 text-[11px] leading-snug" style={secondary}>
             1 pending
           </p>
         </Rise>
@@ -167,18 +176,18 @@ function SceneDashboard() {
             >
               <LetterTile letter={m.company[0]} />
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] font-medium leading-tight truncate" style={text}>{m.role}</p>
-                <p className="text-[9px] truncate" style={secondary}>{m.company}</p>
+                <p className="text-[11px] font-medium leading-tight truncate" style={text}>{m.role}</p>
+                <p className="text-[11px] truncate" style={secondary}>{m.company}</p>
               </div>
-              <span className="hidden sm:inline text-[9px] w-14" style={secondary}>{m.style}</span>
-              <span className="hidden sm:flex items-center gap-1 text-[9px] w-20" style={secondary}>
+              <span className="hidden sm:inline text-[11px] w-14" style={secondary}>{m.style}</span>
+              <span className="hidden sm:flex items-center gap-1 text-[11px] w-20" style={secondary}>
                 <span
                   className="w-1 h-1 rounded-full"
                   style={{ backgroundColor: m.status === 'Request sent' ? 'var(--color-accent)' : 'var(--color-textMuted)' }}
                 />
                 {m.status}
               </span>
-              <span className="text-[10px] font-semibold tabular-nums" style={text}>
+              <span className="text-[11px] font-semibold tabular-nums" style={text}>
                 {m.score}%
               </span>
             </motion.div>
@@ -203,7 +212,7 @@ function SceneAssessment({ hover, picked }: { hover: number; picked: number }) {
       <p className="text-[12px] font-semibold" style={text}>
         Personality assessment
       </p>
-      <div className="mt-2.5 flex items-center justify-between text-[9px]">
+      <div className="mt-2.5 flex items-center justify-between text-[11px]">
         <span style={secondary}>Question 11 of 16</span>
         <span style={muted}>Growth</span>
       </div>
@@ -225,7 +234,7 @@ function SceneAssessment({ hover, picked }: { hover: number; picked: number }) {
             <Rise
               key={o.title}
               delay={0.12 + i * 0.05}
-              className="rounded-lg px-2.5 py-2 flex items-start gap-2 transition-colors duration-200"
+              className="rounded-lg px-2.5 py-1.5 flex items-start gap-2 transition-colors duration-200"
               style={{
                 border: `1px solid ${isPicked ? 'var(--color-accent)' : isHover ? 'var(--color-borderHover)' : 'var(--color-border)'}`,
                 backgroundColor: isPicked
@@ -243,8 +252,8 @@ function SceneAssessment({ hover, picked }: { hover: number; picked: number }) {
                 {isPicked && <Check className="w-2 h-2" strokeWidth={3} style={{ color: 'var(--color-accentText)' }} />}
               </span>
               <span className="min-w-0">
-                <span className="block text-[10px] font-medium leading-tight" style={text}>{o.title}</span>
-                <span className="block text-[9px] mt-0.5 truncate" style={secondary}>{o.desc}</span>
+                <span className="block text-[11px] font-medium leading-tight" style={text}>{o.title}</span>
+                <span className="block text-[11px] mt-0.5 truncate" style={secondary}>{o.desc}</span>
               </span>
             </Rise>
           );
@@ -252,12 +261,12 @@ function SceneAssessment({ hover, picked }: { hover: number; picked: number }) {
       </div>
 
       <div className="mt-3 flex items-center justify-between">
-        <span className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[9px] font-medium" style={{ ...card, ...text }}>
+        <span className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium" style={{ ...card, ...text }}>
           <ArrowLeft className="w-2.5 h-2.5" />
           Back
         </span>
         <span
-          className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[9px] font-medium transition-opacity duration-200"
+          className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-medium transition-opacity duration-200"
           style={{
             backgroundColor: 'var(--color-accent)',
             color: 'var(--color-accentText)',
@@ -275,10 +284,10 @@ function SceneAssessment({ hover, picked }: { hover: number; picked: number }) {
 /* Deep dive: mirrors the Ember deep dive for one match */
 function SceneDeepDive() {
   const scores = [
-    { label: 'Trait match', value: 89 },
-    { label: 'Culture fit', value: 69 },
-    { label: 'Work style', value: 75 },
-    { label: 'Communication', value: 94 },
+    { label: 'Trait match', value: KESTREL.compat.trait_match_score },
+    { label: 'Culture fit', value: KESTREL.compat.culture_match_score },
+    { label: 'Work style', value: KESTREL.compat.work_style_score },
+    { label: 'Communication', value: KESTREL.compat.communication_score },
   ];
 
   return (
@@ -287,11 +296,11 @@ function SceneDeepDive() {
         <LetterTile letter="J" size={30} />
         <div className="min-w-0 flex-1">
           <p className="text-[14px] font-semibold leading-tight truncate" style={text}>Jonah Whitfield</p>
-          <p className="text-[9px] mt-0.5 truncate" style={secondary}>
-            Kestrel Studio · The Innovator · <span className="font-medium" style={text}>81% match</span>
+          <p className="text-[11px] mt-0.5 truncate" style={secondary}>
+            {COMPANY.name} · {COMPANY.archetype} · <span className="font-medium" style={text}>{KESTREL.ember}% match</span>
           </p>
         </div>
-        <span className="hidden sm:inline rounded-md px-2 py-1 text-[9px] font-medium" style={{ ...card, ...text }}>
+        <span className="hidden sm:inline rounded-md px-2 py-1 text-[11px] font-medium" style={{ ...card, ...text }}>
           Connect
         </span>
       </Rise>
@@ -301,7 +310,7 @@ function SceneDeepDive() {
         <div className="rounded-lg p-2.5 grid grid-cols-2 sm:grid-cols-4 gap-x-3 gap-y-2.5" style={card}>
           {scores.map((s, i) => (
             <div key={s.label} className="min-w-0">
-              <p className="text-[9px] truncate" style={secondary}>{s.label}</p>
+              <p className="text-[11px] truncate" style={secondary}>{s.label}</p>
               <p className="text-[14px] font-semibold leading-tight mt-0.5 mb-1" style={text}>
                 <CountUp value={s.value} suffix="%" delay={0.2 + i * 0.05} />
               </p>
@@ -314,18 +323,18 @@ function SceneDeepDive() {
       <Rise delay={0.16} className="flex-1 min-h-0 flex flex-col">
         <div className="flex items-center justify-between mb-1.5">
           <p className="text-[11px] font-semibold" style={text}>Flavor profile</p>
-          <p className="text-[9px]" style={muted}>4 of 5 traits aligned</p>
+          <p className="text-[11px]" style={muted}>{ALIGNED} of {TRAITS.length} traits aligned</p>
         </div>
         <div className="rounded-lg px-2.5 py-2 flex-1 flex flex-col justify-evenly" style={card}>
-          <div className="flex justify-end text-[8px]" style={muted}>You / employer</div>
+          <div className="flex justify-end text-[11px]" style={muted}>You / employer</div>
           {TRAITS.map((t, i) => (
             <div key={t.name} className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: t.color }} />
-              <span className="text-[10px] w-[92px] flex-shrink-0 truncate" style={text}>{t.name}</span>
+              <span className="text-[11px] w-[112px] flex-shrink-0 truncate" style={text}>{t.name}</span>
               <div className="flex-1">
                 <Bar value={t.you} color={t.color} delay={0.3 + i * 0.05} />
               </div>
-              <span className="text-[10px] tabular-nums w-11 text-right flex-shrink-0" style={text}>
+              <span className="text-[11px] tabular-nums w-11 text-right flex-shrink-0" style={text}>
                 {t.you}
                 <span style={muted}> / {t.them}</span>
               </span>
@@ -363,23 +372,23 @@ function SceneConnect({ stage }: { stage: number }) {
           <LetterTile letter="K" size={26} />
           <div className="min-w-0 flex-1">
             <p className="text-[11px] font-semibold leading-tight" style={text}>Kestrel Studio</p>
-            <p className="text-[9px] truncate" style={secondary}>Design agency · The Innovator</p>
+            <p className="text-[11px] truncate" style={secondary}>Design agency · {COMPANY.archetype}</p>
           </div>
-          <span className="text-[11px] font-semibold tabular-nums" style={text}>81%</span>
+          <span className="text-[11px] font-semibold tabular-nums" style={text}>{KESTREL.ember}%</span>
           <X className="w-3 h-3 ml-1" style={muted} />
         </div>
 
-        <div className="rounded-md px-2 py-1.5 text-[10px] leading-snug" style={{ ...card, ...text }}>
+        <div className="rounded-md px-2 py-1.5 text-[11px] leading-snug" style={{ ...card, ...text }}>
           I'd like to connect and discuss how our work styles align.
         </div>
 
         <div>
-          <p className="text-[10px] font-medium mb-1" style={text}>Duration</p>
+          <p className="text-[11px] font-medium mb-1" style={text}>Duration</p>
           <div className="grid grid-cols-4 gap-1">
             {durations.map((d) => (
               <span
                 key={d}
-                className="text-[9px] text-center rounded-md py-1"
+                className="text-[11px] text-center rounded-md py-1"
                 style={{
                   border: `1px solid ${d === '30m' ? 'var(--color-accent)' : 'var(--color-border)'}`,
                   color: d === '30m' ? 'var(--color-accent)' : 'var(--color-textSecondary)',
@@ -395,12 +404,12 @@ function SceneConnect({ stage }: { stage: number }) {
           <div>
             <div className="flex items-center justify-between mb-1">
               <ChevronLeft className="w-2.5 h-2.5" style={muted} />
-              <span className="text-[10px] font-medium" style={text}>April 2026</span>
+              <span className="text-[11px] font-medium" style={text}>April 2026</span>
               <ChevronRight className="w-2.5 h-2.5" style={muted} />
             </div>
             <div className="grid grid-cols-7 gap-y-0.5 text-center">
               {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map((d) => (
-                <span key={d} className="text-[8px]" style={muted}>{d}</span>
+                <span key={d} className="text-[11px]" style={muted}>{d}</span>
               ))}
               {cells.map((c, i) => {
                 const on = datesPicked && c.inMonth && picked.dates.includes(c.day);
@@ -408,7 +417,7 @@ function SceneConnect({ stage }: { stage: number }) {
                 return (
                   <span
                     key={i}
-                    className="text-[8.5px] leading-[15px] rounded transition-colors duration-200"
+                    className="text-[11px] leading-[15px] rounded transition-colors duration-200"
                     style={{
                       backgroundColor: on ? 'var(--color-accent)' : 'transparent',
                       color: on ? 'var(--color-accentText)' : available ? 'var(--color-text)' : 'var(--color-textMuted)',
@@ -423,14 +432,14 @@ function SceneConnect({ stage }: { stage: number }) {
             </div>
           </div>
           <div className="hidden sm:block">
-            <p className="text-[10px] font-medium mb-1" style={text}>Preferred time</p>
+            <p className="text-[11px] font-medium mb-1" style={text}>Preferred time</p>
             <div className="grid grid-cols-2 gap-1">
               {times.map((t, i) => {
                 const on = timePicked && i === picked.time;
                 return (
                   <span
                     key={t}
-                    className="text-[9px] text-center rounded-md py-1 transition-colors duration-200"
+                    className="text-[11px] text-center rounded-md py-1 transition-colors duration-200"
                     style={{
                       backgroundColor: on ? 'var(--color-accent)' : 'transparent',
                       color: on ? 'var(--color-accentText)' : 'var(--color-textSecondary)',
@@ -446,9 +455,9 @@ function SceneConnect({ stage }: { stage: number }) {
         </div>
 
         <div className="flex items-center justify-end gap-3 pt-2" style={{ borderTop: '1px solid var(--color-border)' }}>
-          <span className="text-[10px]" style={text}>Cancel</span>
+          <span className="text-[11px]" style={text}>Cancel</span>
           <span
-            className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[10px] font-medium"
+            className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-medium"
             style={{ backgroundColor: 'var(--color-accent)', color: 'var(--color-accentText)' }}
           >
             {sent && <Check className="w-2.5 h-2.5" strokeWidth={3} />}
@@ -497,12 +506,12 @@ function ProductTour() {
     <SceneConnect key="connect" stage={stage} />,
   ];
 
-  // Both screens stay mounted while they crossfade, so there is never an empty frame
+  // The outgoing screen fades out before the next fades in, so a still frame never shows two screens at once
   const fade = {
     initial: { opacity: 0 },
     animate: { opacity: 1 },
     exit: { opacity: 0 },
-    transition: { duration: reduce ? 0 : 0.45, ease: [0.4, 0, 0.2, 1] as const },
+    transition: { duration: reduce ? 0 : 0.2, ease: [0.4, 0, 0.2, 1] as const },
   };
 
   return (
@@ -536,7 +545,7 @@ function ProductTour() {
 
       <div className="min-w-0">
         <div className="grid lg:hidden mb-4 min-h-[2.75rem]">
-          <AnimatePresence initial={false}>
+          <AnimatePresence initial={false} mode="wait">
             <motion.p key={active} {...fade} className="[grid-area:1/1] text-sm leading-relaxed" style={secondary}>
               {step.caption}
             </motion.p>
@@ -553,14 +562,14 @@ function ProductTour() {
                 <span key={i} className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: 'var(--color-border)' }} />
               ))}
             </div>
-            <span className="flex-1 text-center text-[9px] truncate" style={muted}>
+            <span className="flex-1 text-center text-[11px] truncate" style={muted}>
               nakulpatel0306.github.io/amber/{step.path}
             </span>
           </div>
 
-          {/* Fixed height: scenes are stacked absolutely so the outgoing and incoming screens overlap */}
-          <div className="relative h-[400px] sm:h-[380px]" style={{ backgroundColor: 'var(--color-background)' }}>
-            <AnimatePresence initial={false}>
+          {/* Fixed height so the frame keeps its size while one screen hands over to the next */}
+          <div className="relative h-[440px] sm:h-[410px]" style={{ backgroundColor: 'var(--color-background)' }}>
+            <AnimatePresence initial={false} mode="wait">
               <motion.div key={active} {...fade} className="absolute inset-0">
                 {scenes[active]}
               </motion.div>
@@ -612,7 +621,7 @@ function StepProgress({ vertical = false, reduce }: { vertical?: boolean; reduce
 
 export function FeatureBento() {
   return (
-    <section id="tour" className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20 scroll-mt-20">
+    <section id="tour" className={SECTION_CLASS}>
       <div className="max-w-5xl mx-auto">
         <div className="max-w-2xl mb-10">
           <Eyebrow color={TRAIT.e}>The product</Eyebrow>

@@ -72,7 +72,7 @@ export function DemoStart() {
           <h1 className="text-headline" style={{ color: 'var(--color-text)' }}>
             Try Amber
           </h1>
-          <p className="mt-3 text-sm sm:text-base max-w-xl mx-auto" style={{ color: 'var(--color-textSecondary)' }}>
+          <p className="mt-3 text-sm sm:text-base max-w-xl mx-auto text-balance" style={{ color: 'var(--color-textSecondary)' }}>
             Pick a side. A throwaway account is created in your browser, so there is no signup and nothing is sent
             anywhere. The people and companies are invented.
           </p>

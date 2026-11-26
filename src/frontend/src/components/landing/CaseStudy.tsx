@@ -14,10 +14,10 @@ import {
   ClipboardList,
   Coffee,
   EyeOff,
+  FolderGit2,
   Github,
   Laptop,
   MessageCircle,
-  PauseCircle,
   Radar,
   ShieldCheck,
   Sparkles,
@@ -31,17 +31,15 @@ import { FeatureBento } from './FeatureBento';
 import { MatchingExplainer } from './MatchingExplainer';
 import { ArchitectureDiagram } from './ArchitectureDiagram';
 import { HeroRadar } from './HeroRadar';
+import { COMPANY } from './kestrel';
 import { ARCHETYPE_ICONS } from './archetypeIcons';
-import { Section, TintCard, TRAIT } from './Section';
+import { Section, TintCard, TRAIT, WEIGHT_SHADES, readable } from './Section';
 import { BLUEPRINT_URL, DEMO_LABEL, DEMO_PATH, REPO_URL, TEAM } from './links';
 import { ARCHETYPES } from '../../lib/archetypes';
 import { IS_DEMO } from '../../demo/flag';
 import { usePageTitle } from '../../hooks/usePageTitle';
 
 const PALETTE = [TRAIT.o, TRAIT.c, TRAIT.e, TRAIT.a, TRAIT.n];
-
-// Trait colors are tuned for fills; as text they lean toward the text color so yellow and cyan stay legible on white
-const readable = (c: string) => `color-mix(in srgb, ${c} 70%, var(--color-text))`;
 
 // From BLUEPRINT.md, "Where Amber Was Going (never built)"
 const ROADMAP: { t: string; d: string; icon: LucideIcon }[] = [
@@ -79,24 +77,24 @@ const ROADMAP: { t: string; d: string; icon: LucideIcon }[] = [
 
 const STATUS = [
   {
-    title: 'Paused',
-    icon: PauseCircle,
+    title: 'Shelved',
+    icon: Archive,
     color: TRAIT.a,
     body: 'The culture-fit hiring space filled up quickly. Competing would have meant raising money, and we decided not to. So Amber will not launch, and none of that roadmap will be built.',
   },
   {
     title: 'Kept',
-    icon: Archive,
+    icon: FolderGit2,
     color: TRAIT.c,
     body: 'The code stays open under MIT, the full stack still runs locally, and this page ships a demo of the real app with invented data so anyone can try it.',
   },
 ];
 
 const WEIGHTS = [
-  { n: 40, t: 'Trait distance', icon: Activity, c: TRAIT.o, d: 'Euclidean distance across the five traits, scaled so identical profiles score 100.' },
-  { n: 30, t: 'Culture and role fit', icon: Building2, c: TRAIT.c, d: 'Each culture value maps to traits (innovation leans on openness), plus how many traits land inside the role ranges.' },
-  { n: 20, t: 'Work style', icon: Laptop, c: TRAIT.e, d: 'Remote, hybrid, onsite or flexible, from a small compatibility table.' },
-  { n: 10, t: 'Communication', icon: MessageCircle, c: TRAIT.a, d: 'Closeness on extraversion and agreeableness.' },
+  { n: 40, t: 'Trait distance', icon: Activity, c: WEIGHT_SHADES[0], d: 'Euclidean distance across the five traits, scaled so identical profiles score 100.' },
+  { n: 30, t: 'Culture and role fit', icon: Building2, c: WEIGHT_SHADES[1], d: 'Each culture value maps to traits (innovation leans on openness), plus how many traits land inside the role ranges.' },
+  { n: 20, t: 'Work style', icon: Laptop, c: WEIGHT_SHADES[2], d: 'Remote, hybrid, onsite or flexible, from a small compatibility table.' },
+  { n: 10, t: 'Communication', icon: MessageCircle, c: WEIGHT_SHADES[3], d: 'Closeness on extraversion and agreeableness.' },
 ];
 
 const FLOW = [
@@ -113,8 +111,13 @@ const LESSONS = [
   },
   {
     title: 'Supabase from the client was fast, RLS was the cost',
-    body:
-      'Talking to Postgres directly from React let three people ship both sides of the product. It also meant Row Level Security carried authorization, and policies that referenced each other recursed. The supabase/ folder still has the fix-*-recursion scripts that taught us.',
+    body: (
+      <>
+        Talking to Postgres directly from React let three people ship both sides of the product. It also meant Row Level
+        Security carried authorization, and policies that referenced each other recursed. The <Code>supabase/</Code> folder
+        still has the <Code>fix-*-recursion</Code> scripts that taught us.
+      </>
+    ),
   },
   {
     title: 'Two scoring engines need one test',
@@ -130,6 +133,15 @@ const LESSONS = [
 
 const primaryCta =
   'inline-flex items-center justify-center gap-2 h-11 px-6 rounded-lg text-sm font-medium transition-[background-color,transform] active:scale-[0.98] bg-[var(--color-accent)] text-[var(--color-accentText)] hover:bg-[var(--color-accentHover)]';
+
+// Paths and globs never break across lines
+function Code({ children }: { children: string }) {
+  return (
+    <code className="whitespace-nowrap rounded px-1 py-0.5 text-[0.92em]" style={{ backgroundColor: 'var(--color-surfaceHover)', color: 'var(--color-text)' }}>
+      {children}
+    </code>
+  );
+}
 
 function IconBadge({ icon: Icon, color, size = 'md' }: { icon: LucideIcon; color: string; size?: 'md' | 'lg' }) {
   const box = size === 'lg' ? 'w-12 h-12 rounded-2xl' : 'w-10 h-10 rounded-xl';
@@ -169,12 +181,12 @@ export function CaseStudy() {
               style={{ borderColor: 'var(--color-border)', backgroundColor: 'color-mix(in srgb, var(--color-surface) 70%, transparent)', color: 'var(--color-textSecondary)' }}
             >
               <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: TRAIT.e }} />
-              A startup we built in 2026, now shelved and open source
+              A 2026 startup, now shelved and open source
             </span>
             <h1 className="mt-6 text-display" style={{ color: 'var(--color-text)' }}>
               Hiring that starts with <span className="text-gradient-warm">how you work</span>
             </h1>
-            <p className="mt-6 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+            <p className="mt-6 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed text-pretty" style={{ color: 'var(--color-textSecondary)' }}>
               Hiring matches on resumes and keywords, while culture fit only shows up after someone starts. Amber measured
               how people work and compared it with a team's real culture, so both sides met over a coffee chat before
               anyone applied. Three of us built it through 2026 and took it close to launch.
@@ -221,7 +233,7 @@ export function CaseStudy() {
         eyebrow="How it works"
         color={TRAIT.o}
         title="Five traits, eight archetypes, one score you can read"
-        intro="Candidates answer scenario questions that map to the Big Five (OCEAN): openness, conscientiousness, extraversion, agreeableness and neuroticism. Employers take a culture quiz that sets the scores they hope for, pick culture values, and give each role an acceptable range per trait. The Ember engine compares the two."
+        intro="Candidates answer scenario questions that map to the Big Five (OCEAN): openness, conscientiousness, extraversion, agreeableness and neuroticism (the app shows neuroticism inverted, as stability). Employers take a culture quiz that sets the scores they hope for, pick culture values, and give each role an acceptable range per trait. The Ember engine compares the two."
       >
         <div className="flex h-3 rounded-full overflow-hidden mb-6" aria-hidden>
           {WEIGHTS.map((w) => (
@@ -230,17 +242,18 @@ export function CaseStudy() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-14">
           {WEIGHTS.map((w) => (
-            <TintCard key={w.t} color={w.c}>
+            <TintCard key={w.t} color="var(--color-accent)">
               <div className="flex items-center justify-between">
-                <IconBadge icon={w.icon} color={w.c} />
-                <span className="text-title tabular-nums" style={{ color: readable(w.c) }}>
+                <IconBadge icon={w.icon} color="var(--color-accent)" />
+                <span className="inline-flex items-center gap-2 text-title tabular-nums" style={{ color: readable('var(--color-accent)', 80) }}>
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: w.c }} aria-hidden />
                   {w.n}%
                 </span>
               </div>
               <h3 className="mt-4 text-heading" style={{ color: 'var(--color-text)' }}>
                 {w.t}
               </h3>
-              <p className="mt-1.5 text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+              <p className="mt-1.5 text-sm leading-relaxed text-pretty" style={{ color: 'var(--color-textSecondary)' }}>
                 {w.d}
               </p>
             </TintCard>
@@ -250,30 +263,31 @@ export function CaseStudy() {
         <MatchingExplainer />
 
         <div className="mt-14">
-          <p className="text-sm max-w-2xl mb-6 leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
-            Each profile is classified into one of eight work archetypes. An 8 by 8 table of archetype pairs then nudges the
-            score by up to 10 points either way, which is the Ember score shown in the app.
+          <p className="text-sm max-w-2xl mb-6 leading-relaxed text-pretty" style={{ color: 'var(--color-textSecondary)' }}>
+            Each candidate is classified into one of the eight work archetypes below. Employers have eight culture archetypes
+            of their own ({COMPANY.name}'s is {COMPANY.archetype}). An 8 by 8 table of pairs then adds between -8 and +10
+            points, which gives the Ember score shown in the app.
           </p>
-          <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <dl className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
             {Object.values(ARCHETYPES).map((a, i) => {
               const Icon = ARCHETYPE_ICONS[a.emoji] ?? ARCHETYPE_ICONS.lightbulb;
               const color = PALETTE[i % PALETTE.length];
               return (
                 <div
                   key={a.key}
-                  className="rounded-2xl border p-4 transition-colors hover:border-[var(--color-borderHover)]"
+                  className="rounded-2xl border p-3 sm:p-4 transition-colors hover:border-[var(--color-borderHover)]"
                   style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}
                 >
-                  <dt className="flex items-center gap-2.5 text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+                  <dt className="flex items-center gap-2 sm:gap-2.5 text-label sm:text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
                     <span
-                      className="w-8 h-8 rounded-lg inline-flex items-center justify-center"
+                      className="w-7 h-7 sm:w-8 sm:h-8 shrink-0 rounded-lg inline-flex items-center justify-center"
                       style={{ backgroundColor: `color-mix(in srgb, ${color} 16%, transparent)`, color }}
                     >
                       <Icon className="w-4 h-4" />
                     </span>
                     {a.name}
                   </dt>
-                  <dd className="mt-2.5 text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+                  <dd className="mt-2 sm:mt-2.5 text-caption sm:text-sm leading-relaxed text-pretty" style={{ color: 'var(--color-textSecondary)' }}>
                     {a.description}
                   </dd>
                 </div>
@@ -302,7 +316,7 @@ export function CaseStudy() {
                 <h3 className="mt-4 text-title" style={{ color: 'var(--color-text)' }}>
                   {s.t}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+                <p className="mt-2 text-sm leading-relaxed text-pretty" style={{ color: 'var(--color-textSecondary)' }}>
                   {s.d}
                 </p>
               </TintCard>
@@ -354,7 +368,7 @@ export function CaseStudy() {
                 <h3 className="mt-4 text-heading" style={{ color: 'var(--color-text)' }}>
                   {r.t}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+                <p className="mt-2 text-sm leading-relaxed text-pretty" style={{ color: 'var(--color-textSecondary)' }}>
                   {r.d}
                 </p>
               </li>
@@ -373,7 +387,7 @@ export function CaseStudy() {
                   {s.title}
                 </h3>
               </div>
-              <p className="mt-3 text-sm sm:text-base leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+              <p className="mt-3 text-sm sm:text-base leading-relaxed text-pretty" style={{ color: 'var(--color-textSecondary)' }}>
                 {s.body}
               </p>
             </TintCard>
@@ -398,7 +412,7 @@ export function CaseStudy() {
                   <h3 className="text-heading" style={{ color: 'var(--color-text)' }}>
                     {l.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+                  <p className="mt-2 text-sm leading-relaxed text-pretty" style={{ color: 'var(--color-textSecondary)' }}>
                     {l.body}
                   </p>
                 </div>
@@ -444,7 +458,7 @@ export function CaseStudy() {
 
         <div
           className="relative mt-16 overflow-hidden rounded-3xl px-6 py-12 sm:px-10 sm:py-16 text-center"
-          style={{ background: 'linear-gradient(135deg, #B45309 0%, #D97706 45%, #DB2777 100%)' }}
+          style={{ background: 'linear-gradient(135deg, #92400E 0%, #B45309 45%, #BE185D 100%)' }}
         >
           <div
             className="absolute inset-0 opacity-20"
@@ -453,7 +467,7 @@ export function CaseStudy() {
           />
           <div className="relative">
             <h3 className="text-headline text-white">See it for yourself</h3>
-            <p className="mt-3 text-sm sm:text-base max-w-xl mx-auto text-white/90">
+            <p className="mt-3 text-sm sm:text-base max-w-xl mx-auto text-white text-pretty">
               Take the assessment as a job seeker, or define a culture as an employer, and book a coffee chat with someone
               who doesn't exist.
             </p>

@@ -2,6 +2,9 @@ import { Link } from 'react-router-dom';
 import { AmberLogo } from '../ui/AmberLogo';
 import { DEMO_PATH, REPO_URL, TEAM } from './links';
 
+const names = TEAM.map((m) => m.name);
+const TEAM_NAMES = `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+
 export function LandingFooter() {
   return (
     <footer
@@ -12,7 +15,7 @@ export function LandingFooter() {
         <div className="flex items-center gap-2">
           <AmberLogo size="sm" />
           <span style={{ color: 'var(--color-textSecondary)' }}>
-            Amber, 2026. Built by {TEAM.map((m) => m.name).join(', ')}. MIT licensed.
+            Amber, 2026. Built by {TEAM_NAMES}. MIT licensed.
           </span>
         </div>
         <div className="flex items-center gap-5" style={{ color: 'var(--color-textSecondary)' }}>

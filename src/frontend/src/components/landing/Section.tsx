@@ -17,15 +17,15 @@ export function Section({
   children: ReactNode;
 }) {
   return (
-    <section id={id} className="px-4 sm:px-6 lg:px-8 py-16 sm:py-20 scroll-mt-20">
+    <section id={id} className={SECTION_CLASS}>
       <div className="max-w-5xl mx-auto">
         <div className="max-w-2xl mb-10">
           {eyebrow && <Eyebrow color={color}>{eyebrow}</Eyebrow>}
-          <h2 className="text-headline" style={{ color: 'var(--color-text)' }}>
+          <h2 className="text-headline text-balance" style={{ color: 'var(--color-text)' }}>
             {title}
           </h2>
           {intro && (
-            <p className="mt-4 text-base sm:text-lg leading-relaxed" style={{ color: 'var(--color-textSecondary)' }}>
+            <p className="mt-4 text-base sm:text-lg leading-relaxed text-pretty" style={{ color: 'var(--color-textSecondary)' }}>
               {intro}
             </p>
           )}
@@ -36,11 +36,18 @@ export function Section({
   );
 }
 
+// Shared by every landing section so the gaps between them stay even
+export const SECTION_CLASS = 'px-4 sm:px-6 lg:px-8 py-10 sm:py-12 scroll-mt-20';
+
+// Trait colors are tuned for fills; as text they lean toward the text color so yellow and cyan stay legible on white.
+// 70% is enough for large numerals; small text needs about 50% to clear 4.5:1 on a tinted background.
+export const readable = (c: string, pct = 70) => `color-mix(in srgb, ${c} ${pct}%, var(--color-text))`;
+
 export function Eyebrow({ color, children }: { color: string; children: ReactNode }) {
   return (
     <span
       className="inline-flex items-center gap-2 mb-4 h-7 px-3 rounded-full text-caption font-medium"
-      style={{ color, backgroundColor: `color-mix(in srgb, ${color} 12%, transparent)` }}
+      style={{ color: readable(color, 50), backgroundColor: `color-mix(in srgb, ${color} 12%, transparent)` }}
     >
       <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: color }} />
       {children}
@@ -70,3 +77,11 @@ export const TRAIT = {
   a: 'var(--color-trait-agreeableness)',
   n: 'var(--color-trait-stability)',
 };
+
+// The four score weights (40/30/20/10) get shades of the accent, heaviest first, so they never read as traits
+export const WEIGHT_SHADES = [
+  'color-mix(in srgb, var(--color-accent) 62%, var(--color-text))',
+  'var(--color-accent)',
+  'color-mix(in srgb, var(--color-accent) 62%, var(--color-surface))',
+  'color-mix(in srgb, var(--color-accent) 36%, var(--color-surface))',
+];

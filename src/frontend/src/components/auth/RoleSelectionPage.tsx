@@ -157,7 +157,7 @@ export function RoleSelectionPage() {
                   className={cn(
                     'w-10 h-10 rounded-xl flex items-center justify-center',
                     role === option.id
-                      ? 'bg-[var(--color-accent)] text-white'
+                      ? 'bg-[var(--color-accent)] text-[var(--color-accentText)]'
                       : 'bg-[var(--color-background)]'
                   )}
                   style={{

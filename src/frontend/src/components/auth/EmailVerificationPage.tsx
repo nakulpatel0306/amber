@@ -63,7 +63,7 @@ export function EmailVerificationPage() {
                 backgroundColor: 'var(--color-accent)',
               }}
             >
-              <Mail className="w-8 h-8 text-white" />
+              <Mail className="w-8 h-8 text-[var(--color-accentText)]" />
             </div>
             <h1
               className="text-title"
