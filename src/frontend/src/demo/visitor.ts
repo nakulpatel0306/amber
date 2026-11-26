@@ -18,8 +18,9 @@ export type DemoRole = 'candidate' | 'employer';
 
 export const VISITOR_NAME = 'Demo Visitor';
 
+// Short enough to fit the sidebar; the random part keeps a second visitor in the same browser from colliding
 export function visitorEmail(role: DemoRole): string {
-  return `visitor-${role}-${Date.now().toString(36)}@demo.example.com`;
+  return `${role === 'candidate' ? 'seeker' : 'team'}.${Math.random().toString(36).slice(2, 6)}@example.com`;
 }
 
 const hoursAgo = (h: number) => new Date(Date.now() - h * 3600_000).toISOString();

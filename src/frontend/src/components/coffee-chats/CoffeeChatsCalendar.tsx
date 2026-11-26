@@ -203,7 +203,7 @@ function NextUpCard({
 
       {!chat ? (
         <p className="mt-2 text-label font-normal" style={{ color: 'var(--color-textMuted)' }}>
-          No upcoming chats
+          Nothing booked ahead. Accept a request or invite someone from your matches.
         </p>
       ) : (
         <>
