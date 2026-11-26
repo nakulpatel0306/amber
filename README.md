@@ -1,6 +1,6 @@
 # Amber - Culture-First Job Matching
 
-Hiring matches on resumes and keywords, while culture fit only shows up after someone starts, in exit interviews and anonymous reviews. Amber's thesis was to measure how people work and compare it with a team's real culture, so both sides could meet over a coffee chat before anyone applied. Fit is worth measuring early: in a meta-analysis, person-organization fit correlated .51 with organizational commitment and -.35 with intent to quit ([Kristof-Brown, Zimmerman and Johnson, 2005](https://doi.org/10.1111/j.1744-6570.2005.00672.x)).
+Hiring matches on resumes and keywords, while culture fit only shows up after someone starts, in exit interviews and anonymous reviews. Amber's thesis was to measure how people work and compare it with a team's real culture, so both sides could meet over a coffee chat before anyone applied.
 
 **[Try the demo](https://nakulpatel0306.github.io/amber/)**: it runs entirely in your browser, with invented people and companies and no signup.
 

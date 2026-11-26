@@ -6,7 +6,7 @@
 
 ## The Premise
 
-Hiring mostly matches on keywords and job titles, while culture fit shows up only after someone starts, in exit interviews and anonymous reviews. Research on person-organization fit suggests that is worth measuring earlier: in a meta-analysis, fit correlated .51 with organizational commitment and -.35 with intent to quit ([Kristof-Brown, Zimmerman and Johnson, 2005](https://doi.org/10.1111/j.1744-6570.2005.00672.x)).
+Hiring mostly matches on keywords and job titles, while culture fit shows up only after someone starts, in exit interviews and anonymous reviews.
 
 Amber set out to put personality science and culture intelligence at the center of the hiring process. Not as a bolt-on filter, but as the **foundation** of every match, connection and hire.
 
