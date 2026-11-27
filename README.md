@@ -30,7 +30,7 @@ Candidates took a Big Five (OCEAN) assessment and got one of 8 work archetypes, 
 |---|---|
 | ![Job seeker dashboard with archetype, average match and top matches](docs/screenshots/dashboard.png) | ![Per-trait breakdown of one match](docs/screenshots/deep-dive.png) |
 | **Employer: candidates ranked for a role** | **Coffee chat with an automatic demo reply** |
-| ![Top candidates ranked for the Customer Success Lead role](docs/screenshots/employer-candidates.png) | ![Coffee chat calendar and messaging panel](docs/screenshots/coffee-chat.png) |
+| ![Top candidates ranked across both open roles](docs/screenshots/employer-candidates.png) | ![Coffee chat calendar and messaging panel](docs/screenshots/coffee-chat.png) |
 
 ## How Matching Works
 
