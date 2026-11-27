@@ -7,16 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-26
+
 ### Added
 - `supabase/rpc-matching.sql` and `supabase/migrations/add-employer-archetype.sql`, reconstructed from the frontend because the originals never made it into the repo. Untested against a live Supabase project.
 - `src/frontend/.env.example`.
 
 ### Changed
 - Landing page: an interactive fit radar replaces the hero cards, with more color and card-based sections, and a refreshed link preview and screenshot.
-- Demo fixes, including shorter visitor emails and an explanation for the empty Next up card.
+- Demo: "Skip with a sample profile" writes a distinct personality or culture profile, so matches spread out instead of all landing near 80%. Each role gets a past chat awaiting feedback and an upcoming one. Employers reach Roles from the sidebar, the network feed draws hobby tiles instead of hotlinked photos, and chat panels name the person, not just the company.
+- Every displayed match score comes from one function (engine score plus archetype bonus), so the dashboard, Ember and deep dive agree.
+- Pricing is presented as the plans we had planned, without a live checkout.
 - Backend logs through `logging` instead of `print`, CORS no longer lists the removed Tauri origins, and the frontend lints against `console.log`.
 - Supabase: the one-off `fix-*` scripts moved to `supabase/archive/` with a README on the RLS recursion they were fixing; seed data uses fictional companies and placeholder passwords.
 - Docs corrected against the code: scoring math, assessment counts, Node 20.19+ requirement, env var lists, and the roadmap without invented figures. Contributing notes say the project is shelved.
+
+### Fixed
+- Employer culture archetypes were the same for every company because the classifier was handed the wrong keys.
+- A company could show three different archetypes on different screens; it now shows its culture archetype everywhere.
+- The deep dive read stability as neuroticism, inverting its trait insights, and addressed employers as if they were the candidate.
+- Primary buttons lost their text color at small sizes (a class-merge bug), failing contrast in both themes.
+- The network feed's job seeker label and filter never matched, and past chats were labelled as booked.
 
 ### Removed
 - Unused backend Python dependencies and an unsourced research citation.
@@ -78,5 +89,6 @@ Pre-release baseline built during 2026. All features below were implemented; the
 - **Payments**: Stripe checkout, customer portal, and webhook handling (with graceful demo-data fallback when unconfigured).
 - **Documentation**: root `README.md`, `BLUEPRINT.md`, `FEATURES.md`, and per-area READMEs under `src/frontend/`, `src/backend/`, and `supabase/`.
 
-[Unreleased]: https://github.com/nakulpatel0306/amber/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/nakulpatel0306/amber/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/nakulpatel0306/amber/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/nakulpatel0306/amber/releases/tag/v1.0.0
