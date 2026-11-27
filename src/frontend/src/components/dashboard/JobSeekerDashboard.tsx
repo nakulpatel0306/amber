@@ -291,18 +291,24 @@ export function JobSeekerDashboard() {
         if (candRecord) {
           const { data: chats } = await supabase
             .from('coffee_chats')
-            .select('employer_id, status')
+            .select('employer_id, status, scheduled_at')
             .eq('candidate_id', candRecord.id);
 
           if (chats) {
-            // Priority: completed > scheduled > accepted > pending
-            const priority: Record<string, number> = { completed: 4, scheduled: 3, accepted: 2, pending: 1 };
+            // An upcoming chat is the most useful thing to show, then one already had
+            const priority: Record<string, number> = { scheduled: 4, completed: 3, accepted: 2, pending: 1 };
+            const now = Date.now();
             for (const chat of chats) {
+              // A scheduled chat whose time has passed already happened, it just hasn't been rated yet
+              const status =
+                chat.status === 'scheduled' && chat.scheduled_at && new Date(chat.scheduled_at).getTime() < now
+                  ? 'completed'
+                  : chat.status;
               const existing = chatStatusMap.get(chat.employer_id);
               const existingPri = existing ? (priority[existing] || 0) : 0;
-              const newPri = priority[chat.status] || 0;
+              const newPri = priority[status] || 0;
               if (newPri > existingPri) {
-                chatStatusMap.set(chat.employer_id, chat.status);
+                chatStatusMap.set(chat.employer_id, status);
               }
             }
           }
